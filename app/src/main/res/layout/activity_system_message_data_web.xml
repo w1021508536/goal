@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/chat_top"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_arrow_white_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="详情"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+
+    </RelativeLayout>
+
+    <!--<ScrollView-->
+        <!--android:id="@+id/scrollView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:descendantFocusability="blocksDescendants"-->
+        <!--android:fillViewport="true"-->
+        <!--android:scrollbars="none">-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:focusable="true"-->
+            <!--android:focusableInTouchMode="true"-->
+            <!--android:orientation="vertical">-->
+
+            <WebView
+                android:id="@+id/web"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" />
+
+
+        <!--</LinearLayout>-->
+
+    <!--</ScrollView>-->
+
+
+</LinearLayout>

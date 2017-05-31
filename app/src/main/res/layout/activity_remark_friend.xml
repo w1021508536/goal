@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/chat_top"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_arrow_white_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="备注"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/right_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="保存"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/remark_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
+
+
+        <EditText
+            android:id="@+id/remark_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:hint="备注"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+
+    </RelativeLayout>
+</LinearLayout>

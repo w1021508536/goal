@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pi.small.goal">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".welcome.WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- QQ -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1106004131" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--  -->
+
+
+        <!-- 微信登录 -->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!--  -->
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.pi.small.goal.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
+
+        <!-- 高德地图 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="高德地图的 AppKey" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.pi.small.goal.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
+
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.pi.small.goal"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".register.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.LoginPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.LoginCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.ConversationActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="com.pi.small.goal"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".message.activity.FriendsListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".message.activity.SystemMessageListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.activity.FriendsMessageListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.activity.SystemMessageDataWebActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.activity.AddFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".message.activity.FriendSetActivity" />
+        <activity android:name=".message.activity.RemarkFriendActivity"></activity>
+    </application>
+
+</manifest>

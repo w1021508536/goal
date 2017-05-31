@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/chat_top"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/left_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_arrow_white_left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="系统通知"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/system_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_system_list"
+        android:dividerHeight="0dp"
+        android:fadingEdge="none"
+        android:fastScrollEnabled="false"
+        android:footerDividersEnabled="false"
+        android:headerDividersEnabled="false"
+        android:smoothScrollbar="true" />
+
+</LinearLayout>
