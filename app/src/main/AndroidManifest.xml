@@ -137,6 +137,14 @@
             android:screenOrientation="portrait" />
         <activity android:name=".message.activity.FriendSetActivity" />
         <activity android:name=".message.activity.RemarkFriendActivity"></activity>
+        <activity
+            android:name=".my.activity.UserInfoActivity"
+            android:label="个人中心"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.TaskActivity"
+            android:label="任务中心"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
