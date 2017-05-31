@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\android_studio_workplace\\goal\\IMKit\\build\\intermediates\\res\\merged\\release\\xml\\rc_file_path.xml",
+        "source": "E:\\android_studio_workplace\\goal\\IMKit\\src\\main\\res\\xml\\rc_file_path.xml"
+    },
+    {
+        "merged": "D:\\Android\\android_studio_place\\goal\\IMKit\\build\\intermediates\\res\\merged\\release\\xml\\rc_file_path.xml",
+        "source": "D:\\Android\\android_studio_place\\goal\\IMKit\\src\\main\\res\\xml\\rc_file_path.xml"
+    }
+]
