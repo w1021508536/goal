@@ -34,6 +34,9 @@ public class MyApplication extends Application {
         for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
             if (appProcess.pid == pid) {
                 return appProcess.processName;
+
+
+
             }
         }
         return null;
