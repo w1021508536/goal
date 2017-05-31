@@ -27,16 +27,13 @@ dependencies {
     compile files('libs/mta-sdk-1.6.2.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/MiPush_SDK_Client_3_2_2.jar')
-    compile files('libs/AMap_2DMap_V2.9.0_20160525.jar')
-    compile files('libs/AMap_Channel_Location_V1.4.0_20160708.jar')
-    compile files('libs/AMap_Search_V3.4.0_20160811.jar')
     compile project(':IMKit')
     compile project(':IMLib')
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'org.xutils:xutils:3.5.0'
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile 'com.github.userswlwork:pull-to-refresh:1.0.0'
-    testCompile 'junit:junit:4.12'
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.jakewharton:butterknife:5.1.1'
+    testCompile 'junit:junit:4.12'
 }
