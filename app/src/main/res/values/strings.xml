@@ -18,4 +18,6 @@
     <string name="password">密码</string>
 
     <string name="invitation_code">邀请码</string>
+    
+    <string name="transfer_mine_fragment">期权转让</string>
 </resources>
