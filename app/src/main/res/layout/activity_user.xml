@@ -12,8 +12,11 @@
         android:id="@+id/rl_icon_user"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-android:background="@drawable/background_selector_white_gray"
-        android:padding="5dp">
+        android:background="@drawable/background_selector_white_gray"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
         <TextView
             style="@style/text_black_14"
@@ -22,8 +25,10 @@ android:background="@drawable/background_selector_white_gray"
             android:layout_centerVertical="true"
             android:text="@string/icon_user_activity" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/icon_user"
             android:layout_width="40dp"
+            android:scaleType="centerCrop"
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:src="@mipmap/ic_launcher_round" />
@@ -36,7 +41,10 @@ android:background="@drawable/background_selector_white_gray"
         android:layout_height="50dp"
         android:layout_marginTop="0.5dp"
         android:background="@drawable/background_selector_white_gray"
-        android:padding="5dp">
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
         <TextView
             style="@style/text_black_14"
@@ -45,22 +53,26 @@ android:background="@drawable/background_selector_white_gray"
             android:layout_centerVertical="true"
             android:text="@string/username_user_activity" />
 
-      <TextView
-          android:id="@+id/tv_username_user"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          style="@style/text_gray_14"
-          android:text=""/>
+        <TextView
+            android:id="@+id/tv_username_user"
+            style="@style/text_gray_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl_content_user"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="0.5dp"
         android:background="@drawable/background_selector_white_gray"
-        android:padding="5dp">
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
         <TextView
             style="@style/text_black_14"
@@ -70,20 +82,25 @@ android:background="@drawable/background_selector_white_gray"
             android:text="@string/content_user_activity" />
 
         <TextView
+            android:id="@+id/tv_brief_user"
+            style="@style/text_gray_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            style="@style/text_gray_14"
-            android:text=""/>
+            android:text="" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl_denji_user"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/background_selector_white_gray"
-        android:padding="5dp">
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
         <TextView
             style="@style/text_black_14"
@@ -93,20 +110,24 @@ android:background="@drawable/background_selector_white_gray"
             android:text="@string/dengji_user_activity" />
 
         <TextView
+            style="@style/text_gray_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            style="@style/text_gray_14"
-            android:text=""/>
+            android:text="" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl_wx_user"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="0.5dp"
         android:background="@drawable/background_selector_white_gray"
-        android:padding="5dp">
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
         <TextView
             style="@style/text_black_14"
@@ -116,12 +137,12 @@ android:background="@drawable/background_selector_white_gray"
             android:text="@string/wx_user_activity" />
 
         <TextView
+            style="@style/text_gray_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            style="@style/text_gray_14"
-            android:text="绑定"/>
+            android:text="绑定" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -130,7 +151,10 @@ android:background="@drawable/background_selector_white_gray"
         android:layout_height="50dp"
         android:layout_marginTop="0.5dp"
         android:background="@drawable/background_selector_white_gray"
-        android:padding="5dp">
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
 
         <TextView
             style="@style/text_black_14"

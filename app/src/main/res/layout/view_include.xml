@@ -45,5 +45,14 @@
             android:padding="5dp"
             android:src="@mipmap/icon_chat_set" />
 
+        <TextView
+            android:id="@+id/tv_ok_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+            android:text="确定" />
+
     </RelativeLayout>
 </LinearLayout>

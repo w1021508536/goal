@@ -17,7 +17,7 @@ import butterknife.InjectView;
  * 创建者： 王金壮
  * 时间： 2017/5/31 18:43
  * 修改：
- * 描述：
+ * 描述：任务中心
  **/
 public class TaskActivity extends BaseActivity {
 

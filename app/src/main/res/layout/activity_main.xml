@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="23dp"
-        android:background="@color/chat_top" />
 
     <RelativeLayout
         android:id="@+id/message_top_layout"
