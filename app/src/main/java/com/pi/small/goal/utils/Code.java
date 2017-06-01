@@ -1,7 +1,7 @@
 package com.pi.small.goal.utils;
 
 /**
- * Created by Administrator on 2017/5/31.
+ * Created by JS on 2017/5/31.
  */
 
 public class Code {
