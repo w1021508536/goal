@@ -38,6 +38,7 @@ public class UserInfoActivity extends BaseActivity {
         ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
     }
+
     @Override
 
     public void initData() {
@@ -45,7 +46,7 @@ public class UserInfoActivity extends BaseActivity {
         nameTextInclude.setText("个人资料");
         SharedPreferences sp = Utils.UserSharedPreferences(this);
         tvUsernameUser.setText(sp.getString("nick", ""));
-        view=findViewById(R.id.view);
+        view = findViewById(R.id.view);
         super.initData();
     }
 
@@ -58,7 +59,7 @@ public class UserInfoActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.left_image_include:
                 finish();
                 break;
