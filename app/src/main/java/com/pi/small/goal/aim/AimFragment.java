@@ -1,16 +1,22 @@
 package com.pi.small.goal.aim;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.aim.activity.AddAimActivity;
 
 
-public class AimFragment extends Fragment {
+public class AimFragment extends Fragment implements View.OnClickListener {
 
+    private ImageView right_image;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +28,6 @@ public class AimFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_aim, container, false);
 
         View view = inflater.inflate(R.layout.fragment_aim, container, false);
         View topView = view.findViewById(R.id.view);
