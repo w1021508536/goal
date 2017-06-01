@@ -38,12 +38,13 @@
             android:textSize="16dp" />
 
         <ImageView
+            android:id="@+id/right_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:src="@mipmap/icon_chat_set" />
+            android:src="@mipmap/add_btn" />
 
     </RelativeLayout>
 
