@@ -2,10 +2,9 @@ package com.pi.small.goal;
 
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,14 +17,14 @@ import com.pi.small.goal.aim.AimFragment;
 import com.pi.small.goal.message.MessageFragment;
 import com.pi.small.goal.my.MyFragment;
 import com.pi.small.goal.search.SearchFragment;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Utils;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
-import io.rong.imlib.model.UserInfo;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private LinearLayout aim_layout;
     private ImageView aim_image;
@@ -63,20 +62,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
-
         imtoken = sharedPreferences.getString("imtoken", "");
-
         fragmentManager = getSupportFragmentManager();
-
-        init();
+        super.onCreate(savedInstanceState);
     }
 
-    private void init() {
+@Override
+    public void initData() {
 
+view=findViewById(R.id.view);
         aim_layout = (LinearLayout) findViewById(R.id.aim_layout);
         aim_image = (ImageView) findViewById(R.id.aim_image);
         aim_text = (TextView) findViewById(R.id.aim_text);
@@ -107,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         setTabSelection(0);
-
+super.initData();
 
     }
 
@@ -259,6 +257,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
         }
+
+      if (index==3)
+        view.setVisibility(View.GONE);
+        else
+            view.setVisibility(View.VISIBLE);
         transaction.commitAllowingStateLoss();
 
     }
