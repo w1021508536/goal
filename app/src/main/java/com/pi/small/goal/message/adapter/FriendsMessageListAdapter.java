@@ -23,6 +23,8 @@ import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +44,7 @@ public class FriendsMessageListAdapter extends BaseAdapter {
             .setLoadingDrawableId(R.mipmap.ic_launcher)
             .setFailureDrawableId(R.mipmap.icon_message_system)
             .build();
-
+    private SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm");
 
     public FriendsMessageListAdapter(Context context, List<Map<String, String>> dataList, int rightWidth) {
         this.context = context;
@@ -92,14 +94,17 @@ public class FriendsMessageListAdapter extends BaseAdapter {
         viewHolder.name_text.setText(dataList.get(position).get("sendUserNick"));
 //        viewHolder.content_text.setText(dataList.get(position).get("sendUserBrief"));
         x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + dataList.get(position).get("avatar"), imageOptions);
+        viewHolder.content_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(dataList.get(position).get("createTime")))) + "申请加你为好友");
 
         if (dataList.get(position).get("status").equals("0")) {
             viewHolder.agree_layout.setVisibility(View.VISIBLE);
             viewHolder.right_text.setVisibility(View.GONE);
+
         } else if (dataList.get(position).get("status").equals("-1")) {
             viewHolder.agree_layout.setVisibility(View.GONE);
             viewHolder.right_text.setVisibility(View.VISIBLE);
             viewHolder.right_text.setText("已拒绝");
+
         } else if (dataList.get(position).get("status").equals("1")) {
             viewHolder.agree_layout.setVisibility(View.GONE);
             viewHolder.right_text.setVisibility(View.VISIBLE);

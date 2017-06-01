@@ -28,7 +28,9 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import io.rong.imkit.fragment.ConversationListFragment;
@@ -64,6 +66,9 @@ public class MessageFragment extends ConversationListFragment implements View.On
 
     private List<Conversation> LastMessage_List;
     private Conversation conversation;
+
+    private SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm");
+    private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
 
     public MessageFragment() {
 
@@ -154,26 +159,35 @@ public class MessageFragment extends ConversationListFragment implements View.On
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("===========lastmessage==============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
                         conversation = new Conversation();
 
-                        JSONObject jsonObject_system = new JSONObject(result).getJSONObject("result").getJSONObject("system");
+                        JSONObject jsonObject_system = new JSONObject(result).getJSONObject("result").optJSONObject("system");
                         JSONObject jsonObject_contact = new JSONObject(result).getJSONObject("result").optJSONObject("contact");
 
                         if (jsonObject_contact != null) {
 
+                            String content = jsonObject_contact.getString("content");
+                            JSONObject jsonObject = new JSONObject(content);
+                            friends_context_text.setText(jsonObject.getJSONObject("user").getString("nick") + "请求加你为好友");
+                            friends_time_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(jsonObject_contact.optString("createTime")))));
 
                         } else {
-
+                            friends_context_text.setText("");
+                            friends_time_text.setText("");
                         }
 
                         if (jsonObject_system != null) {
-                            conversation.setSentTime(Long.valueOf(jsonObject_system.getString("createTime")));
-                        } else {
+                            String content = jsonObject_system.getString("content");
+                            JSONObject jsonObject = new JSONObject(content);
 
+                            system_context_text.setText(jsonObject.optString("brief"));
+                            system_time_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(jsonObject_system.optString("createTime")))));
+                        } else {
+                            system_context_text.setText("");
+                            system_time_text.setText("");
                         }
 
 
