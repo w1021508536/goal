@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.activity.FriendSetActivity;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -25,7 +26,7 @@ import java.util.HashMap;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
-public class ConversationActivity extends FragmentActivity implements View.OnClickListener {
+public class ConversationActivity extends BaseActivity  {
 
     private ImageView left_image;
     private ImageView right_image;

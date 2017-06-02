@@ -3,28 +3,23 @@ package com.pi.small.goal.message.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.message.ConversationActivity;
 import com.pi.small.goal.message.adapter.FriendsListAdapter;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CharacterParser;
-import com.pi.small.goal.utils.ContactBean;
+import com.pi.small.goal.utils.entity.ContactBean;
 import com.pi.small.goal.utils.FirstLetterUtil;
 import com.pi.small.goal.utils.PinyinComparator;
 import com.pi.small.goal.utils.Url;
@@ -46,15 +41,12 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.rong.imkit.RongIM;
-import io.rong.imkit.mention.MemberMentionedActivity;
 import io.rong.imlib.model.UserInfo;
 
-public class FriendsListActivity extends AppCompatActivity implements View.OnClickListener {
+public class FriendsListActivity extends BaseActivity {
 
 
     private ImageView left_image;

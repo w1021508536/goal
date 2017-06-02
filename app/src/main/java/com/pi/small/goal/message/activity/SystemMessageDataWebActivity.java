@@ -8,8 +8,9 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 
-public class SystemMessageDataWebActivity extends AppCompatActivity implements View.OnClickListener {
+public class SystemMessageDataWebActivity extends BaseActivity  {
 
 
     private ImageView left_image;

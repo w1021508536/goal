@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -22,7 +23,7 @@ import org.xutils.x;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
-public class RemarkFriendActivity extends AppCompatActivity implements View.OnClickListener {
+public class RemarkFriendActivity extends BaseActivity  {
 
 
     private ImageView left_image;

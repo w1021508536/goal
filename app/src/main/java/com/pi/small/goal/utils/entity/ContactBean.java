@@ -1,4 +1,4 @@
-package com.pi.small.goal.utils;
+package com.pi.small.goal.utils.entity;
 
 public class ContactBean {
 

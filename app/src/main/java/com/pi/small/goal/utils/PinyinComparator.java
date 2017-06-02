@@ -1,5 +1,7 @@
 package com.pi.small.goal.utils;
 
+import com.pi.small.goal.utils.entity.ContactBean;
+
 import java.util.Comparator;
 
 

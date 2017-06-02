@@ -11,6 +11,7 @@ import android.widget.Switch;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -26,7 +27,7 @@ import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
-public class FriendSetActivity extends AppCompatActivity implements View.OnClickListener {
+public class FriendSetActivity extends BaseActivity {
 
     private ImageView left_image;
 

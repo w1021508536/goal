@@ -3,7 +3,6 @@ package com.pi.small.goal.aim.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,9 +22,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.PositionAdapter;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
-import com.pi.small.goal.utils.ContactBean;
-import com.pi.small.goal.utils.FirstLetterUtil;
 import com.pi.small.goal.utils.Utils;
 
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PositionActivity extends AppCompatActivity implements PoiSearch.OnPoiSearchListener, View.OnClickListener {
+public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSearchListener {
 
     private ImageView left_image;
     private ImageView right_image;
@@ -142,13 +140,35 @@ public class PositionActivity extends AppCompatActivity implements PoiSearch.OnP
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent();
-                intent.putExtra("position", dataList.get(position - 1).get("title"));
-                setResult(Code.PositionCode, intent);
-                finish();
+                if (position == 1) {
+                    ImageView check_image = (ImageView) view.findViewById(R.id.check_image);
+                    check_image.setVisibility(View.VISIBLE);
+                    Intent intent = new Intent();
+                    intent.putExtra("position", "");
+                    intent.putExtra("city", "");
+                    intent.putExtra("province", "");
+                    setResult(Code.PositionCode, intent);
+                    finish();
+                } else {
+                    ImageView check_image = (ImageView) view.findViewById(R.id.check_image);
+                    check_image.setVisibility(View.VISIBLE);
+                    Intent intent = new Intent();
+                    intent.putExtra("position", dataList.get(position - 1).get("title"));
+                    intent.putExtra("city", dataList.get(position - 1).get("city"));
+                    intent.putExtra("province", dataList.get(position - 1).get("province"));
+                    setResult(Code.PositionCode, intent);
+                    finish();
+                }
+
+
             }
         });
 
+        map = new HashMap<String, String>();
+        map.put("title", "不显示");
+        map.put("snippet", "");
+        dataList.add(map);
+        dataList2.add(map);
         poiSearch.searchPOIAsyn();
     }
 
@@ -250,7 +270,8 @@ public class PositionActivity extends AppCompatActivity implements PoiSearch.OnP
                 map = new HashMap<String, String>();
                 map.put("title", poiResult.getPois().get(j).getTitle());
                 map.put("snippet", poiResult.getPois().get(j).getSnippet());
-
+                map.put("city", poiResult.getPois().get(j).getCityName());
+                map.put("province", poiResult.getPois().get(j).getProvinceName());
                 dataList.add(map);
                 dataList2.add(map);
 
@@ -284,6 +305,11 @@ public class PositionActivity extends AppCompatActivity implements PoiSearch.OnP
     private void Refresh() {
         dataList.clear();
         dataList2.clear();
+        map = new HashMap<String, String>();
+        map.put("title", "不显示");
+        map.put("snippet", "");
+        dataList.add(map);
+        dataList2.add(map);
         page = 1;
         query.setPageNum(page);
 
@@ -296,6 +322,8 @@ public class PositionActivity extends AppCompatActivity implements PoiSearch.OnP
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
             Intent intent = new Intent();
             intent.putExtra("position", "");
+            intent.putExtra("city", "");
+            intent.putExtra("province", "");
             setResult(Code.PositionCode, intent);
             finish();
             return true;

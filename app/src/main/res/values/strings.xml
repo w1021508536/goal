@@ -19,6 +19,9 @@
 
     <string name="invitation_code">邀请码</string>
 
+    <string name="aim_budget">目标预算</string>
+
+
     <string name="transfer_mine_fragment">期权转让</string>
     <string name="shop_mine_fragment">积分商城</string>
     <string name="task_mine_fragment">任务中心</string>

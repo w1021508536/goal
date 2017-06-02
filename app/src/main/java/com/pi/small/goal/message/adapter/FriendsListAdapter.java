@@ -1,24 +1,21 @@
 package com.pi.small.goal.message.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
-import com.pi.small.goal.utils.ContactBean;
+import com.pi.small.goal.utils.entity.ContactBean;
 import com.pi.small.goal.utils.Url;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2017/5/26.

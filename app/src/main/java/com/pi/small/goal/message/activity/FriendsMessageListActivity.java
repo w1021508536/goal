@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.adapter.FriendsMessageListAdapter;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.SwipeListView;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FriendsMessageListActivity extends AppCompatActivity implements View.OnClickListener {
+public class FriendsMessageListActivity extends BaseActivity  {
 
 
     private ImageView left_image;

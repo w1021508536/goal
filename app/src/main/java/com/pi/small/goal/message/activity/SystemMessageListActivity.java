@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.adapter.SystemMessageListAdapter;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -27,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SystemMessageListActivity extends AppCompatActivity implements View.OnClickListener {
+public class SystemMessageListActivity extends BaseActivity  {
 
     private ImageView left_image;
     private ListView system_list;

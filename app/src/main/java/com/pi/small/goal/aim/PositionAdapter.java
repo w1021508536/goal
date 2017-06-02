@@ -60,8 +60,20 @@ public class PositionAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.title_text.setText(dataList.get(position).get("title"));
-        viewHolder.snippet_text.setText(dataList.get(position).get("snippet"));
+//        if (position == 0) {
+//            viewHolder.title_text.setText("不显示");
+//            viewHolder.snippet_text.setVisibility(View.GONE);
+//        } else {
+        if (dataList.get(position).get("snippet").equals("")) {
+            viewHolder.title_text.setText(dataList.get(position).get("title"));
+            viewHolder.snippet_text.setVisibility(View.GONE);
+        } else {
+            viewHolder.title_text.setText(dataList.get(position).get("title"));
+            viewHolder.snippet_text.setVisibility(View.VISIBLE);
+            viewHolder.snippet_text.setText(dataList.get(position).get("snippet"));
+        }
+
+//        }
 
 
         return convertView;

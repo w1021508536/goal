@@ -14,7 +14,13 @@ public class Url {
     public static String Register = "/user/register";
     public static String Login = "/user/login";
 
+    public static String UpPicture = "/file/picture";//上传图片
 
+    public static String Aim = "/aim";// put 访问  新建目标   get 访问  aimId参数为详情  userId参数为列表
+    public static String AimDynamic = "/aim/dynamic";//新建动态或创建目标
+
+
+    //Message
     public static String LastMessage = "/push/message/last";
 
     public static String FriendsMessageList = "/push/message/contact";
@@ -34,4 +40,6 @@ public class Url {
     public static String FriendBlackAdd = "/friend/black/add";//添加黑名单
     public static String FriendBlackDelete = "/friend/black/remove";// 移出黑名单
     public static String FriendEdit = "/friend";//编辑好友
+
+
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.adapter.AddFriendAdapter;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AddFriendActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddFriendActivity extends BaseActivity {
 
     private ImageView left_image;
     private ImageView delete_image;
