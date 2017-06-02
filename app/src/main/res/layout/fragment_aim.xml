@@ -20,8 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:src="@mipmap/icon_arrow_white_left"
-            android:visibility="gone" />
+            android:src="@mipmap/icon_sign_aim" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:src="@mipmap/add_btn" />
+            android:src="@mipmap/icon_add" />
 
     </RelativeLayout>
 
