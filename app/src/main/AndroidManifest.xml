@@ -86,7 +86,8 @@
         <!-- 高德地图 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="高德地图的 AppKey" />
+            android:value="ba47c3f72135168a4b805af7d8dcd40b" />
+        <service android:name="com.amap.api.location.APSService"></service>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -184,12 +185,6 @@
         <activity
             android:name=".my.activity.FollowActivity"
             android:label="关注页面"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".message.activity.RemarkFriendActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".aim.activity.AddAimActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".aim.activity.PositionActivity"
