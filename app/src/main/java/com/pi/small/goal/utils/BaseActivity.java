@@ -6,6 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import com.pi.small.goal.R;
 
 /**
  * 公司：小目标
@@ -14,9 +17,10 @@ import android.view.WindowManager;
  * 修改：
  * 描述：
  **/
-public class BaseActivity extends AppCompatActivity implements View.OnClickListener{
+public class BaseActivity extends AppCompatActivity implements View.OnClickListener {
 
     public View view;
+    public ImageView leftImageInclude;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,20 +28,22 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         initData();
         initWeight();
     }
-/**
-*设置点击事件等
-*create  wjz
-**/
+
+    /**
+     * 设置点击事件等
+     * create  wjz
+     **/
     public void initWeight() {
 
     }
 
     /**
-    *初始化數據
-    *create  wjz
-    **/
+     * 初始化數據
+     * create  wjz
+     **/
 
     public void initData() {
+        view = findViewById(R.id.view);
         if (view == null)
             return;
         int sysVersion = Integer.parseInt(Build.VERSION.SDK);
@@ -47,10 +53,20 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             view.setVisibility(View.GONE);
         }
+        leftImageInclude = (ImageView) findViewById(R.id.left_image_include);
+        if (leftImageInclude != null) {
+            leftImageInclude.setOnClickListener(this);
+        }
     }
 
     @Override
     public void onClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.left_image_include:
+                finish();
+                break;
+        }
 
     }
 }

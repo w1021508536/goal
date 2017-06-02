@@ -3,15 +3,16 @@ package com.pi.small.goal.message;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
@@ -34,7 +35,6 @@ import java.util.Date;
 import java.util.List;
 
 import io.rong.imkit.fragment.ConversationListFragment;
-import io.rong.imkit.model.UIConversation;
 import io.rong.imkit.widget.adapter.ConversationListAdapter;
 import io.rong.imlib.model.Conversation;
 
@@ -43,23 +43,16 @@ import io.rong.imlib.model.Conversation;
  */
 
 public class MessageFragment extends ConversationListFragment implements View.OnClickListener {
-
     private ImageView right_image;
-
     private RelativeLayout system_layout;
     private TextView system_context_text;
     private TextView system_time_text;
     private ImageView system_image;
-
     private RelativeLayout friends_layout;
     private TextView friends_context_text;
     private TextView friends_time_text;
     private ImageView friends_image;
-
-
     private MessageListAdapter messageListAdapter;
-
-
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private String token;
@@ -101,6 +94,16 @@ public class MessageFragment extends ConversationListFragment implements View.On
         friends_context_text = (TextView) view.findViewById(R.id.friends_context_text);
         friends_time_text = (TextView) view.findViewById(R.id.friends_time_text);
 
+        View topView = view.findViewById(R.id.view);
+        if (topView == null)
+            return;
+        int sysVersion = Integer.parseInt(Build.VERSION.SDK);
+        if (sysVersion >= 19) {
+            getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        } else {
+            topView.setVisibility(View.GONE);
+        }
 
         init();
     }

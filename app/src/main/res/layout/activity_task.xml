@@ -4,10 +4,13 @@
     android:layout_height="match_parent"
     android:background="@color/background_system_list"
     android:orientation="vertical">
+
     <include layout="@layout/view_include" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,9 +26,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textSize="12dp"
                 android:padding="5dp"
-                android:text="-主线任务-" />
+                android:text="-主线任务-"
+                android:textSize="12dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -37,22 +40,23 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/save_mission" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="目标存钱" />
 
                 <TextView
                     style="@style/text_white_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -68,8 +72,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:textSize="12dp"
-                android:text="-日常任务-" />
+                android:text="-日常任务-"
+                android:textSize="12dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -81,22 +85,23 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/sign_mission" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="每日签到" />
 
                 <TextView
                     style="@style/text_white_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -110,7 +115,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/rc_divider_line" />
+                android:background="@color/background_system_list" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -122,18 +127,19 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/help_mission" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="助力好友" />
 
                 <TextView
+                    style="@style/text_yellow_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
@@ -143,9 +149,10 @@
 
                 <TextView
                     style="@style/text_white_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -159,7 +166,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/rc_divider_line" />
+                android:background="@color/background_system_list" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -171,22 +178,33 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/great_mission" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
+
                     android:text="点赞目标" />
 
                 <TextView
-                    style="@style/text_white_12"
+                    style="@style/text_yellow_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
+                    android:text="+2经验/次" />
+
+                <TextView
+                    style="@style/text_white_12"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -200,7 +218,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/rc_divider_line" />
+                android:background="@color/background_system_list" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -212,22 +230,32 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/share_mission" />
+
+                <TextView
+                    style="@style/text_yellow_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
+                    android:text="+20经验/天" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="分享目标" />
 
                 <TextView
                     style="@style/text_white_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -241,7 +269,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
-                android:background="@color/rc_divider_line" />
+                android:background="@color/background_system_list" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -253,22 +281,32 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/comment_mission" />
+
+                <TextView
+                    style="@style/text_yellow_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
+                    android:text="+4经验/次" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="评论目标" />
 
                 <TextView
                     style="@style/text_white_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -284,8 +322,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:textSize="12dp"
-                android:text="-特殊任务-" />
+                android:text="-特殊任务-"
+                android:textSize="12dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -297,22 +335,32 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/invite_mission" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="邀请好友" />
 
                 <TextView
-                    style="@style/text_white_12"
+                    style="@style/text_yellow_10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="40dp"
+                    android:text="+50经验/人" />
+
+                <TextView
+                    style="@style/text_white_12"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"
@@ -328,8 +376,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:textSize="12dp"
-                android:text="-新手任务-" />
+                android:text="-新手任务-"
+                android:textSize="12dp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -341,22 +389,23 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/rookie_mission" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="50dp"
                     android:text="新手任务包" />
 
                 <TextView
                     style="@style/text_white_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="70dp"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:background="@drawable/selector_task_blue"
                     android:gravity="center"
                     android:paddingBottom="5dp"

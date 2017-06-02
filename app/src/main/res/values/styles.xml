@@ -12,9 +12,15 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="text_white_12">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="text_white_16">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="text_black_14">
@@ -24,8 +30,17 @@
 
 
     <style name="text_gray_14">
-        <item name="android:textColor">@color/space_line</item>
+        <item name="android:textColor">@color/text_small_light</item>
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="text_gray_12">
+        <item name="android:textColor">@color/text_small_light</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="text_yellow_10">
+        <item name="android:textColor">@color/text_main_on</item>
+        <item name="android:textSize">10sp</item>
+    </style>
 </resources>

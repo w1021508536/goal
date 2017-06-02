@@ -27,17 +27,22 @@
     <string name="looks_mine_fragment">浏览记录</string>
     <string name="changyong_mine_fragment">常用工具</string>
     <string name="wallet_mine_fragment">钱包</string>
-    <string name="target_mine_fragment">目标</string>
+    <string name="target_mine_fragment">我的目标</string>
     <string name="red_mine_fragment">红包</string>
     <string name="distribution_mine_fragment">分销</string>
     <string name="extension_mine_fragment">推广码</string>
     <string name="illness_mine_fragment">大病互助</string>
 
+    <string name="title_user_activity">个人资料</string>
     <string name="icon_user_activity">头像</string>
     <string name="username_user_activity">昵称</string>
     <string name="content_user_activity">个性签名</string>
     <string name="dengji_user_activity">等级</string>
     <string name="wx_user_activity">微信</string>
     <string name="phone_user_activity">手机号</string>
+
+    <string name="title_updata_name">更改昵称</string>
+    <string name="title_updata_content">更改签名</string>
+    <string name="updata_ok">修改成功</string>
 
 </resources>

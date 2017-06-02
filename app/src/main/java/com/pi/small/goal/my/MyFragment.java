@@ -14,15 +14,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.FollowActivity;
+import com.pi.small.goal.my.activity.RedActivity;
 import com.pi.small.goal.my.activity.TaskActivity;
 import com.pi.small.goal.my.activity.UserInfoActivity;
 import com.pi.small.goal.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import org.xutils.image.ImageOptions;
-import org.xutils.x;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -38,9 +41,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     @InjectView(R.id.right_image_include)
     ImageView rightImageInclude;
     @InjectView(R.id.icon_fragment)
-    ImageView iconFragment;
-    @InjectView(R.id.content_tv_fragment)
-    TextView contentTvFragment;
+    CircleImageView iconFragment;
     @InjectView(R.id.top_rl)
     RelativeLayout topRl;
     @InjectView(R.id.ll_collect_framgent)
@@ -53,8 +54,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     View lineView;
     @InjectView(R.id.ll_wallect_fragment)
     LinearLayout llWallectFragment;
-    @InjectView(R.id.ll_target_fragment)
-    LinearLayout llTargetFragment;
     @InjectView(R.id.ll_red_fragment)
     LinearLayout llRedFragment;
     @InjectView(R.id.ll_extension_fragment)
@@ -65,6 +64,16 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     LinearLayout llDistributionFragment;
     @InjectView(R.id.ll_task_fragment)
     LinearLayout llTaskFragment;
+    @InjectView(R.id.content_tv_fragment)
+    TextView contentTvFragment;
+    @InjectView(R.id.linearLayout)
+    LinearLayout linearLayout;
+    @InjectView(R.id.ll_follow_fragment)
+    LinearLayout llFollowFragment;
+    @InjectView(R.id.imageView)
+    ImageView imageView;
+    @InjectView(R.id.imageView2)
+    ImageView imageView2;
 
 
     private ImageOptions imageOptions = new ImageOptions.Builder()
@@ -87,16 +96,13 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     private void initWeight() {
         iconFragment.setOnClickListener(this);
         llTaskFragment.setOnClickListener(this);
+        llRedFragment.setOnClickListener(this);
+        llFollowFragment.setOnClickListener(this);
     }
 
     private void initData() {
 
 
-        SharedPreferences sp = Utils.UserSharedPreferences(getContext());
-        String avatar = sp.getString("avatar", "");
-        x.image().bind(iconFragment, sp
-                .getString("avatar", ""), imageOptions);
-        nameTextInclude.setText(sp.getString("nick", ""));
     }
 
     @Override
@@ -114,6 +120,34 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             case R.id.ll_task_fragment:
                 startActivity(new Intent(getContext(), TaskActivity.class));
                 break;
+            case R.id.ll_red_fragment:
+                startActivity(new Intent(getContext(), RedActivity.class));
+                break;
+            case R.id.ll_follow_fragment:
+                startActivity(new Intent(getContext(), FollowActivity.class));
+                break;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences sp = Utils.UserSharedPreferences(getContext());
+        String avatar = sp.getString("avatar", "");
+//        x.image().bind(iconFragment, sp
+//                .getString("avatar", ""), imageOptions);
+        if (!"".equals(sp.getString("avatar", ""))) {
+            Picasso.with(getContext()).load(sp.getString("avatar", "")).into(iconFragment);
+        }
+        nameTextInclude.setText(sp.getString("nick", ""));
+        String content = sp.getString("brief", "");
+
+        if (!"".equals(content)) {
+            contentTvFragment.setBackground(null);
+            contentTvFragment.setText(content);
+        } else {
+            contentTvFragment.setBackgroundResource(R.drawable.background_oval_white);
+            contentTvFragment.setText("请登录");
         }
     }
 }
