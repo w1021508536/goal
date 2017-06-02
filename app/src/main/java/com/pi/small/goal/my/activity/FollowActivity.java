@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.FollowAdapter;
 import com.pi.small.goal.my.entry.FollowEntry;
 import com.pi.small.goal.utils.BaseActivity;
-import com.pi.small.goal.utils.GosnUtil;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -50,6 +53,7 @@ public class FollowActivity extends BaseActivity {
     @InjectView(R.id.plv_collect)
     PullToRefreshListView plvCollect;
     private FollowAdapter adapter;
+    private int page = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,8 +68,16 @@ public class FollowActivity extends BaseActivity {
         super.initData();
         adapter = new FollowAdapter(this);
         plvCollect.setAdapter(adapter);
+        nameTextInclude.setText("我的关注");
+        rightImageInclude.setVisibility(View.GONE);
         getData();
     }
+
+
+    /**
+     * 获取数据
+     * create  wjz
+     **/
 
     //{"msg":"success","code":0,
 // "result":[{"followId":1,"userId":26,"followUserId":31,"nick":"张洋","avatar":"https://wx.qlogo.cn/mmopen/SK4ycmXqictWLtQbUyjGw4o4yzlcY5AEZevEib7zkIJqwuiamTibn4cImYk3Tb0fJOqv92ykvlObc2j0gu6Nv3az2VtBniavZHOiay/0"},
@@ -77,13 +89,21 @@ public class FollowActivity extends BaseActivity {
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("p", page + "");
         x.http().post(requestParams, new Callback.CacheCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    List<FollowEntry> data = GosnUtil.parseJsonArrayWithGson(jsonObject.get("result").toString(), FollowEntry.class);
-                    adapter.setData(data);
+                    String jsonData = jsonObject.get("result").toString();
+                    Gson gson = new Gson();
+                    List<FollowEntry> data = gson.fromJson(jsonData, new TypeToken<List<FollowEntry>>() {
+                    }.getType());
+                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
+                        adapter.addData(data);
+                    } else
+                        adapter.setData(data);
+                    plvCollect.onRefreshComplete();
 
                 } catch (JSONException e) {
                 }
@@ -91,17 +111,17 @@ public class FollowActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                plvCollect.onRefreshComplete();
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-
+                plvCollect.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                plvCollect.onRefreshComplete();
             }
 
             @Override
@@ -115,6 +135,22 @@ public class FollowActivity extends BaseActivity {
     @Override
     public void initWeight() {
         super.initWeight();
+
+        plvCollect.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                page = 1;
+                getData();
+            }
+        });
+        plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                page++;
+                getData();
+            }
+        });
+
     }
 
 

@@ -9,6 +9,8 @@
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/plv_target"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.handmark.pulltorefresh.library.PullToRefreshListView>
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"></com.handmark.pulltorefresh.library.PullToRefreshListView>
 
 </LinearLayout>

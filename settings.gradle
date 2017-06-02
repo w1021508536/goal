@@ -1,1 +1,1 @@
-include ':app', ':IMLib', ':IMKit', ':wjz'
+include ':app', ':IMLib', ':IMKit', ':wjz', ':cirprogress'

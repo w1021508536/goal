@@ -47,12 +47,13 @@
 
         <TextView
             android:id="@+id/tv_ok_include"
+            style="@style/text_white_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:visibility="gone"
-            android:text="确定" />
+            android:text="确定"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </LinearLayout>

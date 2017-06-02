@@ -14,8 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.CollectActivity;
 import com.pi.small.goal.my.activity.FollowActivity;
 import com.pi.small.goal.my.activity.RedActivity;
+import com.pi.small.goal.my.activity.TargetActivity;
 import com.pi.small.goal.my.activity.TaskActivity;
 import com.pi.small.goal.my.activity.UserInfoActivity;
 import com.pi.small.goal.utils.Utils;
@@ -34,24 +36,30 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MyFragment extends Fragment implements View.OnClickListener {
 
 
-    @InjectView(R.id.left_image_include)
-    ImageView leftImageInclude;
-    @InjectView(R.id.name_text_include)
-    TextView nameTextInclude;
-    @InjectView(R.id.right_image_include)
-    ImageView rightImageInclude;
     @InjectView(R.id.icon_fragment)
     CircleImageView iconFragment;
+    @InjectView(R.id.content_tv_fragment)
+    TextView contentTvFragment;
+    @InjectView(R.id.ll_task_fragment)
+    LinearLayout llTaskFragment;
+    @InjectView(R.id.linearLayout)
+    LinearLayout linearLayout;
     @InjectView(R.id.top_rl)
     RelativeLayout topRl;
+    @InjectView(R.id.ll_follow_fragment)
+    LinearLayout llFollowFragment;
     @InjectView(R.id.ll_collect_framgent)
     LinearLayout llCollectFramgent;
-    @InjectView(R.id.looks_mine_fragment)
-    LinearLayout looksMineFragment;
+    @InjectView(R.id.imageView)
+    ImageView imageView;
+    @InjectView(R.id.ll_target_fragment)
+    LinearLayout llTargetFragment;
     @InjectView(R.id.center_ll_fragment)
     LinearLayout centerLlFragment;
     @InjectView(R.id.line_view)
     View lineView;
+    @InjectView(R.id.imageView2)
+    ImageView imageView2;
     @InjectView(R.id.ll_wallect_fragment)
     LinearLayout llWallectFragment;
     @InjectView(R.id.ll_red_fragment)
@@ -62,20 +70,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     LinearLayout llIllnessFragment;
     @InjectView(R.id.ll_distribution_fragment)
     LinearLayout llDistributionFragment;
-    @InjectView(R.id.ll_task_fragment)
-    LinearLayout llTaskFragment;
-    @InjectView(R.id.content_tv_fragment)
-    TextView contentTvFragment;
-    @InjectView(R.id.linearLayout)
-    LinearLayout linearLayout;
-    @InjectView(R.id.ll_follow_fragment)
-    LinearLayout llFollowFragment;
-    @InjectView(R.id.imageView)
-    ImageView imageView;
-    @InjectView(R.id.imageView2)
-    ImageView imageView2;
-
-
+    @InjectView(R.id.left_image_include)
+    ImageView leftImageInclude;
+    @InjectView(R.id.name_text_include)
+    TextView nameTextInclude;
+    @InjectView(R.id.right_image_include)
+    ImageView rightImageInclude;
     private ImageOptions imageOptions = new ImageOptions.Builder()
             .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
             .setLoadingDrawableId(R.mipmap.ic_launcher)
@@ -98,6 +98,9 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         llTaskFragment.setOnClickListener(this);
         llRedFragment.setOnClickListener(this);
         llFollowFragment.setOnClickListener(this);
+        llTargetFragment.setOnClickListener(this);
+        llCollectFramgent.setOnClickListener(this);
+
     }
 
     private void initData() {
@@ -125,6 +128,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ll_follow_fragment:
                 startActivity(new Intent(getContext(), FollowActivity.class));
+                break;
+            case R.id.ll_target_fragment:
+                startActivity(new Intent(getContext(), TargetActivity.class));
+                break;
+            case R.id.ll_collect_framgent:
+                startActivity(new Intent(getContext(), CollectActivity.class));
                 break;
         }
     }

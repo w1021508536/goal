@@ -2,6 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_system_list">
+
     <RelativeLayout
         android:id="@+id/top_rl"
         android:layout_width="match_parent"
@@ -25,21 +26,23 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@drawable/background_yellow_jingyan"
+            android:drawableLeft="@mipmap/exp_icon"
+            android:drawablePadding="5dp"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp"
-            android:drawableLeft="@mipmap/exp_icon"
-            android:drawablePadding="5dp"
             android:text="经验值---" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="10dp"
             android:layout_height="10dp"
             android:layout_alignBottom="@+id/icon_fragment"
             android:layout_alignRight="@+id/icon_fragment"
             android:layout_marginBottom="5dp"
             android:layout_marginRight="5dp"
+            android:scaleType="centerCrop"
+            android:background="@color/my_dengji_bg"
             android:src="@mipmap/v_icon" />
 
         <TextView
@@ -139,8 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/top_rl"
         android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="5dp">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_follow_fragment"
@@ -148,7 +150,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_wallet_white_gray"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -173,7 +177,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_wallet_white_gray"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
             <ImageView
                 android:layout_width="40dp"
@@ -193,12 +199,14 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/looks_mine_fragment"
+            android:id="@+id/ll_target_fragment"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_wallet_white_gray"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
 
             <ImageView
                 android:id="@+id/imageView"

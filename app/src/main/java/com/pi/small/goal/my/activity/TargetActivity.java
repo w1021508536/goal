@@ -1,5 +1,6 @@
 package com.pi.small.goal.my.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.adapter.TargetAdapter;
 import com.pi.small.goal.utils.BaseActivity;
 
 import butterknife.ButterKnife;
@@ -47,10 +49,24 @@ public class TargetActivity extends BaseActivity {
         super.initData();
         nameTextInclude.setText("我的目标");
         rightImageInclude.setImageResource(R.mipmap.qa_icon);
+
+        TargetAdapter adapter = new TargetAdapter(this);
+        plvTarget.setAdapter(adapter);
     }
 
     @Override
     public void initWeight() {
         super.initWeight();
+        rightImageInclude.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.right_image_include:
+                startActivity(new Intent(this, TargetOldActivity.class));
+                break;
+        }
     }
 }

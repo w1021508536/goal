@@ -35,8 +35,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -80,8 +80,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -122,8 +122,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -173,8 +173,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -225,8 +225,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -276,8 +276,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -330,8 +330,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
@@ -384,8 +384,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left"
                 android:paddingTop="10dp">
 
                 <ImageView
