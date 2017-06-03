@@ -43,8 +43,6 @@ dependencies {
     compile files('libs/libammsdk.jar')
     compile files('libs/AMap2DMap_4.2.0_AMapSearch_5.1.0_AMapLocation_3.4.0_20170517.jar')
 
-    compile project(':IMKit')
-    compile project(':IMLib')
     compile project(':pingpp')
     compile project(':bdwallet_pay_sdk')
 
