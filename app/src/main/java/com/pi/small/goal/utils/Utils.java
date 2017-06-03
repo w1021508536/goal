@@ -54,7 +54,6 @@ public class Utils {
         } else {
             photoPath = path;
         }
-
         return photoPath;
 
     }
