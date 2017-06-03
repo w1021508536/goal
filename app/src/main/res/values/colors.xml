@@ -19,13 +19,20 @@
 
     <color name="yellow_light">#FD9641</color>
 
+    <color name="yellow_heavy_text">#F4372C</color>
+
     <color name="yellow_walet_have">#E3CA92</color>
 
+    <!--background_gary -->
     <color name="background_system_list">#F6F6F6</color>
 
+    <!-- text_gary_light-->
     <color name="text_small_light">#B9B9B9</color>
 
+    <!-- black_light-->
     <color name="text_aim">#3C3C3C</color>
 
     <color name="gray_line">#B9B9B9</color>
+
+
 </resources>

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.AddAimActivity;
+import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.entity.AimEntity;
@@ -74,9 +75,29 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             case R.id.right_image:
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), AddAimActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, Code.AddAimCode);
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Code.AddAimCode) {
+
+            List<AimEntity> list = (List<AimEntity>) data.getSerializableExtra("aim");
+
+            if (list.size() == 0) {
+                System.out.println("========== list.size() ========" +00);
+            } else {
+
+
+                System.out.println("========== list.get(0).getName();========" + list.get(0).getName())
+                ;
+
+            }
+
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 

@@ -5,13 +5,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,7 +31,9 @@ import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ScrollerNumberPicker;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.entity.AimEntity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -37,6 +42,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +81,8 @@ public class AddAimActivity extends BaseActivity {
 
     private String cycle_window;
 
+    private ArrayList<AimEntity> aimList;
+
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
 
@@ -82,6 +90,8 @@ public class AddAimActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_aim);
+
+        aimList = new ArrayList<AimEntity>();
 
         cycle_window = "6";
         cycleList = new ArrayList<String>();
@@ -116,6 +126,7 @@ public class AddAimActivity extends BaseActivity {
         cycle_layout.setOnClickListener(this);
         budget_layout.setOnClickListener(this);
 
+
     }
 
     @Override
@@ -139,14 +150,15 @@ public class AddAimActivity extends BaseActivity {
                         } else {
                             brief = content_edit.getText().toString().trim();
                             if (imgLoad.equals("")) {
-                                NewAim();
+                                NewAim(v);
                             } else {
-                                UpPicture();
+                                UpPicture(v);
                             }
                         }
                     }
 
                 }
+
 
                 break;
             case R.id.position_layout:
@@ -253,7 +265,7 @@ public class AddAimActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void UpPicture() {
+    private void UpPicture(final View view) {
         RequestParams requestParams = new RequestParams(Url.Url + Url.UpPicture);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -270,7 +282,7 @@ public class AddAimActivity extends BaseActivity {
                     if (code.equals("0")) {
 
                         img = new JSONObject(result).getJSONObject("result").getString("path");
-                        NewAim();
+                        NewAim(view);
                     } else {
                         Utils.showToast(AddAimActivity.this, new JSONObject(result).getString("msg"));
                     }
@@ -301,7 +313,7 @@ public class AddAimActivity extends BaseActivity {
 
     }
 
-    private void NewAim() {
+    private void NewAim(final View view) {
         RequestParams requestParams = new RequestParams(Url.Url + Url.Aim);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -322,6 +334,32 @@ public class AddAimActivity extends BaseActivity {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
 
+                        JSONObject jsonObject = new JSONObject(result).getJSONObject("result");
+                        AimEntity aimEntity = new AimEntity();
+
+
+                        aimEntity.setId(jsonObject.getString("id"));
+                        aimEntity.setName(jsonObject.getString("name"));
+                        aimEntity.setBudget(jsonObject.getString("budget"));
+                        aimEntity.setMoney("0");
+                        aimEntity.setCycle(jsonObject.getString("cycle"));
+                        aimEntity.setCurrent("0");//
+                        aimEntity.setUserId(jsonObject.getString("userId"));
+
+                        aimEntity.setProvince(jsonObject.getString("province"));
+                        aimEntity.setCity(jsonObject.getString("city"));
+                        aimEntity.setBrief(jsonObject.getString("brief"));
+                        aimEntity.setPosition(jsonObject.getString("position"));
+                        aimEntity.setLongitude(jsonObject.optString("longitude"));
+                        aimEntity.setLatitude(jsonObject.optString("latitude"));
+                        aimEntity.setSupport("0");
+                        aimEntity.setCreateTime(jsonObject.getString("createTime"));
+                        aimEntity.setStatus("1");
+                        aimEntity.setImg(jsonObject.getString("img"));
+
+                        aimList.add(aimEntity);
+
+                        PutAimMoneyWindow(view);
 
                     } else {
                         Utils.showToast(AddAimActivity.this, new JSONObject(result).getString("msg"));
@@ -471,4 +509,92 @@ public class AddAimActivity extends BaseActivity {
 
     }
 
+
+    //弹出框
+    private void PutAimMoneyWindow(View view) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_aim_money, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        Button cancel_text = (Button) windowView.findViewById(R.id.cancel_text);
+        TextView ok_text = (TextView) windowView.findViewById(R.id.ok_text);
+        ImageView delete_image = (ImageView) windowView.findViewById(R.id.delete_image);
+        cancel_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                Intent intent = new Intent();
+                intent.putExtra("aim", aimList);
+                setResult(Code.AddAimCode, intent);
+                finish();
+            }
+        });
+        delete_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                Intent intent = new Intent();
+                intent.putExtra("aim", aimList);
+                setResult(Code.AddAimCode, intent);
+                finish();
+            }
+        });
+        ok_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+//                Intent intent = new Intent();
+//                setResult(Code.AddAimCode, intent);
+                Intent intent = new Intent();
+                intent.setClass(AddAimActivity.this, SaveMoneyActivity.class);
+                intent.putExtra("content", aimList.get(0).getBrief());
+                intent.putExtra("aimId", aimList.get(0).getId());
+                intent.putExtra("money", "0");
+                intent.putExtra("budget", aimList.get(0).getBudget());
+                intent.putExtra("img1", aimList.get(0).getImg());
+                intent.putExtra("img2", aimList.get(0).getBrief());
+                intent.putExtra("img3", aimList.get(0).getBrief());
+                startActivity(intent);
+
+
+            }
+        });
+        right_text.setOnClickListener(this);
+        left_image.setOnClickListener(this);
+
+
+//        windowView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                popupWindow.dismiss();
+//            }
+//        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
+            Intent intent = new Intent();
+            intent.putExtra("aim", aimList);
+            setResult(Code.AddAimCode, intent);
+            finish();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
 }

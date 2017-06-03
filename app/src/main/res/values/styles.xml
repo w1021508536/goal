@@ -44,6 +44,12 @@
         <item name="android:textColor">@color/text_main_on</item>
         <item name="android:textSize">10sp</item>
     </style>
+
+    <style name="black_light_14">
+        <item name="android:textColor">@color/text_aim</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
     <style name="MyDialogStyle" parent="android:Theme.Dialog">
         <!-- 边框 -->
         <item name="android:windowFrame">@null</item>

@@ -1,15 +1,21 @@
 package com.pi.small.goal.utils.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by JS on 2017-06-01.
  * <p>
  * 目标
  */
 
-public class AimEntity {
+public class AimEntity implements Serializable {
+
+    public AimEntity(){
+        super();
+    }
 
 //    {
-//        "id":25, "name":"刚刚好", "budget":5000, "money":0, "cycle":6, "current":0, "userId":
+//        "id":25, "name":"刚刚好", "budget":5000, "mone.y":0, "cycle":6, "current":0, "userId":
 //        43, "province":"山东省", "city":"青岛市", "brief":"哈哈", "position":"瘦和美瘦身中心", "longitude":
 //        0.000000, "latitude":0.000000, "support":0, "createTime":1496309464000, "status":1, "img":
 //        "1496309312178.PNG"
