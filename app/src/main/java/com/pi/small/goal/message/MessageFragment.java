@@ -57,6 +57,7 @@ public class MessageFragment extends ConversationListFragment implements View.On
     private SharedPreferences.Editor editor;
     private String token;
 
+
     private List<Conversation> LastMessage_List;
     private Conversation conversation;
 
