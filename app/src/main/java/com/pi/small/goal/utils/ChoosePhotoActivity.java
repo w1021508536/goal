@@ -13,13 +13,11 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
@@ -445,4 +443,3 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                 true);
     }
 }
-

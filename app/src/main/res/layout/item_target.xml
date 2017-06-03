@@ -1,21 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:paddingBottom="@dimen/top_left"
+    android:paddingLeft="@dimen/top_left"
+    android:paddingRight="@dimen/top_left">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:cardCornerRadius="5dp"
-        >
+        android:layout_height="160dp"
+        app:cardCornerRadius="5dp">
 
-        <ImageView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/chat_top" />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img_bg_item"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@color/chat_top" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="#30000000" />
+
+                <TextView
+                    android:id="@+id/tv_name_item"
+                    style="@style/text_white_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:singleLine="true"
+                    android:text="我要买电脑" />
+
+                <TextView
+                    android:id="@+id/tv_money_item"
+                    style="@style/text_white_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/tv_name_item"
+                    android:text="已转入 6000/12000元" />
+
+                <com.github.lzyzsd.circleprogress.DonutProgress
+                    android:id="@+id/progress_item"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:backgroundTint="@color/chat_top"
+                    android:backgroundTintMode="add"
+                    app:donut_text_size="10sp"
+                    custom:donut_finished_color="@color/chat_top"
+                    custom:donut_inner_drawable="@drawable/ic_star_black_48dp"
+                    custom:donut_show_text="false"
+                    custom:donut_unfinished_color="@color/primary_material_light" />
+            </RelativeLayout>
+        </RelativeLayout>
+
 
     </android.support.v7.widget.CardView>
 

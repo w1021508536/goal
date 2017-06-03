@@ -24,7 +24,7 @@ import butterknife.InjectView;
  * 创建者： 王金壮
  * 时间： 2017/6/1 9:22
  * 修改：
- * 描述：钱包明细
+ * 描述：我的红包
  **/
 public class RedActivity extends BaseActivity {
 
@@ -47,7 +47,7 @@ public class RedActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
-        nameTextInclude.setText("我的钱包");
+        nameTextInclude.setText("我的红包");
         rightImageInclude.setImageResource(R.mipmap.list_btn);
 
         List<WalletEntry> data = new ArrayList<>();

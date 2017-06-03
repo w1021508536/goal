@@ -39,8 +39,9 @@ public class TaskActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        view=findViewById(R.id.view);
+        view = findViewById(R.id.view);
         super.initData();
+        nameTextInclude.setText("我的任务");
     }
 
     @Override
@@ -52,7 +53,7 @@ public class TaskActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.left_image_include:
                 finish();
                 break;

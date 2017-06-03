@@ -3,6 +3,8 @@ package com.pi.small.goal.my.activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -45,6 +48,10 @@ public class RenameActivity extends BaseActivity {
     TextView tvOkInclude;
     @InjectView(R.id.etv_name_user)
     EditText etvNameUser;
+    @InjectView(R.id.left_image_include)
+    ImageView leftImageInclude;
+    @InjectView(R.id.img_delete)
+    ImageView imgDelete;
     private int type;
     private SharedPreferences sp;
 
@@ -67,10 +74,10 @@ public class RenameActivity extends BaseActivity {
 
         if (type == 0) {
             nameTextInclude.setText(getResources().getString(R.string.title_updata_name));
-            etvNameUser.setText(sp.getString("nick", ""));
+            etvNameUser.setText(sp.getString(KeyCode.USER_NICK, ""));
         } else {
             nameTextInclude.setText(getResources().getString(R.string.title_updata_content));
-            etvNameUser.setText(sp.getString("brief", ""));
+            etvNameUser.setText(sp.getString(KeyCode.USER_BRIEF, ""));
         }
 
         etvNameUser.setSelection(etvNameUser.getText().length());
@@ -83,6 +90,8 @@ public class RenameActivity extends BaseActivity {
 
         tvOkInclude.setOnClickListener(this);
 
+        etvNameUser.addTextChangedListener(new myTextWatch());
+        imgDelete.setOnClickListener(this);
     }
 
     @Override
@@ -91,6 +100,9 @@ public class RenameActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.tv_ok_include:
                 updata();
+                break;
+            case R.id.img_delete:
+                etvNameUser.setText("");
                 break;
         }
     }
@@ -101,12 +113,12 @@ public class RenameActivity extends BaseActivity {
             return;
         }
         RequestParams requestParams = new RequestParams(Url.Url + "/user");
-        requestParams.addHeader("token", sp.getString("token", ""));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
+        requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         if (type == TYPE_NICK) {
-            requestParams.addBodyParameter("nick", etvNameUser.getText().toString());
+            requestParams.addBodyParameter(KeyCode.USER_NICK, etvNameUser.getText().toString());
         } else {
-            requestParams.addBodyParameter("brief", etvNameUser.getText().toString());   //简介
+            requestParams.addBodyParameter(KeyCode.USER_BRIEF, etvNameUser.getText().toString());   //简介
         }
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -115,9 +127,9 @@ public class RenameActivity extends BaseActivity {
                     Utils.showToast(RenameActivity.this, getResources().getString(R.string.updata_ok));
                     SharedPreferences.Editor editor = sp.edit();
                     if (type == TYPE_NICK) {
-                        editor.putString("nick", etvNameUser.getText().toString());
+                        editor.putString(KeyCode.USER_NICK, etvNameUser.getText().toString());
                     } else {
-                        editor.putString("brief", etvNameUser.getText().toString());
+                        editor.putString(KeyCode.USER_BRIEF, etvNameUser.getText().toString());
                     }
                     editor.commit();
                     finish();
@@ -141,6 +153,29 @@ public class RenameActivity extends BaseActivity {
         });
     }
 
+    class myTextWatch implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() > 0) {
+                imgDelete.setVisibility(View.VISIBLE);
+            } else imgDelete.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * 返回的json是否是成功的
+     * create  wjz
+     **/
     public static boolean callOk(String jsonString) {
         String code = "";
         try {

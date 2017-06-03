@@ -6,31 +6,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.pi.small.goal.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 公司：小目标
  * 创建者： 王金壮
- * 时间： 2017/6/1 21:17
- * 描述： 我的目标的adapter
+ * 时间： 2017/6/2 17:38
  * 修改：
+ * 描述：我的收藏的adapter
  **/
-public class TargetAdapter extends BaseAdapter {
+public class CollectAdapter extends BaseAdapter {
 
     private final Context context;
 
-    public TargetAdapter(Context context) {
+    public CollectAdapter(Context context) {
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return 3;
     }
 
     @Override
@@ -40,32 +42,38 @@ public class TargetAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return 0;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_target, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_collect, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-            vh.progressItem.setFinishedStrokeWidth(8);
-            vh.progressItem.setUnfinishedStrokeWidth(8);
-            vh.progressItem.setTextColor(context.getResources().getColor(R.color.chat_top));
-            vh.progressItem.setFinishedStrokeColor(context.getResources().getColor(R.color.chat_top));
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        vh.progressItem.setProgress(50);
+
         return convertView;
     }
 
     static class ViewHolder {
-        @InjectView(R.id.img_bg_item)
-        ImageView imgBgItem;
-        @InjectView(R.id.progress_item)
-        DonutProgress progressItem;
+        @InjectView(R.id.line)
+        View line;
+        @InjectView(R.id.icon_item)
+        CircleImageView iconItem;
+        @InjectView(R.id.tv_name_item)
+        TextView tvNameItem;
+        @InjectView(R.id.tv_time_item)
+        TextView tvTimeItem;
+        @InjectView(R.id.img_city_item)
+        ImageView imgCityItem;
+        @InjectView(R.id.tv_title_item)
+        TextView tvTitleItem;
+        @InjectView(R.id.ll_progress_item)
+        LinearLayout llProgressItem;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);
