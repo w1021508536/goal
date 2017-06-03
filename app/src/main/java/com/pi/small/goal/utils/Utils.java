@@ -47,11 +47,16 @@ public class Utils {
     }
 
 
-    public static String GetAvatar() {
-        String avatar = "";
+    public static String GetPhotoPath(String path) {
+        String photoPath = "";
+        if (path.indexOf("http") == -1) {
+            photoPath = Url.PhotoUrl + path;
+        } else {
+            photoPath = path;
+        }
 
 
-        return avatar;
+        return photoPath;
 
     }
 }
