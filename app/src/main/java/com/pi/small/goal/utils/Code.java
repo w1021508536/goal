@@ -7,6 +7,7 @@ package com.pi.small.goal.utils;
 public class Code {
 
     public static int PositionCode = 10001;
+    public static int AddAimCode = 10002;
 
 
     public static int REQUEST_HEAD_CODE = 201;//编辑头像
