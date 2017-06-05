@@ -48,6 +48,7 @@ import java.util.List;
 
 /**
  * JS
+ *
  */
 
 public class AddAimActivity extends BaseActivity {
@@ -134,6 +135,8 @@ public class AddAimActivity extends BaseActivity {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.left_image:
+                intent.putExtra("aim", aimList);
+                setResult(Code.AddAimCode, intent);
                 finish();
                 break;
             case R.id.right_text:
@@ -156,7 +159,6 @@ public class AddAimActivity extends BaseActivity {
                             }
                         }
                     }
-
                 }
 
 
@@ -261,6 +263,17 @@ public class AddAimActivity extends BaseActivity {
             imgLoad = data.getStringExtra("path");
             System.out.println("===============imgLoad============" + imgLoad);
             photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+        } else if (resultCode == Code.SupportAim) {
+            aimList.get(0).setMoney(data.getStringExtra("money"));
+            Intent intent = new Intent();
+            intent.putExtra("aim", aimList);
+            setResult(Code.AddAimCode, intent);
+            finish();
+        } else if (resultCode == Code.FailCode) {
+            Intent intent = new Intent();
+            intent.putExtra("aim", aimList);
+            setResult(Code.AddAimCode, intent);
+            finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -554,9 +567,9 @@ public class AddAimActivity extends BaseActivity {
                 intent.putExtra("money", "0");
                 intent.putExtra("budget", aimList.get(0).getBudget());
                 intent.putExtra("img1", aimList.get(0).getImg());
-                intent.putExtra("img2", aimList.get(0).getBrief());
-                intent.putExtra("img3", aimList.get(0).getBrief());
-                startActivity(intent);
+                intent.putExtra("img2", "");
+                intent.putExtra("img3", "");
+                startActivityForResult(intent, Code.SupportAim);
 
 
             }

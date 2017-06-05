@@ -2,8 +2,14 @@ package com.pi.small.goal.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2017/5/23.
@@ -50,11 +56,25 @@ public class Utils {
     public static String GetPhotoPath(String path) {
         String photoPath = "";
         if (path.indexOf("http") == -1) {
-            photoPath = Url.PhotoUrl + path;
+            photoPath = Url.PhotoUrl +"/"+ path;
         } else {
             photoPath = path;
         }
         return photoPath;
 
+    }
+
+
+    public static boolean isAppInstalled(Context context, String packageName) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        List<String> pName = new ArrayList<String>();
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                pName.add(pn);
+            }
+        }
+        return pName.contains(packageName);
     }
 }
