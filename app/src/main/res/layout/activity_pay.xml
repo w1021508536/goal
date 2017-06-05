@@ -67,6 +67,7 @@
                 android:text="存入金额" />
 
             <TextView
+                android:id="@+id/money_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
@@ -80,6 +81,7 @@
                 android:src="@color/background_system_list" />
 
             <TextView
+                android:id="@+id/profit_text"
                 style="@style/text_gray_12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

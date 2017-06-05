@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#40000000">
+    android:background="#30000000">
 
     <LinearLayout
         android:id="@+id/pop_layout"
@@ -23,14 +23,14 @@
 
 
             <TextView
-                android:id="@+id/gallery_text"
+                android:id="@+id/withdrawals_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
-                android:text="手机相册"
+                android:text="资金取出"
                 android:textColor="@color/blue_text"
                 android:textSize="20sp" />
 
@@ -40,33 +40,17 @@
                 android:src="@color/gray_line" />
 
             <TextView
-                android:id="@+id/own_text"
+                android:id="@+id/photo_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:gravity="center"
                 android:paddingBottom="10dp"
                 android:paddingTop="10dp"
-                android:text="精美配图"
+                android:text="更换图片"
                 android:textColor="@color/blue_text"
                 android:textSize="20sp" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:src="@color/gray_line" />
-
-            <TextView
-                android:id="@+id/camera_text"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:gravity="center"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp"
-                android:text="拍摄"
-                android:textColor="@color/blue_text"
-                android:textSize="20sp" />
 
         </LinearLayout>
 
