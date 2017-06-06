@@ -8,7 +8,9 @@ import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,11 +81,27 @@ public class Utils {
     }
 
 
-    public static String GetTime(Context context, Long time) {
-
+    public static String GetTime( Long time) {
+       SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
         String time_string = "";
-        Long createTime = Long.valueOf(time);
+        long minute = 60000;
+        long hour = 3600000;
+        long day = 86400000;
+        long third_day = 259200000;
+        long distanceTime = System.currentTimeMillis() - time;
 
+        if (distanceTime < minute) {
+            time_string = "刚刚";
+        } else if (distanceTime >= minute && distanceTime < hour) {
+            time_string = String.valueOf(distanceTime / minute) + "分钟前";
+        } else if (distanceTime >= hour && distanceTime < day) {
+            time_string = String.valueOf(distanceTime / hour) + "小时前";
+        } else if (distanceTime >= day && distanceTime < third_day) {
+            time_string = String.valueOf(distanceTime / day) + "天前";
+        } else if (distanceTime >= third_day ){
+         time_string=   simpleDateFormat2.format(new Date(time));
+
+        }
 
 
         return time_string;
