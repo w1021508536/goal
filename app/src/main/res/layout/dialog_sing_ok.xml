@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingTop="30dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop="88dp"
+        android:background="@drawable/background_oval_white_white"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/tv_addExp_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="+6点经验"
+            android:textColor="@color/chat_top"
+            android:textSize="30dp" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="恭喜您今日签到成功!" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="并额外获得一次" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="翻牌"
+                android:textColor="@color/chat_top"
+                android:textSize="14dp" />
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="的机会" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_sigeOK"
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selector_setting_orange"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="去翻牌" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/sign_title_bg2x" />
+</RelativeLayout>

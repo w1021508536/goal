@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="70dp"
+    android:background="@android:color/transparent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingTop="30dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/background_oval_white_white"
+        android:orientation="vertical"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="+6点经验"
+            android:textColor="@color/chat_top"
+            android:textSize="30dp" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:text="恭喜您" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="赢得额外" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textColor="@color/chat_top"
+                android:textSize="14dp" />
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点经验值" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_flowOK"
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_setting_orange"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="领取" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/img_title_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/icon_ex_title_bg2x"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

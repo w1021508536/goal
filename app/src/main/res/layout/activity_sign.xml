@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/icon_sign_bg2x"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="23dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/left_image_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_arrow_white_left" />
+
+        <TextView
+            android:id="@+id/name_text_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="哈哈"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <ImageView
+            android:id="@+id/right_image_include"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_chat_set" />
+
+        <TextView
+            android:id="@+id/tv_ok_include"
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="确定"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_above="@+id/tv_sing_sign"
+        android:layout_alignLeft="@+id/tv_sing_sign"
+        android:layout_alignStart="@+id/tv_sing_sign"
+        android:layout_marginBottom="15dp"
+        android:background="@mipmap/icon_sign_days_bg2x">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/text_white_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="恭喜！您已连续签到" />
+
+            <TextView
+                android:id="@+id/tv_signDays_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:text="1"
+                android:textColor="@color/chat_top" />
+
+            <TextView
+                style="@style/text_white_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="天" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal"
+            android:paddingTop="30dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_day1_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_sign_chose2x" />
+
+                <TextView
+                    android:id="@+id/tv_day1_sign"
+                    style="@style/text_white_16"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:gravity="center"
+                    android:text="1"
+                    android:visibility="visible" />
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/space_line" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_day2_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_sign_chose2x" />
+
+                <TextView
+                    android:id="@+id/tv_day2_sign"
+                    style="@style/text_white_16"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:gravity="center"
+                    android:text="2"
+                    android:visibility="visible" />
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/space_line" />
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_day3_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_sign_chose2x" />
+
+                <TextView
+                    android:id="@+id/tv_day3_sign"
+                    style="@style/text_white_16"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:gravity="center"
+                    android:text="3"
+                    android:visibility="visible" />
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/space_line" />
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_day4_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_sign_chose2x" />
+
+                <TextView
+                    android:id="@+id/tv_day4_sign"
+                    style="@style/text_white_16"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:gravity="center"
+                    android:text="4"
+                    android:visibility="visible" />
+
+
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/space_line" />
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_day5_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_sign_chose2x" />
+
+                <TextView
+                    android:id="@+id/tv_day5_sign"
+                    style="@style/text_white_16"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:gravity="center"
+                    android:text="5"
+                    android:visibility="visible" />
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/space_line" />
+
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_day6_sign"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:padding="10dp"
+                    android:src="@mipmap/icon_sign_chose2x" />
+
+                <TextView
+                    android:id="@+id/tv_day6_sign"
+                    style="@style/text_white_16"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/background_yuan_gray"
+                    android:gravity="center"
+                    android:text="6"
+                    android:visibility="visible" />
+            </FrameLayout>
+
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center_vertical"
+                android:background="@color/space_line" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/background_yuan_gray"
+                android:padding="10dp"
+                android:src="@mipmap/liwu" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:text="(连续签到7天，即可额外获得15经验奖励哦)"
+            android:textColor="@color/chat_top"
+            android:textSize="14dp" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/tv_sing_sign"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_above="@+id/tv_hint_sign"
+        android:layout_marginLeft="@dimen/top_left"
+        android:layout_marginRight="@dimen/top_left"
+        android:background="@mipmap/icon_sign_button2x"
+        android:text="签到" />
+
+    <TextView
+        android:id="@+id/tv_hint_sign"
+        style="@style/text_white_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+
+        android:text="本活动最终解释权归小目标所有" />
+</RelativeLayout>

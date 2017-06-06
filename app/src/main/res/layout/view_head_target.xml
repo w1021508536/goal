@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical"
+    android:paddingBottom="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@drawable/image3">
+
+        <com.github.lzyzsd.circleprogress.DonutProgress
+            android:id="@+id/progress"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/chat_top"
+            android:backgroundTintMode="add"
+            app:donut_text_size="10sp"
+            custom:donut_finished_color="@color/chat_top"
+            custom:donut_inner_drawable="@drawable/ic_star_black_48dp"
+            custom:donut_show_text="false"
+            custom:donut_unfinished_color="@color/primary_material_light" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/progress"
+            android:layout_marginTop="10dp"
+            android:background="#30000000"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_budget_head"
+                    style="@style/text_white_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10,000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="目标预算(元)"
+                    android:textColor="#C09BA3"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="#C09BA3" />
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_money_head"
+                    style="@style/text_white_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1,600" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="已存金额(元)"
+                    android:textColor="#C09BA3"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="#C09BA3" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_cycle_head"
+                    style="@style/text_white_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="目标周期(天)"
+                    android:textColor="#C09BA3"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="#C09BA3"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10.0"
+                    android:textColor="@color/chat_top"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="目标预算(元)"
+                    android:textColor="#C09BA3"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="#C09BA3" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_goodPeople_targetMore"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:paddingLeft="@dimen/top_left"
+        android:paddingRight="@dimen/top_left">
+
+        <TextView
+            android:id="@+id/tv_goodNums_targetMOre"
+            style="@style/text_gray_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="1鼓励" />
+
+        <LinearLayout
+            android:id="@+id/ll_imags_head"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/tv_goodNums_targetMOre"
+            android:orientation="vertical">
+
+            <!--<de.hdodenhof.circleimageview.CircleImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:src="@mipmap/icon_user" />-->
+        </LinearLayout>
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/top_left"
+    android:paddingRight="@dimen/top_left">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="400dp"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view_line_top"
+            android:layout_width="2dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:background="@color/background_system_list" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="1dp"
+            android:src="@mipmap/timeline_all_icon" />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/background_system_list" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp">
+
+        <TextView
+            android:id="@+id/tv_time_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            android:textColor="@color/text_aim"
+            android:textSize="20dp" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_time_item"
+            android:layout_marginBottom="2dp"
+            android:layout_toRightOf="@+id/tv_time_item"
+            android:text="分钟前" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/background_system_list" />
+
+        <TextView
+            android:id="@+id/tv_title_item"
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_time_item"
+            android:text="来一趟说走就走的旅行" />
+
+        <ImageView
+            android:id="@+id/img_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl_money_item"
+            android:layout_below="@+id/tv_title_item"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image2" />
+
+
+        <LinearLayout
+            android:id="@+id/rl_money_item"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_above="@+id/rl_operation_item"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/background_system_list"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/icon_aim_save2x" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="为自己的目标存入" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100.0"
+                android:textColor="@color/chat_top" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="元" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rl_operation_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/top_left"
+            android:paddingTop="@dimen/top_left">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="150赞  100助力"
+                    android:textColor="@android:color/holo_blue_light" />
+
+                <TextView
+                    android:id="@+id/tv_city_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="5dp"
+                    android:drawableLeft="@mipmap/local_icon"
+                    android:drawablePadding="5dp"
+                    android:text="山东 青岛" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_city_item"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LEE:"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            style="@style/text_gray_big_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="支持你的目标！" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chirs:"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            style="@style/text_gray_big_14"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="支持你的目标！" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="查看全部20条评论" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

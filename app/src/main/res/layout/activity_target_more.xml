@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/srfl_targetMore"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lv_targetMore"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"></ListView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/tl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="23dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:id="@+id/left_image_include"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:padding="5dp"
+                android:src="@mipmap/icon_arrow_white_left" />
+
+            <TextView
+                android:id="@+id/name_text_include"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="哈哈"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:id="@+id/collect_image_include"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/right_image_include"
+                android:padding="5dp"
+                android:src="@mipmap/collection_btn" />
+
+            <ImageView
+                android:id="@+id/right_image_include"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:padding="5dp"
+                android:src="@mipmap/share_btn" />
+
+            <TextView
+                android:id="@+id/tv_ok_include"
+                style="@style/text_white_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="确定"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#50000000"
+        android:visibility="gone">
+
+        <com.pi.small.goal.weight.PinchImageView
+            android:id="@+id/pimg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/image2" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

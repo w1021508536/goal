@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/icon_draw_bg2x"
+    android:orientation="vertical">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="23dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="5dp">
+
+        <ImageView
+            android:id="@+id/left_image_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_arrow_white_left" />
+
+        <TextView
+            android:id="@+id/name_text_include"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="哈哈"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <ImageView
+            android:id="@+id/right_image_include"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:src="@mipmap/icon_chat_set" />
+
+        <TextView
+            android:id="@+id/tv_ok_include"
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="确定"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/background_oval_white_flop"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/gift_icon2x" />
+
+        <TextView
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="5dp"
+            android:text="您有" />
+
+        <TextView
+            android:id="@+id/tv_flowNums_flow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="1"
+            android:textColor="@color/chat_top"
+            android:textSize="14dp" />
+
+        <TextView
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="次翻牌机会" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_above="@+id/tv_hint_flop"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/icon_draw_card_bg2x"
+        android:orientation="vertical"
+        android:padding="25dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp">
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rl1_card_flop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/card_front2x">
+
+                    <ImageView
+                        android:id="@+id/img1_card_flop"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:src="@mipmap/icon_draw_exbg2x" />
+
+                    <TextView
+                        android:id="@+id/tv1_card_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img1_card_flop"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="5点经验"
+                        android:textColor="@color/chat_top"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/card_back2x" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/rl2_card_flop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/card_front2x">
+
+                    <ImageView
+                        android:id="@+id/img2_card_flop"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:src="@mipmap/icon_draw_exbg2x" />
+
+                    <TextView
+                        android:id="@+id/tv2_card_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img2_card_flop"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="5点经验"
+                        android:textColor="@color/chat_top"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/card_back2x" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/rl3_card_flop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/card_front2x">
+
+                    <ImageView
+                        android:id="@+id/img3_card_flop"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:src="@mipmap/icon_draw_exbg2x" />
+
+                    <TextView
+                        android:id="@+id/tv3_card_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img3_card_flop"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="5点经验"
+                        android:textColor="@color/chat_top"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/card_back2x" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_marginTop="2dp">
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rl4_card_flop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/card_front2x">
+
+                    <ImageView
+                        android:id="@+id/img4_card_flop"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:src="@mipmap/icon_draw_exbg2x" />
+
+                    <TextView
+                        android:id="@+id/tv4_card_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img4_card_flop"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="5点经验"
+                        android:textColor="@color/chat_top"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/card_back2x" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/rl5_card_flop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/card_front2x">
+
+                    <ImageView
+                        android:id="@+id/img5_card_flop"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:src="@mipmap/icon_draw_exbg2x" />
+
+                    <TextView
+                        android:id="@+id/tv5_card_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img5_card_flop"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="5点经验"
+                        android:textColor="@color/chat_top"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/card_back2x" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp">
+
+                <RelativeLayout
+                    android:id="@+id/rl6_card_flop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/card_front2x">
+
+                    <ImageView
+                        android:id="@+id/img6_card_flop"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:src="@mipmap/icon_draw_exbg2x" />
+
+                    <TextView
+                        android:id="@+id/tv6_card_item"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/img6_card_flop"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:text="5点经验"
+                        android:textColor="@color/chat_top"
+                        android:textSize="16dp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@mipmap/card_back2x"
+                    android:visibility="visible" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_hint_flop"
+        style="@style/text_white_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="本活动最终解释归小目标所有" />
+
+</RelativeLayout>
