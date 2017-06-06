@@ -1,6 +1,5 @@
 package com.pi.small.goal.my.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -18,13 +17,10 @@ import com.pi.small.goal.my.adapter.FollowAdapter;
 import com.pi.small.goal.my.entry.FollowEntry;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
-import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.util.List;
 
@@ -83,14 +79,16 @@ public class FollowActivity extends BaseActivity {
 // "result":[{"followId":1,"userId":26,"followUserId":31,"nick":"张洋","avatar":"https://wx.qlogo.cn/mmopen/SK4ycmXqictWLtQbUyjGw4o4yzlcY5AEZevEib7zkIJqwuiamTibn4cImYk3Tb0fJOqv92ykvlObc2j0gu6Nv3az2VtBniavZHOiay/0"},
 // {"followId":2,"userId":26,"followUserId":8,"nick":"ee","avatar":"jpg"},
 // {"followId":3,"userId":26,"followUserId":9,"nick":"ff","avatar":"jpg"}],"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
-    private void getData() {
-        SharedPreferences sp = Utils.UserSharedPreferences(this);
-        RequestParams requestParams = new RequestParams(Url.Url + "/user/followed");
+    @Override
+    public void getData() {
+
+        requestParams.setUri(Url.Url + "/user/followed");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("userId", "26");
         requestParams.addBodyParameter("p", page + "");
-        x.http().post(requestParams, new Callback.CacheCallback<String>() {
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 try {
@@ -115,21 +113,10 @@ public class FollowActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-                plvCollect.onRefreshComplete();
-            }
-
-            @Override
             public void onFinished() {
                 plvCollect.onRefreshComplete();
             }
-
-            @Override
-            public boolean onCache(String result) {
-                return false;
-            }
         });
-
     }
 
     @Override

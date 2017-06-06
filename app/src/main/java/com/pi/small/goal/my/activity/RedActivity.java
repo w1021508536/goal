@@ -7,11 +7,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.adapter.*;
+import com.pi.small.goal.my.adapter.RedAdapter;
+import com.pi.small.goal.my.entry.RedGsonEntity;
 import com.pi.small.goal.my.entry.WalletEntry;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +47,9 @@ public class RedActivity extends BaseActivity {
     @InjectView(R.id.plv_wallet)
     PullToRefreshListView plvWallet;
 
+    private int page = 1;
+    private RedAdapter adapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_red);
@@ -51,15 +64,66 @@ public class RedActivity extends BaseActivity {
         rightImageInclude.setImageResource(R.mipmap.list_btn);
 
         List<WalletEntry> data = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            if (i == 0 || i == 6) {
-                data.add(new WalletEntry(0));
-            } else {
-                data.add(new WalletEntry(1));
-            }
-        }
-        RedAdapter adapter = new RedAdapter(this, data);
+//        for (int i = 0; i < 10; i++) {
+//            if (i == 0 || i == 6) {
+//                data.add(new WalletEntry(0));
+//            } else {
+//                data.add(new WalletEntry(1));
+//            }
+//        }
+        adapter = new RedAdapter(this, data);
         plvWallet.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void getData() {
+        super.getData();
+        requestParams.setUri(Url.Url + "/redpacket/undraw");
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("p", page + "");
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+//[{"id":9,"aimId":17,"dynamicId":7,"money":10,"size":10,"remainMoney":10,"remainSize":10,"toUserId":48,"fromUserId":26,"createTime":1496717112000,"status":1}]
+                if (!RenameActivity.callOk(result)) return;
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String jsonData = jsonObject.get("result").toString();
+                    Gson gson = new Gson();
+                    Utils.showToast(RedActivity.this, (String) jsonObject.get("msg"));
+                    List<RedGsonEntity> data = gson.fromJson(jsonData, new TypeToken<List<RedGsonEntity>>() {
+                    }.getType());
+
+                    List<WalletEntry> newData = new ArrayList<>();
+                    for (RedGsonEntity one : data) {
+
+                        newData.add(new WalletEntry(one.getId(), one.getAimId(), one.getDynamicId(), one.getMoney(), one.getSize(), one.getRemainMoney(), one.getRemainSize(), one.getToUserId(), one.getFromUserId(), one.getCreateTime(), one.getStatus(), RedAdapter.TYPE_CONTENT));
+                    }
+                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
+                        adapter.addData(newData);
+                    } else
+                        adapter.setData(newData);
+                    plvWallet.onRefreshComplete();
+
+                } catch (JSONException e) {
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override

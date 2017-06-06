@@ -97,6 +97,7 @@
                     android:text="每日签到" />
 
                 <TextView
+                    android:id="@+id/tv_gotoSign_task"
                     style="@style/text_white_12"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
@@ -108,7 +109,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="5dp"
-                    android:text="去做任务" />
+                    android:text="去签到" />
 
             </RelativeLayout>
 

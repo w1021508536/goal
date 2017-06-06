@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_include" />
+
+    <RelativeLayout
+        android:id="@+id/rl_updatapass_pass"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="修改支付密码" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_forgetPass_pass"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="忘记支付密码" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
+</LinearLayout>

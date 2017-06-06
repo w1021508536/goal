@@ -17,9 +17,12 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.activity.CollectActivity;
 import com.pi.small.goal.my.activity.FollowActivity;
 import com.pi.small.goal.my.activity.RedActivity;
+import com.pi.small.goal.my.activity.SettingActivity;
 import com.pi.small.goal.my.activity.TargetActivity;
 import com.pi.small.goal.my.activity.TaskActivity;
 import com.pi.small.goal.my.activity.UserInfoActivity;
+import com.pi.small.goal.my.activity.WalletActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -78,8 +81,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     ImageView rightImageInclude;
     private ImageOptions imageOptions = new ImageOptions.Builder()
             .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-            .setLoadingDrawableId(R.mipmap.ic_launcher)
-            .setFailureDrawableId(R.mipmap.icon_message_system)
+            .setLoadingDrawableId(R.mipmap.icon_user)
+            .setFailureDrawableId(R.mipmap.icon_user)
             .build();
 
     @Override
@@ -100,6 +103,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         llFollowFragment.setOnClickListener(this);
         llTargetFragment.setOnClickListener(this);
         llCollectFramgent.setOnClickListener(this);
+        llWallectFragment.setOnClickListener(this);
+        rightImageInclude.setOnClickListener(this);
 
     }
 
@@ -135,6 +140,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             case R.id.ll_collect_framgent:
                 startActivity(new Intent(getContext(), CollectActivity.class));
                 break;
+            case R.id.ll_wallect_fragment:
+                startActivity(new Intent(getContext(), WalletActivity.class));
+                break;
+            case R.id.right_image_include:
+                startActivity(new Intent(getContext(), SettingActivity.class));
+                break;
         }
     }
 
@@ -146,7 +157,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 //        x.image().bind(iconFragment, sp
 //                .getString("avatar", ""), imageOptions);
         if (!"".equals(sp.getString("avatar", ""))) {
-            Picasso.with(getContext()).load(sp.getString("avatar", "")).into(iconFragment);
+            String string = sp.getString(KeyCode.USER_AVATAR, "");
+            Picasso.with(getContext()).load(Utils.GetPhotoPath(string)).into(iconFragment);
         }
         nameTextInclude.setText(sp.getString("nick", ""));
         String content = sp.getString("brief", "");

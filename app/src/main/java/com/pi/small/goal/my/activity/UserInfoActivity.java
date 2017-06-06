@@ -1,11 +1,14 @@
 package com.pi.small.goal.my.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,15 +28,14 @@ import com.pi.small.goal.utils.ImageUtils;
 import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -81,6 +83,7 @@ public class UserInfoActivity extends BaseActivity {
     TextView tvBriefUser;
     @InjectView(R.id.ll_user)
     LinearLayout llUser;
+    public final static int REQUESTCODE_DROP_IMAGE = 7;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class UserInfoActivity extends BaseActivity {
     public void initData() {
 
         nameTextInclude.setText(getResources().getString(R.string.title_user_activity));
+        rightImageInclude.setVisibility(View.GONE);
 
         view = findViewById(R.id.view);
         super.initData();
@@ -205,13 +209,55 @@ public class UserInfoActivity extends BaseActivity {
         startActivityForResult(getImageByCamera, Code.RESULT_CAMERA_CODE);
     }
 
+
+    /**
+     * 调用底层的图片裁剪成正方形
+     * create  wjz
+     **/
+
+    private void doCrop(Uri mUri) {
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+
+        int size = list.size();
+
+        if (size == 0) {
+            Utils.showToast(this, "找不到图像");
+            return;
+        } else {
+
+            //     intent.setClassName("com.android.camera", "com.android.camera.CropImage");
+            intent.setData(mUri);
+            intent.putExtra("outputX", 200);
+            intent.putExtra("outputY", 200);
+            intent.putExtra("aspectX", 1);   // 裁剪框比例
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("scale", true);
+            intent.putExtra("return-data", true);
+
+            if (size == 1) {
+                Intent i = new Intent(intent);
+                ResolveInfo res = list.get(0);
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+                i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+
+                startActivityForResult(i, REQUESTCODE_DROP_IMAGE);       //调用 onActivityResult      这个  方法
+            } else {
+                Utils.showToast(this, "调取图像失败");
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         SharedPreferences sp = Utils.UserSharedPreferences(this);
         tvUsernameUser.setText(sp.getString(KeyCode.USER_NICK, ""));
         if (sp.getString(KeyCode.USER_AVATAR, "").length() != 0) {
-            Picasso.with(this).load(sp.getString(KeyCode.USER_AVATAR, "")).into(iconUser);
+            Picasso.with(this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(iconUser);
         }
         String brief = sp.getString(KeyCode.USER_BRIEF, "");
         tvBriefUser.setText(brief);
@@ -227,10 +273,11 @@ public class UserInfoActivity extends BaseActivity {
             if (requestCode == Code.RESULT_GALLERY_CODE) {
 
                 Uri uri = data.getData();
-                Bitmap bitmap = ImageUtils.getBitmapFromUri(uri, this);
-                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-                iconUser.setImageBitmap(bitmap);
-                uploadFile(file);
+//                Bitmap bitmap = ImageUtils.getBitmapFromUri(uri, this);
+//                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+//                iconUser.setImageBitmap(bitmap);
+//                uploadFile(file);
+                doCrop(uri);
             } else if (requestCode == Code.RESULT_CAMERA_CODE) {   //获取拍照的
                 Uri uri = data.getData();
                 if (uri == null) {
@@ -238,22 +285,31 @@ public class UserInfoActivity extends BaseActivity {
                     Bundle bundle = data.getExtras();
                     if (bundle != null) {
                         Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
-                        //spath :生成图片取个名字和路径包含类型
-                        File file = ImageUtils.getSmallImageFile(this, photo, 1080, 1080, true);
-                        iconUser.setImageBitmap(photo);
-                        uploadFile(file);
+
+                        String xmb = ImageUtils.saveMyBitmap("xmb", photo);
+                        Uri imageUri = FileProvider.getUriForFile(this, "com.pi.small.goal.FileProvider", new File(xmb));
+                        doCrop(imageUri);
+//                        File file = ImageUtils.getSmallImageFile(this, photo, 1080, 1080, true);
+//                        iconUser.setImageBitmap(photo);
+//                        uploadFile(file);
                     } else {
                         Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
                         return;
                     }
                 } else {
                     //to do find the path of pic by uri
-                    Bitmap bitmap = ImageUtils.getBitmapFromUri(uri, this);
-                    File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-                    iconUser.setImageBitmap(bitmap);
-                    uploadFile(file);
+//                    Bitmap bitmap = ImageUtils.getBitmapFromUri(uri, this);
+//                    File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+//                    iconUser.setImageBitmap(bitmap);
+//                    uploadFile(file);
+                    doCrop(uri);
                 }
 
+            } else if (requestCode == REQUESTCODE_DROP_IMAGE) {
+                Bitmap bitmap = data.getParcelableExtra("data");
+                //    File smallImageFile = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+                uploadFile(file);
             }
         }
 
@@ -265,23 +321,20 @@ public class UserInfoActivity extends BaseActivity {
      **/
 
     private void updataIcon(final String iconPath) {
-        final SharedPreferences sp = Utils.UserSharedPreferences(this);
-        RequestParams requestParams = new RequestParams(Url.Url + "/user");
+        requestParams.setUri(Url.Url + "/user");
         requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
         requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         requestParams.addBodyParameter("avatar", iconPath);
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 if (callOk(result)) {
                     Utils.showToast(UserInfoActivity.this, getResources().getString(R.string.updata_ok));
-
                     SharedPreferences.Editor editor = sp.edit();
-
                     if (!RenameActivity.callOk(result)) return;
                     editor.putString(KeyCode.USER_AVATAR, iconPath);
                     editor.commit();
-
+                    Picasso.with(UserInfoActivity.this).load(iconPath).into(iconUser);
                 }
             }
 
@@ -291,16 +344,10 @@ public class UserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
-
     }
 
     /**
@@ -308,12 +355,11 @@ public class UserInfoActivity extends BaseActivity {
      * create  wjz
      **/
     public void uploadFile(File file) {
-        final SharedPreferences sp = Utils.UserSharedPreferences(this);
-        RequestParams requestParams = new RequestParams(Url.Url + "/file/picture");
+        requestParams.setUri(Url.Url + "/file/picture");
         requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
         requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         requestParams.addBodyParameter("picture", file);
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -324,7 +370,6 @@ public class UserInfoActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -333,15 +378,9 @@ public class UserInfoActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
-
     }
 }

@@ -12,7 +12,7 @@ import java.util.Map;
  * 创建者： 王金壮
  * 时间： 2017/6/1 19:30
  * 描述：
- * 修改：gson 的util
+ * 修改：gson解析 的util
  **/
 public class GsonUtil {
 

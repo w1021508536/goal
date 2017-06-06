@@ -1,6 +1,7 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.TargetMoreActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -53,6 +55,16 @@ public class TargetOldAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
+//        if (!"".equals(followEntry.getAvatar())) {
+//            Picasso.with(context).load(Utils.GetPhotoPath(followEntry.getAvatar())).into(vh.iconItem);
+//        }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, TargetMoreActivity.class));
+            }
+        });
 
         return convertView;
     }

@@ -16,12 +16,10 @@ import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -112,7 +110,7 @@ public class RenameActivity extends BaseActivity {
         if (etvNameUser.getText().toString().length() == 0) {
             return;
         }
-        RequestParams requestParams = new RequestParams(Url.Url + "/user");
+        requestParams.setUri(Url.Url + "/user");
         requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
         requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         if (type == TYPE_NICK) {
@@ -120,7 +118,7 @@ public class RenameActivity extends BaseActivity {
         } else {
             requestParams.addBodyParameter(KeyCode.USER_BRIEF, etvNameUser.getText().toString());   //简介
         }
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 if (callOk(result)) {
@@ -138,11 +136,6 @@ public class RenameActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
 
             }
 

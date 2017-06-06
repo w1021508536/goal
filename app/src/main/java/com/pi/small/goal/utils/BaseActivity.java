@@ -1,5 +1,6 @@
 package com.pi.small.goal.utils;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,7 +9,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+
+import org.xutils.http.RequestParams;
 
 /**
  * 公司：小目标
@@ -21,6 +25,10 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
 
     public View view;
     public ImageView leftImageInclude;
+    public SharedPreferences sp;
+    public RequestParams requestParams;
+    public MyApplication app;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,7 +42,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
      * create  wjz
      **/
     public void initWeight() {
-
+        if (leftImageInclude != null) {
+            leftImageInclude.setOnClickListener(this);
+        }
     }
 
     /**
@@ -43,6 +53,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
      **/
 
     public void initData() {
+
+        app = (MyApplication) getApplication();
+        app.addActivity(this);
+        sp = Utils.UserSharedPreferences(this);
+        requestParams = new RequestParams();
+
         view = findViewById(R.id.view);
         if (view == null)
             return;
@@ -54,9 +70,17 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
             view.setVisibility(View.GONE);
         }
         leftImageInclude = (ImageView) findViewById(R.id.left_image_include);
-        if (leftImageInclude != null) {
-            leftImageInclude.setOnClickListener(this);
-        }
+        getData();
+    }
+
+    /**
+     * 获取网络数据
+     * create  wjz
+     **/
+
+    public void getData() {
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
     }
 
     @Override

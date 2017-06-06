@@ -26,7 +26,7 @@ import butterknife.InjectView;
  **/
 public class RedAdapter extends BaseAdapter {
 
-    private final List<WalletEntry> data;
+    private List<WalletEntry> data;
     private Context context;
     public static final int TYPE_TITLE = 0;
     public static final int TYPE_CONTENT = 1;
@@ -34,6 +34,16 @@ public class RedAdapter extends BaseAdapter {
     public RedAdapter(Context context, List<WalletEntry> data) {
         this.context = context;
         this.data = data;
+    }
+
+    public void setData(List<WalletEntry> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<WalletEntry> data) {
+        this.data.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -68,6 +78,11 @@ public class RedAdapter extends BaseAdapter {
             } else {
                 vh = (ViewHolder) convertView.getTag();
             }
+
+            WalletEntry walletEntry = data.get(position);
+            vh.tvTimeItem.setText(RedMoreAdapter.getTimeDate(walletEntry.getCreateTime()));
+            vh.tvNameItem.setText("助力红包");
+
             vh.tvHaveItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

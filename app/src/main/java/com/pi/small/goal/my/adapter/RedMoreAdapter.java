@@ -12,6 +12,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.RedMoreAdapterEntry;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -66,6 +67,8 @@ public class RedMoreAdapter extends BaseAdapter {
             } else {
                 titleViewHolder = (TitleViewHolder) convertView.getTag();
             }
+            RedMoreAdapterEntry redMoreAdapterEntry = data.get(position);
+            titleViewHolder.tvTimeItem.setText(redMoreAdapterEntry.getTitle());
 
         } else {
             if (convertView == null) {
@@ -75,12 +78,47 @@ public class RedMoreAdapter extends BaseAdapter {
             } else {
                 contentViewHolder = (ContentViewHolder) convertView.getTag();
             }
+            RedMoreAdapterEntry redMoreAdapterEntry = data.get(position);
+            switch (redMoreAdapterEntry.getTitleType()) {//type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
+                case 1:   //
+                    contentViewHolder.tvNameItem.setText("公共红包");
+                    break;
+                case 2:   //
+                    contentViewHolder.tvNameItem.setText("助力红包");
+                    break;
+                case 3:  //
+                    contentViewHolder.tvNameItem.setText("收益红包");
+                    break;
+
+            }
+            contentViewHolder.tvMoneyItem.setText("+" + Float.valueOf(redMoreAdapterEntry.getMoney()));
+
+            String timeDate = getTimeDate(redMoreAdapterEntry.getCreateTime());
+            contentViewHolder.tvTimeItem.setText(timeDate);
+            //  contentViewHolder.tvTimeItem.setText((collectEntity.getCycle() - timeDay) + "");
         }
         if (position == 0 && titleViewHolder != null) {
             titleViewHolder.imgMonthItem.setVisibility(View.VISIBLE);
         }
 
         return convertView;
+    }
+
+    /**
+     * 获取时间格式  *分钟前。。
+     * create  wjz
+     **/
+    public static String getTimeDate(long createTime) {
+        Date date = new Date();
+        long l = date.getTime() - createTime;
+        long timeMinute = l / 60000;  //分钟
+        long timeHour = timeMinute / 60;
+        long timeDay = timeHour / 24;
+        if (timeMinute < 60)
+            return timeMinute + "分钟前";
+        else if (timeHour < 24)
+            return timeHour + "小时前";
+        else return timeDay + "天前";
     }
 
     @Override

@@ -9,31 +9,43 @@ package com.pi.small.goal.my.entry;
  **/
 public class RedMoreAdapterEntry {
 
+
     private int redPacketRecordId;
     private int userId;
     private int money;
     private int packetId;
-    private int createTime;
-    private int type;
+    private long createTime;
+    private int type;   //type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
+    private int fromUserId;
     private int titleType;
+    private String title;
 
-    public RedMoreAdapterEntry(int redPacketRecordId, int userId, int money, int packetId, int createTime, int type, int titleType) {
+    public RedMoreAdapterEntry(int redPacketRecordId, int userId, int money, int packetId, long createTime, int type, int fromUserId, int titleType, String title) {
         this.redPacketRecordId = redPacketRecordId;
         this.userId = userId;
         this.money = money;
         this.packetId = packetId;
         this.createTime = createTime;
         this.type = type;
+        this.fromUserId = fromUserId;
         this.titleType = titleType;
+        this.title = title;
     }
 
-    public RedMoreAdapterEntry(int redPacketRecordId, int userId, int money, int packetId, int createTime, int type) {
+    public RedMoreAdapterEntry(int titleType, String title) {
+        this.titleType = titleType;
+        this.title = title;
+    }
+
+    public RedMoreAdapterEntry(int redPacketRecordId, int userId, int money, int packetId, long createTime, int type, int fromUserId, int titleType) {
         this.redPacketRecordId = redPacketRecordId;
         this.userId = userId;
         this.money = money;
         this.packetId = packetId;
         this.createTime = createTime;
         this.type = type;
+        this.fromUserId = fromUserId;
+        this.titleType = titleType;
     }
 
     public int getRedPacketRecordId() {
@@ -68,11 +80,11 @@ public class RedMoreAdapterEntry {
         this.packetId = packetId;
     }
 
-    public int getCreateTime() {
+    public long getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(int createTime) {
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
 
@@ -84,11 +96,27 @@ public class RedMoreAdapterEntry {
         this.type = type;
     }
 
+    public int getFromUserId() {
+        return fromUserId;
+    }
+
+    public void setFromUserId(int fromUserId) {
+        this.fromUserId = fromUserId;
+    }
+
     public int getTitleType() {
         return titleType;
     }
 
     public void setTitleType(int titleType) {
         this.titleType = titleType;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

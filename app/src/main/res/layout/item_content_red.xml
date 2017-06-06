@@ -16,14 +16,12 @@
 
     <TextView
         android:id="@+id/tv_name_item"
-        style="@style/text_black_14"
+        style="@style/text_gray_big_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/img_item"
-        android:text="收益红包"
-
-        />
+        android:text="收益红包" />
 
     <TextView
         android:id="@+id/tv_time_item"

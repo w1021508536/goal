@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_include" />
+
+    <RelativeLayout
+        android:id="@+id/rl_pass_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/icon_payment_code" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="支付密码" />
+
+        <TextView
+            style="@style/text_gray_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="测试" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_idea_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/icon_feedback" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="意见反馈" />
+
+        <TextView
+            style="@style/text_gray_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="测试" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_empty_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/icon_wipe_cache" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="清空缓存" />
+
+        <TextView
+            style="@style/text_gray_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="测试" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_about_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/icon_about" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="关于我们" />
+
+        <TextView
+            style="@style/text_gray_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="测试" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_logout_setting"
+        style="@style/text_white_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tv_bottom"
+        android:layout_marginLeft="@dimen/top_left"
+        android:layout_marginRight="@dimen/top_left"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_setting_orange"
+        android:gravity="center"
+        android:text="退出登录" />
+</LinearLayout>

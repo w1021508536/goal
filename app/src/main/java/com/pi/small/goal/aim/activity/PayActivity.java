@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
-import com.pingplusplus.android.Pingpp;
+
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -79,7 +79,7 @@ public class PayActivity extends AppCompatActivity {
 
                 break;
             case R.id.wechat_layout:
-                Pingpp.createPayment(PayActivity.this, "");
+           //     Pingpp.createPayment(PayActivity.this, "");
                 break;
             case R.id.alipay_layout:
 

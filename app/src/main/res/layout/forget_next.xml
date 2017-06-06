@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_include" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="@dimen/top_left"
+        android:text="请输入您中国银行(1234)d的银行卡" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/top_left"
+        android:paddingRight="@dimen/top_left">
+
+        <TextView
+            style="@style/text_black_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="银行卡号" />
+
+        <EditText
+            style="@style/text_black_14"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="请输入完整卡号" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/top_left"
+        android:paddingRight="@dimen/top_left">
+
+        <TextView
+            style="@style/text_black_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="证件号码" />
+
+        <EditText
+            style="@style/text_black_14"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="请输入持卡人身份证号" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_next_forget"
+        style="@style/text_white_16"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tv_bottom"
+        android:layout_marginLeft="@dimen/top_left"
+        android:layout_marginRight="@dimen/top_left"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_setting_orange"
+        android:gravity="center"
+        android:text="下一步" />
+</LinearLayout>

@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/tv_time_item"
-        style="@style/text_black_14"
+        style="@style/text_gray_big_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2017年5月" />

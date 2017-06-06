@@ -1,14 +1,23 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.my.entry.CollectEntity;
+import com.pi.small.goal.utils.Utils;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -23,19 +32,31 @@ import butterknife.InjectView;
 public class TargetAdapter extends BaseAdapter {
 
     private final Context context;
+    private List<CollectEntity> data;
 
     public TargetAdapter(Context context) {
         this.context = context;
+        this.data = new ArrayList<>();
+    }
+
+    public void setData(List<CollectEntity> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<CollectEntity> data) {
+        this.data.addAll(data);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return 10;
+        return data.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return data.get(position);
     }
 
     @Override
@@ -57,13 +78,35 @@ public class TargetAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        vh.progressItem.setProgress(50);
+
+        final CollectEntity collectEntity = data.get(position);
+        vh.tvNameItem.setText(collectEntity.getName());
+        vh.tvMoneyItem.setText("已转入 " + collectEntity.getMoney() + "/" + ((int) collectEntity.getBudget()) + "元");
+        vh.progressItem.setProgress(collectEntity.getMoney() / collectEntity.getBudget());
+
+        if (!"".equals(collectEntity.getImg())) {
+            Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgBgItem);
+        }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, TargetMoreActivity.class);
+                intent.putExtra(TargetMoreActivity.KEY_AIMID, collectEntity.getId() + "");
+                context.startActivity(intent);
+            }
+        });
+
         return convertView;
     }
 
     static class ViewHolder {
         @InjectView(R.id.img_bg_item)
         ImageView imgBgItem;
+        @InjectView(R.id.tv_name_item)
+        TextView tvNameItem;
+        @InjectView(R.id.tv_money_item)
+        TextView tvMoneyItem;
         @InjectView(R.id.progress_item)
         DonutProgress progressItem;
 

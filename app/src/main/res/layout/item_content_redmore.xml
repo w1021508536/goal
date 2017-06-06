@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/tv_name_item"
-        style="@style/text_black_14"
+        style="@style/text_gray_big_14"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -38,8 +38,6 @@
 
     <TextView
         android:id="@+id/tv_money_item"
-       android:textSize="16sp"
-        android:textColor="@android:color/holo_red_dark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -48,7 +46,9 @@
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:paddingTop="5dp"
-        android:text="-8.00" />
+        android:text="-8.00"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp" />
 
 
 </RelativeLayout>

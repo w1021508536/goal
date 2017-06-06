@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="70dp"
+    android:background="@drawable/background_oval_white_white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="20dp"
+    android:paddingTop="30dp">
+
+
+    <TextView
+        style="@style/text_gray_big_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="要清除缓存吗？" />
+
+    <TextView
+        android:id="@+id/text_lianxi"
+        style="@style/text_gray_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:text="缓存可以方便您离线浏览内容" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/tv_cancel_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/chat_top"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/tv_ok_dialog"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="清除"
+            android:textColor="@color/chat_top"
+            android:textSize="18dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

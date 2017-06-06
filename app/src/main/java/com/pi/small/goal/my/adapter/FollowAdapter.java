@@ -1,14 +1,22 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.FollowEntry;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
+import com.squareup.picasso.Picasso;
+
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,18 +77,63 @@ public class FollowAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        FollowEntry followEntry = data.get(position);
+        final FollowEntry followEntry = data.get(position);
         vh.tvNameItem.setText(followEntry.getNick());
+        if (!"".equals(followEntry.getAvatar())) {
+            Picasso.with(context).load(Utils.GetPhotoPath(followEntry.getAvatar())).into(vh.iconItem);
+        }
+
+        vh.tvNoFollowItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //    follow(followEntry.getFollowUserId());
+            }
+        });
+
         return convertView;
     }
+
+    /**
+     * 关注or取消关注
+     * create  wjz
+     **/
+
+    private void follow(int followUserId) {
+
+        SharedPreferences sp = Utils.UserSharedPreferences(context);
+        RequestParams requestParams = new RequestParams(Url.Url + "/user/followed");
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("followUserId", followUserId + "'");
+
+        XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
+    }
+
 
     static class ViewHolder {
         @InjectView(R.id.icon_item)
         CircleImageView iconItem;
         @InjectView(R.id.tv_name_item)
         TextView tvNameItem;
-        @InjectView(R.id.tv_follow_item)
-        TextView tvFollowItem;
+        @InjectView(R.id.tv_noFollow_item)
+        TextView tvNoFollowItem;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

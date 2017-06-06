@@ -24,13 +24,18 @@
     </style>
 
     <style name="text_black_14">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/text_aim</item>
         <item name="android:textSize">14dp</item>
     </style>
 
     <style name="text_black_16">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/text_aim</item>
         <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="text_gray_big_14">
+        <item name="android:textColor">@color/text_aim</item>
+        <item name="android:textSize">14dp</item>
     </style>
 
     <style name="text_gray_14">

@@ -25,6 +25,7 @@ import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -166,7 +167,7 @@ public class ImageUtils {
                 true);
     }
 
-    public static Bitmap getBitmapFromUri(Uri uri,Context context) {
+    public static Bitmap getBitmapFromUri(Uri uri, Context context) {
         try {
             // 读取uri所在的图片
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
@@ -177,5 +178,36 @@ public class ImageUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 保存方法
+     */
+    public static String saveMyBitmap(String bitName, Bitmap mBitmap) {
+        File f = new File("/sdcard/" + bitName + ".png");
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+//            DebugMessage.put("在保存图片时出错：" + e.toString());
+        }
+        FileOutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        try {
+            fOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return f.getPath();
     }
 }

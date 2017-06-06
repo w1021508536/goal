@@ -1,5 +1,6 @@
 package com.pi.small.goal;
 
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
@@ -14,6 +15,9 @@ import com.amap.api.location.AMapLocationListener;
 import com.pi.small.goal.utils.Utils;
 
 import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.rong.imkit.RongIM;
 
@@ -36,6 +40,18 @@ public class MyApplication extends Application {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private List<Activity> activityList;
+
+    public void addActivity(Activity activity) {
+        activityList.add(activity);
+    }
+
+    public void exit() {
+        for (Activity activity : activityList) {
+            activity.finish();
+        }
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -44,6 +60,7 @@ public class MyApplication extends Application {
 
         sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
+        activityList = new ArrayList<>();
 
         TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         deviceId = TelephonyMgr.getDeviceId();
@@ -107,7 +124,6 @@ public class MyApplication extends Application {
         for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
             if (appProcess.pid == pid) {
                 return appProcess.processName;
-
 
 
             }

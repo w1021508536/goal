@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_include" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@color/chat_top"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/text_white_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginTop="20dp"
+            android:text="总资产(元)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/top_left">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="8970.00"
+                android:textColor="@color/white"
+                android:textSize="50dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_balance_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/selector_wallet_white_gray">
+
+        <ImageView
+            android:id="@+id/img_balance_wallet"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="@dimen/top_left"
+            android:src="@mipmap/icon_balance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_balance_wallet"
+            android:text="余额" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/top_left"
+            android:text="800元" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bank_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/background_selector_white_gray">
+
+        <ImageView
+            android:id="@+id/img_bank_wallet"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_balance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_bank_wallet"
+            android:text="银行卡" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/top_left"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_moneyTo_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray">
+
+        <ImageView
+            android:id="@+id/img_moneyTo_wallet"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/icon_balance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_moneyTo_wallet"
+            android:text="充值" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/top_left"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_toMoney_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray">
+
+        <ImageView
+            android:id="@+id/img_toMoney_wallet"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/icon_balance" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/img_toMoney_wallet"
+            android:text="提现" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/top_left"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
+</LinearLayout>

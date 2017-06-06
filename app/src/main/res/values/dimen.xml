@@ -2,5 +2,6 @@
 <resources>
 
     <dimen name="top_left">15dp</dimen>
-
+    <dimen name="rl_height">50dp</dimen>
+    <dimen name="tv_bottom">45dp</dimen>
 </resources>

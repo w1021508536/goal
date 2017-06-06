@@ -5,12 +5,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.TargetAdapter;
+import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.XUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -36,6 +48,9 @@ public class TargetActivity extends BaseActivity {
     TextView tvOkInclude;
     @InjectView(R.id.plv_target)
     PullToRefreshListView plvTarget;
+    private TargetAdapter adapter;
+
+    private int page = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,7 +65,7 @@ public class TargetActivity extends BaseActivity {
         nameTextInclude.setText("我的目标");
         rightImageInclude.setImageResource(R.mipmap.qa_icon);
 
-        TargetAdapter adapter = new TargetAdapter(this);
+        adapter = new TargetAdapter(this);
         plvTarget.setAdapter(adapter);
     }
 
@@ -58,6 +73,60 @@ public class TargetActivity extends BaseActivity {
     public void initWeight() {
         super.initWeight();
         rightImageInclude.setOnClickListener(this);
+        plvTarget.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                page = 1;
+                getData();
+            }
+        });
+        plvTarget.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                page++;
+                getData();
+            }
+        });
+    }
+
+    @Override
+    public void getData() {
+        super.getData();
+        requestParams.setUri(Url.Url + "/aim");
+        requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("p", page + "");
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                if (!RenameActivity.callOk(result)) return;
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String jsonData = jsonObject.get("result").toString();
+                    Gson gson = new Gson();
+                    List<CollectEntity> data = gson.fromJson(jsonData, new TypeToken<List<CollectEntity>>() {
+                    }.getType());
+                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
+                        adapter.addData(data);
+                    } else
+                        adapter.setData(data);
+                } catch (JSONException e) {
+                }
+                plvTarget.onRefreshComplete();
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override

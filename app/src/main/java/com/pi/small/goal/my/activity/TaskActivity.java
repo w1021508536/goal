@@ -1,5 +1,6 @@
 package com.pi.small.goal.my.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -27,6 +28,14 @@ public class TaskActivity extends BaseActivity {
     TextView nameTextInclude;
     @InjectView(R.id.right_image_include)
     ImageView rightImageInclude;
+    @InjectView(R.id.view)
+    View view;
+    @InjectView(R.id.tv_ok_include)
+    TextView tvOkInclude;
+    @InjectView(R.id.textView)
+    TextView textView;
+    @InjectView(R.id.tv_gotoSign_task)
+    TextView tvGotoSignTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,12 +51,15 @@ public class TaskActivity extends BaseActivity {
         view = findViewById(R.id.view);
         super.initData();
         nameTextInclude.setText("我的任务");
+        rightImageInclude.setVisibility(View.VISIBLE);
+        rightImageInclude.setImageResource(R.mipmap.qa_icon);
     }
 
     @Override
     public void initWeight() {
         super.initWeight();
         leftImageInclude.setOnClickListener(this);
+        tvGotoSignTask.setOnClickListener(this);
     }
 
     @Override
@@ -56,6 +68,9 @@ public class TaskActivity extends BaseActivity {
         switch (v.getId()) {
             case R.id.left_image_include:
                 finish();
+                break;
+            case R.id.tv_gotoSign_task:
+                startActivity(new Intent(this, SignActivity.class));
                 break;
         }
     }

@@ -4,12 +4,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.CollectAdapter;
+import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.XUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,6 +49,9 @@ public class CollectActivity extends BaseActivity {
     TextView tvCancelCollect;
     @InjectView(R.id.plv_collect)
     PullToRefreshListView plvCollect;
+    private CollectAdapter adapter;
+
+    private int page = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,8 +63,68 @@ public class CollectActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
-        CollectAdapter adapter = new CollectAdapter(this);
+        adapter = new CollectAdapter(this);
         plvCollect.setAdapter(adapter);
         nameTextInclude.setText("我的收藏");
+        rightImageInclude.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void initWeight() {
+        super.initWeight();
+        plvCollect.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                page = 1;
+                getData();
+            }
+        });
+        plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                page++;
+                getData();
+            }
+        });
+    }
+
+    @Override
+    public void getData() {
+        super.getData();
+//{"msg":"success","code":0,"result":[{"id":5,"name":"我的第二个目标","budget":1000,"money":0,"cycle":6,"current":0,"userId":11,"province":"山东","city":"青岛","brief":"实现梦想","position":"卓越","longitude":0.000000,"latitude":0.000000,"support":0,"createTime":1494974232000,"status":1,"img":""}],"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
+        requestParams.setUri(Url.Url + "/aim/collect");
+        requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("p", page + "");
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                JSONObject jsonObject = null;
+                if (!RenameActivity.callOk(result)) return;
+                try {
+                    jsonObject = new JSONObject(result);
+                    String jsonData = jsonObject.get("result").toString();
+                    Gson gson = new Gson();
+                    List<CollectEntity> data = gson.fromJson(jsonData, new TypeToken<List<CollectEntity>>() {
+                    }.getType());
+                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
+                        adapter.addData(data);
+                    } else
+                        adapter.setData(data);
+                    plvCollect.onRefreshComplete();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                plvCollect.onRefreshComplete();
+            }
+
+            @Override
+            public void onFinished() {
+                plvCollect.onRefreshComplete();
+            }
+        });
     }
 }

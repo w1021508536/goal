@@ -35,12 +35,12 @@
             android:layout_centerInParent="true"
             android:text="哈哈"
             android:textColor="@color/white"
-            android:textSize="18dp" />
+            android:textSize="16dp" />
 
         <ImageView
             android:id="@+id/right_image_include"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:padding="5dp"
             android:src="@mipmap/icon_chat_set" />
