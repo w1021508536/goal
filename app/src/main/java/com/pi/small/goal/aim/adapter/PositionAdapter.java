@@ -1,4 +1,4 @@
-package com.pi.small.goal.aim;
+package com.pi.small.goal.aim.adapter;
 
 import android.content.Context;
 import android.media.Image;

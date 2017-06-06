@@ -50,11 +50,53 @@ public class Utils {
     public static String GetPhotoPath(String path) {
         String photoPath = "";
         if (path.indexOf("http") == -1) {
-            photoPath = Url.PhotoUrl +"/"+ path;
+            photoPath = Url.PhotoUrl + "/" + path;
         } else {
             photoPath = path;
         }
         return photoPath;
+
+    }
+
+
+    public static boolean isAppInstalled(Context context, String packageName) {
+        final PackageManager packageManager = context.getPackageManager();
+        List<PackageInfo> pinfo = packageManager.getInstalledPackages(0);
+        List<String> pName = new ArrayList<String>();
+        if (pinfo != null) {
+            for (int i = 0; i < pinfo.size(); i++) {
+                String pn = pinfo.get(i).packageName;
+                pName.add(pn);
+            }
+        }
+        return pName.contains(packageName);
+    }
+
+
+    public static String GetTime( Long time) {
+       SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+        String time_string = "";
+        long minute = 60000;
+        long hour = 3600000;
+        long day = 86400000;
+        long third_day = 259200000;
+        long distanceTime = System.currentTimeMillis() - time;
+
+        if (distanceTime < minute) {
+            time_string = "刚刚";
+        } else if (distanceTime >= minute && distanceTime < hour) {
+            time_string = String.valueOf(distanceTime / minute) + "分钟前";
+        } else if (distanceTime >= hour && distanceTime < day) {
+            time_string = String.valueOf(distanceTime / hour) + "小时前";
+        } else if (distanceTime >= day && distanceTime < third_day) {
+            time_string = String.valueOf(distanceTime / day) + "天前";
+        } else if (distanceTime >= third_day ){
+         time_string=   simpleDateFormat2.format(new Date(time));
+
+        }
+
+
+        return time_string;
 
     }
 

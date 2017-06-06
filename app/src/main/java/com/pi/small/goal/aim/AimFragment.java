@@ -1,18 +1,33 @@
 package com.pi.small.goal.aim;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.AddAimActivity;
+import com.pi.small.goal.aim.activity.SupportAimActivity;
+import com.pi.small.goal.aim.adapter.ViewPagerAdapter;
+import com.pi.small.goal.my.activity.RedActivity;
+import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -22,12 +37,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
-import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,11 +50,26 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
     private ImageView right_image;
 
+    private ViewPager viewPager;
+    private ViewGroup viewGroup;
+
+    private ImageView money_gift_image;
+
     private List<AimEntity> dataList;
     private Map<String, String> map;
-
     private AimEntity aimEntity;
 
+    private List<View> viewList;
+    private View itemView;
+    private ImageView[] imageViews;
+
+    private ViewPagerAdapter viewPagerAdapter;
+    private CustomTransformer customTransformer;
+
+    final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
+    final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
+
+    private int position = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,22 +88,37 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         }
 
         dataList = new ArrayList<AimEntity>();
-
+        viewList = new ArrayList<View>();
+        customTransformer = new CustomTransformer();
 
         right_image = (ImageView) view.findViewById(R.id.right_image);
+        viewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        viewGroup = (ViewGroup) view.findViewById(R.id.viewGroup);
+        money_gift_image = (ImageView) view.findViewById(R.id.money_gift_image);
 
         right_image.setOnClickListener(this);
+        money_gift_image.setOnClickListener(this);
 
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setPageTransformer(true, new CustomTransformer());
+        GetAim();
         return view;
     }
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.right_image:
-                Intent intent = new Intent();
                 intent.setClass(getActivity(), AddAimActivity.class);
                 startActivityForResult(intent, Code.AddAimCode);
+                break;
+            case R.id.money_gift_image:
+                intent.setClass(getActivity(), RedActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.left_image:
+
                 break;
         }
     }
@@ -83,18 +126,31 @@ public class AimFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Code.AddAimCode) {
-
             List<AimEntity> list = (List<AimEntity>) data.getSerializableExtra("aim");
-
             if (list.size() == 0) {
-                System.out.println("========== list.size() ========" +00);
+
             } else {
-
-
-                System.out.println("========== list.get(0).getName();========" + list.get(0).getName())
-                ;
+                AimEntity aimEntity = list.get(0);
+                dataList.add(aimEntity);
+                viewPagerAdapter.notifyDataSetChanged();
 
             }
+
+        } else if (resultCode == Code.RESULT_CAMERA_CODE) {
+//            imgLoad = data.getStringExtra("path");
+//            System.out.println("===============CAMERA======imgLoad======" + imgLoad);
+//            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+        } else if (resultCode == Code.RESULT_GALLERY_CODE) {
+//            imgLoad = data.getStringExtra("path");
+//            System.out.println("===============imgLoad============" + imgLoad);
+//            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+        } else if (resultCode == Code.SupportAim) {
+            dataList.get(position).setMoney(data.getStringExtra("money"));
+            viewPagerAdapter.notifyDataSetChanged();
+//            imgLoad = data.getStringExtra("path");
+//            System.out.println("===============imgLoad============" + imgLoad);
+//            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+
 
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -142,7 +198,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
                             dataList.add(aimEntity);
                         }
-
+                        SetViewPager();
 
                     } else {
                         Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
@@ -170,7 +226,254 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+    }
 
+    private void SetViewPager() {
+
+        TextView money_text;
+        TextView budget_text;
+        TextView aim_text;
+        TextView support_text;
+        TextView day_text;
+        TextView process_text;
+        TextView set_text;
+        ImageView aim_image;
+        for (int i = 0; i < dataList.size(); i++) {
+            itemView = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.item_viewpager_aim, null);
+            money_text = (TextView) itemView.findViewById(R.id.money_text);
+            budget_text = (TextView) itemView.findViewById(R.id.budget_text);
+            aim_text = (TextView) itemView.findViewById(R.id.aim_text);
+            support_text = (TextView) itemView.findViewById(R.id.support_text);
+            day_text = (TextView) itemView.findViewById(R.id.day_text);
+            set_text = (TextView) itemView.findViewById(R.id.set_text);
+            aim_image = (ImageView) itemView.findViewById(R.id.aim_image);
+            process_text = (TextView) itemView.findViewById(R.id.process_text);
+
+            aim_text.setText(dataList.get(i).getName());
+            money_text.setText(dataList.get(i).getMoney());
+            budget_text.setText(dataList.get(i).getBudget());
+
+            support_text.setText(dataList.get(i).getSupport());
+
+
+            long createTime = Long.valueOf(dataList.get(i).getCreateTime());
+            long currentTime = System.currentTimeMillis();
+            long day = (currentTime - createTime) / 86400000;
+            Long.valueOf(dataList.get(i).getCycle());
+            if (day > Long.valueOf(dataList.get(i).getCycle()) * 30) {
+                day_text.setText("0");
+            } else {
+                day_text.setText(Long.valueOf(dataList.get(i).getCycle()) * 30 - day + "");
+            }
+
+
+            if (!dataList.get(i).getMoney().equals(dataList.get(i).getBudget())) {
+                process_text.setText("向小目标更进一步");
+                position = i;
+                process_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), SupportAimActivity.class);
+                        intent.putExtra("aimId", dataList.get(position).getId());
+                        intent.putExtra("budget", dataList.get(position).getBudget());
+                        intent.putExtra("money", dataList.get(position).getMoney());
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                process_text.setText("目标达成 可提现");
+                Drawable drawable = getActivity().getResources().getDrawable(R.mipmap.icon_aim_finish);
+                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
+                process_text.setCompoundDrawables(drawable, null, null, null);
+            }
+
+            final int finalI = i;
+            set_text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    position = finalI;
+                    View windowView = LayoutInflater.from(getActivity()).inflate(
+                            R.layout.window_aim_set, null);
+                    final PopupWindow popupWindow = new PopupWindow(windowView,
+                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, true);
+
+                    TextView withdrawals_text = (TextView) windowView.findViewById(R.id.withdrawals_text);
+                    TextView photo_text = (TextView) windowView.findViewById(R.id.photo_text);
+                    TextView cancel_text = (TextView) windowView.findViewById(R.id.cancel_text);
+                    withdrawals_text.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            System.out.println("======finalI===========" + finalI);
+//                            popupWindow.dismiss();
+                        }
+                    });
+
+                    cancel_text.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupWindow.dismiss();
+                        }
+                    });
+                    photo_text.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (Build.VERSION.SDK_INT >= 23) {
+
+                                int checkCallPhonePermission = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA);
+                                if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_CALL_PHONE);
+                                    return;
+                                } else {
+                                    int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                    if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_CALL_STORGE);
+                                        return;
+                                    } else {
+                                        Intent intent = new Intent();
+                                        intent.setClass(getActivity(), ChoosePhotoActivity.class);
+                                        startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
+                                    }
+                                }
+                            } else {
+                                Intent intent = new Intent();
+                                intent.setClass(getActivity(), ChoosePhotoActivity.class);
+                                startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
+                            }
+                            popupWindow.dismiss();
+                        }
+                    });
+                    popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+                    popupWindow.setTouchable(true);
+                    popupWindow.setOutsideTouchable(true);
+
+                    // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+                    // 我觉得这里是API的一个bug
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+                    // 设置好参数之后再show
+                    popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+
+
+                }
+            });
+
+
+            viewList.add(itemView);
+        }
+
+        imageViews = new ImageView[viewList.size()];
+        //添加小圆点的图片
+        for (int i = 0; i < viewList.size(); i++) {
+            ImageView imageView = new ImageView(getActivity());
+            //设置小圆点imageview的参数
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 30);
+            params.setMargins(10, 0, 10, 0);
+            imageView.setLayoutParams(params);//创建一个宽高均为20 的布局
+            //将小圆点layout添加到数组中
+            imageViews[i] = imageView;
+
+            //默认选中的是第一张图片，此时第一个小圆点是选中状态，其他不是
+            if (i == 0) {
+                imageViews[i].setBackgroundResource(R.mipmap.icon_dian_yellow);
+            } else {
+                imageViews[i].setBackgroundResource(R.mipmap.icon_dian_white);
+            }
+
+            //将imageviews添加到小圆点视图组
+            viewGroup.addView(imageViews[i]);
+        }
+        viewPagerAdapter = new ViewPagerAdapter(getActivity(), viewList);
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setOnPageChangeListener(new GuidePageChangeListener());
 
     }
+
+    class GuidePageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            // TODO Auto-generated method stub
+            for (int i = 0; i < imageViews.length; i++) {
+                imageViews[position].setBackgroundResource(R.mipmap.icon_dian_yellow);
+                //不是当前选中的page，其小圆点设置为未选中的状态
+                if (position != i) {
+                    imageViews[i].setBackgroundResource(R.mipmap.icon_dian_white);
+                }
+            }
+
+        }
+    }
+
+
+    public class CustomTransformer implements ViewPager.PageTransformer {
+        private static final float MIN_SCALE = 0.9F;
+
+        @Override
+        public void transformPage(View view, float position) {
+
+            if (position < -1) {
+                view.setScaleY(MIN_SCALE);
+            } else if (position <= 1) {
+                float scale = Math.max(MIN_SCALE, 1 - Math.abs(position));
+                view.setScaleY(scale);
+            } else {
+                view.setScaleY(MIN_SCALE);
+            }
+
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_CALL_PHONE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_CALL_STORGE);
+                        return;
+                    } else {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), ChoosePhotoActivity.class);
+                        startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
+                    }
+                } else {
+                    // Permission Denied
+                    Toast.makeText(getActivity(), "您禁止了相机权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case REQUEST_CODE_ASK_CALL_STORGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), ChoosePhotoActivity.class);
+                    startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
+                } else {
+                    // Permission Denied
+                    Toast.makeText(getActivity(), "您禁止了写入权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 }

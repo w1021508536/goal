@@ -1,13 +1,16 @@
 package com.pi.small.goal.aim.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.Code;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,7 +33,7 @@ public class PayDetailActivity extends BaseActivity {
     TextView finish_text;
 
     private String money;
-    private String pay_mode;
+    private String channel;
     private String card;
 
     @Override
@@ -40,7 +43,7 @@ public class PayDetailActivity extends BaseActivity {
         ButterKnife.inject(this);
 
         money = getIntent().getExtras().getString("money", "0");
-        pay_mode = getIntent().getExtras().getString("pay_mode", "");
+        channel = getIntent().getExtras().getString("channel", "");
         card = getIntent().getExtras().getString("card");
 
 
@@ -49,14 +52,15 @@ public class PayDetailActivity extends BaseActivity {
 
     @OnClick({R.id.left_image, R.id.finish_text})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.finish_text:
+                setResult(Code.Pay, intent);
                 finish();
-
                 break;
             case R.id.left_image:
+                setResult(Code.Pay, intent);
                 finish();
-
                 break;
         }
 
@@ -64,8 +68,8 @@ public class PayDetailActivity extends BaseActivity {
 
     private void init() {
 
-        money_text.setText(getResources().getText(R.string.aim) + money);
-        pay_mode_text.setText(pay_mode);
+        money_text.setText(getResources().getText(R.string.money_sign) + money);
+        pay_mode_text.setText(channel);
         if (card.equals("")) {
             card_text.setVisibility(View.GONE);
         } else {
@@ -73,6 +77,19 @@ public class PayDetailActivity extends BaseActivity {
             card_text.setText(card);
         }
 
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
+            Intent intent = new Intent();
+            setResult(Code.Pay, intent);
+            finish();
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
 
     }
 

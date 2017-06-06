@@ -16,8 +16,12 @@ public class Url {
 
     public static String UpPicture = "/file/picture";//上传图片
 
+    //aim
     public static String Aim = "/aim";// put 访问  新建目标   get 访问  aimId参数为详情  userId参数为列表
     public static String AimDynamic = "/aim/dynamic";//新建动态或创建目标
+
+    //search
+    public static String HotSearch = "/aim/discover";//获取热门发现
 
 
     //Message

@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="35dp"
-        android:src="@mipmap/icon_save_moeny" />
+        android:src="@mipmap/icon_save_money" />
 
     <RelativeLayout
         android:layout_width="match_parent"

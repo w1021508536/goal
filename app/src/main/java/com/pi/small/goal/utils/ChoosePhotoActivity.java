@@ -19,6 +19,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pi.small.goal.R;
 
@@ -108,11 +109,6 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
      * 获取照片uri
      */
     private Uri getImageUri() {
-//        ContentValues contentValues = new ContentValues(1);
-//        contentValues.put(MediaStore.Images.Media.DATA, new File(Environment.getExternalStorageDirectory(),
-//                IMAGE_FILE_NAME).getAbsolutePath());
-//        Uri uri = this.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
-//        return uri;
         return Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
                 IMAGE_FILE_NAME));
     }

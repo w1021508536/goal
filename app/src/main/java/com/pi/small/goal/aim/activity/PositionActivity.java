@@ -21,7 +21,7 @@ import com.amap.api.services.poisearch.PoiSearch;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
-import com.pi.small.goal.aim.PositionAdapter;
+import com.pi.small.goal.aim.adapter.PositionAdapter;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Utils;

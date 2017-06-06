@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <!-- 银联需要的权限 -->
     <uses-permission android:name="android.permission.NFC" />
 
@@ -85,7 +85,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/rc_file_path" />
         </provider>
-
 
         <!-- 高德地图 -->
         <meta-data
@@ -310,6 +309,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
 
         <!--  ping++ -->
+
 
 
     </application>

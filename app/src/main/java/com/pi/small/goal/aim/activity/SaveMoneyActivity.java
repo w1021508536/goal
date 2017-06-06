@@ -1,9 +1,12 @@
 package com.pi.small.goal.aim.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,8 +16,10 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pingplusplus.android.Pingpp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,15 +75,15 @@ public class SaveMoneyActivity extends BaseActivity {
         sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
 
-        content = sharedPreferences.getString("content", "");
-        aimId = sharedPreferences.getString("aimId", "");
+        content = getIntent().getStringExtra("content");
+        aimId = getIntent().getStringExtra("aimId");
 
-        img1 = sharedPreferences.getString("img1", "");
-        img2 = sharedPreferences.getString("img2", "");
-        img3 = sharedPreferences.getString("img3", "");
+        img1 = getIntent().getStringExtra("img1");
+        img2 = getIntent().getStringExtra("img2");
+        img3 = getIntent().getStringExtra("img3");
 
-        budget = Integer.valueOf(sharedPreferences.getString("budget", "0"));
-        haveMoney = Integer.valueOf(sharedPreferences.getString("money", "0"));
+        budget = Integer.valueOf(getIntent().getStringExtra("budget"));
+        haveMoney = Integer.valueOf(getIntent().getStringExtra("money"));
 
 
         init();
@@ -87,8 +92,11 @@ public class SaveMoneyActivity extends BaseActivity {
 
     @OnClick({R.id.left_image, R.id.right_image, R.id.save_text, R.id.hook_layout})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.left_image:
+                Utils.showToast(SaveMoneyActivity.this, "支付取消");
+                setResult(Code.FailCode, intent);
                 finish();
                 break;
             case R.id.right_image:
@@ -105,27 +113,52 @@ public class SaveMoneyActivity extends BaseActivity {
                         } else {
 
                             money = money_edit.getText().toString().trim();
-                            DynamicAim();
+                            intent.setClass(this, PayActivity.class);
+                            intent.putExtra("aimId", aimId);
+                            intent.putExtra("money", money);
+                            intent.putExtra("img1", img1);
+                            intent.putExtra("img2", img2);
+                            intent.putExtra("img3", img3);
+                            intent.putExtra("content", content);
+                            startActivityForResult(intent, Code.SupportAim);
+
                         }
                     }
                 }
-                DynamicAim();
                 break;
             case R.id.hook_layout:
                 if (isRead) {
                     isRead = false;
-                    hook_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
-                } else {
                     hook_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
+                } else {
                     isRead = true;
+                    hook_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
                 }
                 break;
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == Code.SupportAim) {
+            Intent intent = new Intent();
+            intent.putExtra("money", money);
+            setResult(Code.SupportAim, intent);
+            finish();
+
+        } else if (resultCode == Code.FailCode) {
+            Intent intent = new Intent();
+            intent.putExtra("money", "0");
+            setResult(Code.FailCode, intent);
+            finish();
+
         }
     }
 
 
     private void init() {
 
+        System.out.println("========================" + budget + "=====" + haveMoney);
         MaxMoney = budget - haveMoney;
 
         money_edit.addTextChangedListener(new TextWatcher() {
@@ -149,55 +182,17 @@ public class SaveMoneyActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
+            Utils.showToast(SaveMoneyActivity.this, "支付取消");
+            Intent intent = new Intent();
+            setResult(Code.FailCode, intent);
+            finish();
+            return true;
+        }
 
-    private void DynamicAim() {
-        RequestParams requestParams = new RequestParams(Url.Url + Url.AimDynamic);
-        requestParams.addHeader("token", Utils.GetToken(this));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("content", content);
-        requestParams.addBodyParameter("aimId", aimId);
-        requestParams.addBodyParameter("money", money);
-        requestParams.addBodyParameter("img1", img1);
-        requestParams.addBodyParameter("img2", img2);
-        requestParams.addBodyParameter("img3", img3);
-        requestParams.addBodyParameter("video", "");
-        x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-
-                System.out.println("==============AimDynamic=========" + result);
-                try {
-                    String code = new JSONObject(result).getString("code");
-                    if (code.equals("0")) {
-
-
-                    } else {
-                        Utils.showToast(SaveMoneyActivity.this, new JSONObject(result).getString("msg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                if (ex.getMessage() != null) {
-                    Utils.showToast(SaveMoneyActivity.this, ex.getMessage());
-                }
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-
+        return super.onKeyDown(keyCode, event);
 
     }
 }
