@@ -225,7 +225,7 @@
             android:name="com.pingplusplus.android.PaymentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"></activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- 微信支付 -->
         <activity-alias
@@ -252,7 +252,9 @@
 
         <!-- ping++ -->
 
-        <activity android:name=".aim.activity.SupportAimActivity"></activity>
+        <activity android:name=".aim.activity.SupportAimActivity" />
+        <activity android:name=".search.activity.SearchKeyActivity" />
+        <activity android:name=".search.activity.AddFriendSearchActivity"></activity>
     </application>
 
 </manifest>

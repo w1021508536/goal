@@ -56,7 +56,7 @@ public class Utils {
     public static String GetPhotoPath(String path) {
         String photoPath = "";
         if (path.indexOf("http") == -1) {
-            photoPath = Url.PhotoUrl +"/"+ path;
+            photoPath = Url.PhotoUrl + "/" + path;
         } else {
             photoPath = path;
         }
@@ -76,5 +76,17 @@ public class Utils {
             }
         }
         return pName.contains(packageName);
+    }
+
+
+    public static String GetTime(Context context, Long time) {
+
+        String time_string = "";
+        Long createTime = Long.valueOf(time);
+
+
+
+        return time_string;
+
     }
 }

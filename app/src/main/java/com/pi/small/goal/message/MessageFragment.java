@@ -64,9 +64,6 @@ public class MessageFragment extends ConversationListFragment implements View.On
     private SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm");
     private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
 
-    public MessageFragment() {
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -5,6 +5,8 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.pi.small.goal.my.entry.FollowEntry;
+
 import java.util.List;
 
 /**
@@ -13,11 +15,16 @@ import java.util.List;
 
 public class ViewPagerAdapter extends PagerAdapter {
     private List<View> viewList;
-    private Context mContext;
+    private Context context;
 
     public ViewPagerAdapter(Context context, List<View> viewList) {
-        this.mContext = context;
+        this.context = context;
         this.viewList = viewList;
+    }
+
+    public void addData(View view) {
+        this.viewList.add(view);
+        notifyDataSetChanged();
     }
 
     @Override
