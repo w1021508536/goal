@@ -1,24 +1,57 @@
 package com.pi.small.goal;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.pi.small.goal.aim.AimFragment;
+import com.pi.small.goal.aim.activity.AddAimActivity;
+import com.pi.small.goal.aim.activity.SaveMoneyActivity;
 import com.pi.small.goal.message.MessageFragment;
+import com.pi.small.goal.message.activity.FriendsListActivity;
 import com.pi.small.goal.my.MyFragment;
 import com.pi.small.goal.search.SearchFragment;
+import com.pi.small.goal.utils.Code;
+import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
@@ -56,20 +89,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout frameLayout;
     private int currentTabIndex = -1;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences userSharedPreferences;
+    private SharedPreferences.Editor userEditor;
     private String imtoken;
 
+    private SharedPreferences utilsSharedPreferences;
+    private SharedPreferences.Editor utilsEditor;
+
+    private String lastTime = "";
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private View currentView;
+    final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
+
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    //声明定位回调监听器
+    public AMapLocationListener mLocationListener;
+
+    public AMapLocationClientOption mLocationOption;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         setContentView(R.layout.activity_main);
-        sharedPreferences = Utils.UserSharedPreferences(this);
-        editor = sharedPreferences.edit();
-        imtoken = sharedPreferences.getString("imtoken", "");
+        userSharedPreferences = Utils.UserSharedPreferences(this);
+        userEditor = userSharedPreferences.edit();
+        imtoken = userSharedPreferences.getString("imtoken", "");
+
+        utilsSharedPreferences = Utils.UtilsSharedPreferences(this);
+        utilsEditor = utilsSharedPreferences.edit();
+        lastTime = utilsSharedPreferences.getString("lastTime", "");
         fragmentManager = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
         initData();
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        currentView = parent;
+        return super.onCreateView(parent, name, context, attrs);
     }
 
     public void initData() {
@@ -96,13 +155,96 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         message_layout.setOnClickListener(this);
         my_layout.setOnClickListener(this);
 
-        System.out.println("=========imtoken===========" + imtoken);
         if (!imtoken.equals("")) {
 
             connect(imtoken);
+//            GetFriendsListData();
+            GetFollowListData();
+
+//            if (lastTime.equals("")) {
+//                GetRed();
+//            } else {
+//                if (simpleDateFormat.format(new Date(Long.valueOf(lastTime))).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
+//
+//                } else {
+//                    GetRed();
+//                }
+//            }
+
         }
 
         setTabSelection(0);
+
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        mLocationClient = new AMapLocationClient(this);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(600000);
+        //设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+        // 在定位结束后，在合适的生命周期调用onDestroy()方法
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+//        //启动定位
+//        mLocationClient.startLocation();
+
+        mLocationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+
+
+                if (aMapLocation != null) {
+                    //解析定位结果
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //定位成功回调信息，设置相关消息
+                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                        aMapLocation.getLatitude();//获取纬度
+                        aMapLocation.getLongitude();//获取经度
+                        aMapLocation.getAccuracy();//获取精度信息
+
+
+                        userEditor.putString("latitude", String.valueOf(aMapLocation.getLatitude()));
+                        userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
+                        userEditor.putString("city", aMapLocation.getCity());
+                        userEditor.commit();
+
+                    } else {
+                        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                        Log.e("AmapError", "location Error, ErrCode:"
+                                + aMapLocation.getErrorCode() + ", errInfo:"
+                                + aMapLocation.getErrorInfo());
+                    }
+                }
+            }
+        };
+//        //初始化定位
+//        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        //启动定位
+        mLocationClient.startLocation();
+
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            System.out.println("=============23=================");
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                System.out.println("=============23=========22========");
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_CALL_PHONE);
+                return;
+            } else {
+                System.out.println("=============23=====1111============");
+                mLocationClient.startLocation();
+            }
+        } else {
+            System.out.println("=============!23=================");
+            mLocationClient.startLocation();
+        }
+
+
 
     }
 
@@ -177,18 +319,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int color = getResources().getColor(R.color.text_main_off);
         aim_text.setTextColor(color);
-//      aim_image.setImageResource(R.mipmap.center);
+        aim_image.setImageResource(R.mipmap.icon_tab_aim_off);
 
         search_text.setTextColor(color);
-//      search_image.setImageResource(R.mipmap.search);
+        search_image.setImageResource(R.mipmap.icon_tab_search_off);
 
 
         my_text.setTextColor(color);
-//      my_image.setImageResource(R.mipmap.my);
+        my_image.setImageResource(R.mipmap.icon_tab_my_off);
 
 
         message_text.setTextColor(color);
-//      message_image.setImageResource(R.mipmap.message);
+        message_image.setImageResource(R.mipmap.icon_tab_message_off);
     }
 
     private void setTabSelection(int index) {
@@ -202,7 +344,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 currentTabIndex = 0;
                 aim_text.setTextColor(getResources().getColor(R.color.text_main_on));
-//                aim_image.setImageResource(R.mipmap.center_2);
+                aim_image.setImageResource(R.mipmap.icon_tab_aim_on);
                 if (aimFragment == null) {
                     // 如果CenterFragment为空，则创建一个并添加到界面上
                     aimFragment = new AimFragment();
@@ -215,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 1:
                 currentTabIndex = 1;
                 search_text.setTextColor(getResources().getColor(R.color.text_main_on));
-//                search_image.setImageResource(R.mipmap.search_2);
+                search_image.setImageResource(R.mipmap.icon_tab_search_on);
                 if (searchFragment == null) {
                     searchFragment = new SearchFragment();
                     transaction.add(R.id.framelayout, searchFragment);
@@ -226,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 2:
                 currentTabIndex = 2;
                 message_text.setTextColor(getResources().getColor(R.color.text_main_on));
-//                message_image.setImageResource(R.mipmap.message_2);
+                message_image.setImageResource(R.mipmap.icon_tab_message_on);
 //                message_top_layout.setVisibility(View.VISIBLE);
                 if (messageFragment == null) {
                     messageFragment = new MessageFragment();
@@ -244,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 currentTabIndex = 3;
                 my_text.setTextColor(getResources().getColor(R.color.text_main_on));
-//                my_image.setImageResource(R.mipmap.my_2);
+                my_image.setImageResource(R.mipmap.icon_tab_my_on);
                 if (myFragment == null) {
                     myFragment = new MyFragment();
                     transaction.add(R.id.framelayout, myFragment);
@@ -274,7 +416,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //     * @return RongIM  客户端核心类的实例。
 //     */
     private void connect(String token) {
-        System.out.println("=========token===========" + token);
         if (getApplicationInfo().packageName.equals(MyApplication.getCurProcessName(getApplicationContext()))) {
 
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
@@ -299,8 +440,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //                    finish();
 
-                    editor.putString("RY_Id", userid);
-                    editor.commit();
+                    userEditor.putString("RY_Id", userid);
+                    userEditor.commit();
                 }
 
                 /**
@@ -314,4 +455,161 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
         }
     }
+
+    private void GetFriendsListData() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.FriendList);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=============GetFriendsListData==========" + result);
+
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        utilsEditor.putString("friendsList", result);
+                        utilsEditor.commit();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void GetRed() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.RedGet);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        GetRedWindow();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void GetRedWindow() {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_red_get, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(currentView, Gravity.CENTER, 0, 0);
+
+    }
+
+
+    private void GetFollowListData() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.FollowedList);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("==========GetFollowListData===========" + result);
+
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        utilsEditor.putString("followList", new JSONObject(result).getString("result"));
+                        utilsEditor.commit();
+                    }
+//                    else if(code.equals("100000")){
+//                        List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
+//                        Utils.UtilsSharedPreferences(MainActivity.this).edit().putString("followList", Utils.changeFollowToJson(followList));
+//                        Utils.UtilsSharedPreferences(MainActivity.this).edit().commit();
+//                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_CALL_PHONE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    System.out.println("=============6666=================");
+                    mLocationClient.startLocation();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(MainActivity.this, "您禁止了定位权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
 }

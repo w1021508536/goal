@@ -10,23 +10,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.message.activity.FriendsMessageListActivity;
-import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
-import org.xutils.x;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Administrator on 2017/5/26.
@@ -76,7 +71,7 @@ public class FriendsMessageListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_list_friends_message, parent, false);
 
             viewHolder.name_text = (TextView) convertView.findViewById(R.id.name_text);
-            viewHolder.head_image = (ImageView) convertView.findViewById(R.id.head_image);
+            viewHolder.head_image = (CircleImageView) convertView.findViewById(R.id.head_image);
             viewHolder.content_text = (TextView) convertView.findViewById(R.id.content_text);
             viewHolder.refuse_text = (TextView) convertView.findViewById(R.id.refuse_text);
             viewHolder.agree_text = (TextView) convertView.findViewById(R.id.agree_text);
@@ -93,7 +88,14 @@ public class FriendsMessageListAdapter extends BaseAdapter {
 
         viewHolder.name_text.setText(dataList.get(position).get("sendUserNick"));
 //        viewHolder.content_text.setText(dataList.get(position).get("sendUserBrief"));
-        x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + dataList.get(position).get("avatar"), imageOptions);
+
+//        x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + dataList.get(position).get("avatar"), imageOptions);
+
+
+        if (!Utils.GetPhotoPath(dataList.get(position).get("sendUserAvatar")).equals("")) {
+            Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).get("sendUserAvatar"))).into(viewHolder.head_image);
+        }
+
         viewHolder.content_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(dataList.get(position).get("createTime")))) + "申请加你为好友");
 
         if (dataList.get(position).get("status").equals("0")) {
@@ -124,49 +126,10 @@ public class FriendsMessageListAdapter extends BaseAdapter {
         viewHolder.agree_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                RequestParams requestParams = new RequestParams(Url.Url + Url.FriendAgree);
-//                requestParams.addHeader("token", Utils.GetToken(context));
-//                requestParams.addHeader("deviceId", MyApplication.deviceId);
-//                requestParams.addBodyParameter("uid", dataList.get(position).get("sendUserId"));
-//                x.http().post(requestParams, new Callback.CommonCallback<String>() {
-//                    @Override
-//                    public void onSuccess(String result) {
-//                        try {
-//                            String code = new JSONObject(result).getString("code");
-//                            if (code.equals("0")) {
-//
-//                                FriendsMessageListActivity.UpData();
-//
-//                            } else {
-//                                Utils.showToast(context, new JSONObject(result).getString("msg"));
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable ex, boolean isOnCallback) {
-//                        Utils.showToast(context, ex.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(CancelledException cex) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onFinished() {
-//
-//                    }
-//                });
                 if (agreeListener != null) {
                     agreeListener.onAgreeItemClick(v, position);
-
                 }
-
             }
-
         });
 
 
@@ -196,7 +159,7 @@ public class FriendsMessageListAdapter extends BaseAdapter {
     private class ViewHolder {
 
         private TextView name_text;
-        private ImageView head_image;
+        private CircleImageView head_image;
         private TextView content_text;
 
         private TextView refuse_text;

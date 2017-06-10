@@ -1,15 +1,15 @@
 package com.pi.small.goal.aim.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.os.Parcelable;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -33,7 +33,6 @@ import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.entity.AimEntity;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -42,13 +41,10 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * JS
- *
  */
 
 public class AddAimActivity extends BaseActivity {
@@ -87,10 +83,18 @@ public class AddAimActivity extends BaseActivity {
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
 
+
+    private View currentView;
+
+
+    String cutPath;
+    String newPath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_aim);
+        super.onCreate(savedInstanceState);
+
 
         aimList = new ArrayList<AimEntity>();
 
@@ -98,10 +102,15 @@ public class AddAimActivity extends BaseActivity {
         cycleList = new ArrayList<String>();
         for (int i = 1; i < 25; i++) {
             cycleList.add(String.valueOf(i));
-
         }
 
         init();
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        currentView = parent;
+        return super.onCreateView(parent, name, context, attrs);
     }
 
     private void init() {
@@ -212,6 +221,7 @@ public class AddAimActivity extends BaseActivity {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_CALL_STORGE);
                         return;
                     } else {
+
                         Intent intent = new Intent();
                         intent.setClass(this, ChoosePhotoActivity.class);
                         startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
@@ -242,41 +252,43 @@ public class AddAimActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == Code.PositionCode) {
-
-            if (data.getStringExtra("position").equals("")) {
-                position = "";
-                province = "";
-                city = "";
-                position_text.setText("不显示");
-            } else {
-                position = data.getStringExtra("position");
-                province = data.getStringExtra("province");
-                city = data.getStringExtra("city");
-                position_text.setText(position);
+        if (data != null) {
+            if (resultCode == Code.PositionCode) {
+                if (data.getStringExtra("position").equals("")) {
+                    position = "";
+                    province = "";
+                    city = "";
+                    position_text.setText("不显示");
+                } else {
+                    position = data.getStringExtra("position");
+                    province = data.getStringExtra("province");
+                    city = data.getStringExtra("city");
+                    position_text.setText(position);
+                }
+            } else if (resultCode == Code.SupportAim) {
+                aimList.get(0).setMoney(data.getStringExtra("money"));
+                Intent intent = new Intent();
+                intent.putExtra("aim", aimList);
+                setResult(Code.AddAimCode, intent);
+                finish();
+            } else if (resultCode == Code.FailCode) {
+                Intent intent = new Intent();
+                intent.putExtra("aim", aimList);
+                setResult(Code.AddAimCode, intent);
+                finish();
+            } else if (resultCode == Code.RESULT_CAMERA_CODE) {
+                imgLoad = data.getStringExtra("path");
+                System.out.println("===============CAMERA======imgLoad======" + imgLoad);
+                photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+            } else if (resultCode == Code.RESULT_GALLERY_CODE) {
+                imgLoad = data.getStringExtra("path");
+                System.out.println("===============imgLoad============" + imgLoad);
+                photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
             }
-        } else if (resultCode == Code.RESULT_CAMERA_CODE) {
-            imgLoad = data.getStringExtra("path");
-            System.out.println("===============CAMERA======imgLoad======" + imgLoad);
-            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
-        } else if (resultCode == Code.RESULT_GALLERY_CODE) {
-            imgLoad = data.getStringExtra("path");
-            System.out.println("===============imgLoad============" + imgLoad);
-            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
-        } else if (resultCode == Code.SupportAim) {
-            aimList.get(0).setMoney(data.getStringExtra("money"));
-            Intent intent = new Intent();
-            intent.putExtra("aim", aimList);
-            setResult(Code.AddAimCode, intent);
-            finish();
-        } else if (resultCode == Code.FailCode) {
-            Intent intent = new Intent();
-            intent.putExtra("aim", aimList);
-            setResult(Code.AddAimCode, intent);
-            finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
     private void UpPicture(final View view) {
         RequestParams requestParams = new RequestParams(Url.Url + Url.UpPicture);
@@ -596,6 +608,7 @@ public class AddAimActivity extends BaseActivity {
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
     }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

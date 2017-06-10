@@ -43,18 +43,6 @@ public class SearchFragment extends Fragment {
     View view;
     @InjectView(R.id.left_image)
     ImageView left_image;
-    @InjectView(R.id.hot_image)
-    ImageView hot_image;
-    @InjectView(R.id.hot_layout)
-    RelativeLayout hot_layout;
-    @InjectView(R.id.attention_image)
-    ImageView attention_image;
-    @InjectView(R.id.attention_layout)
-    RelativeLayout attention_layout;
-    @InjectView(R.id.city_image)
-    ImageView city_image;
-    @InjectView(R.id.city_layout)
-    RelativeLayout city_layout;
     @InjectView(R.id.right_image)
     ImageView right_image;
     @InjectView(R.id.view_pager)
@@ -105,7 +93,7 @@ public class SearchFragment extends Fragment {
         ButterKnife.reset(this);
     }
 
-    @OnClick({R.id.left_image, R.id.hot_layout, R.id.attention_layout, R.id.city_layout, R.id.right_image})
+    @OnClick({R.id.left_image, R.id.right_image})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -113,15 +101,7 @@ public class SearchFragment extends Fragment {
                 intent.setClass(getActivity(), AddFriendSearchActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.hot_layout:
 
-                break;
-            case R.id.attention_layout:
-
-                break;
-            case R.id.city_layout:
-
-                break;
             case R.id.right_image:
                 intent.setClass(getActivity(), SearchKeyActivity.class);
                 startActivity(intent);

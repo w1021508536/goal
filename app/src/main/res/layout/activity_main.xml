@@ -77,7 +77,8 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="2dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_tab_aim_off" />
 
             <TextView
                 android:id="@+id/aim_text"
@@ -104,7 +105,8 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="2dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_tab_search_off" />
 
             <TextView
                 android:id="@+id/search_text"
@@ -131,7 +133,8 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="2dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_tab_message_off" />
 
             <TextView
                 android:id="@+id/message_text"
@@ -157,7 +160,8 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="2dp"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_tab_my_off" />
 
             <TextView
                 android:id="@+id/my_text"

@@ -13,6 +13,8 @@
     <string name="phone">手机号</string>
     <string name="code">验证码</string>
     <string name="password">密码</string>
+    <string name="password_new">新的密码</string>
+    <string name="forget_password">忘记密码</string>
 
     <string name="invitation_code">邀请码</string>
 

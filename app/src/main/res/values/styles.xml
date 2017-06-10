@@ -69,6 +69,7 @@
         <item name="android:textSize">14dp</item>
     </style>
 
+
     <style name="MyDialogStyle" parent="android:Theme.Dialog">
         <!-- 边框 -->
         <item name="android:windowFrame">@null</item>

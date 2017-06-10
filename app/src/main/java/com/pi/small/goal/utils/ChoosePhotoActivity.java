@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -109,8 +110,15 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
      * 获取照片uri
      */
     private Uri getImageUri() {
-        return Uri.fromFile(new File(Environment.getExternalStorageDirectory(),
-                IMAGE_FILE_NAME));
+        Uri uri = null;
+        File file = new File(Environment.getExternalStorageDirectory(),
+                IMAGE_FILE_NAME);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            uri = FileProvider.getUriForFile(this, "com.pi.small.goal.fileprovider", file);
+//        } else {
+        uri = Uri.fromFile(file);
+//        }
+        return uri;
     }
 
 
@@ -140,6 +148,7 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                         path = cursor.getString(column_index);
                     }
                 } else if (firstNum > 4) {
+
                     path = getPath(this, uri);
                 } else if (firstNum < 4) {
                     String[] proj = {MediaStore.Images.Media.DATA};

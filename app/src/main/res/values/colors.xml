@@ -31,6 +31,7 @@
 
     <!-- black_light-->
     <color name="text_aim">#3C3C3C</color>
+    <color name="gray_heavy">#8E8D93</color>
 
     <color name="gray_line">#B9B9B9</color>
 

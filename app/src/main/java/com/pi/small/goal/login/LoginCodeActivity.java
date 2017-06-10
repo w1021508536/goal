@@ -123,10 +123,10 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-
-
+                        Utils.showToast(LoginCodeActivity.this, "发送成功");
                     } else {
-
+                        String msg = new JSONObject(result).getString("msg");
+                        Utils.showToast(LoginCodeActivity.this, msg);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -137,7 +137,7 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Utils.showToast(LoginCodeActivity.this, ex.getMessage());
             }
 
             @Override
@@ -157,6 +157,8 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
         requestParams.addBodyParameter("loginWay", "mobile");
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
         requestParams.addBodyParameter("deviceId", deviceId);
+        requestParams.addBodyParameter("verifyCode", code_edit.getText().toString().trim());
+
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

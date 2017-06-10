@@ -96,6 +96,8 @@ public class LoginPasswordActivity extends AppCompatActivity implements View.OnC
                 }
                 break;
             case R.id.forget_text:
+                Intent intent = new Intent(this, ForgetPasswordActivity.class);
+                startActivity(intent);
 
                 break;
         }

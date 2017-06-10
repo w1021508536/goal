@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
@@ -36,7 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class PayActivity extends AppCompatActivity {
+public class PayActivity extends BaseActivity {
 
     @InjectView(R.id.left_image)
     ImageView left_image;
@@ -182,7 +183,11 @@ public class PayActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.pay_text:
-                DynamicAim();
+                if (isHook) {
+                    DynamicAim();
+                } else {
+                    Utils.showToast(this, "请仔细阅读相关协议");
+                }
                 break;
         }
     }

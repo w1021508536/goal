@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -70,6 +71,13 @@ public class AimFragment extends Fragment implements View.OnClickListener {
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
 
     private int position = -1;
+
+
+    private ImageOptions imageOptions = new ImageOptions.Builder()
+            .setImageScaleType(ImageView.ScaleType.FIT_XY)
+            .setLoadingDrawableId(R.drawable.image1)
+            .setFailureDrawableId(R.drawable.image1)
+            .build();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -158,6 +166,9 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
 
     private void GetAim() {
+
+        System.out.println("============deviceId==========" + MyApplication.deviceId);
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.Aim);
         requestParams.addHeader("token", Utils.GetToken(getActivity()));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -167,7 +178,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=============GetAim=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -230,6 +240,9 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
     private void SetViewPager() {
 
+        ImageView line_left_image;
+        ImageView line_right_image;
+        TextView weight_text;
         TextView money_text;
         TextView budget_text;
         TextView aim_text;
@@ -250,6 +263,16 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             aim_image = (ImageView) itemView.findViewById(R.id.aim_image);
             process_text = (TextView) itemView.findViewById(R.id.process_text);
 
+            line_left_image = (ImageView) itemView.findViewById(R.id.line_left_image);
+            line_right_image = (ImageView) itemView.findViewById(R.id.line_right_image);
+            weight_text = (TextView) itemView.findViewById(R.id.weight_text);
+
+
+            if (!dataList.get(i).getImg().equals("")) {
+                x.image().bind(aim_image, Utils.GetPhotoPath(dataList.get(i).getImg()), imageOptions);
+            }
+
+
             aim_text.setText(dataList.get(i).getName());
             money_text.setText(dataList.get(i).getMoney());
             budget_text.setText(dataList.get(i).getBudget());
@@ -266,8 +289,10 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             } else {
                 day_text.setText(Long.valueOf(dataList.get(i).getCycle()) * 30 - day + "");
             }
-
-
+//            Float.valueOf(dataList.get(i).getBudget())-Float.valueOf(dataList.get(i).getMoney())
+            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
+            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(i).getMoney())));
+            weight_text.setText(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100 + "%");
             if (!dataList.get(i).getMoney().equals(dataList.get(i).getBudget())) {
                 process_text.setText("向小目标更进一步");
                 position = i;

@@ -5,14 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.entity.DynamicEntity;
+import com.squareup.picasso.Picasso;
+
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+;
 
 /**
  * Created by JS on 2017-06-06.
@@ -22,6 +30,12 @@ public class HotAdapter extends BaseAdapter {
 
     private Context context;
     private List<DynamicEntity> dataList;
+
+    private ImageOptions imageOptions = new ImageOptions.Builder()
+            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+            .setLoadingDrawableId(R.mipmap.icon_head)
+            .setFailureDrawableId(R.mipmap.icon_head)
+            .build();
 
     public HotAdapter(Context context, List<DynamicEntity> dataList) {
         this.context = context;
@@ -49,12 +63,12 @@ public class HotAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView= LayoutInflater.from(context).inflate(R.layout.item_list_hot,parent,false);
-            viewHolder.head_image= (CircleImageView) convertView.findViewById(R.id.head_image);
-            viewHolder.name_text= (TextView) convertView.findViewById(R.id.name_text);
-            viewHolder.time_text= (TextView) convertView.findViewById(R.id.time_text);
-            viewHolder.attention_text= (TextView) convertView.findViewById(R.id.attention_text);
-            viewHolder.content_text= (TextView) convertView.findViewById(R.id.content_text);
+            convertView = LayoutInflater.from(context).inflate(R.layout.item_list_hot, parent, false);
+            viewHolder.head_image = (CircleImageView) convertView.findViewById(R.id.head_image);
+            viewHolder.name_text = (TextView) convertView.findViewById(R.id.name_text);
+            viewHolder.time_text = (TextView) convertView.findViewById(R.id.time_text);
+            viewHolder.attention_text = (TextView) convertView.findViewById(R.id.attention_text);
+            viewHolder.content_text = (TextView) convertView.findViewById(R.id.content_text);
 
             convertView.setTag(viewHolder);
 
@@ -62,14 +76,15 @@ public class HotAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.head_image= (CircleImageView) convertView.findViewById(R.id.head_image);
-        viewHolder.name_text= (TextView) convertView.findViewById(R.id.name_text);
-        viewHolder.time_text= (TextView) convertView.findViewById(R.id.time_text);
-        viewHolder.attention_text= (TextView) convertView.findViewById(R.id.attention_text);
-        viewHolder.content_text= (TextView) convertView.findViewById(R.id.content_text);
+        viewHolder.name_text.setText(dataList.get(position).getNick());
+        viewHolder.content_text.setText(dataList.get(position).getContent());
+        viewHolder.time_text.setText(Utils.GetTime(Long.valueOf(dataList.get(position).getUpdateTime())));
 
+//        x.image().bind(viewHolder.head_image, Utils.GetPhotoPath(dataList.get(position).getAvatar()), imageOptions);
 
-
+        if (!Utils.GetPhotoPath(dataList.get(position).getAvatar()).equals("")) {
+            Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).getAvatar())).into(viewHolder.head_image);
+        }
         return convertView;
     }
 

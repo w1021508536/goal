@@ -3,6 +3,7 @@ package com.pi.small.goal.utils;
 import android.content.Context;
 
 import org.xutils.common.Callback;
+import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
@@ -66,7 +67,35 @@ public class XUtil {
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Utils.showToast(context, Utils.getMsg(result));
+//                Utils.showToast(context, Utils.getMsg(result));
+                xCallBackLinstener.onSuccess(result);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                xCallBackLinstener.onError(ex, isOnCallback);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                xCallBackLinstener.onFinished();
+            }
+        });
+
+    }
+
+
+    public static <T> void put(RequestParams requestParams, Context context, final XCallBackLinstener xCallBackLinstener) {
+
+
+        x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
                 xCallBackLinstener.onSuccess(result);
             }
 

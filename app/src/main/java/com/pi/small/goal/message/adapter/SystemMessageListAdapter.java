@@ -42,8 +42,8 @@ public class SystemMessageListAdapter extends BaseAdapter {
 
         imageOptions = new ImageOptions.Builder()
                 .setImageScaleType(ImageView.ScaleType.FIT_XY)
-                .setLoadingDrawableId(R.mipmap.ic_launcher)
-                .setFailureDrawableId(R.mipmap.icon_message_system)
+                .setLoadingDrawableId(R.mipmap.icon_head)
+                .setFailureDrawableId(R.mipmap.icon_head)
                 .build();
     }
 
@@ -84,8 +84,8 @@ public class SystemMessageListAdapter extends BaseAdapter {
         viewHolder.title_text.setText(dataList.get(position).get("title"));
         viewHolder.brief_text.setText(dataList.get(position).get("brief"));
 
-        viewHolder.time_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(dataList.get(position).get("createTime") ))));
-        viewHolder.date_text.setText(simpleDateFormat2.format(new Date(Long.valueOf(dataList.get(position).get("createTime") ))));
+        viewHolder.time_text.setText(simpleDateFormat2.format(new Date(Long.valueOf(dataList.get(position).get("createTime")))));
+//        viewHolder.date_text.setText(simpleDateFormat2.format(new Date(Long.valueOf(dataList.get(position).get("createTime") ))));
         if (!dataList.get(position).get("url").equals("")) {
             viewHolder.item_image.setVisibility(View.VISIBLE);
             x.image().bind(viewHolder.item_image, Url.PhotoUrl + "/" + dataList.get(position).get("img"), imageOptions);

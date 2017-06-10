@@ -75,7 +75,7 @@ public class FriendsListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
 
-        sharedPreferences = Utils.UserSharedPreferences(this);
+        sharedPreferences = Utils.UtilsSharedPreferences(this);
         editor = sharedPreferences.edit();
 
         friendList = new ArrayList<ContactBean>();
@@ -197,10 +197,6 @@ public class FriendsListActivity extends BaseActivity {
 
     }
 
-
-    private void SearchFriend() {
-
-    }
 
     private void GetFriendsListData() {
         RequestParams requestParams = new RequestParams(Url.Url + Url.FriendList);

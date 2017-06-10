@@ -29,6 +29,34 @@ public class DynamicEntity {
     private String haveVote;
     private String votes;
 
+    private String supports;
+    private String haveRedPacket;
+    private List<CommentEntity> commentList;
+    // 0 没关注 1 关注
+    private String isFollow;
+    public String getIsFollow() {
+        return isFollow;
+    }
+
+    public void setIsFollow(String isFollow) {
+        this.isFollow = isFollow;
+    }
+
+
+
+
+    public List<CommentEntity> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<CommentEntity> commentList) {
+        this.commentList = commentList;
+    }
+
+
+
+
+
     public String getId() {
         return id;
     }
@@ -165,9 +193,7 @@ public class DynamicEntity {
         this.supports = supports;
     }
 
-    private String supports;
-    private String haveRedPacket;
-    private List<List<CommentEntity>> dynamicList;
+
 
 
     public String getCity() {
@@ -194,13 +220,6 @@ public class DynamicEntity {
         this.haveRedPacket = haveRedPacket;
     }
 
-    public List<List<CommentEntity>> getDynamicList() {
-        return dynamicList;
-    }
-
-    public void setDynamicList(List<List<CommentEntity>> dynamicList) {
-        this.dynamicList = dynamicList;
-    }
 
 
 }

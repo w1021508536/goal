@@ -2,33 +2,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pi.small.goal">
 
-    <!--用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <!--用于访问GPS定位-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-    <!--这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-    <!--用于访问网络，网络定位需要上网-->
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <!--用于读取手机当前的状态-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-    <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <!--用于申请调用A-GPS模块-->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"></uses-permission>
-    <!--用于申请获取蓝牙信息进行室内定位-->
-    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
-
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 用于访问网络，网络定位需要上网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- 银联需要的权限 -->
     <uses-permission android:name="android.permission.NFC" />
-
 
     <application
         android:name=".MyApplication"
@@ -90,7 +88,8 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="ba47c3f72135168a4b805af7d8dcd40b" />
-        <service android:name="com.amap.api.location.APSService"></service>
+
+        <service android:name="com.amap.api.location.APSService" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -294,10 +293,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".aim.activity.PayDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
-
-        <!-- 第三方 ping++ 支付-->
+        <!-- 第三方 ping++ 支付 -->
         <activity
             android:name="com.pingplusplus.android.PaymentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
@@ -313,7 +311,6 @@
 
                 <data android:scheme="qwalletXXXXXXXX" />
             </intent-filter>
-
         </activity>
 
         <!-- 微信支付 -->
@@ -327,12 +324,12 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind"></activity>
+            android:screenOrientation="behind" />
         <activity
             android:name=".aim.activity.SupportAimActivity"
             android:screenOrientation="portrait" />
@@ -342,9 +339,33 @@
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
 
-        <!--  ping++ -->
+        <!-- ping++ -->
 
 
+        <activity
+            android:name=".search.activity.RedHaveActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".search.activity.SupportMoneyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".search.activity.SupportPayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".search.activity.SearchKeyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".search.activity.AddFriendSearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".login.ForgetPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".search.activity.RedPacketActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".search.activity.UserDetitalActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
