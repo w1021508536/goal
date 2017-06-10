@@ -106,9 +106,9 @@ public class TrajectoryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_trajectory, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-//            if (!operationShowFlag) {
-//                vh.rlOperation.setVisibility(View.GONE);
-//            }
+            if (!operationShowFlag) {
+                vh.rlOperation.setVisibility(View.GONE);
+            }
             Drawable drawable = context.getResources().getDrawable(R.mipmap.local_icon);
             drawable.setBounds(0, 0, Utils.dip2px(context, 11), Utils.dip2px(context, 13));
             vh.tvCityItem.setCompoundDrawables(drawable, null, null, null);
@@ -157,6 +157,11 @@ public class TrajectoryAdapter extends BaseAdapter {
             vh.tvSupportsNumsItem.setVisibility(View.VISIBLE);
         }
 
+        if (data.get(position).getHaveVote() == 1) {
+            vh.imgGreat.setImageResource(R.mipmap.icon_vote_on);
+        } else {
+            vh.imgGreat.setImageResource(R.mipmap.icon_vote_off);
+        }
 
         vh.imgItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,19 +188,23 @@ public class TrajectoryAdapter extends BaseAdapter {
                 vh.tvSupportsNumsItem.setVisibility(View.GONE);
             }
         });
-        vh.imgCommit.setOnClickListener(new myClick(dynamicEntity));
-        vh.imgGreat.setOnClickListener(new myClick(dynamicEntity));
-        vh.imgHelp.setOnClickListener(new myClick(dynamicEntity));
+        vh.imgCommit.setOnClickListener(new myClick(data, position, vh));
+        vh.imgGreat.setOnClickListener(new myClick(data, position, vh));
+        vh.imgHelp.setOnClickListener(new myClick(data, position, vh));
 
         return convertView;
     }
 
     class myClick implements View.OnClickListener {
 
-        private DynamicEntity dynamicEntity;
+        private final int position;
+        private final ViewHolder viewHolder;
+        private List<DynamicEntity> data;
 
-        public myClick(DynamicEntity dynamicEntity) {
-            this.dynamicEntity = dynamicEntity;
+        public myClick(List<DynamicEntity> data, int position, ViewHolder viewHolder) {
+            this.data = data;
+            this.viewHolder = viewHolder;
+            this.position = position;
         }
 
         @Override
@@ -203,17 +212,31 @@ public class TrajectoryAdapter extends BaseAdapter {
             switch (v.getId()) {
                 case R.id.img_great:
                     if (listener != null) {
-                        listener.great(dynamicEntity.getDynamic().getId() + "");
+                        listener.great(data.get(position).getDynamic().getId() + "");
+                        if (data.get(position).getHaveVote() == 0) {
+                            data.get(position).setHaveVote(1);
+                            viewHolder.imgGreat.setImageResource(R.mipmap.icon_vote_on);
+                            data.get(position).setVotes(data.get(position).getVotes() + 1);
+                            notifyDataSetChanged();
+                        } else {
+                            data.get(position).setHaveVote(0);
+                            viewHolder.imgGreat.setImageResource(R.mipmap.icon_vote_off);
+                            data.get(position).setVotes(data.get(position).getVotes() - 1);
+                            notifyDataSetChanged();
+                        }
+
                     }
                     break;
                 case R.id.img_commit:
                     if (listener != null) {
-                        listener.comment(dynamicEntity.getDynamic().getId() + "");
+                        listener.comment(data.get(position).getDynamic().getId() + "");
                     }
                     break;
                 case R.id.img_help:
                     if (listener != null) {
-                        listener.help(dynamicEntity.getDynamic().getId() + "", dynamicEntity.getDynamic().getNick(), dynamicEntity.getDynamic().getAvatar());
+                        listener.help(data.get(position).getDynamic().getId() + "", data.get(position).getDynamic().getNick(), data.get(position).getDynamic().getAvatar());
+
+
                     }
                     break;
             }

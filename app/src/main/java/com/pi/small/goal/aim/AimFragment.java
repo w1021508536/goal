@@ -165,6 +165,9 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 //            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
 
 
+        } else if (resultCode == Code.REQUEST_HEAD_CODE) {
+
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -367,7 +370,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         set_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           //     position = finalI;
+                //     position = finalI;
                 View windowView = LayoutInflater.from(getActivity()).inflate(
                         R.layout.window_aim_set, null);
                 final PopupWindow popupWindow = new PopupWindow(windowView,
