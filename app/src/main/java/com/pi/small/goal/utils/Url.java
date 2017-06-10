@@ -80,4 +80,8 @@ public class Url {
     public static String RedGet = "";//获取收益红包
 
 
+    public static String AimDynamicUser = "/aim/dynamic/user";//用户的动态
+    public static String UserBase = "/user/base";//用户基础信息
+
+
 }

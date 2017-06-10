@@ -121,21 +121,30 @@
                 android:background="@color/white"
                 android:orientation="vertical">
 
-                <ImageView
+                <LinearLayout
+                    android:id="@+id/phone_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:padding="5dp"
-                    android:src="@mipmap/contact_btn" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="5dp"
-                    android:text="连接手机通讯录"
-                    android:textColor="@color/gray_heavy"
-                    android:textSize="14dp" />
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:src="@mipmap/contact_btn" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:padding="5dp"
+                        android:text="连接手机通讯录"
+                        android:textColor="@color/gray_heavy"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -148,6 +157,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/wx_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -173,6 +183,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/qq_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -198,6 +209,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/wb_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -225,6 +237,21 @@
 
 
             </LinearLayout>
+
+            <com.pi.small.goal.utils.MyListView
+                android:id="@+id/user_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:divider="@null"
+                android:dividerHeight="2dp"
+                android:fadingEdge="none"
+                android:fastScrollEnabled="false"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false"
+                android:scrollbars="none"
+                android:smoothScrollbar="true" />
+
 
         </LinearLayout>
 

@@ -27,6 +27,7 @@ import com.pi.small.goal.aim.activity.AddAimActivity;
 import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.aim.adapter.ViewPagerAdapter;
 import com.pi.small.goal.my.activity.RedActivity;
+import com.pi.small.goal.my.activity.SignActivity;
 import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
@@ -126,7 +127,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.left_image:
-
+                startActivity(new Intent(getContext(), SignActivity.class));
                 break;
         }
     }

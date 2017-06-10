@@ -229,18 +229,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (Build.VERSION.SDK_INT >= 23) {
 
-            System.out.println("=============23=================");
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
-                System.out.println("=============23=========22========");
                 requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_CALL_PHONE);
                 return;
             } else {
-                System.out.println("=============23=====1111============");
                 mLocationClient.startLocation();
             }
         } else {
-            System.out.println("=============!23=================");
             mLocationClient.startLocation();
         }
 

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +30,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.aim.activity.AddAimActivity;
+import com.pi.small.goal.aim.activity.SaveMoneyActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.search.activity.UserDetitalActivity;
@@ -88,10 +91,6 @@ public class HotFragment extends Fragment {
     private int width;
     private List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
     private Parcelable state;
-    public HotFragment() {
-        // Required empty public constructor
-    }
-
     private int currentPosition;
 
     private boolean isDown = false;
@@ -140,7 +139,7 @@ public class HotFragment extends Fragment {
             }
         });
 
-        GetHotData(page+"","10");
+        GetHotData(page + "", "10");
     }
 
     /**
@@ -158,7 +157,7 @@ public class HotFragment extends Fragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            GetHotData(page+"","10");
+            GetHotData(page + "", "10");
             return dynamicEntityList;
         }
 
@@ -194,7 +193,7 @@ public class HotFragment extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                GetHotData(page+"","10");
+                GetHotData(page + "", "10");
             }
 
 
@@ -214,12 +213,12 @@ public class HotFragment extends Fragment {
     }
 
 
-    private void GetHotData(String page,String r) {
+    private void GetHotData(String page, String r) {
         state = hotList.getRefreshableView().onSaveInstanceState();
         RequestParams requestParams = new RequestParams(Url.Url + Url.HotSearch);
         requestParams.addHeader("token", Utils.GetToken(getActivity()));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("p", page );
+        requestParams.addBodyParameter("p", page);
         requestParams.addBodyParameter("r", r);
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
@@ -242,7 +241,7 @@ public class HotFragment extends Fragment {
 //
                             dynamicEntity.setId(dynamicObject.optString("id"));
                             dynamicEntity.setAimId(dynamicObject.optString("aimId"));
-                            dynamicEntity.setUserId(dynamicObject.optString("userId"));
+                            dynamicEntity.setUserId(dynamicObject.getString("userId"));
                             dynamicEntity.setNick(dynamicObject.optString("nick"));
                             dynamicEntity.setAvatar(dynamicObject.optString("avatar"));
                             dynamicEntity.setContent(dynamicObject.optString("content"));
@@ -331,11 +330,80 @@ public class HotFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Code.SupportAim) {
 
-
+            PutRedWindow();
         } else if (resultCode == Code.FailCode) {
             System.out.println("==========支付失败============");
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //弹出框
+    private void PutRedWindow() {
+        final View windowView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.window_thanks_red, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        ImageView imageView = (ImageView) windowView.findViewById(R.id.image);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestParams requestParams = new RequestParams(Url.Url + Url.Aim);
+                requestParams.addHeader("token", Utils.GetToken(getActivity()));
+                requestParams.addHeader("deviceId", MyApplication.deviceId);
+                XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            String code = new JSONObject(result).getString("code");
+                            if (code.equals("0")) {
+                                String money = new JSONObject(result).optString("money");
+                                if (money.equals("")) {
+                                    Utils.showToast(getActivity(), "恭喜您获取红包");
+                                } else {
+                                    Utils.showToast(getActivity(), "恭喜您获取红包" + money + "元");
+                                }
+                            } else {
+                                Utils.showToast(getActivity(), "红包领取失败");
+                            }
+                            popupWindow.dismiss();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+            }
+        });
+
+
+//        windowView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                popupWindow.dismiss();
+//            }
+//        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(currentView, Gravity.CENTER, 0, 0);
+
     }
 
     @OnClick({R.id.pinch_image, R.id.image_layout})
@@ -409,7 +477,7 @@ public class HotFragment extends Fragment {
 
             if (!dynamicEntityList.get(position).getAvatar().equals("")) {
                 Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntityList.get(position).getAvatar())).into(viewHolder.headImage);
-            }else {
+            } else {
                 viewHolder.headImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
             }
 
@@ -418,6 +486,7 @@ public class HotFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), UserDetitalActivity.class);
+                    intent.putExtra("userId", dynamicEntityList.get(position).getUserId());
                     startActivity(intent);
                 }
             });
@@ -482,7 +551,7 @@ public class HotFragment extends Fragment {
 
                                     }
 
-                                    GetHotData("1",page*10+"");
+                                    GetHotData("1", page * 10 + "");
 //                                    notifyDataSetChanged();
                                 }
                             } catch (JSONException e) {
@@ -604,6 +673,7 @@ public class HotFragment extends Fragment {
                                             try {
                                                 String code = new JSONObject(result).getString("code");
                                                 if (code.equals("0")) {
+
                                                     commentEntity = new CommentEntity();
                                                     commentEntity.setCommentId(new JSONObject(result).getJSONObject("result").getString("commentId"));
                                                     commentEntity.setPid(new JSONObject(result).getJSONObject("result").getString("pid"));
@@ -618,11 +688,12 @@ public class HotFragment extends Fragment {
                                                     dynamicEntityList.get(position).getCommentList().add(0, commentEntity);
 
                                                     Utils.showToast(getActivity(), "评论成功");
-                                                    notifyDataSetChanged();
                                                     popupWindow.dismiss();
+                                                    notifyDataSetChanged();
 
                                                 } else {
                                                     Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                                                    popupWindow.dismiss();
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -632,6 +703,7 @@ public class HotFragment extends Fragment {
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
+                                            System.out.println("======================" + ex.getMessage());
                                             Utils.showToast(getActivity(), ex.getMessage());
                                         }
 
@@ -692,10 +764,10 @@ public class HotFragment extends Fragment {
                     imageList.add(dynamicEntityList.get(position).getImg1());
                 }
                 if (!dynamicEntityList.get(position).getImg2().equals("")) {
-                    imageList.add(dynamicEntityList.get(position).getImg1());
+                    imageList.add(dynamicEntityList.get(position).getImg2());
                 }
                 if (!dynamicEntityList.get(position).getImg3().equals("")) {
-                    imageList.add(dynamicEntityList.get(position).getImg1());
+                    imageList.add(dynamicEntityList.get(position).getImg3());
                 }
 
                 if (imageList.size() == 1) {

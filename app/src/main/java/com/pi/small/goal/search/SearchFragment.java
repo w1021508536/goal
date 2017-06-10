@@ -83,6 +83,8 @@ public class SearchFragment extends Fragment {
 
         searchViewPagerAdapter = new SearchViewPagerAdapter(getChildFragmentManager());
         view_pager.setAdapter(searchViewPagerAdapter);
+//        view_pager.set
+        view_pager.setOffscreenPageLimit(2);
         tabs.setViewPager(view_pager);
         return view;
     }
