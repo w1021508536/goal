@@ -57,6 +57,7 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -83,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="1"
-            android:textColor="@color/chat_top"
+            android:textColor="#FCC92F"
             android:textSize="14dp" />
 
         <TextView
@@ -99,6 +100,7 @@
         android:layout_height="300dp"
         android:layout_above="@+id/tv_hint_flop"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
         android:background="@mipmap/icon_draw_card_bg2x"
         android:orientation="vertical"
         android:padding="25dp">
@@ -344,7 +346,7 @@
 
     <TextView
         android:id="@+id/tv_hint_flop"
-        style="@style/text_white_14"
+        style="@style/text_white_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

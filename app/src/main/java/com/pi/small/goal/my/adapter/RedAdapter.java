@@ -1,6 +1,7 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.WalletEntry;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
+
+import org.xutils.http.RequestParams;
 
 import java.util.List;
 
@@ -62,7 +69,7 @@ public class RedAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
 
         if (getItemViewType(position) == TYPE_TITLE) {
@@ -79,19 +86,58 @@ public class RedAdapter extends BaseAdapter {
                 vh = (ViewHolder) convertView.getTag();
             }
 
-            WalletEntry walletEntry = data.get(position);
+            final WalletEntry walletEntry = data.get(position);
             vh.tvTimeItem.setText(RedMoreAdapter.getTimeDate(walletEntry.getCreateTime()));
-            vh.tvNameItem.setText("助力红包");
+            vh.tvNameItem.setText("助力红包—来自");
+            vh.tvUserNameItem.setText(walletEntry.getFromUserNick());
 
             vh.tvHaveItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    obtainRed(position, walletEntry.getId() + "");
 
                 }
             });
         }
 
         return convertView;
+    }
+
+    /**
+     * 获取红包
+     * create  wjz
+     **/
+    private void obtainRed(final int position, String packetId) {
+
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.setUri(Url.Url + "/redpacket/draw");
+        SharedPreferences sp = Utils.UserSharedPreferences(context);
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("packetId", packetId);
+
+        XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                if (!Utils.callOk(result)) return;
+                data.remove(position);
+                notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override
@@ -110,6 +156,8 @@ public class RedAdapter extends BaseAdapter {
         ImageView imgItem;
         @InjectView(R.id.tv_name_item)
         TextView tvNameItem;
+        @InjectView(R.id.tv_userName_item)
+        TextView tvUserNameItem;
         @InjectView(R.id.tv_time_item)
         TextView tvTimeItem;
         @InjectView(R.id.tv_have_item)

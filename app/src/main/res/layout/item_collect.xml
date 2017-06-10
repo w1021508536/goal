@@ -5,6 +5,11 @@
     android:background="@color/background_system_list"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#e5e6e6" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -33,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
             android:layout_toEndOf="@+id/icon_item"
             android:layout_toRightOf="@+id/icon_item"
             android:text="老大啊" />
@@ -59,7 +65,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
         android:background="@color/white"
         android:paddingBottom="@dimen/top_left"
         android:paddingLeft="@dimen/top_left"
@@ -107,17 +113,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_oval_orange_orange"
-                android:paddingBottom="2dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:paddingTop="2dp"
+                android:gravity="center"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:text="80%" />
 
             <View
                 android:id="@+id/view_width"
                 android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_weight="1" />
+                android:layout_height="5dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:background="#dbd9d8" />
         </LinearLayout>
 
         <LinearLayout
@@ -208,5 +215,11 @@
         </LinearLayout>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginBottom="@dimen/top_left"
+        android:background="#e5e6e6" />
 
 </LinearLayout>

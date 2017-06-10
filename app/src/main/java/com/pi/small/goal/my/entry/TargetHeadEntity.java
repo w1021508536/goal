@@ -10,10 +10,12 @@ import java.util.List;
  * 描述：
  **/
 public class TargetHeadEntity {
+
+
     /**
-     * aim : {"id":3,"name":"我的第二个目标","budget":1000,"money":0,"cycle":6,"current":0,"userId":26,"province":"山东","city":"青岛","brief":"实现梦想","position":"卓越","longitude":0,"latitude":0,"support":0,"createTime":1495002021000,"status":1}
-     * user : {"id":26,"nick":"雨滴","avatar":"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2097810229,3516784541&fm=11&gp=0.jpg","brief":"","city":"青岛","sex":0}
-     * count : 1
+     * aim : {"id":30,"name":"那就","budget":9999,"money":20,"cycle":6,"current":2,"userId":43,"province":"山东省","city":"青岛市","brief":"","position":"瘦和美瘦身中心","longitude":0,"latitude":0,"support":0,"createTime":1496480197000,"status":1,"img":"","transfer":0}
+     * user : {"id":43,"nick":"13693361208","avatar":"","brief":"","city":"","sex":0,"status":1}
+     * count : 0
      * supports : [{"id":1,"aimId":3,"userId":26,"money":1,"message":"","createTime":1495167325000,"nick":"雨滴","avatar":"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2097810229,3516784541&fm=11&gp=0.jpg"}]
      */
 
@@ -56,22 +58,24 @@ public class TargetHeadEntity {
 
     public static class AimBean {
         /**
-         * id : 3
-         * name : 我的第二个目标
-         * budget : 1000
-         * money : 0
+         * id : 30
+         * name : 那就
+         * budget : 9999
+         * money : 20
          * cycle : 6
-         * current : 0
-         * userId : 26
-         * province : 山东
-         * city : 青岛
-         * brief : 实现梦想
-         * position : 卓越
+         * current : 2
+         * userId : 43
+         * province : 山东省
+         * city : 青岛市
+         * brief :
+         * position : 瘦和美瘦身中心
          * longitude : 0
          * latitude : 0
          * support : 0
-         * createTime : 1495002021000
+         * createTime : 1496480197000
          * status : 1
+         * img :
+         * transfer : 0
          */
 
         private int id;
@@ -90,6 +94,8 @@ public class TargetHeadEntity {
         private int support;
         private long createTime;
         private int status;
+        private String img;
+        private int transfer;
 
         public int getId() {
             return id;
@@ -218,16 +224,33 @@ public class TargetHeadEntity {
         public void setStatus(int status) {
             this.status = status;
         }
+
+        public String getImg() {
+            return img;
+        }
+
+        public void setImg(String img) {
+            this.img = img;
+        }
+
+        public int getTransfer() {
+            return transfer;
+        }
+
+        public void setTransfer(int transfer) {
+            this.transfer = transfer;
+        }
     }
 
     public static class UserBean {
         /**
-         * id : 26
-         * nick : 雨滴
-         * avatar : https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2097810229,3516784541&fm=11&gp=0.jpg
+         * id : 43
+         * nick : 13693361208
+         * avatar :
          * brief :
-         * city : 青岛
+         * city :
          * sex : 0
+         * status : 1
          */
 
         private int id;
@@ -236,6 +259,7 @@ public class TargetHeadEntity {
         private String brief;
         private String city;
         private int sex;
+        private int status;
 
         public int getId() {
             return id;
@@ -283,6 +307,14 @@ public class TargetHeadEntity {
 
         public void setSex(int sex) {
             this.sex = sex;
+        }
+
+        public int getStatus() {
+            return status;
+        }
+
+        public void setStatus(int status) {
+            this.status = status;
         }
     }
 

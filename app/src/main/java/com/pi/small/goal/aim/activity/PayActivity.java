@@ -327,7 +327,6 @@ public class PayActivity extends AppCompatActivity {
             finish();
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
 
     }

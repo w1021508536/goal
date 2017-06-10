@@ -116,7 +116,7 @@ public class SettingActivity extends BaseActivity {
                 .getSystemService(Context.WINDOW_SERVICE);
         params.width = wm.getDefaultDisplay().getWidth();
         window.setAttributes(params);
-        deleteCacheDialog.setCancelable(false);
+        //       deleteCacheDialog.setCancelable(false);
 
 
         TextView tv_cancel = (TextView) window.findViewById(R.id.tv_cancel_dialog);
@@ -130,7 +130,7 @@ public class SettingActivity extends BaseActivity {
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
             }
         });
 

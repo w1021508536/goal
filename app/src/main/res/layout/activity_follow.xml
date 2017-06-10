@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_system_list"
     android:orientation="vertical">
 
     <include layout="@layout/view_include" />
@@ -9,8 +10,16 @@
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/plv_collect"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:dividerHeight="0.5dp">
 
     </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/view_empty_nofollow" />
+    </LinearLayout>
 
 </LinearLayout>

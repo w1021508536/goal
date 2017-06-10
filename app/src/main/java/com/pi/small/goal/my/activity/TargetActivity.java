@@ -16,7 +16,9 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.TargetAdapter;
 import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
@@ -63,10 +65,11 @@ public class TargetActivity extends BaseActivity {
     public void initData() {
         super.initData();
         nameTextInclude.setText("我的目标");
-        rightImageInclude.setImageResource(R.mipmap.qa_icon);
+        rightImageInclude.setImageResource(R.mipmap.icon_aim_history2x);
 
         adapter = new TargetAdapter(this);
         plvTarget.setAdapter(adapter);
+
     }
 
     @Override
@@ -93,14 +96,19 @@ public class TargetActivity extends BaseActivity {
     public void getData() {
         super.getData();
         requestParams.setUri(Url.Url + "/aim");
-        requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
         requestParams.addBodyParameter("p", page + "");
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
-                if (!RenameActivity.callOk(result)) return;
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+//                    View emptyView = LayoutInflater.from(TargetActivity.this).inflate(R.layout.view_empty_nodata, null);
+//                    plvTarget.setEmptyView(emptyView);
+                    plvTarget.setVisibility(View.GONE);
+                    return;
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String jsonData = jsonObject.get("result").toString();
@@ -109,8 +117,12 @@ public class TargetActivity extends BaseActivity {
                     }.getType());
                     if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
                         adapter.addData(data);
-                    } else
+
+                    } else {
                         adapter.setData(data);
+
+                    }
+
                 } catch (JSONException e) {
                 }
                 plvTarget.onRefreshComplete();

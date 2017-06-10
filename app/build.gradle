@@ -42,4 +42,6 @@ dependencies {
     compile project(':cirprogress')
     compile files('libs/libammsdk.jar')
     compile 'com.android.support:design:26.0.0-alpha1'
+    compile project(':pingpp')
+    compile project(':DatePicker')
 }

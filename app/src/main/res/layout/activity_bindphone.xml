@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_system_list"
+    android:orientation="vertical">
+
+    <include layout="@layout/view_include" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingLeft="@dimen/top_left"
+        android:text="请输入您要绑定的手机号码" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/top_left"
+        android:paddingRight="@dimen/top_left">
+
+        <TextView
+            android:id="@+id/tv_hint_phone"
+            style="@style/text_black_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="手机号码" />
+
+        <EditText
+            android:id="@+id/etv_phone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:inputType="number"
+            android:maxLength="11" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="@dimen/top_left"
+        android:layout_marginRight="@dimen/top_left"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/selector_setting_orange"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="下一步"
+        android:textColor="@color/white"
+        android:textSize="18dp" />
+
+</LinearLayout>

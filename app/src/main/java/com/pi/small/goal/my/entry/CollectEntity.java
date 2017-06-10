@@ -29,6 +29,12 @@ public class CollectEntity {
     private long createTime;
     private int status;
     private String img;
+    //        "transfer": 0,
+//                "nick": "hh",
+//                "avatar": "jpg"
+    private int transfer;
+    private String nick;
+    private String avatar;
 
     public CollectEntity() {
     }
@@ -187,5 +193,29 @@ public class CollectEntity {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(int transfer) {
+        this.transfer = transfer;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

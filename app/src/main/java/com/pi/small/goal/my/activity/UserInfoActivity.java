@@ -1,18 +1,23 @@
 package com.pi.small.goal.my.activity;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -22,14 +27,20 @@ import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.entry.UerEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ImageUtils;
 import com.pi.small.goal.utils.KeyCode;
+import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.squareup.picasso.Picasso;
+import com.tencent.mm.sdk.modelmsg.SendAuth;
+import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.tencent.mm.sdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,6 +95,19 @@ public class UserInfoActivity extends BaseActivity {
     @InjectView(R.id.ll_user)
     LinearLayout llUser;
     public final static int REQUESTCODE_DROP_IMAGE = 7;
+    @InjectView(R.id.img_level_user)
+    ImageView imgLevelUser;
+    @InjectView(R.id.tv_phoneBind_user)
+    TextView tvPhoneBindUser;
+    @InjectView(R.id.tv_level_user)
+    TextView tvLevelUser;
+    @InjectView(R.id.tv_wxBind_user)
+    TextView tvWxBindUser;
+    private IWXAPI wx_api;
+
+    public static final String BIND_WX = "bind_wx";
+    final public static int REQUEST_CODE_CAMERA = 123;
+    final public static int REQUEST_CODE_PHOTO = 124;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,6 +126,45 @@ public class UserInfoActivity extends BaseActivity {
         view = findViewById(R.id.view);
         super.initData();
         //  x.image().bind(sp.getString("avatar", ""), iconUser);
+
+
+        UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
+        //微信
+        wx_api = WXAPIFactory.createWXAPI(this, ThirdUtils.WX_APP_ID, true);
+        wx_api.registerApp(ThirdUtils.WX_APP_ID);
+        if (userInfo == null) return;
+        String grade = userInfo.getGrade().replace("v", "");
+
+        switch (Integer.valueOf(grade)) {
+            case 0:
+                imgLevelUser.setVisibility(View.GONE);
+                tvLevelUser.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_1);
+                break;
+            case 2:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_2);
+                break;
+            case 3:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_3);
+                break;
+            case 4:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_4);
+                break;
+            case 5:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_5);
+                break;
+            case 6:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_6);
+                break;
+            case 7:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_7);
+                break;
+            case 8:
+                imgLevelUser.setImageResource(R.mipmap.icon_level_8);
+                break;
+        }
     }
 
     @Override
@@ -111,6 +174,9 @@ public class UserInfoActivity extends BaseActivity {
         rlUsernameUser.setOnClickListener(this);
         rlContentUser.setOnClickListener(this);
         rlIconUser.setOnClickListener(this);
+        rlDenjiUser.setOnClickListener(this);
+        rlPhoneUser.setOnClickListener(this);
+        rlWxUser.setOnClickListener(this);
     }
 
     @Override
@@ -135,8 +201,40 @@ public class UserInfoActivity extends BaseActivity {
 
                 showPop();
                 break;
+            case R.id.rl_denji_user:
+                startActivity(new Intent(this, LevelActivity.class));
+                break;
+            case R.id.rl_phone_user:
+                if ("".equals(CacheUtil.getInstance().getUserInfo().getUser().getMobile())) {
+                    startActivity(new Intent(this, BindPhoneActivity.class));
+                } else {
+                    startActivity(new Intent(this, UpdataPhoneActivity.class));
+                }
+
+                break;
+            case R.id.rl_wx_user:
+                wxLogin();
+                break;
         }
     }
+
+    /**
+     * 微信登陆
+     * create  wjz
+     **/
+    private void wxLogin() {
+        boolean isHaveWeixin = wx_api.isWXAppInstalled()
+                && wx_api.isWXAppSupportAPI();
+        if (isHaveWeixin) {
+            final SendAuth.Req req = new SendAuth.Req();
+            req.scope = "snsapi_userinfo";
+            req.state = BIND_WX;
+            wx_api.sendReq(req);
+        } else {
+            Utils.showToast(this, "请先安装微信应用");
+        }
+    }
+
 
     /**
      * 显示popuwindow
@@ -145,14 +243,17 @@ public class UserInfoActivity extends BaseActivity {
 
     private void showPop() {
         final PopupWindow popupWindow = new PopupWindow(llUser,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         View view = LayoutInflater.from(this).inflate(R.layout.popu_choose_photo, null);
         popupWindow.setContentView(view);
 
-        popupWindow.setHeight(getWindowManager().getDefaultDisplay().getHeight());
-        popupWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        popupWindow.setWidth(getWindowManager().getDefaultDisplay().getWidth());
+        popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setOutsideTouchable(true); //点击其他地方dismiss
-        popupWindow.showAsDropDown(llUser);
+        popupWindow.update();
+
+
+        popupWindow.showAsDropDown(llUser, 0, -llUser.getHeight());
 
         TextView tv_album = (TextView) view.findViewById(R.id.tv_album_pop);  //选择相册
         TextView tv_camera = (TextView) view.findViewById(R.id.tv_camera_pop); //拍照
@@ -160,7 +261,20 @@ public class UserInfoActivity extends BaseActivity {
         tv_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goCamera();
+
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int checkCallPhonePermission = ContextCompat.checkSelfPermission(UserInfoActivity.this, Manifest.permission.CAMERA);
+                    if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(UserInfoActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_CAMERA);
+                        return;
+                    } else {
+                        goCamera();
+                    }
+                } else {
+                    goCamera();
+                }
+
                 popupWindow.dismiss();
             }
         });
@@ -168,7 +282,17 @@ public class UserInfoActivity extends BaseActivity {
         tv_album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goGallery();
+
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(UserInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(UserInfoActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PHOTO);
+                        return;
+                    } else {
+                        goGallery();
+                    }
+                } else
+                    goGallery();
                 popupWindow.dismiss();
             }
         });
@@ -205,6 +329,8 @@ public class UserInfoActivity extends BaseActivity {
 //        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
 //        cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
 //        startActivityForResult(cameraIntent, Code.RESULT_CAMERA_CODE);
+
+
         Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
         startActivityForResult(getImageByCamera, Code.RESULT_CAMERA_CODE);
     }
@@ -261,6 +387,21 @@ public class UserInfoActivity extends BaseActivity {
         }
         String brief = sp.getString(KeyCode.USER_BRIEF, "");
         tvBriefUser.setText(brief);
+
+        String mobile = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+        String wechatId = CacheUtil.getInstance().getUserInfo().getUser().getWechatId();
+        if ("".equals(mobile)) {
+            tvPhoneBindUser.setText("未绑定");
+        } else {
+            tvPhoneBindUser.setText("已绑定");
+            //     rlPhoneUser.setClickable(false);
+        }
+        if ("".equals(wechatId)) {
+            tvWxBindUser.setText("未绑定");
+        } else {
+            tvWxBindUser.setText("已绑定");
+            //  rlWxUser.setClickable(false);
+        }
     }
 
 
@@ -287,7 +428,10 @@ public class UserInfoActivity extends BaseActivity {
                         Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
 
                         String xmb = ImageUtils.saveMyBitmap("xmb", photo);
-                        Uri imageUri = FileProvider.getUriForFile(this, "com.pi.small.goal.FileProvider", new File(xmb));
+                        Uri imageUri = Uri.fromFile(new File(xmb));
+                        if (Integer.parseInt(Build.VERSION.SDK) >= 24) {
+                            imageUri = FileProvider.getUriForFile(this, "com.pi.small.goal.FileProvider", new File(xmb));
+                        }
                         doCrop(imageUri);
 //                        File file = ImageUtils.getSmallImageFile(this, photo, 1080, 1080, true);
 //                        iconUser.setImageBitmap(photo);
@@ -312,7 +456,32 @@ public class UserInfoActivity extends BaseActivity {
                 uploadFile(file);
             }
         }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    goCamera();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(UserInfoActivity.this, "您禁止了相机权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case REQUEST_CODE_PHOTO:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    goCamera();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(UserInfoActivity.this, "您禁止了写入权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     /**
@@ -324,7 +493,7 @@ public class UserInfoActivity extends BaseActivity {
         requestParams.setUri(Url.Url + "/user");
         requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
         requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
-        requestParams.addBodyParameter("avatar", iconPath);
+        requestParams.addBodyParameter("avatar", Url.PhotoUrl + "/" + iconPath);
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
@@ -332,9 +501,9 @@ public class UserInfoActivity extends BaseActivity {
                     Utils.showToast(UserInfoActivity.this, getResources().getString(R.string.updata_ok));
                     SharedPreferences.Editor editor = sp.edit();
                     if (!RenameActivity.callOk(result)) return;
-                    editor.putString(KeyCode.USER_AVATAR, iconPath);
+                    editor.putString(KeyCode.USER_AVATAR, Utils.GetPhotoPath(iconPath));
                     editor.commit();
-                    Picasso.with(UserInfoActivity.this).load(iconPath).into(iconUser);
+                    Picasso.with(UserInfoActivity.this).load(Utils.GetPhotoPath(iconPath)).into(iconUser);
                 }
             }
 
@@ -358,7 +527,11 @@ public class UserInfoActivity extends BaseActivity {
         requestParams.setUri(Url.Url + "/file/picture");
         requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
         requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
+        requestParams.addBodyParameter("token", Utils.GetToken(this));
+        requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", file);
+
+
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
@@ -383,4 +556,6 @@ public class UserInfoActivity extends BaseActivity {
             }
         });
     }
+
+
 }

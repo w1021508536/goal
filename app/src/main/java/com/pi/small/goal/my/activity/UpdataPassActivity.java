@@ -21,6 +21,9 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.dialog.HuiFuDialog;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.weight.VirtualKeyboardView;
 
 import butterknife.ButterKnife;
@@ -82,7 +85,9 @@ public class UpdataPassActivity extends BaseActivity {
     private ImageView[] imgList;      //用数组保存6个TextView，为什么用数组？
     private int currentIndex = -1;    //用于记录当前输入密码格位置
 
+
     public static final String KEY_FLAG = "flag";
+    public static final String KEY_PASS = "pass";
     public static final int FLAG_OLD = 1;
     public static final int FLAG_NEW = 2;
     public static final int FLAG_NEW_AGIN = 3;
@@ -136,7 +141,7 @@ public class UpdataPassActivity extends BaseActivity {
         imgList[4] = (ImageView) findViewById(R.id.img_pass5);
         imgList[5] = (ImageView) findViewById(R.id.img_pass6);
 
-        dialog = new HuiFuDialog(this);
+        dialog = new HuiFuDialog(this, "你的支付密码已设置成功");
 
     }
 
@@ -207,20 +212,53 @@ public class UpdataPassActivity extends BaseActivity {
                         case FLAG_OLD:
                             intent.putExtra(KEY_FLAG, FLAG_NEW);
                             startActivity(intent);
+                            CacheUtil.getInstance().setOldPass(strPassword);
                             finish();
                             break;
                         case FLAG_NEW:
                             intent.putExtra(KEY_FLAG, FLAG_NEW_AGIN);
                             startActivity(intent);
-                            CacheUtil.getInstance().setNewPassWord(strPassword);
+                            CacheUtil.getInstance().setNewPass(strPassword);
                             finish();
                             break;
                         case FLAG_NEW_AGIN:
-                            dialog.show();
+                            if (!CacheUtil.getInstance().getNewPass().equals(strPassword)) {
+                                Utils.showToast(UpdataPassActivity.this, "两次密码不一致");
+                                return;
+                            }
+                            updataPass();
                             break;
                     }
 
                 }
+            }
+        });
+    }
+
+    private void updataPass() {
+
+        requestParams.setUri(Url.Url + "/user/password");
+        requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
+        requestParams.addBodyParameter("oldPassword", CacheUtil.getInstance().getOldPass());
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (RenameActivity.callOk(result)) {
+                    dialog.show();
+                } else {
+                    Utils.showToast(UpdataPassActivity.this, Utils.getMsg(result));
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }

@@ -17,6 +17,7 @@ import com.pi.small.goal.my.adapter.FollowAdapter;
 import com.pi.small.goal.my.entry.FollowEntry;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
@@ -67,6 +68,8 @@ public class FollowActivity extends BaseActivity {
         nameTextInclude.setText("我的关注");
         rightImageInclude.setVisibility(View.GONE);
         getData();
+//        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_nofollow, null);
+//        plvCollect.setEmptyView(emptyView);
     }
 
 
@@ -91,6 +94,12 @@ public class FollowActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+//                    View emptyView = LayoutInflater.from(TargetActivity.this).inflate(R.layout.view_empty_nodata, null);
+//                    plvTarget.setEmptyView(emptyView);
+                    plvCollect.setVisibility(View.GONE);
+                    return;
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String jsonData = jsonObject.get("result").toString();

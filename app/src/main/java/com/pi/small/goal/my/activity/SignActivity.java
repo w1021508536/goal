@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.XUtil;
 
@@ -36,6 +37,7 @@ import butterknife.InjectView;
  **/
 public class SignActivity extends BaseActivity {
 
+
     @InjectView(R.id.view)
     View view;
     @InjectView(R.id.left_image_include)
@@ -46,38 +48,42 @@ public class SignActivity extends BaseActivity {
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
+    @InjectView(R.id.tv_signHint_sign)
+    TextView tvSignHintSign;
+    @InjectView(R.id.tv_signDays_sign)
+    TextView tvSignDaysSign;
+    @InjectView(R.id.tv_sign_hintDay_sign)
+    TextView tvSignHintDaySign;
+    @InjectView(R.id.img_day1_sign)
+    ImageView imgDay1Sign;
+    @InjectView(R.id.tv_day1_sign)
+    TextView tvDay1Sign;
+    @InjectView(R.id.img_day2_sign)
+    ImageView imgDay2Sign;
+    @InjectView(R.id.tv_day2_sign)
+    TextView tvDay2Sign;
+    @InjectView(R.id.img_day3_sign)
+    ImageView imgDay3Sign;
+    @InjectView(R.id.tv_day3_sign)
+    TextView tvDay3Sign;
+    @InjectView(R.id.img_day4_sign)
+    ImageView imgDay4Sign;
+    @InjectView(R.id.tv_day4_sign)
+    TextView tvDay4Sign;
+    @InjectView(R.id.img_day5_sign)
+    ImageView imgDay5Sign;
+    @InjectView(R.id.tv_day5_sign)
+    TextView tvDay5Sign;
+    @InjectView(R.id.img_day6_sign)
+    ImageView imgDay6Sign;
+    @InjectView(R.id.tv_day6_sign)
+    TextView tvDay6Sign;
+    @InjectView(R.id.imageView7)
+    ImageView imageView7;
     @InjectView(R.id.tv_sing_sign)
     Button tvSingSign;
     @InjectView(R.id.tv_hint_sign)
     TextView tvHintSign;
-    @InjectView(R.id.img_day1_sign)
-    ImageView imgDay1Sign;
-    @InjectView(R.id.img_day2_sign)
-    ImageView imgDay2Sign;
-    @InjectView(R.id.img_day3_sign)
-    ImageView imgDay3Sign;
-    @InjectView(R.id.img_day4_sign)
-    ImageView imgDay4Sign;
-    @InjectView(R.id.img_day5_sign)
-    ImageView imgDay5Sign;
-    @InjectView(R.id.img_day6_sign)
-    ImageView imgDay6Sign;
-    @InjectView(R.id.imageView7)
-    ImageView imageView7;
-    @InjectView(R.id.tv_day1_sign)
-    TextView tvDay1Sign;
-    @InjectView(R.id.tv_day2_sign)
-    TextView tvDay2Sign;
-    @InjectView(R.id.tv_day3_sign)
-    TextView tvDay3Sign;
-    @InjectView(R.id.tv_day4_sign)
-    TextView tvDay4Sign;
-    @InjectView(R.id.tv_day5_sign)
-    TextView tvDay5Sign;
-    @InjectView(R.id.tv_day6_sign)
-    TextView tvDay6Sign;
-    @InjectView(R.id.tv_signDays_sign)
-    TextView tvSignDaysSign;
     private long signTime;
     private int days;
     private View[] tvViews;
@@ -93,11 +99,15 @@ public class SignActivity extends BaseActivity {
     @Override
     public void initData() {
         tvViews = new TextView[]{tvDay1Sign, tvDay2Sign, tvDay3Sign, tvDay4Sign, tvDay5Sign, tvDay6Sign,};
-
         nameTextInclude.setText("签到");
         tvOkInclude.setText("规则");
         tvOkInclude.setVisibility(View.VISIBLE);
         rightImageInclude.setVisibility(View.GONE);
+
+        if (CacheUtil.getInstance().isSignFlag()) {
+            tvSingSign.setText("今日已签到");
+            tvSingSign.setBackgroundResource(R.mipmap.btn_signed);
+        }
 
         super.initData();
     }
@@ -117,7 +127,12 @@ public class SignActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 //{"msg":"success","code":0,"result":{"signInId":4,"lastSignInTime":1496714247000,"userId":48,"days":2,"drew":0,"rewardType":1,"exp":6},"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
-                //    if (!RenameActivity.callOk(result)) return;
+                if (!RenameActivity.callOk(result)) {
+                    tvSignHintSign.setText("您尚未签到");
+                    tvSignDaysSign.setVisibility(View.GONE);
+                    tvSignHintDaySign.setVisibility(View.GONE);
+                    return;
+                }
 
                 try {
 
@@ -128,6 +143,13 @@ public class SignActivity extends BaseActivity {
                     Date date = new Date(signTime);
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
                     Date nowDate = new Date();
+
+                    if (days == 0) {
+                        tvSignHintSign.setText("您尚未签到");
+                        tvSignDaysSign.setVisibility(View.GONE);
+                        tvSignHintDaySign.setVisibility(View.GONE);
+                    }
+
 //                    if (formatter.format(date).equals(formatter.format(nowDate)))
 //                        return;
                     for (int i = 0; i < tvViews.length; i++) {
@@ -186,9 +208,9 @@ public class SignActivity extends BaseActivity {
         Date date = new Date(signTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
         Date nowDate = new Date();
-//        if (formatter.format(date).equals(formatter.format(nowDate)))
-//            return;
-
+        if (formatter.format(date).equals(formatter.format(nowDate))) {
+            return;
+        }
         requestParams.setUri(Url.Url + "/signin");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -203,6 +225,10 @@ public class SignActivity extends BaseActivity {
                     JSONObject obj = (JSONObject) new JSONObject(result).get("result");
                     int exp = (int) obj.get("exp");
                     signOkDialog(exp);
+                    tvSingSign.setText("今日已签到");
+                    tvSingSign.setBackgroundResource(R.mipmap.btn_signed);
+                    CacheUtil.getInstance().setSignFlag(true);
+                    CacheUtil.getInstance().getUserInfo().getTaskInfo().setFinishTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount() + 1);
                 } catch (JSONException e) {
                 }
             }
@@ -217,6 +243,7 @@ public class SignActivity extends BaseActivity {
 
             }
         });
+        signTime = new Date().getTime();
     }
 
 
@@ -243,12 +270,17 @@ public class SignActivity extends BaseActivity {
         TextView tv_exp = (TextView) window.findViewById(R.id.tv_addExp_dialog);
         TextView tv_ok = (TextView) window.findViewById(R.id.tv_sigeOK);
         tv_exp.setText("+" + exp + "点经验");
+
+        tvSignDaysSign.setText((Integer.valueOf(tvSignDaysSign.getText().toString()) + 1) + "");
+        tvSignDaysSign.setVisibility(View.VISIBLE);
+        tvSignHintDaySign.setVisibility(View.VISIBLE);
+        tvSignHintSign.setText("恭喜！您已连续签到");
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (thiDayImageView != null)
-
                     thiDayImageView.setVisibility(View.INVISIBLE);
+                deleteCacheDialog.dismiss();
                 startActivity(new Intent(SignActivity.this, FlopActivity.class));
             }
         });

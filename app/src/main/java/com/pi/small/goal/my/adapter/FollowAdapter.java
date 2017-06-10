@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.RenameActivity;
 import com.pi.small.goal.my.entry.FollowEntry;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -68,7 +69,7 @@ public class FollowAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_follow, null);
@@ -81,12 +82,14 @@ public class FollowAdapter extends BaseAdapter {
         vh.tvNameItem.setText(followEntry.getNick());
         if (!"".equals(followEntry.getAvatar())) {
             Picasso.with(context).load(Utils.GetPhotoPath(followEntry.getAvatar())).into(vh.iconItem);
+        } else {
+            vh.iconItem.setImageResource(R.mipmap.icon_user);
         }
 
         vh.tvNoFollowItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //    follow(followEntry.getFollowUserId());
+                follow(followEntry.getFollowUserId(), position);
             }
         });
 
@@ -98,18 +101,23 @@ public class FollowAdapter extends BaseAdapter {
      * create  wjz
      **/
 
-    private void follow(int followUserId) {
+    private void follow(int followUserId, final int position) {
 
         SharedPreferences sp = Utils.UserSharedPreferences(context);
         RequestParams requestParams = new RequestParams(Url.Url + "/user/followed");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("followUserId", followUserId + "'");
+        //  requestParams.addBodyParameter("status", 0 + "");                //0 否 1 是
+
 
         XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
+                if (!RenameActivity.callOk(result)) return;
+                data.remove(position);
+                notifyDataSetChanged();
             }
 
             @Override

@@ -19,15 +19,17 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@android:color/holo_red_light" />
+                android:src="@mipmap/bg_banner_mission"
+                android:scaleType="centerCrop" />
+
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="5dp"
-                android:text="-主线任务-"
+                android:paddingBottom="5dp"
+                android:text="— 主线任务 —"
                 android:textSize="12dp" />
 
             <RelativeLayout
@@ -40,8 +42,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/save_mission" />
 
                 <TextView
@@ -52,6 +54,7 @@
                     android:text="目标存钱" />
 
                 <TextView
+                    android:id="@+id/tv_addMoney_task"
                     style="@style/text_white_12"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
@@ -72,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="-日常任务-"
+                android:text="— 日常任务 —"
                 android:textSize="12dp" />
 
             <RelativeLayout
@@ -85,8 +88,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/sign_mission" />
 
                 <TextView
@@ -128,8 +131,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/help_mission" />
 
                 <TextView
@@ -145,10 +148,11 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="35dp"
                     android:text="+10经验/元" />
 
                 <TextView
+                    android:id="@+id/tv_friends_task"
                     style="@style/text_white_12"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
@@ -179,7 +183,7 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
+                    android:layout_width="35dp"
                     android:layout_height="40dp"
                     android:src="@mipmap/great_mission" />
 
@@ -231,8 +235,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/share_mission" />
 
                 <TextView
@@ -241,7 +245,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="35dp"
                     android:text="+20经验/天" />
 
                 <TextView
@@ -282,8 +286,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/comment_mission" />
 
                 <TextView
@@ -292,7 +296,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="35dp"
                     android:text="+4经验/次" />
 
                 <TextView
@@ -323,7 +327,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="-特殊任务-"
+                android:text="— 特殊任务 —"
                 android:textSize="12dp" />
 
             <RelativeLayout
@@ -336,8 +340,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/invite_mission" />
 
                 <TextView
@@ -353,7 +357,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="35dp"
                     android:text="+50经验/人" />
 
                 <TextView
@@ -377,7 +381,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="-新手任务-"
+                android:text="— 新手任务 —"
                 android:textSize="12dp" />
 
             <RelativeLayout
@@ -390,8 +394,8 @@
                 android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:src="@mipmap/rookie_mission" />
 
                 <TextView

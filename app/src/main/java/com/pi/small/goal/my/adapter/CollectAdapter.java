@@ -1,7 +1,7 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +11,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.TargetMoreActivity;
 import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.Utils;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,12 +77,21 @@ public class CollectAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        CollectEntity collectEntity = data.get(position);
+        final CollectEntity collectEntity = data.get(position);
 
         vh.tvTitleItem.setText(collectEntity.getName());
         vh.tvBudgetNumItem.setText(((int) collectEntity.getBudget()) + "");   //预算
         vh.tvSupportNumItem.setText(collectEntity.getSupport() + "");  //支持人数
 
+        if (Utils.photoEmpty(collectEntity.getAvatar())) {
+            Picasso.with(context).load(collectEntity.getAvatar()).into(vh.iconItem);
+        }
+        vh.tvNameItem.setText(collectEntity.getNick());
+        if (Utils.photoEmpty(collectEntity.getImg())) {
+            Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgCityItem);
+        }
+
+        vh.tvDayNumItem.setText(collectEntity.getCycle() + "");
         Date date = new Date();
         long l = date.getTime() - collectEntity.getCreateTime();
         long timeMinute = l / 60000;  //分钟
@@ -91,19 +101,28 @@ public class CollectAdapter extends BaseAdapter {
             vh.tvTimeItem.setText(timeMinute + "分钟前");
         else if (timeHour < 24)
             vh.tvTimeItem.setText(timeHour + "小时前");
-        else vh.tvTimeItem.setText(timeDay + "天前");
-        vh.tvDayNumItem.setText((collectEntity.getCycle() - timeDay) + "");
+        else {
+            vh.tvTimeItem.setText(timeDay + "天前");
+            vh.tvDayNumItem.setText((collectEntity.getCycle() - timeDay) + "");
+        }
+//
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss ");
-        Date curDate = new Date(collectEntity.getCreateTime());//获取当前时间
-        String str = formatter.format(curDate);
-        Log.v("TAG", str);
+//        vh.tvTimeItem.setText(Utils.GetTime(collectEntity.getCreateTime()));
+
 
         float v = collectEntity.getMoney() / collectEntity.getBudget();
+
+        DecimalFormat df = new DecimalFormat("#.0");
+
         //通过设置权重来改变横线块占比长度
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vh.imgProgressItem.getLayoutParams();
-        vh.tvProgressItem.setText(v + "%");
-        if (v == 0) {
+        if (v < 1) {
+            vh.tvProgressItem.setText("0" + df.format(v) + "%");
+        } else {
+            vh.tvProgressItem.setText(df.format(v) + "%");
+        }
+
+        if (v < 0.01) {
             lp.weight = 0.01f;
         } else if (v == 1) {
             lp.weight = 1;
@@ -115,10 +134,14 @@ public class CollectAdapter extends BaseAdapter {
         //   vh.viewWidth.setVisibility(View.GONE);
         vh.imgProgressItem.setLayoutParams(lp);
         // vh.viewWidth.setLayoutParams(new LinearLayout.LayoutParams(0,0,1-lp.width));
-
-        if (!"".equals(collectEntity.getImg())) {
-            Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgCityItem);
-        }
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, TargetMoreActivity.class);
+                intent.putExtra(TargetMoreActivity.KEY_AIMID, collectEntity.getId() + "");
+                context.startActivity(intent);
+            }
+        });
         return convertView;
     }
 

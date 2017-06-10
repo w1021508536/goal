@@ -16,7 +16,7 @@
         android:src="@mipmap/success" />
 
     <TextView
-        android:id="@+id/text_lianxi"
+        android:id="@+id/text_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="30dp"

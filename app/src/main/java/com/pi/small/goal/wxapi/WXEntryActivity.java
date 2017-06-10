@@ -4,15 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 
 import com.pi.small.goal.MainActivity;
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.login.LoginActivity;
+import com.pi.small.goal.my.activity.UserInfoActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.tencent.mm.sdk.constants.ConstantsAPI;
 import com.tencent.mm.sdk.modelbase.BaseReq;
 import com.tencent.mm.sdk.modelbase.BaseResp;
@@ -113,7 +116,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 String code = ((SendAuth.Resp) resp).code;
 
                 System.out.println("========code===" + code);
-                GetData(code);
+                GetData(code, ((SendAuth.Resp) resp).state);
 //                GetWXData(code);
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
@@ -127,7 +130,51 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         }
     }
 
-    private void GetData(String code) {
+
+    /**
+     * 绑定微信
+     * create  wjz
+     **/
+    private void bindWx(final String code) {
+        RequestParams params = new RequestParams(Url.Url + "/user/bind");
+
+        params.addHeader("token", Utils.GetToken(this));
+        params.addHeader("deviceId", MyApplication.deviceId);
+        params.addBodyParameter("bindWay", "wechat");
+        params.addBodyParameter("openid", code);
+        params.addBodyParameter("verifyCode", "");
+
+        XUtil.post(params, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!Utils.callOk(result)) {
+
+                    Utils.showToast(WXEntryActivity.this, Utils.getMsg(result));
+                    finish();
+                    return;
+                }
+
+//                UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
+//                userInfo.getUser().setWechatId(code);
+                CacheUtil.getInstance().getUserInfo().getUser().setWechatId(code);
+                finish();
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void GetData(final String code, final String state) {
         RequestParams params = new RequestParams("https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + ThirdUtils.WX_APP_ID + "&secret=" + ThirdUtils.WX_APP_SECRET + "&code=" + code + "&grant_type=authorization_code");
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -137,6 +184,11 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                 try {
                     access_token = new JSONObject(result).getString("access_token");
                     openid_wx = new JSONObject(result).getString("openid");
+
+                    if (state.equals(UserInfoActivity.BIND_WX)) {
+                        bindWx(openid_wx);
+                        return;
+                    }
                     GetUserInfo(access_token, openid_wx);
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/top_left"
     android:paddingLeft="@dimen/top_left"
-    android:paddingRight="@dimen/top_left">
+    android:paddingRight="@dimen/top_left"
+    android:paddingTop="@dimen/top_left">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -22,7 +22,8 @@
                 android:id="@+id/img_bg_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@color/chat_top" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/image4" />
 
             <RelativeLayout
                 android:layout_width="match_parent"

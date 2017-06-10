@@ -171,7 +171,7 @@
             android:label="个人中心"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TaskActivity"
+            android:name=".my.activity.TaskListActivity"
             android:label="任务中心"
             android:screenOrientation="portrait" />
         //
@@ -249,6 +249,37 @@
             android:label="目标详情"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".my.activity.MontyToActivity"
+            android:label="充值"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.ToMoneyActivity"
+            android:label="提现"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.LevelActivity"
+            android:label="等级"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.SupportActivity"
+            android:label="助力的人的"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.BindPhoneActivity"
+            android:label="绑定电话"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.BindPhoneNextActivity"
+            android:label="绑定电话获取验证码"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.UpdataPhoneActivity"
+            android:label="更换手机号"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.TaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".aim.activity.PositionActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -302,6 +333,9 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind"></activity>
+        <activity
+            android:name=".aim.activity.SupportAimActivity"
+            android:screenOrientation="portrait" />
 
         <!-- 银联支付 -->
         <activity
@@ -309,7 +343,6 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
 
         <!--  ping++ -->
-
 
 
     </application>

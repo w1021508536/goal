@@ -1,8 +1,10 @@
 package com.pi.small.goal.my.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,6 +18,7 @@ import com.pi.small.goal.my.adapter.CollectAdapter;
 import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
@@ -49,6 +52,8 @@ public class CollectActivity extends BaseActivity {
     TextView tvCancelCollect;
     @InjectView(R.id.plv_collect)
     PullToRefreshListView plvCollect;
+    @InjectView(R.id.etv_seach_collect)
+    EditText etvSeachCollect;
     private CollectAdapter adapter;
 
     private int page = 1;
@@ -67,6 +72,13 @@ public class CollectActivity extends BaseActivity {
         plvCollect.setAdapter(adapter);
         nameTextInclude.setText("我的收藏");
         rightImageInclude.setVisibility(View.GONE);
+
+        Drawable drawable = getResources().getDrawable(R.mipmap.index_iocn_search);
+        drawable.setBounds(0, 0, Utils.dip2px(this, 14), Utils.dip2px(this, 14));
+        etvSeachCollect.setCompoundDrawables(drawable, null, null, null);
+
+//        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_collect, null);
+//        plvCollect.setEmptyView(emptyView);
     }
 
     @Override
@@ -99,7 +111,12 @@ public class CollectActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 JSONObject jsonObject = null;
-                if (!RenameActivity.callOk(result)) return;
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+//                    View emptyView = LayoutInflater.from(TargetActivity.this).inflate(R.layout.view_empty_nodata, null);
+//                    plvTarget.setEmptyView(emptyView);
+                    plvCollect.setVisibility(View.GONE);
+                    return;
+                }
                 try {
                     jsonObject = new JSONObject(result);
                     String jsonData = jsonObject.get("result").toString();

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.dialog.MonthDialog;
 import com.pi.small.goal.my.entry.RedMoreAdapterEntry;
 
 import java.util.ArrayList;
@@ -27,16 +28,23 @@ import butterknife.InjectView;
  **/
 public class RedMoreAdapter extends BaseAdapter {
 
+    private final MonthDialog dialog;
     private Context context;
     private List<RedMoreAdapterEntry> data;
 
-    public RedMoreAdapter(Context context) {
+    public RedMoreAdapter(Context context, MonthDialog dialog) {
         this.context = context;
         data = new ArrayList<>();
+        this.dialog = dialog;
     }
 
     public void setData(List<RedMoreAdapterEntry> data) {
         this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void addData(List<RedMoreAdapterEntry> data) {
+        this.data.addAll(data);
         notifyDataSetChanged();
     }
 
@@ -69,7 +77,21 @@ public class RedMoreAdapter extends BaseAdapter {
             }
             RedMoreAdapterEntry redMoreAdapterEntry = data.get(position);
             titleViewHolder.tvTimeItem.setText(redMoreAdapterEntry.getTitle());
+            //  titleViewHolder.tvMoneyItem.setText("支出 ¥" + redMoreAdapterEntry.getDeletteMoney() + "  收入 ¥" + redMoreAdapterEntry.getAddMoney());
+            titleViewHolder.tvMoneyItem.setText("收入 ¥" + redMoreAdapterEntry.getAddMoney());
+            if (position == 0 && titleViewHolder != null) {
+                titleViewHolder.imgMonthItem.setVisibility(View.VISIBLE);
+            }
+            titleViewHolder.imgMonthItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    if (dialog != null && !dialog.isShowing()) {
+                        dialog.show();
+                    }
+
+                }
+            });
         } else {
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_content_redmore, null);
@@ -81,10 +103,12 @@ public class RedMoreAdapter extends BaseAdapter {
             RedMoreAdapterEntry redMoreAdapterEntry = data.get(position);
             switch (redMoreAdapterEntry.getTitleType()) {//type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
                 case 1:   //
-                    contentViewHolder.tvNameItem.setText("公共红包");
+                    contentViewHolder.tvNameItem.setText("公共红包—来自");
+                    contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
                     break;
                 case 2:   //
-                    contentViewHolder.tvNameItem.setText("助力红包");
+                    contentViewHolder.tvNameItem.setText("助力红包—来自");
+                    contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
                     break;
                 case 3:  //
                     contentViewHolder.tvNameItem.setText("收益红包");
@@ -96,9 +120,6 @@ public class RedMoreAdapter extends BaseAdapter {
             String timeDate = getTimeDate(redMoreAdapterEntry.getCreateTime());
             contentViewHolder.tvTimeItem.setText(timeDate);
             //  contentViewHolder.tvTimeItem.setText((collectEntity.getCycle() - timeDay) + "");
-        }
-        if (position == 0 && titleViewHolder != null) {
-            titleViewHolder.imgMonthItem.setVisibility(View.VISIBLE);
         }
 
         return convertView;
@@ -154,6 +175,8 @@ public class RedMoreAdapter extends BaseAdapter {
         TextView tvTimeItem;
         @InjectView(R.id.tv_money_item)
         TextView tvMoneyItem;
+        @InjectView(R.id.tv_userName_item)
+        TextView tvUserName;
 
         ContentViewHolder(View view) {
             ButterKnife.inject(this, view);

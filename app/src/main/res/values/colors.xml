@@ -24,10 +24,10 @@
     <color name="yellow_walet_have">#E3CA92</color>
 
     <!--background_gary -->
-    <color name="background_system_list">#F6F6F6</color>
+    <color name="background_system_list">#EFF0F4</color>
 
     <!-- text_gary_light-->
-    <color name="text_small_light">#B9B9B9</color>
+    <color name="text_small_light">#939393</color>//#939393 //B9B9B9
 
     <!-- black_light-->
     <color name="text_aim">#3C3C3C</color>
@@ -40,4 +40,10 @@
     <color name="my_dengji_bg">#D615C8</color>
 
     <color name="background_tab_pressed">#6633B5E5</color>
+    //等级的背景蓝色
+    <color name="bg_level_blue">#B0A2C6</color>
+    <color name="line_level_red">#C05492</color>
+    <color name="line_level_gray">#C1BCD3</color>
+    <color name="progress_unfinish_color">#50ffffff</color>
+    <color name="sign_line">#E5DBD7</color>
 </resources>

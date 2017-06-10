@@ -60,12 +60,13 @@ public class XUtil {
      * create  wjz
      **/
 
-    public static <T> void get(RequestParams requestParams, Context context, final XCallBackLinstener xCallBackLinstener) {
+    public static <T> void get(RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
 
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Utils.showToast(context, Utils.getMsg(result));
                 xCallBackLinstener.onSuccess(result);
             }
 

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingLeft="@dimen/top_left"
+        android:paddingRight="@dimen/top_left"
+        android:paddingTop="8dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/icon_item"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@mipmap/icon_user" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/icon_item">
+
+            <TextView
+                android:id="@+id/tv_name_item"
+                style="@style/text_black_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="名字" />
+
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_name_item"
+                android:layout_marginTop="5dp"
+                android:text="为你的目标助力了" />
+
+            <TextView
+                android:id="@+id/tv_money_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_name_item"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/tv1"
+                android:text="100"
+                android:textColor="@color/cmbkb_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_name_item"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/tv_money_item"
+                android:text="元" />
+
+            <TextView
+                android:id="@+id/tv_time_item"
+                style="@style/text_gray_12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="1分钟前" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

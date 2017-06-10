@@ -27,10 +27,11 @@
             android:layout_marginLeft="@dimen/top_left">
 
             <TextView
+                android:id="@+id/tv_money_wallet"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="8970.00"
+                android:text="0.00"
                 android:textColor="@color/white"
                 android:textSize="50dp" />
         </LinearLayout>
@@ -58,12 +59,13 @@
             android:text="余额" />
 
         <TextView
+            android:id="@+id/tv_walletMoney_walllet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="@dimen/top_left"
-            android:text="800元" />
+            android:text="0元" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -77,12 +79,12 @@
             android:id="@+id/img_bank_wallet"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:layout_centerVertical="true"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="@dimen/top_left"
             android:layout_marginRight="@dimen/top_left"
             android:layout_marginTop="10dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/icon_balance" />
+            android:src="@mipmap/icon_pocket_bankcard2x" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -114,7 +116,7 @@
             android:layout_marginLeft="@dimen/top_left"
             android:layout_marginRight="@dimen/top_left"
             android:layout_marginTop="10dp"
-            android:src="@mipmap/icon_balance" />
+            android:src="@mipmap/icon_pocket_pay2x" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -146,7 +148,7 @@
             android:layout_marginLeft="@dimen/top_left"
             android:layout_marginRight="@dimen/top_left"
             android:layout_marginTop="10dp"
-            android:src="@mipmap/icon_balance" />
+            android:src="@mipmap/icon_pocket_withdraw2x" />
 
         <TextView
             android:layout_width="wrap_content"

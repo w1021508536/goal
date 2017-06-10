@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.pi.small.goal.R;
 
@@ -18,13 +19,15 @@ import com.pi.small.goal.R;
  */
 public class HuiFuDialog extends AlertDialog {
     private final Context context;
+    private final String title;
 
     //String title;
 
 
-    public HuiFuDialog(Context context) {
+    public HuiFuDialog(Context context, String title) {
         super(context);
         this.context = context;
+        this.title = title;
     }
 
     @Override
@@ -54,6 +57,9 @@ public class HuiFuDialog extends AlertDialog {
                 .getSystemService(Context.WINDOW_SERVICE);
         params.width = wm.getDefaultDisplay().getWidth();
         window.setAttributes(params);
+
+        TextView tv_content = (TextView) window.findViewById(R.id.text_content);
+        tv_content.setText(title);
     }
 
 }

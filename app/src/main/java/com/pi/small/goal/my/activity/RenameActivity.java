@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -73,12 +74,17 @@ public class RenameActivity extends BaseActivity {
         if (type == 0) {
             nameTextInclude.setText(getResources().getString(R.string.title_updata_name));
             etvNameUser.setText(sp.getString(KeyCode.USER_NICK, ""));
+            etvNameUser.setFilters(new InputFilter[]{new InputFilter.LengthFilter(10)});
         } else {
             nameTextInclude.setText(getResources().getString(R.string.title_updata_content));
             etvNameUser.setText(sp.getString(KeyCode.USER_BRIEF, ""));
+            etvNameUser.setFilters(new InputFilter[]{new InputFilter.LengthFilter(30)});
         }
 
         etvNameUser.setSelection(etvNameUser.getText().length());
+        if (etvNameUser.getText().length() < 1) {
+            imgDelete.setVisibility(View.GONE);
+        }
 
     }
 
@@ -180,6 +186,24 @@ public class RenameActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * 返回的json是否是成功的
+     * create  wjz
+     **/
+    public static String getMsg(String jsonString) {
+        String msg = "";
+        try {
+            msg = new JSONObject(jsonString).getString("msg");
+
+            if (msg.equals("0"))
+                return msg;
+            else return msg;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return msg;
         }
     }
 }

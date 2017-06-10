@@ -8,18 +8,24 @@ package com.pi.small.goal.my.entry;
  * 描述：
  **/
 public class RedGsonEntity {
+
     /**
-     * id : 9
-     * aimId : 17
-     * dynamicId : 7
+     * id : 1
+     * aimId : 3
+     * dynamicId : 4
      * money : 10
-     * size : 10
+     * size : 5
      * remainMoney : 10
-     * remainSize : 10
-     * toUserId : 48
+     * remainSize : 5
+     * toUserId : 11
      * fromUserId : 26
-     * createTime : 1496717112000
+     * createTime : 1495793276000
+     * updateTime : 1495793766000
      * status : 1
+     * type : 1
+     * supportId : 0
+     * fromUserNick : 44
+     * fromUserAvatar :
      */
 
     private int id;
@@ -32,7 +38,12 @@ public class RedGsonEntity {
     private int toUserId;
     private int fromUserId;
     private long createTime;
+    private long updateTime;
     private int status;
+    private int type;
+    private int supportId;
+    private String fromUserNick;
+    private String fromUserAvatar;
 
     public int getId() {
         return id;
@@ -114,11 +125,51 @@ public class RedGsonEntity {
         this.createTime = createTime;
     }
 
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getSupportId() {
+        return supportId;
+    }
+
+    public void setSupportId(int supportId) {
+        this.supportId = supportId;
+    }
+
+    public String getFromUserNick() {
+        return fromUserNick;
+    }
+
+    public void setFromUserNick(String fromUserNick) {
+        this.fromUserNick = fromUserNick;
+    }
+
+    public String getFromUserAvatar() {
+        return fromUserAvatar;
+    }
+
+    public void setFromUserAvatar(String fromUserAvatar) {
+        this.fromUserAvatar = fromUserAvatar;
     }
 }

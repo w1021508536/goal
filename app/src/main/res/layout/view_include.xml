@@ -22,10 +22,12 @@
 
         <ImageView
             android:id="@+id/left_image_include"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
-            android:padding="5dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:src="@mipmap/icon_arrow_white_left" />
 
         <TextView

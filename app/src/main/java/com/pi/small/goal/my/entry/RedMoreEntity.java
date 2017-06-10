@@ -15,9 +15,11 @@ public class RedMoreEntity {
      * userId : 11
      * money : 8
      * packetId : 1
-     * createTime : 1491300885000
-     * type : 1                type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
-     * fromUserId : 0
+     * createTime : 1491473685000
+     * type : 1
+     * fromUserId : 26
+     * fromUserNick : 44
+     * fromUserAvatar :
      */
 
     private int redPacketRecordId;
@@ -27,16 +29,8 @@ public class RedMoreEntity {
     private long createTime;
     private int type;
     private int fromUserId;
-
-    public RedMoreEntity(int redPacketRecordId, int userId, int money, int packetId, long createTime, int type, int fromUserId) {
-        this.redPacketRecordId = redPacketRecordId;
-        this.userId = userId;
-        this.money = money;
-        this.packetId = packetId;
-        this.createTime = createTime;
-        this.type = type;
-        this.fromUserId = fromUserId;
-    }
+    private String fromUserNick;
+    private String fromUserAvatar;
 
     public int getRedPacketRecordId() {
         return redPacketRecordId;
@@ -92,5 +86,21 @@ public class RedMoreEntity {
 
     public void setFromUserId(int fromUserId) {
         this.fromUserId = fromUserId;
+    }
+
+    public String getFromUserNick() {
+        return fromUserNick;
+    }
+
+    public void setFromUserNick(String fromUserNick) {
+        this.fromUserNick = fromUserNick;
+    }
+
+    public String getFromUserAvatar() {
+        return fromUserAvatar;
+    }
+
+    public void setFromUserAvatar(String fromUserAvatar) {
+        this.fromUserAvatar = fromUserAvatar;
     }
 }

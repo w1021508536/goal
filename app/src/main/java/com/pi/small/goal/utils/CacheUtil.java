@@ -1,5 +1,11 @@
 package com.pi.small.goal.utils;
 
+
+import com.pi.small.goal.my.entry.TargetHeadEntity;
+import com.pi.small.goal.my.entry.UerEntity;
+
+import java.util.List;
+
 /**
  * 公司：小目标
  * 创建者： 王金壮
@@ -23,13 +29,53 @@ public class CacheUtil {
         return cacheUtil;
     }
 
-    public String newPassWord = "";
+    public UerEntity userInfo;
 
-    public String getNewPassWord() {
-        return newPassWord;
+    public String oldPass = "";
+    public String newPass = "";
+
+    public boolean signFlag = false;
+
+    public List<TargetHeadEntity.SupportsBean> supportEntityList;
+
+    public boolean isSignFlag() {
+        return signFlag;
     }
 
-    public void setNewPassWord(String newPassWord) {
-        this.newPassWord = newPassWord;
+    public void setSignFlag(boolean signFlag) {
+        this.signFlag = signFlag;
+    }
+
+    public UerEntity getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UerEntity userInfo) {
+        this.userInfo = userInfo;
+    }
+
+
+    public String getOldPass() {
+        return oldPass;
+    }
+
+    public void setOldPass(String oldPass) {
+        this.oldPass = oldPass;
+    }
+
+    public String getNewPass() {
+        return newPass;
+    }
+
+    public void setNewPass(String newPass) {
+        this.newPass = newPass;
+    }
+
+    public List<TargetHeadEntity.SupportsBean> getSupportEntityList() {
+        return supportEntityList;
+    }
+
+    public void setSupportEntityList(List<TargetHeadEntity.SupportsBean> supportEntityList) {
+        this.supportEntityList = supportEntityList;
     }
 }

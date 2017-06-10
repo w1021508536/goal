@@ -24,8 +24,17 @@
         android:text="收益红包" />
 
     <TextView
+        android:id="@+id/tv_userName_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/tv_name_item"
+        android:text=""
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="14dp" />
+
+    <TextView
         android:id="@+id/tv_time_item"
-        style="@style/text_gray_14"
+        style="@style/text_gray_12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_name_item"

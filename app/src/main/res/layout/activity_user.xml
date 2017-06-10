@@ -32,7 +32,7 @@
             android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher_round" />
+            android:src="@mipmap/icon_user" />
 
     </RelativeLayout>
 
@@ -61,24 +61,28 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="" />
+            android:maxLength="10"
+            android:singleLine="true"
+            android:text="阿萨阿萨大大萨达撒啊" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_content_user"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/rl_height"
         android:layout_marginTop="0.5dp"
         android:background="@drawable/background_selector_white_gray"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingTop="5dp">
+    >
 
         <TextView
+            android:id="@+id/resl"
             style="@style/text_black_14"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:text="@string/content_user_activity" />
 
         <TextView
@@ -88,6 +92,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="80dp"
+            android:maxLength="30"
             android:text="" />
     </RelativeLayout>
 
@@ -108,13 +114,24 @@
             android:layout_centerVertical="true"
             android:text="@string/dengji_user_activity" />
 
+        <ImageView
+            android:id="@+id/img_level_user"
+            style="@style/text_gray_14"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="" />
+
         <TextView
+            android:id="@+id/tv_level_user"
             style="@style/text_gray_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="" />
+            android:text="Lv0"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -136,6 +153,7 @@
             android:text="@string/wx_user_activity" />
 
         <TextView
+            android:id="@+id/tv_wxBind_user"
             style="@style/text_gray_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -163,9 +181,11 @@
             android:text="@string/phone_user_activity" />
 
         <TextView
+            android:id="@+id/tv_phoneBind_user"
             style="@style/text_gray_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="绑定" />

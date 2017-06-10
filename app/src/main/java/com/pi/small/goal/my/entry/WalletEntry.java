@@ -8,6 +8,26 @@ package com.pi.small.goal.my.entry;
  * 修改：未领取的红包的实体数据
  **/
 public class WalletEntry {
+
+    /**
+     * id : 1
+     * aimId : 3
+     * dynamicId : 4
+     * money : 10
+     * size : 5
+     * remainMoney : 10
+     * remainSize : 5
+     * toUserId : 11
+     * fromUserId : 26
+     * createTime : 1495793276000
+     * updateTime : 1495793766000
+     * status : 1
+     * type : 1
+     * supportId : 0
+     * fromUserNick : 44
+     * fromUserAvatar :
+     */
+
     private int id;
     private int aimId;
     private int dynamicId;
@@ -18,10 +38,15 @@ public class WalletEntry {
     private int toUserId;
     private int fromUserId;
     private long createTime;
+    private long updateTime;
     private int status;
     private int type;
+    private int supportId;
+    private String fromUserNick;
+    private String fromUserAvatar;
+    private int titleType;
 
-    public WalletEntry(int id, int aimId, int dynamicId, int money, int size, int remainMoney, int remainSize, int toUserId, int fromUserId, long createTime, int status, int type) {
+    public WalletEntry(int id, int aimId, int dynamicId, int money, int size, int remainMoney, int remainSize, int toUserId, int fromUserId, long createTime, long updateTime, int status, int type, int supportId, String fromUserNick, String fromUserAvatar, int titleType) {
         this.id = id;
         this.aimId = aimId;
         this.dynamicId = dynamicId;
@@ -32,22 +57,13 @@ public class WalletEntry {
         this.toUserId = toUserId;
         this.fromUserId = fromUserId;
         this.createTime = createTime;
+        this.updateTime = updateTime;
         this.status = status;
         this.type = type;
-    }
-
-    public WalletEntry(int id, int aimId, int dynamicId, int money, int size, int remainMoney, int remainSize, int toUserId, int fromUserId, long createTime, int status) {
-        this.id = id;
-        this.aimId = aimId;
-        this.dynamicId = dynamicId;
-        this.money = money;
-        this.size = size;
-        this.remainMoney = remainMoney;
-        this.remainSize = remainSize;
-        this.toUserId = toUserId;
-        this.fromUserId = fromUserId;
-        this.createTime = createTime;
-        this.status = status;
+        this.supportId = supportId;
+        this.fromUserNick = fromUserNick;
+        this.fromUserAvatar = fromUserAvatar;
+        this.titleType = titleType;
     }
 
     public int getId() {
@@ -130,6 +146,14 @@ public class WalletEntry {
         this.createTime = createTime;
     }
 
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -144,5 +168,29 @@ public class WalletEntry {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getSupportId() {
+        return supportId;
+    }
+
+    public void setSupportId(int supportId) {
+        this.supportId = supportId;
+    }
+
+    public String getFromUserNick() {
+        return fromUserNick;
+    }
+
+    public void setFromUserNick(String fromUserNick) {
+        this.fromUserNick = fromUserNick;
+    }
+
+    public String getFromUserAvatar() {
+        return fromUserAvatar;
+    }
+
+    public void setFromUserAvatar(String fromUserAvatar) {
+        this.fromUserAvatar = fromUserAvatar;
     }
 }

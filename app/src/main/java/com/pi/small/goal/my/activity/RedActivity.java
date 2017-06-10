@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
@@ -73,6 +75,8 @@ public class RedActivity extends BaseActivity {
 //        }
         adapter = new RedAdapter(this, data);
         plvWallet.setAdapter(adapter);
+//        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_red, null);
+//        plvWallet.setEmptyView(emptyView);
 
     }
 
@@ -89,7 +93,10 @@ public class RedActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 //[{"id":9,"aimId":17,"dynamicId":7,"money":10,"size":10,"remainMoney":10,"remainSize":10,"toUserId":48,"fromUserId":26,"createTime":1496717112000,"status":1}]
-                if (!RenameActivity.callOk(result)) return;
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+                    plvWallet.setVisibility(View.GONE);
+                    return;
+                }
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     String jsonData = jsonObject.get("result").toString();
@@ -100,14 +107,13 @@ public class RedActivity extends BaseActivity {
 
                     List<WalletEntry> newData = new ArrayList<>();
                     for (RedGsonEntity one : data) {
-
-                        newData.add(new WalletEntry(one.getId(), one.getAimId(), one.getDynamicId(), one.getMoney(), one.getSize(), one.getRemainMoney(), one.getRemainSize(), one.getToUserId(), one.getFromUserId(), one.getCreateTime(), one.getStatus(), RedAdapter.TYPE_CONTENT));
+                        newData.add(new WalletEntry(one.getId(), one.getAimId(), one.getDynamicId(), one.getMoney(), one.getSize(), one.getRemainMoney(), one.getRemainSize(), one.getToUserId(), one.getFromUserId(), one.getCreateTime(), one.getUpdateTime(), one.getStatus(), one.getType(), one.getSupportId(), one.getFromUserNick(), one.getFromUserAvatar(), RedAdapter.TYPE_CONTENT));
                     }
                     if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
                         adapter.addData(newData);
                     } else
                         adapter.setData(newData);
-                    plvWallet.onRefreshComplete();
+
 
                 } catch (JSONException e) {
                 }
@@ -116,12 +122,12 @@ public class RedActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                plvWallet.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                plvWallet.onRefreshComplete();
             }
         });
     }
@@ -130,6 +136,14 @@ public class RedActivity extends BaseActivity {
     public void initWeight() {
         super.initWeight();
         rightImageInclude.setOnClickListener(this);
+
+        plvWallet.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                page = 1;
+                getData();
+            }
+        });
     }
 
     @Override
