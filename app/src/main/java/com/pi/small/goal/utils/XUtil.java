@@ -89,13 +89,16 @@ public class XUtil {
 
     }
 
+//x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
 
-    public static <T> void put(RequestParams requestParams, Context context, final XCallBackLinstener xCallBackLinstener) {
+
+    public static <T> void put(RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
 
 
         x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Utils.showToast(context, Utils.getMsg(result));
                 xCallBackLinstener.onSuccess(result);
             }
 
@@ -116,5 +119,4 @@ public class XUtil {
         });
 
     }
-
 }

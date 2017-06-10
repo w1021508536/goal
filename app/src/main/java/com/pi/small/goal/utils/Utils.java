@@ -10,6 +10,10 @@ import android.media.ExifInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
@@ -159,9 +163,28 @@ public class Utils {
         }
     }
 
+    // listview 重新测量；
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        ListAdapter listAdapter = listView.getAdapter();
+
+        if (listAdapter == null) {
+            // pre-condition
+            return;
+        }
+        int totalHeight = 0;
+        for (int i = 0; i < listAdapter.getCount(); i++) {
+            View listItem = listAdapter.getView(i, null, listView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+        listView.setLayoutParams(params);
+    }
+
     public static RequestParams getRequestParams(Context context) {
         RequestParams requestParams = new RequestParams();
-        requestParams.setUri(Url.Url + "/redpacket");
         requestParams.addHeader("token", Utils.UserSharedPreferences(context).getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         return requestParams;

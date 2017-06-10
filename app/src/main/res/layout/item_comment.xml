@@ -2,62 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/top_left">
+    android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_userSupport2_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="Chirs:"
+        android:textColor="@color/black" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/icon_item"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@mipmap/icon_user" />
-
-        <RelativeLayout
-            android:id="@+id/rl_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/icon_item"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_userNmae_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="name"
-                android:textColor="@color/black"
-                android:textSize="14dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_userNmae_item"
-                android:layout_marginTop="10dp"
-                android:text="15分钟前"
-                android:textColor="@color/background_system_list"
-                android:textSize="5dp" />
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="15dp"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/icon_aim_comment2x" />
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/tv_support_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_item"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/icon_item"
-            android:text="支持你的目标！" />
-
-    </RelativeLayout>
-
+    <TextView
+        android:id="@+id/tv_contentSupport2_item"
+        style="@style/text_gray_big_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="支持你的目标！" />
 </LinearLayout>

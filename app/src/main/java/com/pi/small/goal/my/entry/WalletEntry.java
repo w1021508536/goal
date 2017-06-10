@@ -66,6 +66,10 @@ public class WalletEntry {
         this.titleType = titleType;
     }
 
+    public WalletEntry(int titleType) {
+        this.titleType = titleType;
+    }
+
     public int getId() {
         return id;
     }

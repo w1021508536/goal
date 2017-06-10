@@ -5,8 +5,6 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.pi.small.goal.my.entry.FollowEntry;
-
 import java.util.List;
 
 /**
@@ -21,6 +19,12 @@ public class ViewPagerAdapter extends PagerAdapter {
         this.context = context;
         this.viewList = viewList;
     }
+
+    public void setViewList(List<View> viewList) {
+        this.viewList = viewList;
+        notifyDataSetChanged();
+    }
+
 
     public void addData(View view) {
         this.viewList.add(view);

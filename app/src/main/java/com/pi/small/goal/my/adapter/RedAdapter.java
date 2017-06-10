@@ -71,12 +71,22 @@ public class RedAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
-
+        titleViewHolder titleViewHolder;
         if (getItemViewType(position) == TYPE_TITLE) {
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_title_red, null);
+                titleViewHolder = new titleViewHolder(convertView);
+                convertView.setTag(titleViewHolder);
             } else {
+                titleViewHolder = (RedAdapter.titleViewHolder) convertView.getTag();
             }
+            titleViewHolder.tvLingquItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
         } else {
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_content_red, null);
@@ -164,6 +174,15 @@ public class RedAdapter extends BaseAdapter {
         TextView tvHaveItem;
 
         ViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
+    }
+
+    static class titleViewHolder {
+        @InjectView(R.id.tv_lingqu_item)
+        TextView tvLingquItem;
+
+        titleViewHolder(View view) {
             ButterKnife.inject(this, view);
         }
     }

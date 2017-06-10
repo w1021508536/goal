@@ -1,6 +1,7 @@
 package com.pi.small.goal.utils;
 
 
+import com.pi.small.goal.my.entry.DynamicEntity;
 import com.pi.small.goal.my.entry.TargetHeadEntity;
 import com.pi.small.goal.my.entry.UerEntity;
 
@@ -37,6 +38,8 @@ public class CacheUtil {
     public boolean signFlag = false;
 
     public List<TargetHeadEntity.SupportsBean> supportEntityList;
+
+    public List<DynamicEntity.CommentsBean> commentsBeanList;
 
     public boolean isSignFlag() {
         return signFlag;
@@ -77,5 +80,13 @@ public class CacheUtil {
 
     public void setSupportEntityList(List<TargetHeadEntity.SupportsBean> supportEntityList) {
         this.supportEntityList = supportEntityList;
+    }
+
+    public List<DynamicEntity.CommentsBean> getCommentsBeanList() {
+        return commentsBeanList;
+    }
+
+    public void setCommentsBeanList(List<DynamicEntity.CommentsBean> commentsBeanList) {
+        this.commentsBeanList = commentsBeanList;
     }
 }

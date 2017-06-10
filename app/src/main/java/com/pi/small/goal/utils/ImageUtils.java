@@ -128,7 +128,7 @@ public class ImageUtils {
         Random r = new Random();
         key = key + r.nextInt();
         key = key.substring(0, 15);
-        return filePath + "/" + key + ".jpeg";
+        return filePath + "/xmb" + ".jpeg";
     }
 
     /**

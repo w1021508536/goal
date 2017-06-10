@@ -1,5 +1,6 @@
 package com.pi.small.goal.my.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,7 +10,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -24,8 +28,10 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.TrajectoryAdapter;
 import com.pi.small.goal.my.entry.DynamicEntity;
 import com.pi.small.goal.my.entry.TargetHeadEntity;
+import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.EditTextHeightUtil;
 import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -63,18 +69,24 @@ public class TargetMoreActivity extends BaseActivity {
     ImageView leftImageInclude;
     @InjectView(R.id.name_text_include)
     TextView nameTextInclude;
+    @InjectView(R.id.collect_image_include)
+    ImageView collectImageInclude;
     @InjectView(R.id.right_image_include)
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
-    @InjectView(R.id.rl_image)
-    RelativeLayout rlImage;
     @InjectView(R.id.tl_top)
     LinearLayout tlTop;
     @InjectView(R.id.pimg)
     PinchImageView pimg;
-    @InjectView(R.id.collect_image_include)
-    ImageView collectImageInclude;
+    @InjectView(R.id.rl_image)
+    RelativeLayout rlImage;
+    @InjectView(R.id.etv_targetMore)
+    EditText etvTargetMore;
+    @InjectView(R.id.ll_bottom)
+    LinearLayout llBottom;
+    @InjectView(R.id.rl_top)
+    RelativeLayout rlTop;
     private int allDy;
     private View header;
     private TrajectoryAdapter adapter;
@@ -84,12 +96,14 @@ public class TargetMoreActivity extends BaseActivity {
     public static final String KEY_AIMID = "aimId";
     private DonutProgress progress;            //圆形的百分比加载框
     private boolean myAim;
+    private String commentId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         setContentView(R.layout.activity_target_more);
         ButterKnife.inject(this);
+        EditTextHeightUtil.assistActivity(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -240,22 +254,12 @@ public class TargetMoreActivity extends BaseActivity {
         } else {
             myAim = false;
         }
-//
-//            JSONArray SupportJsonAry = (JSONArray) jsonObj.getJSONArray("supports");
-//
-//            //   SupportJsonAry.
-//
-//            int money = (int) aimJsonObj.get("money");
-//            int budget = (int) aimJsonObj.get("budget");
         tv_budget.setText(targetHeadEntity.getAim().getBudget() + "");
         tv_money.setText(targetHeadEntity.getAim().getMoney() + "");
         tv_cycle.setText(targetHeadEntity.getAim().getCycle() + "");
         String percentOne = Utils.getPercentOne((float) targetHeadEntity.getAim().getMoney() / targetHeadEntity.getAim().getBudget());
 
         progress.setProgress(Float.parseFloat(percentOne));
-
-//            List<SupportEntity> data = gson.fromJson(SupportJsonAry.toString(), new TypeToken<List<SupportEntity>>() {
-//            }.getType());
 
         List<TargetHeadEntity.SupportsBean> supports = targetHeadEntity.getSupports();
         CacheUtil.getInstance().setSupportEntityList(supports);
@@ -268,11 +272,8 @@ public class TargetMoreActivity extends BaseActivity {
                 layoutParams.setMargins(Utils.dip2px(this, 5), Utils.dip2px(this, 10), Utils.dip2px(this, 5), Utils.dip2px(this, 10));
                 circleImageView.setLayoutParams(layoutParams);
                 ll_images.addView(circleImageView);
-                // JSONObject one = (JSONObject) SupportJsonAry.opt(i);
                 circleImageView.setImageResource(R.mipmap.icon_user);
-//                    if (!((String) (one.get("avatar"))).equals("jpg") && !((String) (one.get("avatar"))).equals("")) {
-//                        Picasso.with(this).load(Utils.GetPhotoPath((String) one.get("avatar"))).into(circleImageView);
-//                    }
+
                 TargetHeadEntity.SupportsBean supportsBean = supports.get(i);
                 if (Utils.photoEmpty(supportsBean.getAvatar())) {
                     Picasso.with(this).load(supportsBean.getAvatar()).into(circleImageView);
@@ -301,6 +302,8 @@ public class TargetMoreActivity extends BaseActivity {
                 srflTargetMore.setRefreshing(false);
             }
         });
+
+        rlTop.setOnClickListener(this);
 
         lvTargetMore.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -335,6 +338,120 @@ public class TargetMoreActivity extends BaseActivity {
             }
 
         });
+
+        adapter.setOnMyAdapterClickListener(new TrajectoryAdapter.myAdapterClickListener() {
+
+            @Override
+            public void great(String id) {
+                goGreat(id);
+            }
+
+            @Override
+            public void comment(String id) {
+                commentId = id;
+                etvTargetMore.setVisibility(View.VISIBLE);
+                rlTop.setVisibility(View.VISIBLE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+
+            @Override
+            public void help(String id, String nick, String avatar) {
+
+                Intent intent = new Intent(TargetMoreActivity.this, SupportMoneyActivity.class);
+                intent.putExtra("dynamicId", id);
+                intent.putExtra("aimId", aimId);
+                intent.putExtra("nick", nick);
+                intent.putExtra("avatar", avatar);
+                startActivity(intent);
+
+            }
+
+
+        });
+
+        etvTargetMore.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_DONE:
+
+                        rlTop.setVisibility(View.GONE);
+                        etvTargetMore.setVisibility(View.GONE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                        comment(commentId, etvTargetMore.getText().toString());
+
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+
+    }
+
+
+    /**
+     * 点赞
+     * create  wjz
+     **/
+    private void goGreat(String id) {
+
+        RequestParams requestParams = Utils.getRequestParams(this);
+
+        requestParams.setUri(Url.Url + "/vote/vote");
+        requestParams.addBodyParameter("objectId", id);
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 去评论
+     * create  wjz
+     **/
+    private void comment(String id, String content) {
+
+        RequestParams requestParams = Utils.getRequestParams(this);
+
+        requestParams.setUri(Url.Url + "/aim/dynamic/comment");
+        requestParams.addBodyParameter("dynamicId", id);
+        requestParams.addBodyParameter("content", content);
+
+        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!Utils.callOk(result)) return;
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
     }
 
     public int getScrollY() {
@@ -373,6 +490,12 @@ public class TargetMoreActivity extends BaseActivity {
 
                 } else
                     collectAim(aimId, "1");
+                break;
+            case R.id.rl_top:
+                rlTop.setVisibility(View.GONE);
+                etvTargetMore.setVisibility(View.GONE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
         }
     }

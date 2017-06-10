@@ -7,9 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.message.activity.FriendsListActivity;
+import com.pi.small.goal.my.entry.EveryTaskGsonEntity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Url;
@@ -21,6 +24,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -52,6 +56,12 @@ public class TaskActivity extends BaseActivity {
     TextView tvAddMoneyTask;
     @InjectView(R.id.tv_friends_task)
     TextView tvFriendsTask;
+    @InjectView(R.id.tv_goGreat_task)
+    TextView tvGoGreatTask;
+    @InjectView(R.id.tv_goShare_task)
+    TextView tvGoShareTask;
+    @InjectView(R.id.tv_goComment_task)
+    TextView tvGoCommentTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,31 +88,49 @@ public class TaskActivity extends BaseActivity {
 
         //  getSign();
 
-//        requestParams.setUri(Url.Url + "/task");
-//        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
-//            @Override
-//            public void onSuccess(String result) {
-//
-//
-//                if (!Utils.callOk(result)) return;
-//                Gson gson = new Gson();
-//                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
-//                }.getType());
-//
-//
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//
-//            }
-//        });
+        requestParams.setUri(Url.Url + "/task");
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+
+                if (!Utils.callOk(result)) return;
+                Gson gson = new Gson();
+                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
+                }.getType());
+
+                for (EveryTaskGsonEntity one : data) {
+                    if (one.getAction().equals("aim_vote")&&one.getFinish()==1) { //点赞
+                        tvGoGreatTask.setText("已完成");
+                        tvGoGreatTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                        tvGoGreatTask.setClickable(false);
+                    } else if (one.getAction().equals("aim_comment")&&one.getFinish()==1) {  //评论
+                        tvGoCommentTask.setText("已完成");
+                        tvGoCommentTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                        tvGoCommentTask.setClickable(false);
+                    } else if (one.getAction().equals("aim_share")&&one.getFinish()==1) {  //分享
+                        tvGoShareTask.setText("已完成");
+                        tvGoShareTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                        tvGoShareTask.setClickable(false);
+                    } else if (one.getAction().equals("aim_support")&&one.getFinish()==1) {  //助力
+                        tvFriendsTask.setText("已完成");
+                        tvFriendsTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                        tvFriendsTask.setClickable(false);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 

@@ -5,14 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.entry.DynamicEntity;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 公司：小目标
@@ -24,19 +25,36 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CommentAdapter extends BaseAdapter {
 
     private final Context context;
+    private final List<DynamicEntity.CommentsBean> comments;
+    private boolean showFlag = false;
 
-    public CommentAdapter(Context context) {
+    public CommentAdapter(Context context, List<DynamicEntity.CommentsBean> comments) {
         this.context = context;
+        this.comments = comments;
+    }
+
+    public void setShowMore(boolean showFlag) {
+        this.showFlag = showFlag;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return 6;
+
+        if(showFlag){
+            return comments.size();
+        }else {
+            if(comments.size()>2){
+                return 2;
+            }else {
+                return comments.size();
+            }
+        }
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return comments.get(position);
     }
 
     @Override
@@ -57,18 +75,26 @@ public class CommentAdapter extends BaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
 
+        DynamicEntity.CommentsBean commentsBean = comments.get(position);
+
+        if (showFlag) {
+            vh.tvUserSupport2Item.setText(commentsBean.getNick() + ": ");
+            vh.tvContentSupport2Item.setText(commentsBean.getContent());
+        } else {
+            if (position < 2) {
+                vh.tvUserSupport2Item.setText(commentsBean.getNick() + ": ");
+                vh.tvContentSupport2Item.setText(commentsBean.getContent());
+            }
+        }
         return convertView;
     }
 
+
     static class ViewHolder {
-        @InjectView(R.id.icon_item)
-        CircleImageView iconItem;
-        @InjectView(R.id.tv_userNmae_item)
-        TextView tvUserNmaeItem;
-        @InjectView(R.id.rl_item)
-        RelativeLayout rlItem;
-        @InjectView(R.id.tv_support_item)
-        TextView tvSupportItem;
+        @InjectView(R.id.tv_userSupport2_item)
+        TextView tvUserSupport2Item;
+        @InjectView(R.id.tv_contentSupport2_item)
+        TextView tvContentSupport2Item;
 
         ViewHolder(View view) {
             ButterKnife.inject(this, view);

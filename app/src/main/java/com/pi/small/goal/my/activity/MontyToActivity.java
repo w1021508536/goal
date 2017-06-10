@@ -85,9 +85,9 @@ public class MontyToActivity extends BaseActivity {
     private String img1;
     private String img2;
     private String img3;
-    private String channel;//支付方式  0: 余额  1：微信 wx   2:alipay
+    private String channel="wx";//支付方式  0: 余额  1：微信 wx   2:alipay
 
-    private Boolean isHook = false;
+    private Boolean isHook = true;
     public static IWXAPI wx_api;
 
     @Override

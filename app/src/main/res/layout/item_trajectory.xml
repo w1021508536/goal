@@ -51,9 +51,9 @@
             style="@style/text_gray_big_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="4dp"
             android:layout_alignBottom="@+id/tv_time_item"
             android:layout_toRightOf="@+id/tv_time_item"
+            android:paddingBottom="4dp"
             android:text="分钟前" />
 
         <View
@@ -105,25 +105,25 @@
                 android:src="@mipmap/icon_aim_save2x" />
 
             <TextView
-                android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="为自己的目标存入" />
+                android:text="为自己的目标存入"
+                android:textSize="12dp" />
 
             <TextView
-                android:textSize="12dp"
                 android:id="@+id/tv_addMoney_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="100.0"
-                android:textColor="@color/chat_top" />
+                android:textColor="@color/chat_top"
+                android:textSize="12dp" />
 
             <TextView
-                android:textSize="12dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="元" />
+                android:text="元"
+                android:textSize="12dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -200,20 +200,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="150赞  100助力"
-                    android:textSize="12dp"
-                    android:textColor="@android:color/holo_blue_light" />
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_city_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginBottom="5dp"
                     android:drawableLeft="@mipmap/local_icon"
                     android:drawablePadding="5dp"
-                    android:textSize="12dp"
                     android:gravity="center_vertical"
-                    android:text="山东 青岛" />
+                    android:text="山东 青岛"
+                    android:textSize="12dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -221,48 +220,20 @@
                     android:layout_below="@+id/tv_city_item"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <ListView
+                        android:id="@+id/lv_item"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="LEE:"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            style="@style/text_gray_big_14"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="支持你的目标！" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chirs:"
-                            android:textColor="@color/black" />
-
-                        <TextView
-                            style="@style/text_gray_big_14"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="支持你的目标！" />
-                    </LinearLayout>
+                        android:divider="@null"
+                        android:listSelector="@android:color/transparent"></ListView>
 
                     <TextView
+                        android:id="@+id/tv_supportsNums_item"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:text="查看全部20条评论" />
+                        android:text="查看全部20条评论"
+                        android:visibility="gone" />
                 </LinearLayout>
             </RelativeLayout>
 

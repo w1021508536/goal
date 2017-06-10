@@ -2,22 +2,20 @@ package com.pi.small.goal.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +23,15 @@ import android.widget.Toast;
 import com.pi.small.goal.R;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
+import static com.pi.small.goal.my.activity.UserInfoActivity.REQUESTCODE_DROP_IMAGE;
+import static com.pi.small.goal.utils.Utils.readPictureDegree;
+import static me.nereo.multi_image_selector.MultiImageSelectorActivity.EXTRA_RESULT;
 
 public class ChoosePhotoActivity extends Activity implements View.OnClickListener {
 
@@ -42,6 +46,11 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
     String newPath;
     String cutPath;
 
+    public static final String KEY_TYPE = "type";
+    public static final int TYPE_ONE = 1;
+    public static final int TYPE_MORE = 2;
+    private int type;
+    private int nums;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +69,10 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
         camera_text.setOnClickListener(this);
         gallery_text.setOnClickListener(this);
         own_text.setOnClickListener(this);
+
+
+        type = getIntent().getIntExtra(KEY_TYPE, TYPE_ONE);
+        nums = getIntent().getIntExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 3);
     }
 
 
@@ -75,7 +88,14 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                 finish();
                 break;
             case R.id.gallery_text:
-                goGallery();
+                if (type == TYPE_ONE) {
+                    goGallery();
+                } else {
+                    Intent intent = new Intent(this, MultiImageSelectorActivity.class);
+                    intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, nums);
+                    startActivityForResult(intent, TYPE_MORE);
+                }
+
                 break;
             case R.id.camera_text:
                 goCamera();
@@ -100,10 +120,12 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
      * 拍照获取照片
      */
     private void goCamera() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
-        cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
-        startActivityForResult(cameraIntent, Code.RESULT_CAMERA_CODE);
+//        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri());
+//        cameraIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+//        startActivityForResult(cameraIntent, Code.RESULT_CAMERA_CODE);
+        Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivityForResult(getImageByCamera, Code.RESULT_CAMERA_CODE);
     }
 
     /**
@@ -127,140 +149,253 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
         // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
 
-        Intent intent = new Intent();
-        if (requestCode == 2102) {
-            if (data != null) {
-                String androidId = android.os.Build.VERSION.RELEASE;
-                int firstNum = Integer.parseInt(androidId.substring(0, 1));
-                int secondNum = Integer.parseInt(androidId.substring(2, 3));
+        if (data != null) {
+            if (requestCode == Code.RESULT_GALLERY_CODE) {
+
                 Uri uri = data.getData();
-                if (firstNum == 4) {
-                    if (secondNum >= 4) {
-                        path = getPath(this, uri);
+                //   doCrop(uri);
+                path = getPath(this, uri);
+                File smallImageFile = ImageUtils.getSmallImageFile(this, path, 1000, 1000, true);
+                Intent intent = new Intent();
+                intent.putExtra("path", smallImageFile.getPath());
+                setResult(Code.RESULT_GALLERY_CODE, intent);
+                finish();
+            } else if (requestCode == Code.RESULT_CAMERA_CODE) {   //获取拍照的
+                Uri uri = data.getData();
+                if (uri == null) {
+                    //use bundle to get data
+                    Bundle bundle = data.getExtras();
+                    if (bundle != null) {
+                        Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
+
+                        String xmb = ImageUtils.saveMyBitmap("xmb", photo);
+                        File smallImageFile = ImageUtils.getSmallImageFile(this, xmb, 1000, 1000, true);
+
+                        Intent intent = new Intent();
+                        intent.putExtra("path", smallImageFile.getPath());
+                        setResult(Code.RESULT_CAMERA_CODE, intent);
+                        finish();
+//                        Uri imageUri = Uri.fromFile(new File(xmb));
+//                        if (Integer.parseInt(Build.VERSION.SDK) >= 24) {
+//                            imageUri = FileProvider.getUriForFile(this, "com.pi.small.goal.FileProvider", new File(xmb));
+//                        }
+//                        doCrop(imageUri);
                     } else {
-                        String[] proj = {MediaStore.Images.Media.DATA};
-                        CursorLoader loader = new CursorLoader(this, uri,
-                                proj, null, null, null);
-                        Cursor cursor = loader.loadInBackground();
-                        int column_index = cursor
-                                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                        cursor.moveToFirst();
-                        path = cursor.getString(column_index);
+                        Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
+                        return;
                     }
-                } else if (firstNum > 4) {
-
+                } else {
+                    //  doCrop(uri);
                     path = getPath(this, uri);
-                } else if (firstNum < 4) {
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    CursorLoader loader = new CursorLoader(this, uri, proj,
-                            null, null, null);
-                    Cursor cursor = loader.loadInBackground();
-                    int column_index = cursor
-                            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    path = cursor.getString(column_index);
+                    File smallImageFile = ImageUtils.getSmallImageFile(this, path, 1000, 1000, true);
+                    Intent intent = new Intent();
+                    intent.putExtra("path", smallImageFile.getPath());
+                    setResult(Code.RESULT_CAMERA_CODE, intent);
+                    finish();
                 }
 
-
-                Bitmap bitmap = BitmapFactory.decodeFile(path);
-
-//                int bitmapWidth = bitmap.getWidth();
-//                int bitmapHeight = bitmap.getHeight();
-                // 缩放图片的尺寸
-                Matrix matrix = new Matrix();
-                matrix.postRotate(readPictureDegree(path)); /*翻转90度*/
-                // 产生缩放后的Bitmap对象
-//                Bitmap resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
-                Bitmap resizeBitmap = reduce(bitmap, 256, 256, path, false);
-
-                newPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + System.currentTimeMillis() + ".PNG";
-                File newFile = new File(newPath);
-                try {
-                    newFile.createNewFile();
-                    FileOutputStream fOut = null;
-                    fOut = new FileOutputStream(newFile);
-                    if (resizeBitmap.compress(Bitmap.CompressFormat.PNG, 50, fOut)) {
-                        fOut.flush();
-                        fOut.close();
-                    }
-                    if (!resizeBitmap.isRecycled()) {
-                        resizeBitmap.recycle();//记得释放资源，否则会内存溢出
-                    }
-
-                    if (!bitmap.isRecycled()) {
-                        bitmap.recycle();//记得释放资源，否则会内存溢出
-                    }
-                    CutPhoto(Uri.parse("file://" + newPath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+            } else if (requestCode == REQUESTCODE_DROP_IMAGE) {
+                Bitmap bitmap = data.getParcelableExtra("data");
+                //    File smallImageFile = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+                Intent intent = new Intent();
+                intent.putExtra("path", file.getPath());
+                setResult(Code.RESULT_CAMERA_CODE, intent);
+                finish();
+            } else if (requestCode == TYPE_MORE) {      //多图选择
+                ArrayList<String> morePhotoDatas = data.getStringArrayListExtra(EXTRA_RESULT);
+                Intent intent = new Intent();
+                intent.putExtra("path", "");
+                intent.putExtra(EXTRA_RESULT, morePhotoDatas);
+                setResult(Code.RESULT_GALLERY_CODE, intent);
+                finish();
             }
-        } else if (requestCode == 2101) {
+        }
+    }
 
-            Bitmap bitmap = BitmapFactory.decodeFile(getImageUri().getPath());
-            if (bitmap != null) {
-//                int bitmapWidth = bitmap.getWidth();
-//                int bitmapHeight = bitmap.getHeight();
-                Matrix matrix = new Matrix();
-                matrix.postRotate(readPictureDegree(getImageUri().getPath())); /*翻转90度*/
-                // 产生缩放后的Bitmap对象
-//                Bitmap resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
-                Bitmap resizeBitmap = reduce(bitmap, 256, 256, getImageUri().getPath(), false);
-                newPath = getImageUri().getPath().substring(0, getImageUri().getPath().lastIndexOf("/")) + "/" + System.currentTimeMillis() + ".PNG";
-                File newFile = new File(newPath);
-                try {
-                    newFile.createNewFile();
-                    FileOutputStream fOut = null;
-                    fOut = new FileOutputStream(newFile);
-                    if (resizeBitmap.compress(Bitmap.CompressFormat.PNG, 80, fOut)) {
-                        fOut.flush();
-                        fOut.close();
-                    }
-                    if (!resizeBitmap.isRecycled()) {
-                        resizeBitmap.recycle();//记得释放资源，否则会内存溢出
-                    }
-                    if (!bitmap.isRecycled()) {
-                        bitmap.recycle();//记得释放资源，否则会内存溢出
-                    }
-                    CutPhoto(Uri.parse("file://" + newPath));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
 
-        } else if (requestCode == 2103) {
-            intent.putExtra("path", newPath);
-            setResult(Code.RESULT_CAMERA_CODE, intent);
-            finish();
+    /**
+     * 调用底层的图片裁剪成正方形
+     * create  wjz
+     **/
 
+    private void doCrop(Uri mUri) {
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
+
+        int size = list.size();
+
+        if (size == 0) {
+            Utils.showToast(this, "找不到图像");
+            return;
         } else {
-            finish();
-        }
 
-    }
+            //     intent.setClassName("com.android.camera", "com.android.camera.CropImage");
+            intent.setData(mUri);
+            intent.putExtra("outputX", 200);
+            intent.putExtra("outputY", 200);
+            intent.putExtra("aspectX", 1);   // 裁剪框比例
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("scale", true);
+            intent.putExtra("return-data", true);
 
-    public static int readPictureDegree(String path) {
-        int degree = 0;
-        try {
-            ExifInterface exifInterface = new ExifInterface(path);
-            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    degree = 90;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    degree = 180;
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
-                    break;
+            if (size == 1) {
+                Intent i = new Intent(intent);
+                ResolveInfo res = list.get(0);
+                i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); //添加这一句表示对目标应用临时授权该Uri所代表的文件
+                i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+
+                startActivityForResult(i, REQUESTCODE_DROP_IMAGE);       //调用 onActivityResult      这个  方法
+            } else {
+                Utils.showToast(this, "调取图像失败");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return degree;
     }
+
+
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        // TODO Auto-generated method stub
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        Intent intent = new Intent();
+//        if (requestCode == 2102) {
+//            if (data != null) {
+//                String androidId = android.os.Build.VERSION.RELEASE;
+//                int firstNum = Integer.parseInt(androidId.substring(0, 1));
+//                int secondNum = Integer.parseInt(androidId.substring(2, 3));
+//                Uri uri = data.getData();
+//                if (firstNum == 4) {
+//                    if (secondNum >= 4) {
+//                        path = getPath(this, uri);
+//                    } else {
+//                        String[] proj = {MediaStore.Images.Media.DATA};
+//                        CursorLoader loader = new CursorLoader(this, uri,
+//                                proj, null, null, null);
+//                        Cursor cursor = loader.loadInBackground();
+//                        int column_index = cursor
+//                                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                        cursor.moveToFirst();
+//                        path = cursor.getString(column_index);
+//                    }
+//                } else if (firstNum > 4) {
+//
+//                    path = getPath(this, uri);
+//                } else if (firstNum < 4) {
+//                    String[] proj = {MediaStore.Images.Media.DATA};
+//                    CursorLoader loader = new CursorLoader(this, uri, proj,
+//                            null, null, null);
+//                    Cursor cursor = loader.loadInBackground();
+//                    int column_index = cursor
+//                            .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//                    cursor.moveToFirst();
+//                    path = cursor.getString(column_index);
+//                }
+//
+//
+//                Bitmap bitmap = BitmapFactory.decodeFile(path);
+//
+////                int bitmapWidth = bitmap.getWidth();
+////                int bitmapHeight = bitmap.getHeight();
+//                // 缩放图片的尺寸
+//                Matrix matrix = new Matrix();
+//                matrix.postRotate(readPictureDegree(path)); /*翻转90度*/
+//                // 产生缩放后的Bitmap对象
+////                Bitmap resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
+//                Bitmap resizeBitmap = reduce(bitmap, 256, 256, path, false);
+//
+//                newPath = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS).getPath() + "/" + System.currentTimeMillis() + ".PNG";
+//                File newFile = new File(newPath);
+//                try {
+//                    newFile.createNewFile();
+//                    FileOutputStream fOut = null;
+//                    fOut = new FileOutputStream(newFile);
+//                    if (resizeBitmap.compress(Bitmap.CompressFormat.PNG, 50, fOut)) {
+//                        fOut.flush();
+//                        fOut.close();
+//                    }
+//                    if (!resizeBitmap.isRecycled()) {
+//                        resizeBitmap.recycle();//记得释放资源，否则会内存溢出
+//                    }
+//
+//                    if (!bitmap.isRecycled()) {
+//                        bitmap.recycle();//记得释放资源，否则会内存溢出
+//                    }
+//                    CutPhoto(Uri.parse("file://" + newPath));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//        } else if (requestCode == 2101) {
+//
+//            Bitmap bitmap = BitmapFactory.decodeFile(getImageUri().getPath());
+//            if (bitmap != null) {
+////                int bitmapWidth = bitmap.getWidth();
+////                int bitmapHeight = bitmap.getHeight();
+//                Matrix matrix = new Matrix();
+//                matrix.postRotate(readPictureDegree(getImageUri().getPath())); /*翻转90度*/
+//                // 产生缩放后的Bitmap对象
+////                Bitmap resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
+//                Bitmap resizeBitmap = reduce(bitmap, 256, 256, getImageUri().getPath(), false);
+//                newPath = getImageUri().getPath().substring(0, getImageUri().getPath().lastIndexOf("/")) + "/" + System.currentTimeMillis() + ".PNG";
+//                File newFile = new File(newPath);
+//                try {
+//                    newFile.createNewFile();
+//                    FileOutputStream fOut = null;
+//                    fOut = new FileOutputStream(newFile);
+//                    if (resizeBitmap.compress(Bitmap.CompressFormat.PNG, 80, fOut)) {
+//                        fOut.flush();
+//                        fOut.close();
+//                    }
+//                    if (!resizeBitmap.isRecycled()) {
+//                        resizeBitmap.recycle();//记得释放资源，否则会内存溢出
+//                    }
+//                    if (!bitmap.isRecycled()) {
+//                        bitmap.recycle();//记得释放资源，否则会内存溢出
+//                    }
+//                    CutPhoto(Uri.parse("file://" + newPath));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//        } else if (requestCode == 2103) {
+//            intent.putExtra("path", newPath);
+//            setResult(Code.RESULT_CAMERA_CODE, intent);
+//            finish();
+//
+//        } else {
+//            finish();
+//        }
+//
+//    }
+//
+//    public static int readPictureDegree(String path) {
+//        int degree = 0;
+//        try {
+//            ExifInterface exifInterface = new ExifInterface(path);
+//            int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//            switch (orientation) {
+//                case ExifInterface.ORIENTATION_ROTATE_90:
+//                    degree = 90;
+//                    break;
+//                case ExifInterface.ORIENTATION_ROTATE_180:
+//                    degree = 180;
+//                    break;
+//                case ExifInterface.ORIENTATION_ROTATE_270:
+//                    degree = 270;
+//                    break;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return degree;
+//    }
 
 
     /**

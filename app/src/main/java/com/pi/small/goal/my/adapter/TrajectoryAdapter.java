@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,11 +40,28 @@ public class TrajectoryAdapter extends BaseAdapter {
     private final Context context;
     private boolean operationShowFlag;
     private List<DynamicEntity> data;
+    private myAdapterClickListener listener;
 
     public TrajectoryAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
 
+    }
+
+    //    dynamicId = getIntent().getStringExtra("dynamicId");
+//    aimId = getIntent().getStringExtra("aimId");
+//    nick = getIntent().getStringExtra("nick");
+//    avatar = getIntent().getStringExtra("avatar");
+    public interface myAdapterClickListener {
+        void great(String id);  //点赞
+
+        void comment(String id); //评论
+
+        void help(String id, String nick, String avatar);    //助力
+    }
+
+    public void setOnMyAdapterClickListener(myAdapterClickListener listener) {
+        this.listener = listener;
     }
 
 
@@ -83,7 +101,7 @@ public class TrajectoryAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder vh;
+        final ViewHolder vh;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_trajectory, null);
             vh = new ViewHolder(convertView);
@@ -120,6 +138,26 @@ public class TrajectoryAdapter extends BaseAdapter {
         if (position == 0) {
             vh.viewLineTop.setVisibility(View.INVISIBLE);
         }
+
+        List<DynamicEntity.CommentsBean> comments = dynamicEntity.getComments();
+        final CommentAdapter adapter = new CommentAdapter(context, comments);
+        vh.lvItem.setAdapter(adapter);
+        Utils.setListViewHeightBasedOnChildren(vh.lvItem);
+
+//        if (comments.size() > 1) {
+//            vh.tvUserSupport1Item.setText(comments.get(0).getNick() + ":");
+//            vh.tvContentSupport1Item.setText(comments.get(0).getContent());
+//            vh.llSuppor1Item.setVisibility(View.VISIBLE);
+//        }
+        if (comments.size() > 2) {
+            vh.tvSupportsNumsItem.setText("查看全部" + comments.size() + "条评论");
+//            vh.tvUserSupport2Item.setText(comments.get(1).getNick() + ": ");
+//            vh.tvContentSupport2Item.setText(comments.get(1).getContent());
+//            vh.llSupport2Item.setVisibility(View.VISIBLE);
+            vh.tvSupportsNumsItem.setVisibility(View.VISIBLE);
+        }
+
+
         vh.imgItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,14 +165,60 @@ public class TrajectoryAdapter extends BaseAdapter {
                 RelativeLayout rl_image = (RelativeLayout) ((Activity) context).findViewById(R.id.rl_image);
                 PinchImageView pimg = (PinchImageView) rl_image.getChildAt(0);
                 String s = Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1());
-                Picasso.with(context).load(s).into(pimg);
+                if (!Utils.photoEmpty(s)) {
+                    Picasso.with(context).load(Utils.GetPhotoPath(s)).into(pimg);
+                } else {
+                    pimg.setImageResource(R.drawable.image2);
+                }
+
                 rl_image.setVisibility(View.VISIBLE);
             }
         });
 
+        vh.tvSupportsNumsItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adapter.setShowMore(true);
+                Utils.setListViewHeightBasedOnChildren(vh.lvItem);
+                vh.tvSupportsNumsItem.setVisibility(View.GONE);
+            }
+        });
+        vh.imgCommit.setOnClickListener(new myClick(dynamicEntity));
+        vh.imgGreat.setOnClickListener(new myClick(dynamicEntity));
+        vh.imgHelp.setOnClickListener(new myClick(dynamicEntity));
+
         return convertView;
     }
 
+    class myClick implements View.OnClickListener {
+
+        private DynamicEntity dynamicEntity;
+
+        public myClick(DynamicEntity dynamicEntity) {
+            this.dynamicEntity = dynamicEntity;
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.img_great:
+                    if (listener != null) {
+                        listener.great(dynamicEntity.getDynamic().getId() + "");
+                    }
+                    break;
+                case R.id.img_commit:
+                    if (listener != null) {
+                        listener.comment(dynamicEntity.getDynamic().getId() + "");
+                    }
+                    break;
+                case R.id.img_help:
+                    if (listener != null) {
+                        listener.help(dynamicEntity.getDynamic().getId() + "", dynamicEntity.getDynamic().getNick(), dynamicEntity.getDynamic().getAvatar());
+                    }
+                    break;
+            }
+        }
+    }
 
     static class ViewHolder {
         @InjectView(R.id.view_line_top)
@@ -163,6 +247,10 @@ public class TrajectoryAdapter extends BaseAdapter {
         TextView tvSupportsItem;
         @InjectView(R.id.tv_city_item)
         TextView tvCityItem;
+        @InjectView(R.id.lv_item)
+        ListView lvItem;
+        @InjectView(R.id.tv_supportsNums_item)
+        TextView tvSupportsNumsItem;
         @InjectView(R.id.rl_operation_item)
         LinearLayout rlOperationItem;
 

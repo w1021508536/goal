@@ -106,6 +106,9 @@ public class RedActivity extends BaseActivity {
                     }.getType());
 
                     List<WalletEntry> newData = new ArrayList<>();
+
+                    newData.add(new WalletEntry(RedAdapter.TYPE_TITLE));
+
                     for (RedGsonEntity one : data) {
                         newData.add(new WalletEntry(one.getId(), one.getAimId(), one.getDynamicId(), one.getMoney(), one.getSize(), one.getRemainMoney(), one.getRemainSize(), one.getToUserId(), one.getFromUserId(), one.getCreateTime(), one.getUpdateTime(), one.getStatus(), one.getType(), one.getSupportId(), one.getFromUserNick(), one.getFromUserAvatar(), RedAdapter.TYPE_CONTENT));
                     }

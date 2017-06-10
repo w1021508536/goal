@@ -33,6 +33,11 @@ import org.xutils.x;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+
+import static me.nereo.multi_image_selector.MultiImageSelectorActivity.EXTRA_RESULT;
 
 public class SupportAimActivity extends BaseActivity {
 
@@ -62,6 +67,10 @@ public class SupportAimActivity extends BaseActivity {
 
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
+    private ImageView photo2_image;
+    private ImageView photo3_image;
+
+    private List<String> selectPhotoPaths = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +79,7 @@ public class SupportAimActivity extends BaseActivity {
         aimId = getIntent().getStringExtra("aimId");
         budget = getIntent().getStringExtra("budget");
         money = getIntent().getStringExtra("money");
-
         aimList = new ArrayList<AimEntity>();
-
         init();
     }
 
@@ -81,7 +88,9 @@ public class SupportAimActivity extends BaseActivity {
         right_text = (TextView) findViewById(R.id.right_text);
 
         content_edit = (EditText) findViewById(R.id.content_edit);
-        photo_image = (ImageView) findViewById(R.id.photo_image);
+        photo_image = (ImageView) findViewById(R.id.photo1_image);
+        photo2_image = (ImageView) findViewById(R.id.photo2_image);
+        photo3_image = (ImageView) findViewById(R.id.photo3_image);
         position_layout = (RelativeLayout) findViewById(R.id.position_layout);
         position_text = (TextView) findViewById(R.id.position_text);
 
@@ -91,8 +100,24 @@ public class SupportAimActivity extends BaseActivity {
 
         position_layout.setOnClickListener(this);
         photo_image.setOnClickListener(this);
+        photo2_image.setOnClickListener(this);
+        photo3_image.setOnClickListener(this);
 
+        initImageView();
 
+    }
+
+    private void initImageView() {
+
+        int WindowWidth = getWindowManager().getDefaultDisplay().getWidth();
+        int i = WindowWidth - Utils.dip2px(this, 80);
+        int width = i / 3;
+        photo_image.getLayoutParams().width = width;
+        photo_image.getLayoutParams().height = width;
+        photo2_image.getLayoutParams().width = width;
+        photo2_image.getLayoutParams().height = width;
+        photo3_image.getLayoutParams().width = width;
+        photo3_image.getLayoutParams().height = width;
     }
 
     @Override
@@ -107,35 +132,26 @@ public class SupportAimActivity extends BaseActivity {
             case R.id.right_text:
                 System.out.println("=========dianji=========");
                 brief = content_edit.getText().toString().trim();
-                if (imgLoad.equals("")) {
 
-//                    content = getIntent().getStringExtra("content");
-//                    aimId = getIntent().getStringExtra("aimId");
-//
-//                    img1 = getIntent().getStringExtra("img1");
-//                    img2 = getIntent().getStringExtra("img2");
-//                    img3 = getIntent().getStringExtra("img3");
-//
-//                    budget = Integer.valueOf(getIntent().getStringExtra("budget"));
-//                    haveMoney = Integer.valueOf(getIntent().getStringExtra("money"));
+                intent.setClass(this, SaveMoneyActivity.class);
+                intent.putExtra("img1", "");
+                intent.putExtra("img2", "");
+                intent.putExtra("img3", "");
+                intent.putExtra("money", money);
+                intent.putExtra("budget", budget);
+                intent.putExtra("aimId", aimId);
+                intent.putExtra("content", content_edit.getText().toString().trim());
 
-                    intent.setClass(this, SaveMoneyActivity.class);
-                    intent.putExtra("img1", "");
-                    intent.putExtra("img2", "");
-                    intent.putExtra("img3", "");
-                    intent.putExtra("money", money);
-                    intent.putExtra("budget", budget);
-                    intent.putExtra("aimId", aimId);
-                    intent.putExtra("content", content_edit.getText().toString().trim());
-                    startActivityForResult(intent, Code.SupportAim);
-
-
-                } else {
-
-//                    UpPicture();
+                if (selectPhotoPaths.size() > 0) {
+                    intent.putExtra("img1", selectPhotoPaths.get(0));
                 }
-
-
+                if (selectPhotoPaths.size() > 0) {
+                    intent.putExtra("img2", selectPhotoPaths.get(1));
+                }
+                if (selectPhotoPaths.size() > 0) {
+                    intent.putExtra("img3", selectPhotoPaths.get(2));
+                }
+                startActivityForResult(intent, Code.SupportAim);
                 break;
             case R.id.position_layout:
 
@@ -143,31 +159,45 @@ public class SupportAimActivity extends BaseActivity {
                 startActivityForResult(intent, Code.PositionCode);
 
                 break;
-            case R.id.photo_image:
-                if (Build.VERSION.SDK_INT >= 23) {
 
-                    int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
-                    if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_CALL_PHONE);
-                        return;
-                    } else {
-                        int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                        if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_CALL_STORGE);
-                            return;
-                        } else {
-                            intent.setClass(this, ChoosePhotoActivity.class);
-                            startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
-                        }
-                    }
-                } else {
-                    intent.setClass(this, ChoosePhotoActivity.class);
-                    startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
-                }
+            case R.id.photo1_image:
+            case R.id.photo2_image:
+            case R.id.photo3_image:
+                myStartActivity();
 
                 break;
         }
     }
+
+    private void myStartActivity() {
+        Intent intent = new Intent();
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+            if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_ASK_CALL_PHONE);
+                return;
+            } else {
+                int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_ASK_CALL_STORGE);
+                    return;
+                } else {
+
+                    intent.putExtra(ChoosePhotoActivity.KEY_TYPE, ChoosePhotoActivity.TYPE_MORE);
+                    intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 3 - selectPhotoPaths.size());
+                    intent.setClass(this, ChoosePhotoActivity.class);
+                    startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
+                }
+            }
+        } else {
+            intent.putExtra(ChoosePhotoActivity.KEY_TYPE, ChoosePhotoActivity.TYPE_MORE);
+            intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 3 - selectPhotoPaths.size());
+            intent.setClass(this, ChoosePhotoActivity.class);
+            startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -181,6 +211,8 @@ public class SupportAimActivity extends BaseActivity {
                         return;
                     } else {
                         Intent intent = new Intent();
+                        intent.putExtra(ChoosePhotoActivity.KEY_TYPE, ChoosePhotoActivity.TYPE_MORE);
+                        intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 3 - selectPhotoPaths.size());
                         intent.setClass(this, ChoosePhotoActivity.class);
                         startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
                     }
@@ -194,6 +226,8 @@ public class SupportAimActivity extends BaseActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission Granted
                     Intent intent = new Intent();
+                    intent.putExtra(ChoosePhotoActivity.KEY_TYPE, ChoosePhotoActivity.TYPE_MORE);
+                    intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 3 - selectPhotoPaths.size());
                     intent.setClass(this, ChoosePhotoActivity.class);
                     startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
                 } else {
@@ -214,12 +248,22 @@ public class SupportAimActivity extends BaseActivity {
             imgLoad = data.getStringExtra("path");
             System.out.println("===============CAMERA======imgLoad======" + imgLoad);
             photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+            selectPhotoPaths.add(imgLoad);
+            setPhoto(selectPhotoPaths);
         } else if (resultCode == Code.RESULT_GALLERY_CODE) {
             imgLoad = data.getStringExtra("path");
             System.out.println("===============imgLoad============" + imgLoad);
-            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+            if ("".equals(imgLoad)) {
+                ArrayList<String> morePhotoDatas = data.getStringArrayListExtra(EXTRA_RESULT);
+                selectPhotoPaths.addAll(morePhotoDatas);
+                setPhoto(selectPhotoPaths);
+            } else {
+                photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+                selectPhotoPaths.add(imgLoad);
+                setPhoto(selectPhotoPaths);
+            }
         } else if (resultCode == Code.SupportAim) {
-            money = String.valueOf(Integer.valueOf(money) + Integer.valueOf(data.getStringExtra("money")));
+            money = String.valueOf(Float.valueOf(money) + Float.valueOf(data.getStringExtra("money")));
             Intent intent = new Intent();
             intent.putExtra("money", money);
             setResult(Code.SupportAim, intent);
@@ -231,6 +275,23 @@ public class SupportAimActivity extends BaseActivity {
             finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void setPhoto(List<String> morePhotoDatas) {
+        if (morePhotoDatas.size() > 0) {
+            photo_image.setImageBitmap(BitmapFactory.decodeFile(morePhotoDatas.get(0)));
+            photo_image.setClickable(false);
+            photo2_image.setVisibility(View.VISIBLE);
+        }
+        if (morePhotoDatas.size() > 1) {
+            photo2_image.setImageBitmap(BitmapFactory.decodeFile(morePhotoDatas.get(1)));
+            photo2_image.setClickable(false);
+            photo3_image.setVisibility(View.VISIBLE);
+        }
+        if (morePhotoDatas.size() > 2) {
+            photo3_image.setImageBitmap(BitmapFactory.decodeFile(morePhotoDatas.get(2)));
+            photo3_image.setClickable(false);
+        }
     }
 
     private void UpPicture() {

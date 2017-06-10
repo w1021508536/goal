@@ -1,6 +1,5 @@
 package com.pi.small.goal.aim.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,20 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
-import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
-import com.pingplusplus.android.Pingpp;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.HttpMethod;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -60,8 +49,8 @@ public class SaveMoneyActivity extends BaseActivity {
     private String video = "";
 
     private int budget;
-    private int haveMoney;
-    private int MaxMoney;
+    private Double haveMoney;
+    private Double MaxMoney;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -83,7 +72,7 @@ public class SaveMoneyActivity extends BaseActivity {
         img3 = getIntent().getStringExtra("img3");
 
         budget = Integer.valueOf(getIntent().getStringExtra("budget"));
-        haveMoney = Integer.valueOf(getIntent().getStringExtra("money"));
+        haveMoney = Double.valueOf(getIntent().getStringExtra("money"));
 
 
         init();
