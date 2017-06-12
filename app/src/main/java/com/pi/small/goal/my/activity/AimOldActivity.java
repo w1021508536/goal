@@ -33,7 +33,7 @@ import butterknife.InjectView;
  * 修改：
  * 描述：历史目标
  **/
-public class TargetOldActivity extends BaseActivity {
+public class AimOldActivity extends BaseActivity {
 
     @InjectView(R.id.view)
     View view;
@@ -73,7 +73,7 @@ public class TargetOldActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
-
+        requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/history");
         requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
         requestParams.addBodyParameter("p", page + "");
@@ -84,7 +84,7 @@ public class TargetOldActivity extends BaseActivity {
             public void onSuccess(String result) {
 
                 if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
-//                    View emptyView = LayoutInflater.from(TargetActivity.this).inflate(R.layout.view_empty_nodata, null);
+//                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvTargetOld.setVisibility(View.GONE);
                     return;

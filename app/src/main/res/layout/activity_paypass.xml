@@ -53,4 +53,27 @@
             android:src="@mipmap/to_right" />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_setPass_pass"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_marginTop="0.5dp"
+        android:background="@drawable/background_selector_white_gray"
+        android:padding="@dimen/top_left">
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="设置支付密码" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/to_right" />
+    </RelativeLayout>
+
 </LinearLayout>

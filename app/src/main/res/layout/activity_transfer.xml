@@ -1,10 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@mipmap/bg_banner_option"
+        android:orientation="vertical">
 
-    <include layout="@layout/view_include" />
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="23dp" />
 
-</LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="5dp">
+
+            <ImageView
+                android:id="@+id/left_image_include"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:layout_alignParentLeft="true"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:src="@mipmap/icon_arrow_white_left" />
+
+            <TextView
+                android:id="@+id/name_text_include"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="哈哈"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
+            <ImageView
+                android:id="@+id/right_image_include"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:padding="5dp"
+                android:src="@mipmap/icon_chat_set" />
+
+            <TextView
+                android:id="@+id/tv_ok_include"
+                style="@style/text_white_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="确定"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            style="@style/text_white_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="我的期权包(个)" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="88"
+            android:textColor="@color/white"
+            android:textSize="100dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ll_top"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:src="@mipmap/icon_notice" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:text="这里是滚动字幕,这里是滚动字幕,这里是滚动字幕,这里是滚动字幕" />
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_below="@+id/ll_notice">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/sign_line" />
+
+        <TextView
+            android:id="@+id/tv_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginTop="30dp"
+            android:text="期权曲线图"
+            android:textSize="20dp" />
+
+        <com.pi.small.goal.weight.BaseFundChartView
+            android:id="@+id/bfcv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_question"
+            android:layout_below="@+id/tv_hint"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
+            android:background="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:drawableLeft="@mipmap/icon_question"
+            android:drawablePadding="5dp"
+            android:gravity="center"
+            android:text="期权相关政策"
+            android:textSize="10dp" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@+id/ll_bottom"
+        android:background="#E3E2E6" />
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rl_height"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_goZhuanqu_transfer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="赚取"
+            android:textColor="@color/chat_top" />
+
+        <TextView
+            android:id="@+id/tv_transfer_transfer"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_transfer_orange_white"
+            android:gravity="center"
+            android:text="转让"
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

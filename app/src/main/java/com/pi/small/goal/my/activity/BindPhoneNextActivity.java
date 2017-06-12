@@ -23,6 +23,12 @@ import org.xutils.http.RequestParams;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import static com.pi.small.goal.my.activity.BindPhoneActivity.TYPE_FORGETPASS;
+import static com.pi.small.goal.my.activity.BindPhoneActivity.TYPE_SETPASS;
+import static com.pi.small.goal.my.activity.UpdataPassActivity.FLAG_FORGET_PASS;
+import static com.pi.small.goal.my.activity.UpdataPassActivity.FLAG_SET_PASS;
+import static com.pi.small.goal.my.activity.UpdataPassActivity.KEY_FLAG;
+
 /**
  * 公司：小目标
  * 创建者： 王金壮
@@ -81,12 +87,16 @@ public class BindPhoneNextActivity extends BaseActivity {
         } else if (type == BindPhoneActivity.TYPE_UNBIND) {
             nameTextInclude.setText("更换绑定手机");
             phone = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+        } else if (type == BindPhoneActivity.TYPE_SETPASS) {
+            phone = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+            nameTextInclude.setText("短信验证");
+        } else if (type == TYPE_FORGETPASS) {
+            phone = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+            nameTextInclude.setText("短信验证");
         }
 
-
-        phone = getIntent().getStringExtra(KEY_PHONE);
-
         tvPhoneNumber.setText("请输入" + phone + "的验证码");
+        phone = getIntent().getStringExtra(KEY_PHONE);
 
         TimeCount time = new TimeCount(60000, 1000);
         time.start();
@@ -112,6 +122,8 @@ public class BindPhoneNextActivity extends BaseActivity {
                 if (type == BindPhoneActivity.TYPE_UNBIND) {
 
                     unBind(phone, etvCode.getText().toString());
+                } else if (type == BindPhoneActivity.TYPE_SETPASS || type == TYPE_FORGETPASS) {
+                    verificationCode();
                 } else
                     bindPhone(phone, etvCode.getText().toString());
                 break;
@@ -147,7 +159,54 @@ public class BindPhoneNextActivity extends BaseActivity {
         });
     }
 
+    public void verificationCode() {
+        requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/verifycode/verify");
+        requestParams.addBodyParameter("mobile", phone);
+        requestParams.addBodyParameter("code", etvCode.getText().toString());
 
+        if (type == TYPE_FORGETPASS) {
+            CacheUtil.getInstance().setForgetPassCode(etvCode.getText().toString());
+        }
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (Utils.callOk(result)) {
+                    if (type == TYPE_SETPASS) {
+
+                        Intent intent = new Intent(BindPhoneNextActivity.this, UpdataPassActivity.class);
+                        intent.putExtra(KEY_FLAG, FLAG_SET_PASS);
+                        startActivity(intent);
+                        Utils.showToast(BindPhoneNextActivity.this, Utils.getMsg(result));
+
+                    } else {
+                        Intent intent = new Intent(BindPhoneNextActivity.this, UpdataPassActivity.class);
+                        intent.putExtra(KEY_FLAG, FLAG_FORGET_PASS);
+                        startActivity(intent);
+                        Utils.showToast(BindPhoneNextActivity.this, Utils.getMsg(result));
+                    }
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+
+    /**
+     * 获取验证码
+     * create  wjz
+     **/
     private void getCode() {
 
         requestParams.setUri(Url.Url + "/sms/verifycode/send");

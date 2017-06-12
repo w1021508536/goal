@@ -31,9 +31,9 @@ public class WalletEntry {
     private int id;
     private int aimId;
     private int dynamicId;
-    private int money;
+    private float money;
     private int size;
-    private int remainMoney;
+    private double remainMoney;
     private int remainSize;
     private int toUserId;
     private int fromUserId;
@@ -46,7 +46,7 @@ public class WalletEntry {
     private String fromUserAvatar;
     private int titleType;
 
-    public WalletEntry(int id, int aimId, int dynamicId, int money, int size, int remainMoney, int remainSize, int toUserId, int fromUserId, long createTime, long updateTime, int status, int type, int supportId, String fromUserNick, String fromUserAvatar, int titleType) {
+    public WalletEntry(int id, int aimId, int dynamicId, float money, int size, double remainMoney, int remainSize, int toUserId, int fromUserId, long createTime, long updateTime, int status, int type, int supportId, String fromUserNick, String fromUserAvatar, int titleType) {
         this.id = id;
         this.aimId = aimId;
         this.dynamicId = dynamicId;
@@ -94,11 +94,11 @@ public class WalletEntry {
         this.dynamicId = dynamicId;
     }
 
-    public int getMoney() {
+    public float getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(float money) {
         this.money = money;
     }
 
@@ -110,11 +110,11 @@ public class WalletEntry {
         this.size = size;
     }
 
-    public int getRemainMoney() {
+    public double getRemainMoney() {
         return remainMoney;
     }
 
-    public void setRemainMoney(int remainMoney) {
+    public void setRemainMoney(double remainMoney) {
         this.remainMoney = remainMoney;
     }
 

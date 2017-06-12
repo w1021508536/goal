@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -91,8 +91,8 @@ public class TargetAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, TargetMoreActivity.class);
-                intent.putExtra(TargetMoreActivity.KEY_AIMID, collectEntity.getId() + "");
+                Intent intent = new Intent(context, AimMoreActivity.class);
+                intent.putExtra(AimMoreActivity.KEY_AIMID, collectEntity.getId() + "");
                 context.startActivity(intent);
             }
         });

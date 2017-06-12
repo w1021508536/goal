@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.entry.AimOldEntity;
 
 import java.util.ArrayList;
@@ -105,8 +105,8 @@ public class TargetOldAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, TargetMoreActivity.class);
-                intent.putExtra(TargetMoreActivity.KEY_AIMID, aimOldEntity.getId()+"");
+                Intent intent = new Intent(context, AimMoreActivity.class);
+                intent.putExtra(AimMoreActivity.KEY_AIMID, aimOldEntity.getId()+"");
                 context.startActivity(intent);
             }
         });

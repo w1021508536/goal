@@ -9,21 +9,22 @@ package com.pi.small.goal.my.entry;
  **/
 public class RedGsonEntity {
 
+
     /**
-     * id : 1
-     * aimId : 3
-     * dynamicId : 4
+     * id : 28
+     * aimId : 17
+     * dynamicId : 7
      * money : 10
-     * size : 5
-     * remainMoney : 10
-     * remainSize : 5
-     * toUserId : 11
+     * size : 10
+     * remainMoney : 8.37
+     * remainSize : 9
+     * toUserId : 48
      * fromUserId : 26
-     * createTime : 1495793276000
-     * updateTime : 1495793766000
+     * createTime : 1496989056000
+     * updateTime : 1497096431000
      * status : 1
      * type : 1
-     * supportId : 0
+     * supportId : 10
      * fromUserNick : 44
      * fromUserAvatar :
      */
@@ -31,9 +32,9 @@ public class RedGsonEntity {
     private int id;
     private int aimId;
     private int dynamicId;
-    private int money;
+    private float money;
     private int size;
-    private int remainMoney;
+    private double remainMoney;
     private int remainSize;
     private int toUserId;
     private int fromUserId;
@@ -69,11 +70,11 @@ public class RedGsonEntity {
         this.dynamicId = dynamicId;
     }
 
-    public int getMoney() {
+    public float getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(float money) {
         this.money = money;
     }
 
@@ -85,11 +86,11 @@ public class RedGsonEntity {
         this.size = size;
     }
 
-    public int getRemainMoney() {
+    public double getRemainMoney() {
         return remainMoney;
     }
 
-    public void setRemainMoney(int remainMoney) {
+    public void setRemainMoney(double remainMoney) {
         this.remainMoney = remainMoney;
     }
 

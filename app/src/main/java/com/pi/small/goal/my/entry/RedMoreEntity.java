@@ -11,26 +11,30 @@ public class RedMoreEntity {
 
 
     /**
-     * redPacketRecordId : 1
-     * userId : 11
-     * money : 8
-     * packetId : 1
-     * createTime : 1491473685000
+     * redPacketRecordId : 185
+     * userId : 48
+     * money : 8.03
+     * packetId : 30
+     * createTime : 1497231587000
      * type : 1
      * fromUserId : 26
      * fromUserNick : 44
      * fromUserAvatar :
+     * nick : 花重锦官城
+     * avatar : http://img.smallaim.cn/1496900672239.jpeg
      */
 
     private int redPacketRecordId;
     private int userId;
-    private int money;
+    private double money;
     private int packetId;
     private long createTime;
     private int type;
     private int fromUserId;
     private String fromUserNick;
     private String fromUserAvatar;
+    private String nick;
+    private String avatar;
 
     public int getRedPacketRecordId() {
         return redPacketRecordId;
@@ -48,11 +52,11 @@ public class RedMoreEntity {
         this.userId = userId;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 
@@ -102,5 +106,21 @@ public class RedMoreEntity {
 
     public void setFromUserAvatar(String fromUserAvatar) {
         this.fromUserAvatar = fromUserAvatar;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

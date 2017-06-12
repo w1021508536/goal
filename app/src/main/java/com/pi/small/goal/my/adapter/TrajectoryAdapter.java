@@ -3,6 +3,7 @@ package com.pi.small.goal.my.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,21 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.DynamicEntity;
+import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.weight.PinchImageView;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,9 +114,9 @@ public class TrajectoryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_trajectory, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-            if (!operationShowFlag) {
-                vh.rlOperation.setVisibility(View.GONE);
-            }
+//            if (!operationShowFlag) {
+//                vh.rlOperation.setVisibility(View.GONE);
+//            }
             Drawable drawable = context.getResources().getDrawable(R.mipmap.local_icon);
             drawable.setBounds(0, 0, Utils.dip2px(context, 11), Utils.dip2px(context, 13));
             vh.tvCityItem.setCompoundDrawables(drawable, null, null, null);
@@ -188,6 +196,7 @@ public class TrajectoryAdapter extends BaseAdapter {
                 vh.tvSupportsNumsItem.setVisibility(View.GONE);
             }
         });
+        vh.imgMore.setOnClickListener(new myClick(data, position, vh));
         vh.imgCommit.setOnClickListener(new myClick(data, position, vh));
         vh.imgGreat.setOnClickListener(new myClick(data, position, vh));
         vh.imgHelp.setOnClickListener(new myClick(data, position, vh));
@@ -224,7 +233,6 @@ public class TrajectoryAdapter extends BaseAdapter {
                             data.get(position).setVotes(data.get(position).getVotes() - 1);
                             notifyDataSetChanged();
                         }
-
                     }
                     break;
                 case R.id.img_commit:
@@ -235,12 +243,79 @@ public class TrajectoryAdapter extends BaseAdapter {
                 case R.id.img_help:
                     if (listener != null) {
                         listener.help(data.get(position).getDynamic().getId() + "", data.get(position).getDynamic().getNick(), data.get(position).getDynamic().getAvatar());
-
-
                     }
+                    break;
+                case R.id.img_more:
+                    report(data.get(position).getDynamic().getId() + "", v);
                     break;
             }
         }
+    }
+
+    private void report(final String id, View v) {
+        View windowView = LayoutInflater.from(context).inflate(
+                R.layout.window_search_report, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, true);
+
+        final TextView report_text = (TextView) windowView.findViewById(R.id.report_text);
+        TextView cancel_text = (TextView) windowView.findViewById(R.id.cancel_text);
+
+        cancel_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        report_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                report_text.setClickable(false);
+
+                RequestParams requestParams = Utils.getRequestParams(context);
+                requestParams.setUri(Url.Url + Url.ReportUser);
+                requestParams.addBodyParameter("uid", id + "");
+                XUtil.put(requestParams, context, new XUtil.XCallBackLinstener() {
+                    @Override
+                    public void onSuccess(String result) {
+                        try {
+                            String code = new JSONObject(result).getString("code");
+                            if (code.equals("0")) {
+                                Utils.showToast(context, "举报成功");
+                                report_text.setClickable(true);
+                                popupWindow.dismiss();
+                            } else {
+                                Utils.showToast(context, new JSONObject(result).getString("msg"));
+                                report_text.setClickable(true);
+                                popupWindow.dismiss();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
     }
 
     static class ViewHolder {
@@ -264,6 +339,8 @@ public class TrajectoryAdapter extends BaseAdapter {
         ImageView imgCommit;
         @InjectView(R.id.img_help)
         ImageView imgHelp;
+        @InjectView(R.id.img_more)
+        ImageView imgMore;
         @InjectView(R.id.rl_operation)
         RelativeLayout rlOperation;
         @InjectView(R.id.tv_supports_item)

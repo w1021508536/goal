@@ -3,39 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="@dimen/top_left">
+    android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/icon_item"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@mipmap/icon_user" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/top_left">
 
-    <TextView
-        android:id="@+id/tv_name_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        style="@style/text_gray_big_14"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/icon_item"
-        android:text="@string/app_name" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/icon_item"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/icon_user" />
 
-    <TextView
-        android:id="@+id/tv_noFollow_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/background_oval_gray"
-        android:paddingBottom="5dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="5dp"
-        android:text="取消关注"
-        android:visibility="visible" />
+        <TextView
+            android:id="@+id/tv_name_item"
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/icon_item"
+            android:text="@string/app_name" />
 
+        <TextView
+            android:id="@+id/tv_noFollow_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/background_oval_gray"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:text="取消关注"
+            android:visibility="visible" />
+    </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#DFDFDF" />
 </RelativeLayout>

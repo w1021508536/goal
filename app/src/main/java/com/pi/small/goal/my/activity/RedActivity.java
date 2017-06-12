@@ -83,10 +83,12 @@ public class RedActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
+        requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/redpacket/undraw");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("userId", "26");
+        String id = sp.getString("id", "26");
+        requestParams.addBodyParameter("userId", id);
         requestParams.addBodyParameter("p", page + "");
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {

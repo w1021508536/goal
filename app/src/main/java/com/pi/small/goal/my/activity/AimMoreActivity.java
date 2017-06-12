@@ -56,7 +56,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 修改：
  * 描述： 目标详情
  **/
-public class TargetMoreActivity extends BaseActivity {
+public class AimMoreActivity extends BaseActivity {
 
 
     @InjectView(R.id.lv_targetMore)
@@ -97,6 +97,7 @@ public class TargetMoreActivity extends BaseActivity {
     private DonutProgress progress;            //圆形的百分比加载框
     private boolean myAim;
     private String commentId;
+    private TargetHeadEntity targetHeadEntity;      //头部视图布局的数据
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -157,7 +158,7 @@ public class TargetMoreActivity extends BaseActivity {
                     JSONObject jsonObj = (JSONObject) ((JSONObject) new JSONObject(result).get("result"));
 
                     Gson gson = new Gson();
-                    TargetHeadEntity targetHeadEntity = gson.fromJson(jsonObj.toString(), TargetHeadEntity.class);
+                    targetHeadEntity = gson.fromJson(jsonObj.toString(), TargetHeadEntity.class);
 
                     setHeadViewData(targetHeadEntity);
                 } catch (JSONException e) {
@@ -253,7 +254,13 @@ public class TargetMoreActivity extends BaseActivity {
             adapter.setOperationShowFlag(false);
         } else {
             myAim = false;
+            if (targetHeadEntity.getHaveCollect() == 1) {
+                collectImageInclude.setImageResource(R.mipmap.collection_btn_pressed);
+            } else {
+                collectImageInclude.setImageResource(R.mipmap.collection_btn);
+            }
         }
+
         tv_budget.setText(targetHeadEntity.getAim().getBudget() + "");
         tv_money.setText(targetHeadEntity.getAim().getMoney() + "");
         tv_cycle.setText(targetHeadEntity.getAim().getCycle() + "");
@@ -285,7 +292,7 @@ public class TargetMoreActivity extends BaseActivity {
         rl_supports.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TargetMoreActivity.this, SupportActivity.class));
+                startActivity(new Intent(AimMoreActivity.this, SupportActivity.class));
             }
         });
     }
@@ -358,7 +365,7 @@ public class TargetMoreActivity extends BaseActivity {
             @Override
             public void help(String id, String nick, String avatar) {
 
-                Intent intent = new Intent(TargetMoreActivity.this, SupportMoneyActivity.class);
+                Intent intent = new Intent(AimMoreActivity.this, SupportMoneyActivity.class);
                 intent.putExtra("dynamicId", id);
                 intent.putExtra("aimId", aimId);
                 intent.putExtra("nick", nick);
@@ -486,10 +493,18 @@ public class TargetMoreActivity extends BaseActivity {
                 rlImage.setVisibility(View.GONE);
                 break;
             case R.id.collect_image_include:
+                if (targetHeadEntity == null) return;
                 if (myAim) {
 
-                } else
-                    collectAim(aimId, "1");
+                } else {
+
+                    if (targetHeadEntity.getHaveCollect() == 0) {
+                        collectAim(aimId, "1");
+                    } else {
+                        collectAim(aimId, "0");
+                    }
+
+                }
                 break;
             case R.id.rl_top:
                 rlTop.setVisibility(View.GONE);
@@ -501,17 +516,23 @@ public class TargetMoreActivity extends BaseActivity {
     }
 
     private void collectAim(String aimId, String status) {
-
+        requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/collect");
         requestParams.addBodyParameter("aimId", aimId + "");
         requestParams.addBodyParameter("status", status);
+        if (status.equals("1")) {
+            collectImageInclude.setImageResource(R.mipmap.collection_btn_pressed);
+        } else {
+            collectImageInclude.setImageResource(R.mipmap.collection_btn);
+        }
+
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 if (!RenameActivity.callOk(result)) return;
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    Utils.showToast(TargetMoreActivity.this, (String) jsonObject.get("msg"));
+                    Utils.showToast(AimMoreActivity.this, (String) jsonObject.get("msg"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

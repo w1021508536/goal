@@ -28,6 +28,12 @@
             android:layout_marginLeft="40dp"
             android:text="支付密码" />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/to_right" />
+
         <TextView
             style="@style/text_gray_14"
             android:layout_width="wrap_content"
@@ -35,7 +41,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
-            android:text="测试" />
+            android:text="测试"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -66,7 +73,14 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
-            android:text="测试" />
+            android:text="测试"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/to_right" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -97,7 +111,14 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="40dp"
-            android:text="测试" />
+            android:text="测试"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/to_right" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -121,14 +142,11 @@
             android:layout_marginLeft="40dp"
             android:text="关于我们" />
 
-        <TextView
-            style="@style/text_gray_14"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="40dp"
-            android:text="测试" />
+            android:src="@mipmap/to_right" />
     </RelativeLayout>
 
     <TextView

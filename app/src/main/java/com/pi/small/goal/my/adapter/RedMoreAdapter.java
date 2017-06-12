@@ -115,7 +115,7 @@ public class RedMoreAdapter extends BaseAdapter {
                     break;
 
             }
-            contentViewHolder.tvMoneyItem.setText("+" + Float.valueOf(redMoreAdapterEntry.getMoney()));
+            contentViewHolder.tvMoneyItem.setText("+" +redMoreAdapterEntry.getMoney());
 
             String timeDate = getTimeDate(redMoreAdapterEntry.getCreateTime());
             contentViewHolder.tvTimeItem.setText(timeDate);

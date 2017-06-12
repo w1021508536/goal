@@ -11,29 +11,30 @@ public class AimOldEntity {
 
 
     /**
-     * id : 1
-     * name : 我的第一个目标
-     * budget : 1000
-     * money : 0
-     * cycle : 6
-     * current : 0
-     * userId : 26
-     * province :
-     * city : 青岛
-     * brief : 实现梦想
-     * position : 万达
+     * id : 17
+     * name : 哦哦
+     * budget : 3000
+     * money : 24.95
+     * cycle : 1
+     * current : 33
+     * userId : 48
+     * province : 山东省
+     * city : 青岛市
+     * brief :
+     * position : 青岛东晖国际大酒店
      * longitude : 0
      * latitude : 0
      * support : 0
-     * createTime : 1494961977000
-     * status : 2
+     * createTime : 1495527352000
+     * status : 3
      * img :
+     * transfer : 0
      */
 
     private int id;
     private String name;
     private int budget;
-    private int money;
+    private double money;
     private int cycle;
     private int current;
     private int userId;
@@ -47,6 +48,7 @@ public class AimOldEntity {
     private long createTime;
     private int status;
     private String img;
+    private int transfer;
 
     public int getId() {
         return id;
@@ -72,11 +74,11 @@ public class AimOldEntity {
         this.budget = budget;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 
@@ -182,5 +184,13 @@ public class AimOldEntity {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(int transfer) {
+        this.transfer = transfer;
     }
 }

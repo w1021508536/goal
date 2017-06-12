@@ -13,15 +13,17 @@ public class TargetHeadEntity {
 
 
     /**
-     * aim : {"id":30,"name":"那就","budget":9999,"money":20,"cycle":6,"current":2,"userId":43,"province":"山东省","city":"青岛市","brief":"","position":"瘦和美瘦身中心","longitude":0,"latitude":0,"support":0,"createTime":1496480197000,"status":1,"img":"","transfer":0}
-     * user : {"id":43,"nick":"13693361208","avatar":"","brief":"","city":"","sex":0,"status":1}
-     * count : 0
-     * supports : [{"id":1,"aimId":3,"userId":26,"money":1,"message":"","createTime":1495167325000,"nick":"雨滴","avatar":"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2097810229,3516784541&fm=11&gp=0.jpg"}]
+     * aim : {"id":17,"name":"哦哦","budget":3000,"money":24.95,"cycle":1,"current":33,"userId":48,"province":"山东省","city":"青岛市","brief":"","position":"青岛东晖国际大酒店","longitude":0,"latitude":0,"support":0,"createTime":1495527352000,"status":3,"img":"","transfer":0}
+     * user : {"id":48,"nick":"花重锦官城","avatar":"http://img.smallaim.cn/1496900672239.jpeg","brief":"涂涂乐仑头诺拖他老婆磕头out偷摸楼父母色色偷摸T1可怕怕蛇","city":"","sex":0,"status":1,"aim":0,"login":0,"follow":1,"beFollowed":0}
+     * count : 3
+     * supports : [{"id":50,"aimId":17,"dynamicId":7,"fromUserId":32,"money":1000,"message":"","createTime":1497230454000,"isPaid":1,"toUserId":48,"remainMoney":1000,"drew":1,"nick":"杨晶晶","avatar":"https://q.qlogo.cn/qqapp/1106004131/E174B73EF43BC3C4D2D8891B79E237AF/100"},{"id":11,"aimId":17,"dynamicId":7,"fromUserId":11,"money":1,"message":"","createTime":1496640447000,"isPaid":1,"toUserId":0,"remainMoney":0,"drew":1,"nick":"hh","avatar":"1496802195021.jpg"},{"id":10,"aimId":17,"dynamicId":7,"fromUserId":26,"money":1,"message":"","createTime":1496640400000,"isPaid":1,"toUserId":0,"remainMoney":0,"drew":1,"nick":"44","avatar":""}]
+     * haveCollect : 0
      */
 
     private AimBean aim;
     private UserBean user;
     private int count;
+    private int haveCollect;
     private List<SupportsBean> supports;
 
     public AimBean getAim() {
@@ -48,6 +50,14 @@ public class TargetHeadEntity {
         this.count = count;
     }
 
+    public int getHaveCollect() {
+        return haveCollect;
+    }
+
+    public void setHaveCollect(int haveCollect) {
+        this.haveCollect = haveCollect;
+    }
+
     public List<SupportsBean> getSupports() {
         return supports;
     }
@@ -58,22 +68,22 @@ public class TargetHeadEntity {
 
     public static class AimBean {
         /**
-         * id : 30
-         * name : 那就
-         * budget : 9999
-         * money : 20
-         * cycle : 6
-         * current : 2
-         * userId : 43
+         * id : 17
+         * name : 哦哦
+         * budget : 3000
+         * money : 24.95
+         * cycle : 1
+         * current : 33
+         * userId : 48
          * province : 山东省
          * city : 青岛市
          * brief :
-         * position : 瘦和美瘦身中心
+         * position : 青岛东晖国际大酒店
          * longitude : 0
          * latitude : 0
          * support : 0
-         * createTime : 1496480197000
-         * status : 1
+         * createTime : 1495527352000
+         * status : 3
          * img :
          * transfer : 0
          */
@@ -81,7 +91,7 @@ public class TargetHeadEntity {
         private int id;
         private String name;
         private int budget;
-        private int money;
+        private double money;
         private int cycle;
         private int current;
         private int userId;
@@ -121,11 +131,11 @@ public class TargetHeadEntity {
             this.budget = budget;
         }
 
-        public int getMoney() {
+        public double getMoney() {
             return money;
         }
 
-        public void setMoney(int money) {
+        public void setMoney(double money) {
             this.money = money;
         }
 
@@ -244,13 +254,17 @@ public class TargetHeadEntity {
 
     public static class UserBean {
         /**
-         * id : 43
-         * nick : 13693361208
-         * avatar :
-         * brief :
+         * id : 48
+         * nick : 花重锦官城
+         * avatar : http://img.smallaim.cn/1496900672239.jpeg
+         * brief : 涂涂乐仑头诺拖他老婆磕头out偷摸楼父母色色偷摸T1可怕怕蛇
          * city :
          * sex : 0
          * status : 1
+         * aim : 0
+         * login : 0
+         * follow : 1
+         * beFollowed : 0
          */
 
         private int id;
@@ -260,6 +274,10 @@ public class TargetHeadEntity {
         private String city;
         private int sex;
         private int status;
+        private int aim;
+        private int login;
+        private int follow;
+        private int beFollowed;
 
         public int getId() {
             return id;
@@ -316,26 +334,68 @@ public class TargetHeadEntity {
         public void setStatus(int status) {
             this.status = status;
         }
+
+        public int getAim() {
+            return aim;
+        }
+
+        public void setAim(int aim) {
+            this.aim = aim;
+        }
+
+        public int getLogin() {
+            return login;
+        }
+
+        public void setLogin(int login) {
+            this.login = login;
+        }
+
+        public int getFollow() {
+            return follow;
+        }
+
+        public void setFollow(int follow) {
+            this.follow = follow;
+        }
+
+        public int getBeFollowed() {
+            return beFollowed;
+        }
+
+        public void setBeFollowed(int beFollowed) {
+            this.beFollowed = beFollowed;
+        }
     }
 
     public static class SupportsBean {
         /**
-         * id : 1
-         * aimId : 3
-         * userId : 26
-         * money : 1
+         * id : 50
+         * aimId : 17
+         * dynamicId : 7
+         * fromUserId : 32
+         * money : 1000
          * message :
-         * createTime : 1495167325000
-         * nick : 雨滴
-         * avatar : https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2097810229,3516784541&fm=11&gp=0.jpg
+         * createTime : 1497230454000
+         * isPaid : 1
+         * toUserId : 48
+         * remainMoney : 1000
+         * drew : 1
+         * nick : 杨晶晶
+         * avatar : https://q.qlogo.cn/qqapp/1106004131/E174B73EF43BC3C4D2D8891B79E237AF/100
          */
 
         private int id;
         private int aimId;
-        private int userId;
+        private int dynamicId;
+        private int fromUserId;
         private int money;
         private String message;
         private long createTime;
+        private int isPaid;
+        private int toUserId;
+        private int remainMoney;
+        private int drew;
         private String nick;
         private String avatar;
 
@@ -355,12 +415,20 @@ public class TargetHeadEntity {
             this.aimId = aimId;
         }
 
-        public int getUserId() {
-            return userId;
+        public int getDynamicId() {
+            return dynamicId;
         }
 
-        public void setUserId(int userId) {
-            this.userId = userId;
+        public void setDynamicId(int dynamicId) {
+            this.dynamicId = dynamicId;
+        }
+
+        public int getFromUserId() {
+            return fromUserId;
+        }
+
+        public void setFromUserId(int fromUserId) {
+            this.fromUserId = fromUserId;
         }
 
         public int getMoney() {
@@ -385,6 +453,38 @@ public class TargetHeadEntity {
 
         public void setCreateTime(long createTime) {
             this.createTime = createTime;
+        }
+
+        public int getIsPaid() {
+            return isPaid;
+        }
+
+        public void setIsPaid(int isPaid) {
+            this.isPaid = isPaid;
+        }
+
+        public int getToUserId() {
+            return toUserId;
+        }
+
+        public void setToUserId(int toUserId) {
+            this.toUserId = toUserId;
+        }
+
+        public int getRemainMoney() {
+            return remainMoney;
+        }
+
+        public void setRemainMoney(int remainMoney) {
+            this.remainMoney = remainMoney;
+        }
+
+        public int getDrew() {
+            return drew;
+        }
+
+        public void setDrew(int drew) {
+            this.drew = drew;
         }
 
         public String getNick() {

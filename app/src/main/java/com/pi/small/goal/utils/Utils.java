@@ -7,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,22 +16,14 @@ import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,6 +77,13 @@ public class Utils {
         return token;
     }
 
+    public static String GetOneStringForSp(Context context, String key) {
+        SharedPreferences sharedPreferences = Utils.UserSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String str = sharedPreferences.getString(key, "");
+
+        return str;
+    }
 
     public static String GetPhotoPath(String path) {
         String photoPath = "";
@@ -263,6 +260,41 @@ public class Utils {
         } else {
             return df.format(v);
         }
+    }
+
+    public static void putUser(String result, Context context) throws JSONException {
+        JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
+        String id = userObject.getString("id");
+        String nick = userObject.getString("nick");
+        String avatar = userObject.optString("avatar");
+        String brief = userObject.optString("brief");
+        String wechatId = userObject.optString("wechatId");
+        String qqId = userObject.optString("qqId");
+        String mobile = userObject.optString("mobile");
+        String city = userObject.optString("city");
+        String createTime = userObject.optString("createTime");
+        String updateTime = userObject.optString("updateTime");
+        String token = new JSONObject(result).getJSONObject("result").optString("token");
+        String imtoken = new JSONObject(result).getJSONObject("result").optString("imtoken");
+        int payPassword = new JSONObject(result).getJSONObject("result").optInt("payPassword");
+
+        SharedPreferences sharedPreferences = UserSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("id", id);
+        editor.putString("nick", nick);
+        editor.putString("avatar", avatar);
+        editor.putString("brief", brief);
+        editor.putString("wechatId", wechatId);
+        editor.putString("qqId", qqId);
+        editor.putString("mobile", mobile);
+        editor.putString("city", city);
+        editor.putString("createTime", createTime);
+        editor.putString("updateTime", updateTime);
+        editor.putString("token", token);
+        editor.putString("imtoken", imtoken);
+        editor.putInt("payPassword", payPassword);
+        editor.commit();
     }
 
 

@@ -12,7 +12,7 @@ public class RedMoreAdapterEntry {
 
     private int redPacketRecordId;
     private int userId;
-    private int money;
+    private double money;
     private int packetId;
     private long createTime;
     private int type;   //type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
@@ -31,7 +31,7 @@ public class RedMoreAdapterEntry {
         this.deletteMoney = deletteMoney;
     }
 
-    public RedMoreAdapterEntry(int redPacketRecordId, int userId, int money, int packetId, long createTime, int type, int fromUserId, String fromUserNick, String fromUserAvatar, int titleType) {
+    public RedMoreAdapterEntry(int redPacketRecordId, int userId, double money, int packetId, long createTime, int type, int fromUserId, String fromUserNick, String fromUserAvatar, int titleType) {
         this.redPacketRecordId = redPacketRecordId;
         this.userId = userId;
         this.money = money;
@@ -60,11 +60,11 @@ public class RedMoreAdapterEntry {
         this.userId = userId;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 
