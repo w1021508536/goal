@@ -84,8 +84,6 @@ public class AddAimActivity extends BaseActivity {
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
 
 
-
-
     String cutPath;
     String newPath;
 
@@ -159,6 +157,7 @@ public class AddAimActivity extends BaseActivity {
                             Utils.showToast(this, "预算不可为空");
                         } else {
                             brief = content_edit.getText().toString().trim();
+                            right_text.setClickable(false);
                             if (imgLoad.equals("")) {
                                 NewAim(v);
                             } else {
@@ -307,6 +306,8 @@ public class AddAimActivity extends BaseActivity {
                         img = new JSONObject(result).getJSONObject("result").getString("path");
                         NewAim(view);
                     } else {
+                        right_text.setClickable(true);
+
                         Utils.showToast(AddAimActivity.this, new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
@@ -321,6 +322,7 @@ public class AddAimActivity extends BaseActivity {
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(AddAimActivity.this, ex.getMessage());
                 }
+                right_text.setClickable(true);
             }
 
             @Override
@@ -382,10 +384,11 @@ public class AddAimActivity extends BaseActivity {
 
                         aimList.add(aimEntity);
 
+                        right_text.setClickable(true);
                         PutAimMoneyWindow(view);
-
                     } else {
                         Utils.showToast(AddAimActivity.this, new JSONObject(result).getString("msg"));
+                        right_text.setClickable(true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -398,6 +401,7 @@ public class AddAimActivity extends BaseActivity {
                 if (ex.getMessage() != null) {
                     Utils.showToast(AddAimActivity.this, ex.getMessage());
                 }
+                right_text.setClickable(true);
             }
 
             @Override
