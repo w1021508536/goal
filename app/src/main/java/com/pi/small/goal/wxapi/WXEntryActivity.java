@@ -264,35 +264,7 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
                     if (code.equals("0")) {
 
-                        JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
-                        id = userObject.getString("id");
-                        nick = userObject.getString("nick");
-                        avatar = userObject.optString("avatar");
-                        brief = userObject.optString("brief");
-                        wechatId = userObject.optString("wechatId");
-                        qqId = userObject.optString("qqId");
-                        mobile = userObject.optString("mobile");
-                        city = userObject.optString("city");
-                        createTime = userObject.optString("createTime");
-                        updateTime = userObject.optString("updateTime");
-                        token = new JSONObject(result).getJSONObject("result").optString("token");
-                        imtoken = new JSONObject(result).getJSONObject("result").optString("imtoken");
-
-
-                        editor.putString("id", id);
-                        editor.putString("nick", nick);
-                        editor.putString("avatar", avatar);
-                        editor.putString("brief", brief);
-                        editor.putString("wechatId", wechatId);
-                        editor.putString("qqId", qqId);
-                        editor.putString("mobile", mobile);
-                        editor.putString("city", city);
-                        editor.putString("createTime", createTime);
-                        editor.putString("updateTime", updateTime);
-                        editor.putString("token", token);
-                        editor.putString("imtoken", imtoken);
-
-                        editor.commit();
+                        Utils.putUser(result, WXEntryActivity.this);
 
                         Intent intent = new Intent();
                         intent.setClass(WXEntryActivity.this, MainActivity.class);

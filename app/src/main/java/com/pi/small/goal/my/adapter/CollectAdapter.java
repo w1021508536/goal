@@ -11,10 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.my.activity.RenameActivity;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.entry.CollectEntity;
+import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -68,7 +75,7 @@ public class CollectAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_collect, null);
@@ -137,13 +144,51 @@ public class CollectAdapter extends BaseAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, TargetMoreActivity.class);
-                intent.putExtra(TargetMoreActivity.KEY_AIMID, collectEntity.getId() + "");
+                Intent intent = new Intent(context, AimMoreActivity.class);
+                intent.putExtra(AimMoreActivity.KEY_AIMID, collectEntity.getId() + "");
                 context.startActivity(intent);
+            }
+        });
+        vh.imgCollectItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                collectAim(collectEntity.getId(),"0",position);
             }
         });
         return convertView;
     }
+
+    private void collectAim(int aimId, String status, final int position) {
+        RequestParams requestParams = Utils.getRequestParams(context);
+        requestParams.setUri(Url.Url + "/aim/collect");
+        requestParams.addBodyParameter("aimId", aimId + "");
+        requestParams.addBodyParameter("status", status);
+        XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!RenameActivity.callOk(result)) return;
+                data.remove(position);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    Utils.showToast(context, (String) jsonObject.get("msg"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
 
     static class ViewHolder {
         @InjectView(R.id.line)
@@ -154,6 +199,8 @@ public class CollectAdapter extends BaseAdapter {
         TextView tvNameItem;
         @InjectView(R.id.tv_time_item)
         TextView tvTimeItem;
+        @InjectView(R.id.img_collect_item)
+        ImageView imgCollectItem;
         @InjectView(R.id.img_city_item)
         ImageView imgCityItem;
         @InjectView(R.id.tv_title_item)

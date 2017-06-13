@@ -193,7 +193,7 @@ public class LevelActivity extends BaseActivity {
         super.initWeight();
         llAimLevel.setOnClickListener(this);
         llRedLevel.setOnClickListener(this);
-        rlMoneyLevel.setOnClickListener(this);
+    //    rlMoneyLevel.setOnClickListener(this);
     }
 
     @Override

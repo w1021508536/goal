@@ -203,11 +203,11 @@
             android:label="关注页面"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TargetActivity"
+            android:name=".my.activity.AimActivity"
             android:label="我的目标"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TargetOldActivity"
+            android:name=".my.activity.AimOldActivity"
             android:label="历史目标"
             android:screenOrientation="portrait" />
         <activity
@@ -255,7 +255,7 @@
             android:label="翻牌"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TargetMoreActivity"
+            android:name=".my.activity.AimMoreActivity"
             android:label="目标详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
@@ -290,6 +290,14 @@
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
             android:label="多图选择的界面"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.TransferActivity"
+            android:label="期权转让"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.TransferNextActivity"
+            android:label="转让"
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.TaskActivity"

@@ -104,6 +104,8 @@ public class CollectActivity extends BaseActivity {
     public void getData() {
         super.getData();
 //{"msg":"success","code":0,"result":[{"id":5,"name":"我的第二个目标","budget":1000,"money":0,"cycle":6,"current":0,"userId":11,"province":"山东","city":"青岛","brief":"实现梦想","position":"卓越","longitude":0.000000,"latitude":0.000000,"support":0,"createTime":1494974232000,"status":1,"img":""}],"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
+
+        requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/collect");
         requestParams.addBodyParameter("userId", "26");
         requestParams.addBodyParameter("p", page + "");
@@ -112,7 +114,7 @@ public class CollectActivity extends BaseActivity {
             public void onSuccess(String result) {
                 JSONObject jsonObject = null;
                 if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
-//                    View emptyView = LayoutInflater.from(TargetActivity.this).inflate(R.layout.view_empty_nodata, null);
+//                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvCollect.setVisibility(View.GONE);
                     return;

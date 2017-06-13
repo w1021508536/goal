@@ -3,59 +3,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="15dp">
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/img_item"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/zhuli_bag_icon" />
 
 
-    <ImageView
-        android:id="@+id/img_item"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:src="@mipmap/zhuli_bag_icon" />
+        <TextView
+            android:id="@+id/tv_name_item"
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/img_item"
+            android:text="收益红包" />
 
+        <TextView
+            android:id="@+id/tv_userName_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_name_item"
+            android:text=""
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="14dp" />
 
-    <TextView
-        android:id="@+id/tv_name_item"
-        style="@style/text_gray_big_14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/img_item"
-        android:text="收益红包" />
+        <TextView
+            android:id="@+id/tv_time_item"
+            style="@style/text_gray_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_name_item"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/img_item"
+            android:text="1分钟前" />
 
-    <TextView
-        android:id="@+id/tv_userName_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/tv_name_item"
-        android:text=""
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="14dp" />
+        <TextView
+            android:id="@+id/tv_have_item"
+            style="@style/text_white_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/selector_wallet_yellow"
+            android:paddingBottom="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="5dp"
+            android:text="领取" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_time_item"
-        style="@style/text_gray_12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_name_item"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/img_item"
-        android:text="1分钟前" />
-
-    <TextView
-        android:id="@+id/tv_have_item"
-        style="@style/text_white_16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/selector_wallet_yellow"
-        android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="5dp"
-        android:text="领取" />
-
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="#DFDFDF" />
 </RelativeLayout>

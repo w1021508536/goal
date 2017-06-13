@@ -1,5 +1,6 @@
 package com.pi.small.goal.my.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,8 @@ import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.weight.VirtualKeyboardView;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -91,6 +94,10 @@ public class UpdataPassActivity extends BaseActivity {
     public static final int FLAG_OLD = 1;
     public static final int FLAG_NEW = 2;
     public static final int FLAG_NEW_AGIN = 3;
+    public static final int FLAG_SET_PASS = 4;
+    public static final int FLAG_SET_PASS_AGIN = 5;
+    public static final int FLAG_FORGET_PASS = 6;
+    public static final int FLAG_FORGET_PASS_AGIN = 7;
     private int flag;            //用户与区分是新的密码输入，还是旧的
     private HuiFuDialog dialog;
 
@@ -116,7 +123,12 @@ public class UpdataPassActivity extends BaseActivity {
                 tvHintPass.setText("请输入新的支付密码");
                 break;
             case FLAG_NEW_AGIN:
+            case FLAG_SET_PASS_AGIN:
                 tvHintPass.setText("请再次输入以确认");
+                break;
+            case FLAG_SET_PASS:
+            case FLAG_FORGET_PASS:
+                tvHintPass.setText("请设置支付密码，用于支付验证");
                 break;
         }
 
@@ -210,10 +222,9 @@ public class UpdataPassActivity extends BaseActivity {
 
                     switch (flag) {
                         case FLAG_OLD:
-                            intent.putExtra(KEY_FLAG, FLAG_NEW);
-                            startActivity(intent);
-                            CacheUtil.getInstance().setOldPass(strPassword);
-                            finish();
+
+                            verifyPass(strPassword);
+
                             break;
                         case FLAG_NEW:
                             intent.putExtra(KEY_FLAG, FLAG_NEW_AGIN);
@@ -228,6 +239,33 @@ public class UpdataPassActivity extends BaseActivity {
                             }
                             updataPass();
                             break;
+                        case FLAG_SET_PASS:
+                            intent.putExtra(KEY_FLAG, FLAG_SET_PASS_AGIN);
+                            startActivity(intent);
+                            finish();
+                            CacheUtil.getInstance().setNewPass(strPassword);
+                            break;
+                        case FLAG_SET_PASS_AGIN:
+
+                            if (!CacheUtil.getInstance().getNewPass().equals(strPassword)) {
+                                Utils.showToast(UpdataPassActivity.this, "两次密码不一致");
+                                return;
+                            }
+                            setPass();
+                            break;
+                        case FLAG_FORGET_PASS:
+                            intent.putExtra(KEY_FLAG, FLAG_FORGET_PASS_AGIN);
+                            startActivity(intent);
+                            finish();
+                            CacheUtil.getInstance().setNewPass(strPassword);
+                            break;
+                        case FLAG_FORGET_PASS_AGIN:
+                            if (!CacheUtil.getInstance().getNewPass().equals(strPassword)) {
+                                Utils.showToast(UpdataPassActivity.this, "两次密码不一致");
+                                return;
+                            }
+                            forgetPass();
+                            break;
                     }
 
                 }
@@ -235,13 +273,119 @@ public class UpdataPassActivity extends BaseActivity {
         });
     }
 
+    private void forgetPass() {
+
+
+        requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/pay/password/reset");
+        requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
+        requestParams.addBodyParameter("verifyCode", CacheUtil.getInstance().getForgetPassCode());
+        requestParams.addBodyParameter("mobile", sp.getString("mobile", ""));
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (Utils.callOk(result
+                )) {
+                    dialog.show();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    /**
+     * 验证支付密码是否正确
+     * create  wjz
+     **/
+
+    private void verifyPass(final String strPassword) {
+
+        requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/pay/password/verify");
+        requestParams.addBodyParameter("password", strPassword);
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (Utils.callOk(result)) {
+                    Intent intent = new Intent(UpdataPassActivity.this, UpdataPassActivity.class);
+                    intent.putExtra(KEY_FLAG, FLAG_NEW);
+                    startActivity(intent);
+                    CacheUtil.getInstance().setOldPass(strPassword);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void setPass() {
+
+        requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/pay/password");
+        requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
+        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                if (Utils.callOk(result)) {
+                    dialog.show();
+                    sp.edit().putInt("payPassword", 1).commit();
+
+                    List<Activity> activityList = app.getActivityList();
+                    for (Activity activity : activityList) {
+                        if (activity instanceof BindPhoneNextActivity) {
+                            activity.finish();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 修改支付密码
+     * create  wjz
+     **/
+
     private void updataPass() {
 
-        requestParams.setUri(Url.Url + "/user/password");
+        requestParams.setUri(Url.Url + "/pay/password");
         requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
         requestParams.addBodyParameter("oldPassword", CacheUtil.getInstance().getOldPass());
 
-        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 if (RenameActivity.callOk(result)) {

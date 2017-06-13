@@ -2,6 +2,8 @@ package com.pi.small.goal.my.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -42,6 +44,8 @@ public class ToMoneyActivity extends BaseActivity {
     TextView tvMoneyHintToMoney;
     @InjectView(R.id.tv_toMoney_toMoney)
     TextView tvToMoneyToMoney;
+    @InjectView(R.id.tv_money_toMOney)
+    TextView tvMoneyToMOney;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,20 +59,42 @@ public class ToMoneyActivity extends BaseActivity {
         super.initData();
         nameTextInclude.setText("提现");
         rightImageInclude.setVisibility(View.GONE);
-        tvMoneyHintToMoney.setText("可提现金额" + CacheUtil.getInstance().getUserInfo().getAccount().getBalance());
+        tvMoneyHintToMoney.setText("可提现金额");
+        tvMoneyToMOney.setText(CacheUtil.getInstance().getUserInfo().getAccount().getBalance() + "");
+        tvToMoneyToMoney.setOnClickListener(this);
     }
 
     @Override
     public void initWeight() {
         super.initWeight();
         payText.setOnClickListener(this);
+        etvMoneyMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    if (Double.valueOf(s.toString()) > Double.valueOf(tvMoneyToMOney.getText().toString())) {
+                        etvMoneyMoney.setText(tvMoneyToMOney.getText().toString());
+                        etvMoneyMoney.setSelection(etvMoneyMoney.getText().toString().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()) {
-            case R.id.pay_text:
+            case R.id.tv_toMoney_toMoney:
                 etvMoneyMoney.setText(CacheUtil.getInstance().getUserInfo().getAccount().getBalance() + "");
                 etvMoneyMoney.setSelection(etvMoneyMoney.getText().toString().length());
                 break;

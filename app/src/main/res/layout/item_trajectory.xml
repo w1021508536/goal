@@ -179,6 +179,7 @@
                     android:background="@color/background_system_list" />
 
                 <ImageView
+                    android:id="@+id/img_more"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignParentRight="true"
@@ -186,7 +187,7 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:paddingTop="5dp"
-                    android:src="@mipmap/more_btn" />
+                    android:src="@mipmap/icon_more" />
 
             </RelativeLayout>
 

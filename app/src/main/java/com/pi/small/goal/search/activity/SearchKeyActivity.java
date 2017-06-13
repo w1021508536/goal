@@ -26,7 +26,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -106,8 +106,8 @@ public class SearchKeyActivity extends BaseActivity {
         searchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SearchKeyActivity.this, TargetMoreActivity.class);
-                intent.putExtra(TargetMoreActivity.KEY_AIMID, dataList.get(position - 1).getId());
+                Intent intent = new Intent(SearchKeyActivity.this, AimMoreActivity.class);
+                intent.putExtra(AimMoreActivity.KEY_AIMID, dataList.get(position - 1).getId());
                 startActivity(intent);
             }
         });

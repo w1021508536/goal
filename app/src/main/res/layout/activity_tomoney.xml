@@ -56,7 +56,6 @@
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="@dimen/top_left"
         android:paddingLeft="@dimen/top_left"
         android:paddingRight="@dimen/top_left">
 
@@ -65,7 +64,17 @@
             style="@style/text_gray_big_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="可提现金额800" />
+            android:layout_centerVertical="true"
+            android:text="可提现金额" />
+
+        <TextView
+            android:id="@+id/tv_money_toMOney"
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/tv_moneyHint_toMoney"
+            android:text="100" />
 
         <TextView
             android:id="@+id/tv_toMoney_toMoney"
@@ -74,7 +83,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
             android:background="@null"
-            android:inputType="number"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             android:text="全部提现"
             android:textColor="@color/chat_top" />
     </RelativeLayout>

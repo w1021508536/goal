@@ -43,6 +43,8 @@ public class BindPhoneActivity extends BaseActivity {
     public static final int TYPE_BIND = 0;
     public static final int TYPE_UPDATA = 1;
     public static final int TYPE_UNBIND = 2;
+    public static final int TYPE_SETPASS = 3;
+    public static final int TYPE_FORGETPASS = 4;
     @InjectView(R.id.tv_hint_phone)
     TextView tvHintPhone;
     private int type;

@@ -34,6 +34,8 @@ public class CacheUtil {
 
     public String oldPass = "";
     public String newPass = "";
+    public String setPass = "";
+    public String forgetPassCode = "";   //重置密码时候的验证短信吗
 
     public boolean signFlag = false;
 
@@ -88,5 +90,21 @@ public class CacheUtil {
 
     public void setCommentsBeanList(List<DynamicEntity.CommentsBean> commentsBeanList) {
         this.commentsBeanList = commentsBeanList;
+    }
+
+    public String getSetPass() {
+        return setPass;
+    }
+
+    public void setSetPass(String setPass) {
+        this.setPass = setPass;
+    }
+
+    public String getForgetPassCode() {
+        return forgetPassCode;
+    }
+
+    public void setForgetPassCode(String forgetPassCode) {
+        this.forgetPassCode = forgetPassCode;
     }
 }

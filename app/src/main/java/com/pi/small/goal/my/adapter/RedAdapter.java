@@ -71,7 +71,7 @@ public class RedAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder vh;
-        titleViewHolder titleViewHolder;
+        final titleViewHolder titleViewHolder;
         if (getItemViewType(position) == TYPE_TITLE) {
             if (convertView == null) {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_title_red, null);
@@ -83,7 +83,7 @@ public class RedAdapter extends BaseAdapter {
             titleViewHolder.tvLingquItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    obtainRedAll();
                 }
             });
 
@@ -113,6 +113,43 @@ public class RedAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+
+    /**
+     * 领取全部红包
+     * create  wjz
+     **/
+    private void obtainRedAll() {
+
+
+        RequestParams requestParams = new RequestParams();
+        requestParams.setUri(Url.Url + "/redpacket/draw/all");
+        SharedPreferences sp = Utils.UserSharedPreferences(context);
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+
+        XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                if (!Utils.callOk(result)) return;
+                data.clear();
+                notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
 
     /**
      * 获取红包

@@ -2,9 +2,9 @@ package com.pi.small.goal.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.R;
-import com.pi.small.goal.register.RegisterActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -169,36 +168,7 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
                     String code = new JSONObject(result).getString("code");
 
                     if (code.equals("0")) {
-
-                        JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
-                        id = userObject.getString("id");
-                        nick = userObject.getString("nick");
-                        avatar = userObject.optString("avatar");
-                        brief = userObject.optString("brief");
-                        wechatId = userObject.optString("wechatId");
-                        qqId = userObject.optString("qqId");
-                        mobile = userObject.optString("mobile");
-                        city = userObject.optString("city");
-                        createTime = userObject.optString("createTime");
-                        updateTime = userObject.optString("updateTime");
-                        token = new JSONObject(result).getJSONObject("result").optString("token");
-                        imtoken = new JSONObject(result).getJSONObject("result").optString("imtoken");
-
-
-                        editor.putString("id", id);
-                        editor.putString("nick", nick);
-                        editor.putString("avatar", avatar);
-                        editor.putString("brief", brief);
-                        editor.putString("wechatId", wechatId);
-                        editor.putString("qqId", qqId);
-                        editor.putString("mobile", mobile);
-                        editor.putString("city", city);
-                        editor.putString("createTime", createTime);
-                        editor.putString("updateTime", updateTime);
-                        editor.putString("token", token);
-                        editor.putString("imtoken", imtoken);
-
-                        editor.commit();
+                        Utils.putUser(result, LoginCodeActivity.this);
 
                         Intent intent = new Intent();
                         intent.setClass(LoginCodeActivity.this, MainActivity.class);

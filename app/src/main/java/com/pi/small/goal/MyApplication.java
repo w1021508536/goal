@@ -6,12 +6,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.pi.small.goal.utils.Utils;
 
 import org.xutils.x;
@@ -46,6 +41,11 @@ public class MyApplication extends Application {
             activity.finish();
         }
     }
+
+    public List<Activity> getActivityList() {
+        return activityList;
+    }
+
 
     @Override
     public void onCreate() {

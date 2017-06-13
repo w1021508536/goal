@@ -36,7 +36,7 @@ import butterknife.InjectView;
  * 描述： 我的目标
  * 修改：
  **/
-public class TargetActivity extends BaseActivity {
+public class AimActivity extends BaseActivity {
 
     @InjectView(R.id.view)
     View view;
@@ -95,6 +95,7 @@ public class TargetActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
+        requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim");
         requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
         requestParams.addBodyParameter("p", page + "");
@@ -104,7 +105,7 @@ public class TargetActivity extends BaseActivity {
             public void onSuccess(String result) {
 
                 if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
-//                    View emptyView = LayoutInflater.from(TargetActivity.this).inflate(R.layout.view_empty_nodata, null);
+//                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvTarget.setVisibility(View.GONE);
                     return;
@@ -146,7 +147,7 @@ public class TargetActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.right_image_include:
-                startActivity(new Intent(this, TargetOldActivity.class));
+                startActivity(new Intent(this, AimOldActivity.class));
                 break;
         }
     }

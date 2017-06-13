@@ -66,7 +66,8 @@
         android:id="@+id/plv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="0.5dp"></com.handmark.pulltorefresh.library.PullToRefreshListView>
+        android:divider="@null"
+        android:dividerHeight="0dp"></com.handmark.pulltorefresh.library.PullToRefreshListView>
 
     <LinearLayout
         android:layout_width="match_parent"

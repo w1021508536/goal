@@ -67,7 +67,7 @@ public class XUtil {
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-//                Utils.showToast(context, Utils.getMsg(result));
+               Utils.showToast(context, Utils.getMsg(result));
                 xCallBackLinstener.onSuccess(result);
             }
 
