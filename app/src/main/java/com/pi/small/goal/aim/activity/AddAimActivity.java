@@ -302,7 +302,6 @@ public class AddAimActivity extends BaseActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-
                         img = new JSONObject(result).getJSONObject("result").getString("path");
                         NewAim(view);
                     } else {
