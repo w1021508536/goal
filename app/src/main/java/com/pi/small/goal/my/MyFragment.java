@@ -74,6 +74,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     TextView tvTaskNumsFragment;
     @InjectView(R.id.ll_task_fragment)
     LinearLayout llTaskFragment;
+    //    ll_transfer_fragment
     @InjectView(R.id.ll_transfer_fragment)
     LinearLayout llTransferFragment;
     @InjectView(R.id.top_rl)
