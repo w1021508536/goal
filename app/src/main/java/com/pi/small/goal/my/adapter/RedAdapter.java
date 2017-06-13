@@ -133,7 +133,7 @@ public class RedAdapter extends BaseAdapter {
             public void onSuccess(String result) {
 
                 if (!Utils.callOk(result)) return;
-                data.removeAll(data);
+                data.clear();
                 notifyDataSetChanged();
 
             }
