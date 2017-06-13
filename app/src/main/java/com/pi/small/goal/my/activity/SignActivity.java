@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.ButterKnife;
@@ -145,7 +146,10 @@ public class SignActivity extends BaseActivity {
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
                     Date nowDate = new Date();
 
-                    if (!formatter.format(date).equals(formatter.format(nowDate))) {
+                    Calendar   cal   =   Calendar.getInstance();
+                    cal.add(Calendar.DATE,   -1);
+
+                    if (!formatter.format(date).equals(formatter.format(cal.getTime()))&&!formatter.format(date).equals(formatter.format(nowDate))) {
                         days = 0;
                     }
 
