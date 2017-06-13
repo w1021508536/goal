@@ -87,7 +87,9 @@ public class Utils {
 
     public static String GetPhotoPath(String path) {
         String photoPath = "";
-        if (path.indexOf("http") == -1) {
+        if (path.equals("")) {
+            return "";
+        } else if (path.indexOf("http") == -1) {
             photoPath = Url.PhotoUrl + "/" + path;
         } else {
             photoPath = path;

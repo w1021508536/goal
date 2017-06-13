@@ -123,21 +123,21 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-
                 if (friendList.get(position).getRemark().equals("")) {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick(), Uri.parse(Url.PhotoUrl + "/" + friendList.get(position).getAvatar())));
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick(), Uri.parse(Utils.GetPhotoPath(friendList.get(position).getAvatar()))));
                 } else {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getRemark(), Uri.parse(Url.PhotoUrl + "/" + friendList.get(position).getAvatar())));
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getRemark(), Uri.parse(Utils.GetPhotoPath(friendList.get(position).getAvatar()))));
                 }
+
                 RongIM.getInstance().setMessageAttachedUserInfo(true);
 
-                RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
+//                RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
 
 
                 if (Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "").equals("")) {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(FriendsListActivity.this).getString("RY_Id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse("")));
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + Utils.UserSharedPreferences(FriendsListActivity.this).getString("id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse("")));
                 } else {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(FriendsListActivity.this).getString("RY_Id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse(Utils.GetPhotoPath(Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "")))));
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + Utils.UserSharedPreferences(FriendsListActivity.this).getString("id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse(Utils.GetPhotoPath(Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "")))));
                 }
                 RongIM.getInstance().setMessageAttachedUserInfo(true);
                 if (friendList.get(position).getRemark().equals("")) {

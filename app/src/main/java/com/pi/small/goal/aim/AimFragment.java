@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +28,9 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.AddAimActivity;
 import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.aim.adapter.ViewPagerAdapter;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.activity.RedActivity;
-import com.pi.small.goal.my.activity.SignActivity;
-import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
@@ -59,6 +60,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
     private ViewPager viewPager;
     private ViewGroup viewGroup;
+    private RelativeLayout null_layout;
+    private TextView aim_text;
 
     private ImageView money_gift_image;
 
@@ -114,10 +117,13 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         viewPager = (ViewPager) currentView.findViewById(R.id.view_pager);
         viewGroup = (ViewGroup) currentView.findViewById(R.id.viewGroup);
         money_gift_image = (ImageView) currentView.findViewById(R.id.money_gift_image);
+        null_layout = (RelativeLayout) currentView.findViewById(R.id.null_layout);
+        aim_text = (TextView) currentView.findViewById(R.id.aim_text);
 
         right_image.setOnClickListener(this);
 //        left_image.setOnClickListener(this);
         money_gift_image.setOnClickListener(this);
+        aim_text.setOnClickListener(this);
 
         viewPager.setOffscreenPageLimit(3);
         viewPager.setPageTransformer(true, new CustomTransformer());
@@ -129,37 +135,43 @@ public class AimFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         Intent intent = new Intent();
         switch (v.getId()) {
+            case R.id.aim_text:
+                intent.setClass(getActivity(), AddAimActivity.class);
+                startActivityForResult(intent, Code.AddAimCode);
+                break;
             case R.id.right_image:
                 int size = dataList.size();
-                if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v0")) {
+//                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
+                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
+                if (grade.equals("v0")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v1")) {
+                } else if (grade.equals("v1")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v2")) {
+                } else if (grade.equals("v2")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v3")) {
+                } else if (grade.equals("v3")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v4")) {
+                } else if (grade.equals("v4")) {
                     if (size < 2) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
@@ -167,28 +179,29 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
 
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v5")) {
+                } else if (grade.equals("v5")) {
                     if (size < 5) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v6")) {
+                } else if (grade.equals("v6")) {
                     if (size < 10) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v7")) {
+                } else if (grade.equals("v7")) {
                     if (size < 15) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
                         Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
                     }
-                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v8")) {
+
+                } else if (grade.equals("v8")) {
                     if (size < 20) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
@@ -221,6 +234,11 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 // viewPagerAdapter.notifyDataSetChanged();
                 viewPagerAdapter.setViewList(viewList);
 
+            }
+            if (dataList.size() == 0) {
+                null_layout.setVisibility(View.VISIBLE);
+            } else {
+                null_layout.setVisibility(View.GONE);
             }
 
         } else if (resultCode == Code.RESULT_CAMERA_CODE) {
@@ -383,11 +401,21 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
                             dataList.add(aimEntity);
                         }
-                        SetViewPager();
+                        System.out.println("=====================" + dataList.size());
+                        if (dataList.size() == 0) {
+                            null_layout.setVisibility(View.VISIBLE);
+                        } else {
+                            null_layout.setVisibility(View.GONE);
+                            SetViewPager();
+                        }
 
+
+                    } else if (code.equals("100000")) {
+                        null_layout.setVisibility(View.VISIBLE);
                     } else {
                         Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                     }
+
                     right_image.setClickable(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -497,8 +525,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         aim_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), TargetMoreActivity.class);
-                intent.putExtra(TargetMoreActivity.KEY_AIMID, dataList.get(position).getId());
+                Intent intent = new Intent(getActivity(), AimMoreActivity.class);
+                intent.putExtra(AimMoreActivity.KEY_AIMID, dataList.get(position).getId());
                 getActivity().startActivity(intent);
             }
         });

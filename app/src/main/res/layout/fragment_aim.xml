@@ -5,6 +5,7 @@
     android:clipChildren="false"
     android:orientation="vertical">
 
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
@@ -86,4 +87,31 @@
         android:layout_marginRight="10dp"
         android:src="@mipmap/icon_money_collect" />
 
+    <RelativeLayout
+        android:id="@+id/null_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/bg_dream_img" />
+
+        <TextView
+            android:id="@+id/aim_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_transparent_white_corner_5"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp"
+            android:text="发起目标"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+    </RelativeLayout>
 </RelativeLayout>

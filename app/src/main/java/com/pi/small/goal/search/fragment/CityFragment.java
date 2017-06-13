@@ -3,6 +3,7 @@ package com.pi.small.goal.search.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +29,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.TargetMoreActivity;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.search.activity.UserDetitalActivity;
@@ -75,7 +75,8 @@ public class CityFragment extends Fragment {
     PinchImageView pinchImage;
     @InjectView(R.id.image_layout)
     RelativeLayout imageLayout;
-
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
 
     private List<DynamicEntity> dynamicEntityList;
     private List<CommentEntity> commentEntityList;
@@ -96,6 +97,9 @@ public class CityFragment extends Fragment {
 
     private int total;
 
+    private SharedPreferences utilsSharedPreferences;
+    private SharedPreferences.Editor utilsEditor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -110,7 +114,8 @@ public class CityFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         width = (getActivity().getWindowManager().getDefaultDisplay().getWidth() - 130);
-
+        utilsSharedPreferences = Utils.UtilsSharedPreferences(getActivity());
+        utilsEditor = utilsSharedPreferences.edit();
         dynamicEntityList = new ArrayList<DynamicEntity>();
         hotAdapter = new HotAdapter(getActivity());
         hotList.setAdapter(hotAdapter);
@@ -137,14 +142,6 @@ public class CityFragment extends Fragment {
             }
         });
 
-        hotList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), TargetMoreActivity.class);
-                intent.putExtra(TargetMoreActivity.KEY_AIMID, dynamicEntityList.get(position - 1).getAimId());
-                getActivity().startActivity(intent);
-            }
-        });
 
         GetHotData(page + "", "10");
     }
@@ -304,7 +301,16 @@ public class CityFragment extends Fragment {
 
                         hotAdapter.notifyDataSetChanged();
                         hotList.getRefreshableView().onRestoreInstanceState(state);
+                    } else if (code.equals("100000")) {
+                        System.out.println("========code===222=========" + code);
+                        if (isDown) {
+                            dynamicEntityList.clear();
+                        }
+                        if (dynamicEntityList.size() == 0) {
+                            nullLayout.setVisibility(View.VISIBLE);
+                        }
                     } else {
+                        System.out.println("========code====333========" + code);
                         Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
@@ -372,8 +378,10 @@ public class CityFragment extends Fragment {
                                 } else {
                                     Utils.showToast(getActivity(), "恭喜您获取红包" + money + "元");
                                 }
+                            } else if (code.equals("100000")) {
+                                Utils.showToast(getActivity(), getString(R.string.rad_null));
                             } else {
-                                Utils.showToast(getActivity(), "红包领取失败");
+                                Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                             }
                             popupWindow.dismiss();
                         } catch (JSONException e) {
@@ -495,7 +503,7 @@ public class CityFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), UserDetitalActivity.class);
-                    intent.putExtra("userId",dynamicEntityList.get(position).getUserId());
+                    intent.putExtra("userId", dynamicEntityList.get(position).getUserId());
                     startActivity(intent);
                 }
             });
@@ -527,24 +535,18 @@ public class CityFragment extends Fragment {
                     XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("==========attention==============" + result);
                             try {
                                 if (new JSONObject(result).getString("code").equals("0")) {
+                                    //1 是已关注 0 是未关注
                                     if (dynamicEntityList.get(position).getIsFollow().equals("1")) {
-                                        dynamicEntityList.get(position).setIsFollow("0");
-
                                         for (int i = 0; i < followList.size(); i++) {
-                                            System.out.println("========followList=======" + dynamicEntityList.get(position).getUserId() + "===" + followList.get(i).get("followUserId"));
                                             if (dynamicEntityList.get(position).getUserId().equals(followList.get(i).get("followUserId"))) {
                                                 followList.remove(i);
                                             }
                                         }
-                                        System.out.println("========followList==size=====" + followList.size());
-                                        Utils.UtilsSharedPreferences(getActivity()).edit().putString("followList", Utils.changeFollowToJson(followList));
-                                        Utils.UtilsSharedPreferences(getActivity()).edit().commit();
-
+                                        utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                                        utilsEditor.commit();
                                     } else {
-                                        dynamicEntityList.get(position).setIsFollow("1");
                                         Map<String, String> map = new HashMap<String, String>();
 
                                         map.put("followId", new JSONObject(result).getJSONObject("result").optString("followId"));
@@ -555,13 +557,12 @@ public class CityFragment extends Fragment {
                                         map.put("status", new JSONObject(result).getJSONObject("result").optString("status"));
                                         followList.add(map);
 
-                                        Utils.UtilsSharedPreferences(getActivity()).edit().putString("followList", Utils.changeFollowToJson(followList));
-                                        Utils.UtilsSharedPreferences(getActivity()).edit().commit();
+                                        utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                                        utilsEditor.commit();
 
                                     }
-
+                                    isDown = true;
                                     GetHotData("1", page * 10 + "");
-//                                    notifyDataSetChanged();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -871,11 +872,22 @@ public class CityFragment extends Fragment {
                 }
             });
 
+            viewHolder.hot_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), AimMoreActivity.class);
+                    intent.putExtra(AimMoreActivity.KEY_AIMID, dynamicEntityList.get(position).getAimId());
+                    startActivity(intent);
+                }
+            });
+
             return convertView;
         }
 
 
         class ViewHolder {
+            @InjectView(R.id.hot_layout)
+            LinearLayout hot_layout;
             @InjectView(R.id.head_image)
             CircleImageView headImage;
             @InjectView(R.id.name_text)

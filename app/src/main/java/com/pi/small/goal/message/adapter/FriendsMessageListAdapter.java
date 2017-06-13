@@ -82,14 +82,12 @@ public class FriendsMessageListAdapter extends BaseAdapter {
         }
 
         viewHolder.name_text.setText(dataList.get(position).get("sendUserNick"));
-//        viewHolder.content_text.setText(dataList.get(position).get("sendUserBrief"));
+//      viewHolder.content_text.setText(dataList.get(position).get("sendUserBrief"));
 
-//        x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + dataList.get(position).get("avatar"), imageOptions);
-
-        if (!Utils.GetPhotoPath(dataList.get(position).get("sendUserAvatar")).equals("")) {
+        if (!dataList.get(position).get("sendUserAvatar").equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).get("sendUserAvatar"))).into(viewHolder.head_image);
         } else {
-            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
+            viewHolder.head_image.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
         }
 
         viewHolder.content_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(dataList.get(position).get("createTime")))) + "申请加你为好友");

@@ -54,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.rong.imkit.RongIM;
+import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private View currentView;
 
+    private int totalUnreadCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,8 +158,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         my_layout.setOnClickListener(this);
 
         if (!imtoken.equals("")) {
-
             connect(imtoken);
+            RongIM.getInstance().addUnReadMessageCountChangedObserver(new IUnReadMessageObserver() {
+                @Override
+                public void onCountChanged(int i) {
+
+                    System.out.println("=======totalUnreadCount=============" + i);
+
+                }
+            }, Conversation.ConversationType.PRIVATE);
+
             GetUserInfo();
 //            GetFriendsListData();
             GetFollowListData();
@@ -413,6 +423,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void connect(String token) {
         if (getApplicationInfo().packageName.equals(MyApplication.getCurProcessName(getApplicationContext()))) {
 
+            System.out.print("=");
+
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
 
                 /**
@@ -445,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
-                    System.out.println("====================" + errorCode.getMessage());
+                    System.out.println("===========errorCode.getMessage()=========" + errorCode.getMessage());
                 }
             });
         }

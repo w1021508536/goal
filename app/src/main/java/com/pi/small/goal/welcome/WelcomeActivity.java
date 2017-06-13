@@ -6,10 +6,22 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.pi.small.goal.MainActivity;
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.login.LoginActivity;
+import com.pi.small.goal.my.activity.RenameActivity;
+import com.pi.small.goal.my.entry.UerEntity;
+import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.KeyCode;
+import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -65,6 +77,44 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         }, 2000);
+    }
+
+    private void getData() {
+        RequestParams requestParams = new RequestParams();
+        SharedPreferences sp = Utils.UserSharedPreferences(this);
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.setUri(Url.Url + "/user/my");
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!RenameActivity.callOk(result)) return;
+                Gson gson = new Gson();
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    UerEntity userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
+
+                    CacheUtil.getInstance().setUserInfo(userInfo);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
 }
