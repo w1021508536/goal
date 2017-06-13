@@ -68,7 +68,7 @@ public class SearchKeyActivity extends BaseActivity {
     private List<AimEntity> dataList;
     private SearchKeyAdapter searchKeyAdapter;
     private AimEntity aimEntity;
-
+    private int width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,9 @@ public class SearchKeyActivity extends BaseActivity {
         dataList = new ArrayList<AimEntity>();
         searchKeyAdapter = new SearchKeyAdapter(this, dataList);
         searchList.setAdapter(searchKeyAdapter);
+
+        width = (getWindowManager().getDefaultDisplay().getWidth() - 130);
+
         init();
     }
 
@@ -114,7 +117,10 @@ public class SearchKeyActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!searchEdit.getText().toString().trim().equals("")) {
-                        key = searchEdit.getText().toString().trim();
+                        dataList.clear();
+                        searchKeyAdapter.notifyDataSetChanged();
+                        page = 1;
+                        total = -1;
                         GetData();
                     }
 
@@ -131,10 +137,7 @@ public class SearchKeyActivity extends BaseActivity {
                 // 当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
                 if (s.toString().equals("")) {
                     dataList.clear();
-                    page = 1;
-                    total = -1;
                     searchKeyAdapter.notifyDataSetChanged();
-
                 }
             }
 
@@ -200,10 +203,11 @@ public class SearchKeyActivity extends BaseActivity {
 
 
     private void GetData() {
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.SearchAim);
         requestParams.addHeader("token", Utils.GetToken(SearchKeyActivity.this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("keyword", key);
+        requestParams.addBodyParameter("keyword", searchEdit.getText().toString().trim());
         requestParams.addBodyParameter("p", page + "");
         requestParams.addBodyParameter("r", "10");
         XUtil.get(requestParams, SearchKeyActivity.this, new XUtil.XCallBackLinstener() {
@@ -264,10 +268,12 @@ public class SearchKeyActivity extends BaseActivity {
         private List<AimEntity> dataList;
         private Context context;
         private ImageOptions imageOptions = new ImageOptions.Builder()
-                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setImageScaleType(ImageView.ScaleType.FIT_XY)
                 .setLoadingDrawableId(R.mipmap.background_load)
                 .setFailureDrawableId(R.mipmap.background_fail)
                 .build();
+
+        SpannableStringBuilder spannable;
 
         public SearchKeyAdapter(Context context, List<AimEntity> dataList) {
             this.dataList = dataList;
@@ -299,20 +305,25 @@ public class SearchKeyActivity extends BaseActivity {
                 convertView = LayoutInflater.from(context).inflate(R.layout.item_list_search_key, parent, false);
                 viewHolder.name_text = (TextView) convertView.findViewById(R.id.name_text);
                 viewHolder.aim_iamge = (ImageView) convertView.findViewById(R.id.aim_image);
+                convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            SpannableStringBuilder spannable = new SpannableStringBuilder(dataList.get(position).getName());
-            dataList.get(position).getName().indexOf(key);
+            key = searchEdit.getText().toString().trim();
+            spannable = new SpannableStringBuilder(dataList.get(position).getName());
             spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.yellow_light)), dataList.get(position).getName().indexOf(key), dataList.get(position).getName().indexOf(key) + key.length()
                     , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             viewHolder.name_text.setText(spannable);
 
+            ViewGroup.LayoutParams layoutParams = viewHolder.aim_iamge.getLayoutParams();
+            layoutParams.height = width / 3;
+            layoutParams.width = width / 3;
+            viewHolder.aim_iamge.setLayoutParams(layoutParams);
+
             if (dataList.get(position).getImg().equals("")) {
                 viewHolder.aim_iamge.setImageDrawable(context.getResources().getDrawable(R.drawable.image1));
             } else {
-
                 x.image().bind(viewHolder.aim_iamge, Utils.GetPhotoPath(dataList.get(position).getImg()), imageOptions);
             }
 

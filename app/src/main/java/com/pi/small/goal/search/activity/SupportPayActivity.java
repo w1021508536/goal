@@ -163,7 +163,6 @@ public class SupportPayActivity extends BaseActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        System.out.print("===============" + data.getExtras().getString("pay_result"));
         //支付页面返回处理
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -223,10 +222,8 @@ public class SupportPayActivity extends BaseActivity {
 
     private void init() {
         union_layout.setVisibility(View.GONE);
-        money_text.setText(money);
+        money_text.setText(money + ".00");
         balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
-
-
     }
 
 

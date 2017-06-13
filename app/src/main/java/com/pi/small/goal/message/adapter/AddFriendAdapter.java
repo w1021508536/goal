@@ -6,13 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +23,8 @@ import org.xutils.x;
 
 import java.util.List;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Administrator on 2017/5/26.
@@ -65,7 +67,7 @@ public class AddFriendAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_friend, parent, false);
-            viewHolder.head_image = (ImageView) convertView.findViewById(R.id.head_image);
+            viewHolder.head_image = (CircleImageView) convertView.findViewById(R.id.head_image);
             viewHolder.name_text = (TextView) convertView.findViewById(R.id.name_text);
             viewHolder.add_text = (TextView) convertView.findViewById(R.id.add_text);
 
@@ -73,8 +75,11 @@ public class AddFriendAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + dataList.get(position).get("avatar"), imageOptions);
-
+        if (!dataList.get(position).get("avatar").equals("")) {
+            Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).get("avatar"))).into(viewHolder.head_image);
+        } else {
+            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
+        }
         viewHolder.name_text.setText(dataList.get(position).get("nick"));
 
         if (dataList.get(position).get("friend").equals("0")) {
@@ -133,7 +138,7 @@ public class AddFriendAdapter extends BaseAdapter {
 
     private class ViewHolder {
 
-        private ImageView head_image;
+        private CircleImageView head_image;
         private TextView name_text;
         private TextView add_text;
 

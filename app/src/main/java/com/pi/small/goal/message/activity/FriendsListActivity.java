@@ -72,10 +72,10 @@ public class FriendsListActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_list);
+        super.onCreate(savedInstanceState);
 
-        sharedPreferences = Utils.UtilsSharedPreferences(this);
+        sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
 
         friendList = new ArrayList<ContactBean>();
@@ -98,18 +98,6 @@ public class FriendsListActivity extends BaseActivity {
 
         left_image.setOnClickListener(this);
         right_image.setOnClickListener(this);
-
-
-//        search_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//                    SearchFriend();
-//
-//                }
-//                return false;
-//            }
-//        });
 
         search_edit.addTextChangedListener(new TextWatcher() {
 
@@ -136,29 +124,6 @@ public class FriendsListActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
 
-//                userInfo = new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
-//              RongIM.getInstance().setCurrentUserInfo(userInfo);
-//                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-//                    @Override
-//                    public UserInfo getUserInfo(String s) {
-//                        return new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
-//                    }
-//                }, false);
-
-//                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-//                    @Override
-//                    public UserInfo getUserInfo(String s) {
-//
-//                        return new UserInfo("xmb_user_" + dataList.get(position).get("friendId"), dataList.get(position).get("nick"), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
-//                    }
-//                }, false);
-//                RongIM.getInstance().setMessageAttachedUserInfo(true);
-
-//                RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
-//                RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + dataList.get(position).get("friendId"), dataList.get(position).get("nick"), Uri.parse(Url.PhotoUrl + "/" + dataList.get(position).get("avatar"))));
-//                RongIM.getInstance().setMessageAttachedUserInfo(true);
-
-
                 if (friendList.get(position).getRemark().equals("")) {
                     RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick(), Uri.parse(Url.PhotoUrl + "/" + friendList.get(position).getAvatar())));
                 } else {
@@ -167,8 +132,14 @@ public class FriendsListActivity extends BaseActivity {
                 RongIM.getInstance().setMessageAttachedUserInfo(true);
 
                 RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
-                RongIM.getInstance().setMessageAttachedUserInfo(true);
 
+
+                if (Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "").equals("")) {
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(FriendsListActivity.this).getString("RY_Id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse("")));
+                } else {
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(FriendsListActivity.this).getString("RY_Id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse(Utils.GetPhotoPath(Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "")))));
+                }
+                RongIM.getInstance().setMessageAttachedUserInfo(true);
                 if (friendList.get(position).getRemark().equals("")) {
                     RongIM.getInstance().startPrivateChat(FriendsListActivity.this, "xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick());
                 } else {

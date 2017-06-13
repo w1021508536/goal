@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="存入金额" />
+                android:text="存入金额(元)" />
 
             <TextView
                 android:id="@+id/money_text"

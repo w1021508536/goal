@@ -37,7 +37,7 @@ public class SaveMoneyActivity extends BaseActivity {
     @InjectView(R.id.money_edit)
     EditText money_edit;
 
-    private Boolean isRead = false;
+    private Boolean isRead = true;
 
     private String content;
     private String aimId;

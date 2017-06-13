@@ -1,7 +1,6 @@
 package com.pi.small.goal.message.activity;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -52,8 +51,8 @@ public class AddFriendActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
+        super.onCreate(savedInstanceState);
 
         dataList = new ArrayList<Map<String, String>>();
 

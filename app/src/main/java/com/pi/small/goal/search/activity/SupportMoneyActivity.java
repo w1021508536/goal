@@ -53,7 +53,7 @@ public class SupportMoneyActivity extends BaseActivity {
     private String avatar;
     private String money;
 
-    private Boolean isRead = false;
+    private Boolean isRead = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

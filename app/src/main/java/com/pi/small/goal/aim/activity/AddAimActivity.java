@@ -84,7 +84,6 @@ public class AddAimActivity extends BaseActivity {
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
 
 
-    private View currentView;
 
 
     String cutPath;
@@ -109,7 +108,6 @@ public class AddAimActivity extends BaseActivity {
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        currentView = parent;
         return super.onCreateView(parent, name, context, attrs);
     }
 

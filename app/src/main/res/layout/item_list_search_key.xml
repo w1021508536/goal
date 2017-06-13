@@ -9,8 +9,9 @@
         android:id="@+id/aim_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:padding="10dp"
-        android:src="@drawable/image1" />
+        android:layout_marginLeft="20dp"
+        android:scaleType="fitXY"
+        android:padding="10dp" />
 
     <TextView
         android:id="@+id/name_text"

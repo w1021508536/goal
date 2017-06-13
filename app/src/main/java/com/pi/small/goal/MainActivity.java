@@ -96,11 +96,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SharedPreferences utilsSharedPreferences;
     private SharedPreferences.Editor utilsEditor;
 
-    private String lastTime = "";
+    private long lastTime;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    private View currentView;
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
 
     //声明AMapLocationClient类对象
@@ -109,27 +108,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public AMapLocationListener mLocationListener;
 
     public AMapLocationClientOption mLocationOption;
+
+    private View currentView;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        setContentView(R.layout.activity_main);
+        currentView = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
+        setContentView(currentView);
+//        setContentView(R.layout.activity_main);
         userSharedPreferences = Utils.UserSharedPreferences(this);
         userEditor = userSharedPreferences.edit();
         imtoken = userSharedPreferences.getString("imtoken", "");
 
         utilsSharedPreferences = Utils.UtilsSharedPreferences(this);
         utilsEditor = utilsSharedPreferences.edit();
-        lastTime = utilsSharedPreferences.getString("lastTime", "");
+        lastTime = utilsSharedPreferences.getLong("lastTime", 0);
         fragmentManager = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
         initData();
     }
 
-    @Override
-    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        currentView = parent;
-        return super.onCreateView(parent, name, context, attrs);
-    }
 
     public void initData() {
         aim_layout = (LinearLayout) findViewById(R.id.aim_layout);
@@ -158,18 +158,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!imtoken.equals("")) {
 
             connect(imtoken);
+            GetUserInfo();
 //            GetFriendsListData();
             GetFollowListData();
 
-//            if (lastTime.equals("")) {
-//                GetRed();
-//            } else {
-//                if (simpleDateFormat.format(new Date(Long.valueOf(lastTime))).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
-//
-//                } else {
-//                    GetRed();
-//                }
-//            }
+            if (lastTime != 0) {
+                if (simpleDateFormat.format(new Date(lastTime)).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
+                } else {
+                    userEditor.putLong("lastTime", System.currentTimeMillis());
+                    GetRed();
+                }
+            }
 
         }
 
@@ -224,8 +223,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        mLocationClient = new AMapLocationClient(getApplicationContext());
         //设置定位回调监听
         mLocationClient.setLocationListener(mLocationListener);
-        //启动定位
-        mLocationClient.startLocation();
+
+//        //启动定位
+//        mLocationClient.startLocation();
 
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -239,7 +239,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             mLocationClient.startLocation();
         }
-
 
 
     }
@@ -452,6 +451,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void GetUserInfo() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.UserMy);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=============GetUserInfo==========" + result);
+
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
+                        JSONObject accountObject = new JSONObject(result).getJSONObject("result").getJSONObject("account");
+                        JSONObject taskInfoObject = new JSONObject(result).getJSONObject("result").getJSONObject("taskInfo");
+                        userEditor.putString("id", userObject.getString("id"));
+                        userEditor.putString("nick", userObject.getString("nick"));
+                        userEditor.putString("avatar", userObject.optString("avatar"));
+                        userEditor.putString("brief", userObject.optString("brief"));
+                        userEditor.putString("wechatId", userObject.optString("wechatId"));
+                        userEditor.putString("qqId", userObject.optString("qqId"));
+                        userEditor.putString("mobile", userObject.optString("mobile"));
+                        userEditor.putString("city", userObject.optString("city"));
+                        userEditor.putString("createTime", userObject.optString("createTime"));
+                        userEditor.putString("updateTime", userObject.optString("updateTime"));
+
+                        userEditor.putString("accountId", accountObject.getString("accountId"));
+                        userEditor.putString("userId", accountObject.getString("userId"));
+                        userEditor.putString("exp", accountObject.getString("exp"));
+                        userEditor.putString("balance", accountObject.getString("balance"));
+                        userEditor.putString("aim", accountObject.getString("aim"));
+                        userEditor.putString("option", accountObject.getString("option"));
+                        userEditor.putString("score", accountObject.getString("score"));
+
+                        userEditor.putString("totalTaskCount", taskInfoObject.getString("totalTaskCount"));
+                        userEditor.putString("finishTaskCount", taskInfoObject.getString("finishTaskCount"));
+
+                        userEditor.putString("grade", new JSONObject(result).getJSONObject("result").getString("grade"));
+
+                        userEditor.commit();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private void GetFriendsListData() {
         RequestParams requestParams = new RequestParams(Url.Url + Url.FriendList);
         requestParams.addHeader("token", Utils.GetToken(this));
@@ -500,8 +563,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-                        GetRedWindow();
+
+                        String money = new JSONObject(result).getJSONObject("result").getString("amount");
+
+                        GetRedWindow(money);
                     }
+//                    GetRedWindow("8.88");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -510,7 +577,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
             }
 
             @Override
@@ -525,15 +591,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void GetRedWindow() {
+    private void GetRedWindow(String money) {
 
         View windowView = LayoutInflater.from(this).inflate(
                 R.layout.window_red_get, null);
         final PopupWindow popupWindow = new PopupWindow(windowView,
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
 
+        TextView money_Text = (TextView) windowView.findViewById(R.id.money_text);
+
+        money_Text.setText(money);
+
         popupWindow.setAnimationStyle(R.style.MyDialogStyle);
-        popupWindow.setTouchable(true);
+        popupWindow.setTouchable(false);
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(false);
 

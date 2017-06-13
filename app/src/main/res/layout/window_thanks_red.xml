@@ -17,7 +17,6 @@
             android:scaleType="centerCrop"
             android:src="@mipmap/icon_thanks_moneybag" />
 
-
     </FrameLayout>
 
 

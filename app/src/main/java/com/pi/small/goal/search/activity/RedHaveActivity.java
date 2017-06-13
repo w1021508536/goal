@@ -214,28 +214,28 @@ public class RedHaveActivity extends AppCompatActivity {
             case R.id.right_image:
                 break;
             case R.id.four_layout:
-                DrawRedPacket(redPacketEntityList.get(3).getId(), redPacketEntityList.get(3).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(3).getId(), redPacketEntityList.get(3).getFromUserNick(), redPacketEntityList.get(3).getFromUserAvatar());
                 break;
             case R.id.three_layout:
-                DrawRedPacket(redPacketEntityList.get(2).getId(), redPacketEntityList.get(2).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(2).getId(), redPacketEntityList.get(2).getFromUserNick(), redPacketEntityList.get(2).getFromUserAvatar());
                 break;
             case R.id.six_layout:
-                DrawRedPacket(redPacketEntityList.get(5).getId(), redPacketEntityList.get(5).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(5).getId(), redPacketEntityList.get(5).getFromUserNick(), redPacketEntityList.get(5).getFromUserAvatar());
                 break;
             case R.id.seven_layout:
-                DrawRedPacket(redPacketEntityList.get(6).getId(), redPacketEntityList.get(6).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(6).getId(), redPacketEntityList.get(6).getFromUserNick(), redPacketEntityList.get(6).getFromUserAvatar());
                 break;
             case R.id.two_layout:
-                DrawRedPacket(redPacketEntityList.get(1).getId(), redPacketEntityList.get(1).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(1).getId(), redPacketEntityList.get(1).getFromUserNick(), redPacketEntityList.get(1).getFromUserAvatar());
                 break;
             case R.id.one_layout:
-                DrawRedPacket(redPacketEntityList.get(0).getId(), redPacketEntityList.get(0).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(0).getId(), redPacketEntityList.get(0).getFromUserNick(), redPacketEntityList.get(0).getFromUserAvatar());
                 break;
             case R.id.five_layout:
-                DrawRedPacket(redPacketEntityList.get(4).getId(), redPacketEntityList.get(4).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(4).getId(), redPacketEntityList.get(4).getFromUserNick(), redPacketEntityList.get(4).getFromUserAvatar());
                 break;
             case R.id.eight_layout:
-                DrawRedPacket(redPacketEntityList.get(7).getId(), redPacketEntityList.get(7).getFromUserNick());
+                DrawRedPacket(redPacketEntityList.get(7).getId(), redPacketEntityList.get(7).getFromUserNick(), redPacketEntityList.get(7).getFromUserAvatar());
                 break;
         }
     }
@@ -279,7 +279,7 @@ public class RedHaveActivity extends AppCompatActivity {
                             redPacketEntity.setType(jsonArray.getJSONObject(i).getString("type"));
                             redPacketEntity.setFromUserNick(jsonArray.getJSONObject(i).getString("fromUserNick"));
                             redPacketEntity.setFromUserAvatar(jsonArray.getJSONObject(i).getString("fromUserAvatar"));
-
+                            redPacketEntity.setDrew(jsonArray.getJSONObject(i).getString("drew"));
                             redPacketEntityList.add(redPacketEntity);
                         }
 
@@ -312,9 +312,6 @@ public class RedHaveActivity extends AppCompatActivity {
 
 
     private void SetDataList() {
-        System.out.println("==========page============" + page);
-        System.out.println("===========redPacketEntityList============" + redPacketEntityList.size());
-        System.out.println("===========displayList============" + displayList.size());
         if (pageTotal < 2) {
             isChange = false;
             changeImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_radar_change_off));
@@ -324,7 +321,6 @@ public class RedHaveActivity extends AppCompatActivity {
         }
 
         displayList.clear();
-        System.out.println("===========displayList===clear=========" + displayList.size());
         if (page * 8 > redPacketEntityList.size()) {
             for (int i = (page - 1) * 8; i < redPacketEntityList.size(); i++) {
                 displayList.add(redPacketEntityList.get(i));
@@ -335,26 +331,30 @@ public class RedHaveActivity extends AppCompatActivity {
             }
         }
 
-        System.out.println("===========displayList===clear===hou======" + displayList.size());
-
 
         for (int i = 0; i < relativeLayoutList.size(); i++) {
             relativeLayoutList.get(i).setVisibility(View.VISIBLE);
         }
         for (int i = 7; i > displayList.size() - 1; i--) {
             relativeLayoutList.get(i).setVisibility(View.GONE);
-            System.out.println("===========displayList============" + displayList.size());
         }
-
+//
         for (int i = 0; i < displayList.size(); i++) {
 //            relativeLayoutList.get(i).setVisibility(View.VISIBLE);
             System.out.println("===========textViewList============" + textViewList.size());
             textViewList.get(i).setText(displayList.get(i).getFromUserNick());
-            if (!Utils.GetPhotoPath(displayList.get(i).getFromUserAvatar()).equals("")) {
+            if (!displayList.get(i).getFromUserAvatar().equals("")) {
+                System.out.println("============displayList.get(i).getFromUserAvatar()==========" + displayList.get(i).getFromUserAvatar());
                 Picasso.with(this).load(Utils.GetPhotoPath(displayList.get(i).getFromUserAvatar())).into(circleImageViewList.get(i));
+            } else {
+                circleImageViewList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
             }
             if (Integer.valueOf(displayList.get(i).getRemainSize()) > 0) {
-                radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_on));
+                if (displayList.get(i).getDrew().equals("0")) {
+                    radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_on));
+                } else {
+                    radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_off));
+                }
             } else {
                 radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_off));
             }
@@ -363,7 +363,7 @@ public class RedHaveActivity extends AppCompatActivity {
 
 
     //抢红包
-    private void DrawRedPacket(String packetId, final String nick) {
+    private void DrawRedPacket(String packetId, final String nick, final String avatar) {
         RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketDraw);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -377,6 +377,7 @@ public class RedHaveActivity extends AppCompatActivity {
                     if (code.equals("0")) {
                         Intent intent = new Intent(RedHaveActivity.this, RedPacketActivity.class);
                         intent.putExtra("nick", nick);
+                        intent.putExtra("avatar", avatar);
                         intent.putExtra("json", result);
                         startActivity(intent);
                     } else {

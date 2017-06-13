@@ -90,7 +90,7 @@ public class PayActivity extends BaseActivity {
     private String img3;
     private String channel;//支付方式  0: 余额  1：微信 wx   2:alipay
 
-    private Boolean isHook = false;
+    private Boolean isHook = true;
     public static IWXAPI wx_api;
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日");
@@ -195,7 +195,7 @@ public class PayActivity extends BaseActivity {
 
 
         if (data == null) return;
-     //   System.out.print("===============" + data.getExtras().getString("pay_result"));
+        //   System.out.print("===============" + data.getExtras().getString("pay_result"));
         //支付页面返回处理
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -255,7 +255,7 @@ public class PayActivity extends BaseActivity {
 
     private void init() {
         union_layout.setVisibility(View.GONE);
-        money_text.setText(money);
+        money_text.setText(money+".00");
         balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
 
         long currentTime = System.currentTimeMillis();

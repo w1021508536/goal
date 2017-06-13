@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.TargetMoreActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.search.activity.UserDetitalActivity;
@@ -131,6 +133,15 @@ public class AttentionFragment extends Fragment {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 new GetUpDataTask().execute();
+            }
+        });
+
+        hotList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), TargetMoreActivity.class);
+                intent.putExtra(TargetMoreActivity.KEY_AIMID, dynamicEntityList.get(position - 1).getAimId());
+                getActivity().startActivity(intent);
             }
         });
 
@@ -817,27 +828,27 @@ public class AttentionFragment extends Fragment {
                 }
             }
 
-            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
-                }
-            });
-            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
-                }
-            });
-            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
-                }
-            });
+//            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
+//                }
+//            });
+//            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
+//                }
+//            });
+//            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
+//                }
+//            });
 
             viewHolder.commentMoreText.setText("查看全部" + dynamicEntityList.get(position).getCommentList().size() + "条评论");
             if (dynamicEntityList.get(position).getCommentList().size() > 2) {

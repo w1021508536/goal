@@ -9,13 +9,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.entity.ContactBean;
 import com.pi.small.goal.utils.Url;
+import com.squareup.picasso.Picasso;
 
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Administrator on 2017/5/26.
@@ -26,12 +30,6 @@ public class FriendsListAdapter extends BaseAdapter {
     private List<ContactBean> dataList;
 
     private String[] sections;
-
-    private ImageOptions imageOptions = new ImageOptions.Builder()
-            .setImageScaleType(ImageView.ScaleType.FIT_XY)
-            .setLoadingDrawableId(R.mipmap.ic_launcher)
-            .setFailureDrawableId(R.mipmap.icon_message_system)
-            .build();
 
     public FriendsListAdapter(Context context, List<ContactBean> dataList) {
         this.context = context;
@@ -121,7 +119,7 @@ public class FriendsListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_list_friends, parent, false);
 
             viewHolder.name_text = (TextView) convertView.findViewById(R.id.name_text);
-            viewHolder.head_image = (ImageView) convertView.findViewById(R.id.head_image);
+            viewHolder.head_image = (CircleImageView) convertView.findViewById(R.id.head_image);
             viewHolder.catalog = (TextView) convertView.findViewById(R.id.catalog);
             convertView.setTag(viewHolder);
         } else {
@@ -129,8 +127,12 @@ public class FriendsListAdapter extends BaseAdapter {
         }
 
         viewHolder.name_text.setText(contact.getDesplayName());
-        x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + contact.getAvatar(), imageOptions);
 
+        if (!contact.getAvatar().equals("")) {
+            Picasso.with(context).load(Utils.GetPhotoPath(contact.getAvatar())).into(viewHolder.head_image);
+        } else {
+            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
+        }
 
         if (dataList.size() == 0) {
             viewHolder.catalog.setVisibility(View.VISIBLE);
@@ -155,7 +157,7 @@ public class FriendsListAdapter extends BaseAdapter {
     private class ViewHolder {
 
         private TextView name_text;
-        private ImageView head_image;
+        private CircleImageView head_image;
         TextView catalog;
 
     }

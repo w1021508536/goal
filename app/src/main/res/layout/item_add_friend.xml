@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/head_image"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -12,7 +12,7 @@
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="5dp"
-        android:src="@mipmap/ic_launcher_round" />
+        android:src="@mipmap/icon_head" />
 
     <TextView
         android:id="@+id/name_text"

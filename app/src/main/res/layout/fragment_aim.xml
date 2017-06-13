@@ -30,7 +30,8 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:src="@mipmap/icon_sign_aim" />
+            android:src="@mipmap/icon_sign_aim"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -83,6 +84,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
-        android:src="@mipmap/icon_money_gift" />
+        android:src="@mipmap/icon_money_collect" />
 
 </RelativeLayout>

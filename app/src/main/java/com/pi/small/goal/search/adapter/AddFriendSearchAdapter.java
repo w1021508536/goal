@@ -108,13 +108,13 @@ public class AddFriendSearchAdapter extends BaseAdapter {
                         System.out.println("==========attention==============" + result);
                         try {
                             if (new JSONObject(result).getString("code").equals("0")) {
-                                if (dataList.get(position).getIsFollowed().equals("1")) {
-                                    dataList.get(position).setIsFollowed("0");
+                                if (dataList.get(position).getIsFollowed().equals("0")) {
+                                    dataList.get(position).setIsFollowed("1");
                                     viewHolder.attentionText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_white_gray_corner));
                                     viewHolder.attentionText.setTextColor(context.getResources().getColor(R.color.gray_heavy));
                                     viewHolder.attentionText.setText("已关注");
                                 } else {
-                                    dataList.get(position).setIsFollowed("1");
+                                    dataList.get(position).setIsFollowed("0");
                                     viewHolder.attentionText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_white_yellow_corner));
                                     viewHolder.attentionText.setTextColor(context.getResources().getColor(R.color.yellow_light));
                                     viewHolder.attentionText.setText("关注");

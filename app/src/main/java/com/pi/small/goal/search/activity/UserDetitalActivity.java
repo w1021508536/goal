@@ -138,7 +138,11 @@ public class UserDetitalActivity extends AppCompatActivity {
                 RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + userId, nick, Uri.parse(Utils.GetPhotoPath(avatar))));
                 RongIM.getInstance().setMessageAttachedUserInfo(true);
 
-                RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(this).getString("RY_Id", ""), Utils.UserSharedPreferences(this).getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
+                if (Utils.UserSharedPreferences(this).getString("avatar", "").equals("")) {
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(this).getString("RY_Id", ""), Utils.UserSharedPreferences(this).getString("nick", ""), Uri.parse("")));
+                } else {
+                    RongIM.getInstance().setCurrentUserInfo(new UserInfo(Utils.UserSharedPreferences(this).getString("RY_Id", ""), Utils.UserSharedPreferences(this).getString("nick", ""), Uri.parse(Utils.GetPhotoPath(Utils.UserSharedPreferences(this).getString("avatar", "")))));
+                }
                 RongIM.getInstance().setMessageAttachedUserInfo(true);
 
                 RongIM.getInstance().startPrivateChat(this, "xmb_user_" + userId, nick);

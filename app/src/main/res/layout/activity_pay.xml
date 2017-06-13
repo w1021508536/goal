@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="存入金额" />
+                android:text="存入金额(元)" />
 
             <TextView
                 android:id="@+id/money_text"
@@ -267,7 +267,7 @@
                 android:id="@+id/hook_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/icon_hook_off" />
+                android:src="@mipmap/icon_hook_on" />
 
             <TextView
                 android:layout_width="match_parent"

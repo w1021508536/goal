@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,7 @@ import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.AddAimActivity;
 import com.pi.small.goal.aim.activity.SaveMoneyActivity;
+import com.pi.small.goal.my.activity.TargetMoreActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.search.activity.UserDetitalActivity;
@@ -138,6 +140,17 @@ public class HotFragment extends Fragment {
                 new GetUpDataTask().execute();
             }
         });
+//        hotList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                System.out.println("==========点击==========");
+//
+//                Intent intent = new Intent(getActivity(), TargetMoreActivity.class);
+//                intent.putExtra(TargetMoreActivity.KEY_AIMID, dynamicEntityList.get(position - 1).getAimId());
+//                startActivity(intent);
+//            }
+//        });
+
 
         GetHotData(page + "", "10");
     }
@@ -264,10 +277,12 @@ public class HotFragment extends Fragment {
                             dynamicEntity.setVotes(jsonArray.getJSONObject(j).optString("votes"));
                             dynamicEntity.setHaveVote(jsonArray.getJSONObject(j).optString("haveVote"));
 
+                            System.out.println("=============followList.size()======" + followList.size());
                             if (!Utils.UtilsSharedPreferences(getActivity()).getString("followList", "").equals("")) {
                                 followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(getActivity()).getString("followList", ""));
+
                             }
-                            System.out.println("=============followList=========" + followList.size());
+                            System.out.println("=============jsonArray.getJSONObject(j).optString()=========" + jsonArray.getJSONObject(j).optString("haveRedPacket"));
                             dynamicEntity.setIsFollow("0");
                             for (int i = 0; i < followList.size(); i++) {
                                 System.out.println("=============userId=========" + dynamicEntity.getUserId() + "===" + followList.get(i).get("followUserId"));
@@ -329,7 +344,6 @@ public class HotFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Code.SupportAim) {
-
             PutRedWindow();
         } else if (resultCode == Code.FailCode) {
             System.out.println("==========支付失败============");
@@ -572,6 +586,7 @@ public class HotFragment extends Fragment {
                 }
             });
 
+            System.out.println("========Integer.valueOf(dynamicEntityList.get(position).getHaveRedPacket())===========" + Integer.valueOf(dynamicEntityList.get(position).getHaveRedPacket()));
 
             if (Integer.valueOf(dynamicEntityList.get(position).getHaveRedPacket()) > 0) {
                 viewHolder.moneyImage.setVisibility(View.VISIBLE);
@@ -822,27 +837,27 @@ public class HotFragment extends Fragment {
                 }
             }
 
-            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
-                }
-            });
-            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
-                }
-            });
-            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
-                }
-            });
+//            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
+//                }
+//            });
+//            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
+//                }
+//            });
+//            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
+//                }
+//            });
 
             viewHolder.commentMoreText.setText("查看全部" + dynamicEntityList.get(position).getCommentList().size() + "条评论");
             if (dynamicEntityList.get(position).getCommentList().size() > 2) {
@@ -862,11 +877,21 @@ public class HotFragment extends Fragment {
                 }
             });
 
+            viewHolder.hot_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), TargetMoreActivity.class);
+                    intent.putExtra(TargetMoreActivity.KEY_AIMID, dynamicEntityList.get(position).getAimId());
+                    startActivity(intent);
+                }
+            });
             return convertView;
         }
 
 
         class ViewHolder {
+            @InjectView(R.id.hot_layout)
+            LinearLayout hot_layout;
             @InjectView(R.id.head_image)
             CircleImageView headImage;
             @InjectView(R.id.name_text)

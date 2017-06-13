@@ -6,8 +6,8 @@
     android:background="@mipmap/background_radar">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110sp"
         android:src="@mipmap/icon_radar" />
@@ -55,9 +55,8 @@
         android:id="@+id/four_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="170sp"
-        android:layout_marginTop="80sp"
-        android:visibility="gone">
+        android:layout_marginLeft="170dp"
+        android:layout_marginTop="100dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/four_head_image"
@@ -89,9 +88,9 @@
         android:id="@+id/three_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="290sp"
-        android:layout_marginTop="230sp"
-        android:visibility="gone">
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="170dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/three_head_image"
@@ -123,9 +122,8 @@
         android:id="@+id/six_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="220sp"
-        android:layout_marginTop="320sp"
-        android:visibility="gone">
+        android:layout_marginLeft="240dp"
+        android:layout_marginTop="290dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/six_head_image"
@@ -157,9 +155,8 @@
         android:id="@+id/seven_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="1sp"
-        android:layout_marginTop="260sp"
-        android:visibility="gone">
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="260dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/seven_head_image"
@@ -191,9 +188,8 @@
         android:id="@+id/two_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="100sp"
-        android:layout_marginTop="330sp"
-        android:visibility="gone">
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="320dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/two_head_image"
@@ -225,9 +221,8 @@
         android:id="@+id/one_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="60sp"
-        android:layout_marginTop="180sp"
-        android:visibility="gone">
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="180dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/one_head_image"
@@ -261,9 +256,8 @@
         android:id="@+id/five_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="180sp"
-        android:layout_marginTop="195sp"
-        android:visibility="gone">
+        android:layout_marginLeft="180dp"
+        android:layout_marginTop="195dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/five_head_image"
@@ -295,9 +289,8 @@
         android:id="@+id/eight_layout"
         android:layout_width="70dp"
         android:layout_height="60dp"
-        android:layout_marginLeft="170sp"
-        android:layout_marginTop="390sp"
-        android:visibility="gone">
+        android:layout_marginLeft="190dp"
+        android:layout_marginTop="370dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/eight_head_image"
@@ -329,9 +322,9 @@
         android:id="@+id/change_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/icon_radar_change_off"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:src="@mipmap/icon_radar_change_off" />
 
 </RelativeLayout>

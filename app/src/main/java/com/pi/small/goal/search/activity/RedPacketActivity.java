@@ -16,6 +16,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.search.adapter.RedPacketAdapter;
 import com.pi.small.goal.utils.MyListView;
 import com.pi.small.goal.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +64,7 @@ public class RedPacketActivity extends AppCompatActivity {
 
     private String money;
     private String nick;
+    private String avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +78,7 @@ public class RedPacketActivity extends AppCompatActivity {
 
         json = getIntent().getExtras().getString("json", "");
         nick = getIntent().getExtras().getString("nick", "");
+        avatar = getIntent().getExtras().getString("avatar", "");
         dataList = new ArrayList<Map<String, String>>();
 
         redPacketAdapter = new RedPacketAdapter(this, dataList);
@@ -133,6 +136,13 @@ public class RedPacketActivity extends AppCompatActivity {
         redList.setFocusableInTouchMode(false);
         moneyText.setText(money);
         nickText.setText(nick);
+
+        if (!avatar.equals("")) {
+            Picasso.with(this).load(Utils.GetPhotoPath(avatar)).into(headImage);
+        } else {
+            headImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
+        }
+
     }
 
     private void setTranslucentStatus(boolean on) {

@@ -9,7 +9,7 @@ public class RedPacketEntity {
 //
 //    id":12,"aimId":18,"dynamicId":64,"money":10.00,"size":10,"
 //    remainMoney":10.00,"remainSize":10,"toUserId":27,"fromUserId":26,"
-//    createTime":1496885913000,"status":1,"type":1,"fromUserNick":"44","fromUserAvatar":""}
+//    createTime":1496885913000,"status":1,"type":1,"fromUserNick":"44","fromUserAvatar":"",drew}
 
     private String id;
     private String aimId;
@@ -25,6 +25,16 @@ public class RedPacketEntity {
     private String status;
     private String type;
     private String fromUserNick;
+    private String drew;
+
+    public String getDrew() {
+        return drew;
+    }
+
+    public void setDrew(String drew) {
+        this.drew = drew;
+    }
+
 
     public String getId() {
         return id;

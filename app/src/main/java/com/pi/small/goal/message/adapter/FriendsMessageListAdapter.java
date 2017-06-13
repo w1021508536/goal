@@ -34,11 +34,6 @@ public class FriendsMessageListAdapter extends BaseAdapter {
 
     private int rightWidth;
 
-    private ImageOptions imageOptions = new ImageOptions.Builder()
-            .setImageScaleType(ImageView.ScaleType.FIT_XY)
-            .setLoadingDrawableId(R.mipmap.ic_launcher)
-            .setFailureDrawableId(R.mipmap.icon_message_system)
-            .build();
     private SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("HH:mm");
 
     public FriendsMessageListAdapter(Context context, List<Map<String, String>> dataList, int rightWidth) {
@@ -91,9 +86,10 @@ public class FriendsMessageListAdapter extends BaseAdapter {
 
 //        x.image().bind(viewHolder.head_image, Url.PhotoUrl + "/" + dataList.get(position).get("avatar"), imageOptions);
 
-
         if (!Utils.GetPhotoPath(dataList.get(position).get("sendUserAvatar")).equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).get("sendUserAvatar"))).into(viewHolder.head_image);
+        } else {
+            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
         }
 
         viewHolder.content_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(dataList.get(position).get("createTime")))) + "申请加你为好友");

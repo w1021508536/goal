@@ -16,6 +16,7 @@ public class Url {
     public static String ForgetPassword = "/user/password/reset";//重置密码
 
     public static String UpPicture = "/file/picture";//上传图片
+    public static String UserMy = "/user/my";//用户个人信息
 
     //user
     public static String UserRecommend = "/user/recommend";// 推荐的用户
@@ -77,7 +78,7 @@ public class Url {
     public static String TestRedThanksSet = "/test/red/thanks/set";//设置感谢红包
     public static String RedpacketThanksDraw = " /redpacket/thanks/draw";//领取感谢红包
 
-    public static String RedGet = "";//获取收益红包
+    public static String RedGet = "/redpacket/income/draw";//获取收益红包
 
 
     public static String AimDynamicUser = "/aim/dynamic/user";//用户的动态

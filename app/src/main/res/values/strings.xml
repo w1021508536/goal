@@ -31,6 +31,7 @@
     <string name="pay_money">支付金额</string>
     <string name="finish">完成</string>
 
+    <string name="aim_upgrade">目标已达当前等级最大个数,请提升等级</string>
 
     <string name="disclaimer">本人已阅读&#60;&#60;相关协议&#62;&#62;,且已理解其内容并承担相关风险</string>
     <string name="disclaimer2">同意服务协议及风险提示</string>

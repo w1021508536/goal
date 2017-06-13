@@ -113,7 +113,7 @@ public class LoginPasswordActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=======qq====result====" + result);
+                System.out.println("=======loginPAssword====" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");

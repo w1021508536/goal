@@ -3,6 +3,7 @@ package com.pi.small.goal.aim;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,10 +29,12 @@ import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.aim.adapter.ViewPagerAdapter;
 import com.pi.small.goal.my.activity.RedActivity;
 import com.pi.small.goal.my.activity.SignActivity;
+import com.pi.small.goal.my.activity.TargetMoreActivity;
 import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.AimEntity;
 
 import org.json.JSONArray;
@@ -42,6 +45,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +55,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
 
     private ImageView right_image;
+//    private ImageView left_image;
 
     private ViewPager viewPager;
     private ViewGroup viewGroup;
@@ -79,14 +84,18 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             .setLoadingDrawableId(R.drawable.image1)
             .setFailureDrawableId(R.drawable.image1)
             .build();
+    private View currentView;
+
+    private String img;
+    private String path;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View view = inflater.inflate(R.layout.fragment_aim, container, false);
-        View topView = view.findViewById(R.id.view);
+        currentView = inflater.inflate(R.layout.fragment_aim, container, false);
+        View topView = currentView.findViewById(R.id.view);
 
         int sysVersion = Integer.parseInt(Build.VERSION.SDK);
         if (sysVersion >= 19) {
@@ -100,18 +109,20 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         viewList = new ArrayList<View>();
         customTransformer = new CustomTransformer();
 
-        right_image = (ImageView) view.findViewById(R.id.right_image);
-        viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        viewGroup = (ViewGroup) view.findViewById(R.id.viewGroup);
-        money_gift_image = (ImageView) view.findViewById(R.id.money_gift_image);
+        right_image = (ImageView) currentView.findViewById(R.id.right_image);
+//        left_image = (ImageView) currentView.findViewById(R.id.left_image);
+        viewPager = (ViewPager) currentView.findViewById(R.id.view_pager);
+        viewGroup = (ViewGroup) currentView.findViewById(R.id.viewGroup);
+        money_gift_image = (ImageView) currentView.findViewById(R.id.money_gift_image);
 
         right_image.setOnClickListener(this);
+//        left_image.setOnClickListener(this);
         money_gift_image.setOnClickListener(this);
 
         viewPager.setOffscreenPageLimit(3);
         viewPager.setPageTransformer(true, new CustomTransformer());
         GetAim();
-        return view;
+        return currentView;
     }
 
     @Override
@@ -119,16 +130,81 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.right_image:
-                intent.setClass(getActivity(), AddAimActivity.class);
-                startActivityForResult(intent, Code.AddAimCode);
+                int size = dataList.size();
+                if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v0")) {
+                    if (size < 1) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v1")) {
+                    if (size < 1) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v2")) {
+                    if (size < 1) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v3")) {
+                    if (size < 1) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v4")) {
+                    if (size < 2) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v5")) {
+                    if (size < 5) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v6")) {
+                    if (size < 10) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v7")) {
+                    if (size < 15) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                    }
+                } else if (Utils.UserSharedPreferences(getActivity()).getString("grade", "").equals("v8")) {
+                    if (size < 20) {
+                        intent.setClass(getActivity(), AddAimActivity.class);
+                        startActivityForResult(intent, Code.AddAimCode);
+                    } else {
+                        Utils.showToast(getActivity(), "目标已达最大个数");
+                    }
+                }
+
                 break;
             case R.id.money_gift_image:
                 intent.setClass(getActivity(), RedActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.left_image:
-                startActivity(new Intent(getContext(), SignActivity.class));
-                break;
+//            case R.id.left_image:
+//                startActivity(new Intent(getContext(), SignActivity.class));
+//                break;
         }
     }
 
@@ -148,35 +224,125 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             }
 
         } else if (resultCode == Code.RESULT_CAMERA_CODE) {
-//            imgLoad = data.getStringExtra("path");
-//            System.out.println("===============CAMERA======imgLoad======" + imgLoad);
-//            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+            path = data.getStringExtra("path");
+            UpPicture();
         } else if (resultCode == Code.RESULT_GALLERY_CODE) {
-//            imgLoad = data.getStringExtra("path");
-//            System.out.println("===============imgLoad============" + imgLoad);
-//            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+            path = data.getStringExtra("path");
+            UpPicture();
         } else if (resultCode == Code.SupportAim) {
             String money = data.getStringExtra("money");
-            dataList.get(position).setMoney(money);
+
+            double totalMoney = Double.valueOf(dataList.get(position).getMoney());
+            totalMoney = totalMoney + Double.valueOf(money);
+            dataList.get(position).setMoney(totalMoney + "");
+
             TextView tv_money = (TextView) viewList.get(position).findViewById(R.id.money_text);
+            ImageView line_left_image = (ImageView) viewList.get(position).findViewById(R.id.line_left_image);
+            ImageView line_right_image = (ImageView) viewList.get(position).findViewById(R.id.line_right_image);
+            TextView weight_text = (TextView) viewList.get(position).findViewById(R.id.weight_text);
+
+
             tv_money.setText(dataList.get(position).getMoney());
+            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(position).getBudget()) - Float.valueOf(dataList.get(position).getMoney())));
+            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(position).getMoney())));
+//            weight_text.setText(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100 + "%");
+
+            String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
+            weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
             viewPagerAdapter.notifyDataSetChanged();
-//            imgLoad = data.getStringExtra("path");
-//            System.out.println("===============imgLoad============" + imgLoad);
-//            photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
-
-
-        } else if (resultCode == Code.REQUEST_HEAD_CODE) {
-
-
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void UpPicture() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.UpPicture);
+        requestParams.addHeader("token", Utils.GetToken(getActivity()));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("token", Utils.GetToken(getActivity()));
+        requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("picture", new File(path));
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("=========photo=========" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        img = new JSONObject(result).getJSONObject("result").getString("path");
+                        ChangeAimPhoto();
+                    } else {
+                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("")) {
+                    Utils.showToast(getActivity(), ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void ChangeAimPhoto() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.Aim);
+        requestParams.addHeader("token", Utils.GetToken(getActivity()));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("aimId", dataList.get(position).getId());
+        requestParams.addBodyParameter("img", img);
+        XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========photo=========" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        ImageView aim_image = (ImageView) viewList.get(position).findViewById(R.id.aim_image);
+                        aim_image.setImageBitmap(BitmapFactory.decodeFile(path));
+                        dataList.get(position).setImg(img);
+                        viewPagerAdapter.notifyDataSetChanged();
+                    } else {
+                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("")) {
+                    Utils.showToast(getActivity(), ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 
     private void GetAim() {
-
-        System.out.println("============deviceId==========" + MyApplication.deviceId);
+        right_image.setClickable(false);
 
         RequestParams requestParams = new RequestParams(Url.Url + Url.Aim);
         requestParams.addHeader("token", Utils.GetToken(getActivity()));
@@ -186,7 +352,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-
+                System.out.println("============GetAim==========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -222,6 +388,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                     } else {
                         Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                     }
+                    right_image.setClickable(true);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -233,6 +400,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 if (ex.getMessage() != null) {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
+                right_image.setClickable(true);
             }
 
             @Override
@@ -326,6 +494,14 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             x.image().bind(aim_image, Utils.GetPhotoPath(dataList.get(i).getImg()), imageOptions);
         }
 
+        aim_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), TargetMoreActivity.class);
+                intent.putExtra(TargetMoreActivity.KEY_AIMID, dataList.get(position).getId());
+                getActivity().startActivity(intent);
+            }
+        });
 
         aim_text.setText(dataList.get(i).getName());
         money_text.setText(dataList.get(i).getMoney());
@@ -344,9 +520,11 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             day_text.setText(Long.valueOf(dataList.get(i).getCycle()) * 30 - day + "");
         }
 //            Float.valueOf(dataList.get(i).getBudget())-Float.valueOf(dataList.get(i).getMoney())
-        line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
-        line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(i).getMoney())));
-        weight_text.setText(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100 + "%");
+        line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
+        line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4, Float.valueOf(dataList.get(i).getMoney())));
+//        weight_text.setText(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100 + "%");
+        String weight = String.valueOf(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100);
+        weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
         if (!dataList.get(i).getMoney().equals(dataList.get(i).getBudget())) {
             process_text.setText("向小目标更进一步");
             process_text.setOnClickListener(new View.OnClickListener() {

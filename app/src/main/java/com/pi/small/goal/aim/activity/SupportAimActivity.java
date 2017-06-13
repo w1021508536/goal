@@ -70,7 +70,11 @@ public class SupportAimActivity extends BaseActivity {
     private ImageView photo2_image;
     private ImageView photo3_image;
 
-    private List<String> selectPhotoPaths = new ArrayList<>();
+    private List<String> selectPhotoPaths = new ArrayList<String>();
+
+    private String img1 = "";
+    private String img2 = "";
+    private String img3 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,33 +129,35 @@ public class SupportAimActivity extends BaseActivity {
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.left_image:
-                intent.putExtra("money", money);
+                intent.putExtra("money", "0");
                 setResult(Code.SupportAim, intent);
                 finish();
                 break;
             case R.id.right_text:
                 System.out.println("=========dianji=========");
-                brief = content_edit.getText().toString().trim();
+                if (selectPhotoPaths.size() > 0) {
+                    UpPicture1();
+                } else {
+                    intent.setClass(this, SaveMoneyActivity.class);
+                    intent.putExtra("img1", img1);
+                    intent.putExtra("img2", img2);
+                    intent.putExtra("img3", img3);
+                    intent.putExtra("money", money);
+                    intent.putExtra("budget", budget);
+                    intent.putExtra("aimId", aimId);
+                    intent.putExtra("content", content_edit.getText().toString().trim());
+                    startActivityForResult(intent, Code.SupportAim);
+                }
+//                intent.setClass(this, SaveMoneyActivity.class);
+//                intent.putExtra("img1", "");
+//                intent.putExtra("img2", "");
+//                intent.putExtra("img3", "");
+//                intent.putExtra("money", money);
+//                intent.putExtra("budget", budget);
+//                intent.putExtra("aimId", aimId);
+//                intent.putExtra("content", content_edit.getText().toString().trim());
+//                startActivityForResult(intent, Code.SupportAim);
 
-                intent.setClass(this, SaveMoneyActivity.class);
-                intent.putExtra("img1", "");
-                intent.putExtra("img2", "");
-                intent.putExtra("img3", "");
-                intent.putExtra("money", money);
-                intent.putExtra("budget", budget);
-                intent.putExtra("aimId", aimId);
-                intent.putExtra("content", content_edit.getText().toString().trim());
-
-                if (selectPhotoPaths.size() > 0) {
-                    intent.putExtra("img1", selectPhotoPaths.get(0));
-                }
-                if (selectPhotoPaths.size() > 0) {
-                    intent.putExtra("img2", selectPhotoPaths.get(1));
-                }
-                if (selectPhotoPaths.size() > 0) {
-                    intent.putExtra("img3", selectPhotoPaths.get(2));
-                }
-                startActivityForResult(intent, Code.SupportAim);
                 break;
             case R.id.position_layout:
 
@@ -273,6 +279,18 @@ public class SupportAimActivity extends BaseActivity {
             intent.putExtra("money", money);
             setResult(Code.SupportAim, intent);
             finish();
+        } else if (resultCode == Code.PositionCode) {
+            if (data.getStringExtra("position").equals("")) {
+                position = "";
+                province = "";
+                city = "";
+                position_text.setText("不显示");
+            } else {
+                position = data.getStringExtra("position");
+                province = data.getStringExtra("province");
+                city = data.getStringExtra("city");
+                position_text.setText(position);
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -294,13 +312,85 @@ public class SupportAimActivity extends BaseActivity {
         }
     }
 
-    private void UpPicture() {
+    private void UpPicture1() {
         RequestParams requestParams = new RequestParams(Url.Url + Url.UpPicture);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("picture", new File(imgLoad));
+        requestParams.addBodyParameter("picture", new File(selectPhotoPaths.get(0)));
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("=========UpPicture1=========" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        img1 = new JSONObject(result).getJSONObject("result").getString("path");
+
+//                        if (selectPhotoPaths.size() > 0) {
+//                            intent.putExtra("img1", selectPhotoPaths.get(0));
+//                        }
+//                        if (selectPhotoPaths.size() > 1) {
+//                            intent.putExtra("img2", selectPhotoPaths.get(1));
+//                        }
+//                        if (selectPhotoPaths.size() > 2) {
+//                            intent.putExtra("img3", selectPhotoPaths.get(2));
+//                        }
+                        if (selectPhotoPaths.size() > 1) {
+                            UpPicture2();
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setClass(SupportAimActivity.this, SaveMoneyActivity.class);
+                            intent.putExtra("img1", img1);
+                            intent.putExtra("img2", img2);
+                            intent.putExtra("img3", img3);
+                            intent.putExtra("money", money);
+                            intent.putExtra("budget", budget);
+                            intent.putExtra("aimId", aimId);
+                            intent.putExtra("content", content_edit.getText().toString().trim());
+                            startActivityForResult(intent, Code.SupportAim);
+                        }
+
+
+                    } else {
+                        Utils.showToast(SupportAimActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("")) {
+                    Utils.showToast(SupportAimActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void UpPicture2() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.UpPicture);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("token", Utils.GetToken(this));
+        requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("picture", new File(selectPhotoPaths.get(1)));
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -310,7 +400,78 @@ public class SupportAimActivity extends BaseActivity {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
 
-                        img = new JSONObject(result).getJSONObject("result").getString("path");
+                        img2 = new JSONObject(result).getJSONObject("result").getString("path");
+                        if (selectPhotoPaths.size() > 2) {
+                            UpPicture3();
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setClass(SupportAimActivity.this, SaveMoneyActivity.class);
+                            intent.putExtra("img1", img1);
+                            intent.putExtra("img2", img2);
+                            intent.putExtra("img3", img3);
+                            intent.putExtra("money", money);
+                            intent.putExtra("budget", budget);
+                            intent.putExtra("aimId", aimId);
+                            intent.putExtra("content", content_edit.getText().toString().trim());
+                            startActivityForResult(intent, Code.SupportAim);
+                        }
+                    } else {
+                        Utils.showToast(SupportAimActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("")) {
+                    Utils.showToast(SupportAimActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
+    private void UpPicture3() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.UpPicture);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("token", Utils.GetToken(this));
+        requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("picture", new File(selectPhotoPaths.get(2)));
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("=========photo=========" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+
+                        img3 = new JSONObject(result).getJSONObject("result").getString("path");
+                        Intent intent = new Intent();
+                        intent.setClass(SupportAimActivity.this, SaveMoneyActivity.class);
+                        intent.putExtra("img1", img1);
+                        intent.putExtra("img2", img2);
+                        intent.putExtra("img3", img3);
+                        intent.putExtra("money", money);
+                        intent.putExtra("budget", budget);
+                        intent.putExtra("aimId", aimId);
+                        intent.putExtra("content", content_edit.getText().toString().trim());
+                        startActivityForResult(intent, Code.SupportAim);
                     } else {
                         Utils.showToast(SupportAimActivity.this, new JSONObject(result).getString("msg"));
                     }
@@ -345,7 +506,7 @@ public class SupportAimActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
             Intent intent = new Intent();
-            intent.putExtra("money", money);
+            intent.putExtra("money", "0");
             setResult(Code.SupportAim, intent);
             finish();
             return true;

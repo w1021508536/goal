@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.search.activity.AddFriendSearchActivity;
 import com.pi.small.goal.search.activity.SearchKeyActivity;
@@ -24,6 +25,14 @@ import com.pi.small.goal.search.fragment.AttentionFragment;
 import com.pi.small.goal.search.fragment.CityFragment;
 import com.pi.small.goal.search.fragment.HotFragment;
 import com.pi.small.goal.utils.PagerSlidingTabStrip;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,4 +191,51 @@ public class SearchFragment extends Fragment {
             return titles.length;
         }
     }
+
+
+    private void GetFollowListData() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.FollowedList);
+        requestParams.addHeader("token", Utils.GetToken(getActivity()));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("==========GetFollowListData===========" + result);
+
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        Utils.UtilsSharedPreferences(getActivity()).edit().putString("followList", new JSONObject(result).getString("result"));
+                        Utils.UtilsSharedPreferences(getActivity()).edit().commit();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+//    @Override
+//    public void onResume() {
+//        GetFollowListData();
+//        super.onResume();
+//    }
+
 }
