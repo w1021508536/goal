@@ -44,7 +44,7 @@
             android:padding="5dp"
             android:singleLine="true"
             android:textColor="@color/black"
-            android:textColorHint="@color/text_small_light"
+            android:textColorHint="@color/gray_line"
             android:textSize="14dp" />
 
         <ImageView

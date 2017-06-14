@@ -58,6 +58,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private RelativeLayout message_num_layout;
     private TextView message_num_text;
+    private CircleImageView round_image;
 
     private FragmentManager fragmentManager;
 
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initData();
         MyApplication app = (MyApplication) getApplication();
         app.addActivity(this);
-        getData();
+
     }
 
 
@@ -158,9 +160,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         my_image = (ImageView) findViewById(R.id.my_image);
         my_text = (TextView) findViewById(R.id.my_text);
 
-
-        message_num_layout= (RelativeLayout) findViewById(R.id.message_num_layout);
-        message_num_text= (TextView) findViewById(R.id.message_num_text);
+        round_image = (CircleImageView) findViewById(R.id.round_image);
+        message_num_layout = (RelativeLayout) findViewById(R.id.message_num_layout);
+        message_num_text = (TextView) findViewById(R.id.message_num_text);
 
         aim_layout.setOnClickListener(this);
         search_layout.setOnClickListener(this);
@@ -172,14 +174,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             RongIM.getInstance().addUnReadMessageCountChangedObserver(new IUnReadMessageObserver() {
                 @Override
                 public void onCountChanged(int i) {
-                    if (i==0){
+                    if (i == 0) {
                         message_num_layout.setVisibility(View.GONE);
-                    }else if (i>99){
+                        round_image.setVisibility(View.VISIBLE);
+                    } else if (i > 99) {
                         message_num_layout.setVisibility(View.VISIBLE);
-                        message_num_text.setText(99+"+");
-                    }else {
+                        message_num_text.setText(99 + "+");
+                        round_image.setVisibility(View.GONE);
+                    } else {
                         message_num_layout.setVisibility(View.VISIBLE);
-                        message_num_text.setText(i+"");
+                        message_num_text.setText(i + "");
+                        round_image.setVisibility(View.VISIBLE);
                     }
 
 
@@ -189,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             GetUserInfo();
 //            GetFriendsListData();
             GetFollowListData();
-
+//            getData();
             if (lastTime != 0) {
                 if (simpleDateFormat.format(new Date(lastTime)).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
                 } else {
@@ -699,6 +704,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     private void getData() {
         RequestParams requestParams = new RequestParams();
         SharedPreferences sp = Utils.UserSharedPreferences(this);

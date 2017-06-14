@@ -141,42 +141,42 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.right_image:
                 int size = dataList.size();
-                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
-//                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
+//                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
+                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
                 if (grade.equals("v0")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
                 } else if (grade.equals("v1")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
                 } else if (grade.equals("v2")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
                 } else if (grade.equals("v3")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
                 } else if (grade.equals("v4")) {
                     if (size < 2) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
 
                 } else if (grade.equals("v5")) {
@@ -184,21 +184,21 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
                 } else if (grade.equals("v6")) {
                     if (size < 10) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
                 } else if (grade.equals("v7")) {
                     if (size < 15) {
                         intent.setClass(getActivity(), AddAimActivity.class);
                         startActivityForResult(intent, Code.AddAimCode);
                     } else {
-                        Utils.showToast(getActivity(), getString(R.string.aim_upgrade));
+                        Utils.showToast(getActivity(), getResources().getString(R.string.aim_upgrade));
                     }
 
                 } else if (grade.equals("v8")) {
@@ -261,8 +261,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
 
             tv_money.setText(dataList.get(position).getMoney());
-            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(position).getBudget()) - Float.valueOf(dataList.get(position).getMoney())));
-            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2, Float.valueOf(dataList.get(position).getMoney())));
+            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getBudget()) - Float.valueOf(dataList.get(position).getMoney())));
+            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getMoney())));
 //            weight_text.setText(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100 + "%");
 
             String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
@@ -470,7 +470,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < viewList.size(); i++) {
             ImageView imageView = new ImageView(getActivity());
             //设置小圆点imageview的参数
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(30, 30);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20, 20);
             params.setMargins(10, 0, 10, 0);
             imageView.setLayoutParams(params);//创建一个宽高均为20 的布局
             //将小圆点layout添加到数组中
@@ -548,8 +548,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             day_text.setText(Long.valueOf(dataList.get(i).getCycle()) * 30 - day + "");
         }
 //            Float.valueOf(dataList.get(i).getBudget())-Float.valueOf(dataList.get(i).getMoney())
-        line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
-        line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 4, Float.valueOf(dataList.get(i).getMoney())));
+        line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
+        line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getMoney())));
 //        weight_text.setText(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100 + "%");
         String weight = String.valueOf(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100);
         weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");

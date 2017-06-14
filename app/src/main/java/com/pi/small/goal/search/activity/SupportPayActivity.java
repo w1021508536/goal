@@ -18,6 +18,7 @@ import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pingplusplus.android.Pingpp;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.tencent.mm.sdk.openapi.WXAPIFactory;
@@ -239,11 +240,9 @@ public class SupportPayActivity extends BaseActivity {
         requestParams.addBodyParameter("money", money);
         requestParams.addBodyParameter("dynamicId", dynamicId);
         requestParams.addBodyParameter("channel", channel);
-
-        x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
                 System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
@@ -259,7 +258,6 @@ public class SupportPayActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override
@@ -270,16 +268,10 @@ public class SupportPayActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
-
 
     }
 

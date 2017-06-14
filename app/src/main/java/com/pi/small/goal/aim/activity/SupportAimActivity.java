@@ -78,8 +78,8 @@ public class SupportAimActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_aim);
+        super.onCreate(savedInstanceState);
         aimId = getIntent().getStringExtra("aimId");
         budget = getIntent().getStringExtra("budget");
         money = getIntent().getStringExtra("money");

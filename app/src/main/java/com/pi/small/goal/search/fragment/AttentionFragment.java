@@ -374,7 +374,7 @@ public class AttentionFragment extends Fragment {
                                     Utils.showToast(getActivity(), "恭喜您获取红包" + money + "元");
                                 }
                             } else if (code.equals("100000")) {
-                                Utils.showToast(getActivity(), getString(R.string.rad_null));
+                                Utils.showToast(getActivity(), getResources().getString(R.string.rad_null));
                             } else {
                                 Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                             }

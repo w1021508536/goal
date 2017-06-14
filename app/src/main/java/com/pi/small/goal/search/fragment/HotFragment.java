@@ -366,6 +366,7 @@ public class HotFragment extends Fragment {
                 XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
+                        Utils.showToast(getActivity(), result);
                         System.out.println("=======感谢红包=========" + result);
                         try {
                             String code = new JSONObject(result).getString("code");
@@ -377,7 +378,7 @@ public class HotFragment extends Fragment {
                                     Utils.showToast(getActivity(), "恭喜您获取红包" + money + "元");
                                 }
                             } else if (code.equals("100000")) {
-                                Utils.showToast(getActivity(), getString(R.string.rad_null));
+                                Utils.showToast(getActivity(), getResources().getString(R.string.rad_null));
                             } else {
                                 Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                             }
@@ -389,9 +390,9 @@ public class HotFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
+                        popupWindow.dismiss();
                         System.out.println("========ex.getMessage()========" + ex.getMessage());
-
+                        Utils.showToast(getActivity(), ex.getMessage());
                     }
 
                     @Override

@@ -69,7 +69,14 @@ public class PayDetailActivity extends BaseActivity {
     private void init() {
 
         money_text.setText(getResources().getText(R.string.money_sign) + money);
-        pay_mode_text.setText(channel);
+
+        if (channel.equals("balance")) {
+            pay_mode_text.setText(" 余额");
+        } else if (channel.equals("wx")) {
+            pay_mode_text.setText(" 微信");
+        } else {
+            pay_mode_text.setText(" 支付宝");
+        }
         if (card.equals("")) {
             card_text.setVisibility(View.GONE);
         } else {

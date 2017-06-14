@@ -5,6 +5,12 @@
     android:orientation="vertical">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_fragment" />
+
+
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"
@@ -12,19 +18,12 @@
         android:layout_weight="1.0"
         android:background="@color/background_fragment" />
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/background_fragment" />
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:paddingBottom="3dp">
+        android:paddingBottom="5dp">
 
 
         <LinearLayout
@@ -34,14 +33,12 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
             android:paddingTop="5dp">
 
             <ImageView
                 android:id="@+id/aim_image"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="2dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/icon_tab_aim_off" />
 
@@ -49,7 +46,7 @@
                 android:id="@+id/aim_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:text="@string/aim"
                 android:textColor="@color/text_main_off"
@@ -64,14 +61,12 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
             android:paddingTop="5dp">
 
             <ImageView
                 android:id="@+id/search_image"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="2dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/icon_tab_search_off" />
 
@@ -79,7 +74,7 @@
                 android:id="@+id/search_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:text="@string/search"
                 android:textColor="@color/text_main_off"
@@ -94,7 +89,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
             android:paddingTop="5dp">
 
             <RelativeLayout
@@ -107,7 +101,6 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="2dp"
                     android:scaleType="fitXY"
                     android:src="@mipmap/icon_tab_message_off" />
 
@@ -118,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/message_image"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="2dp"
                     android:gravity="center"
                     android:text="@string/message"
                     android:textColor="@color/text_main_off"
@@ -132,18 +125,23 @@
                     <RelativeLayout
                         android:id="@+id/message_num_layout"
                         android:layout_width="wrap_content"
-                        android:layout_alignParentRight="true"
+                        android:layout_height="wrap_content"
                         android:visibility="gone"
-                        android:layout_height="wrap_content">
+                        android:layout_alignParentRight="true">
 
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/round_image"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@color/red"/>
                         <TextView
                             android:id="@+id/message_num_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:background="@drawable/background_red_corner_90"
-                            android:textColor="@color/white"
                             android:padding="2dp"
+                            android:textColor="@color/white"
                             android:textSize="10sp" />
 
                     </RelativeLayout>
@@ -162,14 +160,12 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingBottom="5dp"
             android:paddingTop="5dp">
 
             <ImageView
                 android:id="@+id/my_image"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="2dp"
                 android:scaleType="fitXY"
                 android:src="@mipmap/icon_tab_my_off" />
 
@@ -177,7 +173,7 @@
                 android:id="@+id/my_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:text="@string/my"
                 android:textColor="@color/text_main_off"

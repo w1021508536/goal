@@ -44,6 +44,8 @@
     <style name="text_gray_20">
         <item name="android:textColor">@color/text_small_light</item>
         <item name="android:textSize">20dp</item>
+        
+        
     </style>
 
 
@@ -83,5 +85,6 @@
         <item name="android:windowBackground">@android:color/transparent</item>
 
     </style>
+
 
 </resources>

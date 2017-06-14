@@ -88,13 +88,12 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:background="@null"
-                    android:hint="目标名称"
+                    android:gravity="top"
+                    android:hint="目标名称..."
                     android:paddingBottom="5dp"
                     android:textColor="@color/text_aim"
                     android:textColorHint="@color/text_aim"
                     android:textSize="14dp" />
-
-
             </LinearLayout>
 
             <ImageView
@@ -112,7 +111,6 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:paddingTop="10dp">
-
 
                 <EditText
                     android:id="@+id/content_edit"

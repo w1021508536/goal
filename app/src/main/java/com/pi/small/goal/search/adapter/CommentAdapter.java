@@ -72,7 +72,7 @@ public class CommentAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.nick_text.setText(dataList.get(position).getNick() + ":");
+        viewHolder.nick_text.setText(dataList.get(position).getNick() + "：");
 
         viewHolder.content_text.setText(dataList.get(position).getContent());
         return convertView;
