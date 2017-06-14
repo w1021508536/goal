@@ -16,6 +16,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.FollowAdapter;
 import com.pi.small.goal.my.entry.FollowEntry;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -94,7 +95,7 @@ public class FollowActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvCollect.setVisibility(View.GONE);

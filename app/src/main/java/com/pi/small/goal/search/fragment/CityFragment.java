@@ -510,8 +510,10 @@ public class CityFragment extends Fragment {
 
             if (dynamicEntityList.get(position).getUserId().equals(Utils.UserSharedPreferences(context).getString("id", ""))) {
                 viewHolder.attentionText.setVisibility(View.GONE);
+                viewHolder.moreLayout.setVisibility(View.GONE);
             } else {
                 viewHolder.attentionText.setVisibility(View.VISIBLE);
+                viewHolder.moreLayout.setVisibility(View.VISIBLE);
             }
             System.out.println("=============dynamicEntityList.get(position).getIsFollow()=========" + dynamicEntityList.get(position).getIsFollow());
             if (dynamicEntityList.get(position).getIsFollow().equals("0")) {
@@ -898,7 +900,8 @@ public class CityFragment extends Fragment {
             TextView attentionText;
             @InjectView(R.id.content_text)
             TextView contentText;
-
+            @InjectView(R.id.more_layout)
+            RelativeLayout moreLayout;
             @InjectView(R.id.image_layout)
             LinearLayout imageLayout;
             @InjectView(R.id.image3)

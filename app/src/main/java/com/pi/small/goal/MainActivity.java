@@ -30,16 +30,21 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.google.gson.Gson;
 import com.pi.small.goal.aim.AimFragment;
 import com.pi.small.goal.aim.activity.AddAimActivity;
 import com.pi.small.goal.aim.activity.SaveMoneyActivity;
 import com.pi.small.goal.message.MessageFragment;
 import com.pi.small.goal.message.activity.FriendsListActivity;
 import com.pi.small.goal.my.MyFragment;
+import com.pi.small.goal.my.activity.RenameActivity;
+import com.pi.small.goal.my.entry.UerEntity;
 import com.pi.small.goal.search.SearchFragment;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView search_image;
     private TextView search_text;
 
-    private LinearLayout message_layout;
+    private RelativeLayout message_layout;
     private ImageView message_image;
     private TextView message_text;
 
@@ -76,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView my_image;
     private TextView my_text;
 
-    private RelativeLayout message_top_layout;
-
+    private RelativeLayout message_num_layout;
+    private TextView message_num_text;
 
     private FragmentManager fragmentManager;
 
@@ -130,6 +135,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentManager = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
         initData();
+        MyApplication app = (MyApplication) getApplication();
+        app.addActivity(this);
+        getData();
     }
 
 
@@ -142,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         search_image = (ImageView) findViewById(R.id.search_image);
         search_text = (TextView) findViewById(R.id.search_text);
 
-        message_layout = (LinearLayout) findViewById(R.id.message_layout);
+        message_layout = (RelativeLayout) findViewById(R.id.message_layout);
         message_image = (ImageView) findViewById(R.id.message_image);
         message_text = (TextView) findViewById(R.id.message_text);
 
@@ -150,7 +158,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         my_image = (ImageView) findViewById(R.id.my_image);
         my_text = (TextView) findViewById(R.id.my_text);
 
-        message_top_layout = (RelativeLayout) findViewById(R.id.message_top_layout);
+
+        message_num_layout= (RelativeLayout) findViewById(R.id.message_num_layout);
+        message_num_text= (TextView) findViewById(R.id.message_num_text);
 
         aim_layout.setOnClickListener(this);
         search_layout.setOnClickListener(this);
@@ -162,8 +172,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             RongIM.getInstance().addUnReadMessageCountChangedObserver(new IUnReadMessageObserver() {
                 @Override
                 public void onCountChanged(int i) {
+                    if (i==0){
+                        message_num_layout.setVisibility(View.GONE);
+                    }else if (i>99){
+                        message_num_layout.setVisibility(View.VISIBLE);
+                        message_num_text.setText(99+"+");
+                    }else {
+                        message_num_layout.setVisibility(View.VISIBLE);
+                        message_num_text.setText(i+"");
+                    }
 
-                    System.out.println("=======totalUnreadCount=============" + i);
 
                 }
             }, Conversation.ConversationType.PRIVATE);
@@ -320,8 +338,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private void clearSelection() {
 
-        message_top_layout.setVisibility(View.GONE);
-
         int color = getResources().getColor(R.color.text_main_off);
         aim_text.setTextColor(color);
         aim_image.setImageResource(R.mipmap.icon_tab_aim_off);
@@ -423,8 +439,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void connect(String token) {
         if (getApplicationInfo().packageName.equals(MyApplication.getCurProcessName(getApplicationContext()))) {
 
-            System.out.print("=");
-
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
 
                 /**
@@ -442,10 +456,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onSuccess(String userid) {
-                    System.out.println("====================" + userid);
                     Log.d("LoginActivity", "--onSuccess" + userid);
-//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                    finish();
 
                     userEditor.putString("RY_Id", userid);
                     userEditor.commit();
@@ -457,7 +468,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
-                    System.out.println("===========errorCode.getMessage()=========" + errorCode.getMessage());
                 }
             });
         }
@@ -689,5 +699,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    private void getData() {
+        RequestParams requestParams = new RequestParams();
+        SharedPreferences sp = Utils.UserSharedPreferences(this);
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.setUri(Url.Url + "/user/my");
 
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!RenameActivity.callOk(result)) return;
+                Gson gson = new Gson();
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    UerEntity userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
+
+                    CacheUtil.getInstance().setUserInfo(userInfo);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 }

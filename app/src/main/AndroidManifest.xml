@@ -181,6 +181,10 @@
             android:label="个人中心"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".my.activity.FollowActivity"
+            android:label="我的关注"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".my.activity.TaskListActivity"
             android:label="任务中心"
             android:screenOrientation="portrait" />
@@ -197,10 +201,6 @@
         <activity
             android:name=".my.activity.RenameActivity"
             android:label="修改个人信息复用页"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".my.activity.FollowActivity"
-            android:label="关注页面"
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.AimActivity"
@@ -367,12 +367,15 @@
 
         <activity
             android:name=".search.activity.RedHaveActivity"
+            android:label="雷达红包列表"
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.activity.SupportMoneyActivity"
+            android:label="支持填写钱数"
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.activity.SupportPayActivity"
+            android:label="支持支付"
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.activity.SearchKeyActivity"
@@ -385,11 +388,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.activity.RedPacketActivity"
+            android:label="领取红包详情"
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.activity.UserDetitalActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".search.activity.InviteActivity"></activity>
+        <activity
+            android:name=".search.activity.InviteActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

@@ -76,7 +76,7 @@ public class Url {
     public static String RedpacketUnraw = "/redpacket/undraw";//用户未领取的红包
     public static String RedpacketDynamic = "/redpacket/dynamic";//动态/助力红包
     public static String TestRedThanksSet = "/test/red/thanks/set";//设置感谢红包
-    public static String RedpacketThanksDraw = " /redpacket/thanks/draw";//领取感谢红包
+    public static String RedpacketThanksDraw = "/redpacket/thanks/draw";//领取感谢红包
 
     public static String RedGet = "/redpacket/income/draw";//获取收益红包
 

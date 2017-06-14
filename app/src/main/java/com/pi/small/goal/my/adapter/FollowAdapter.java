@@ -104,10 +104,10 @@ public class FollowAdapter extends BaseAdapter {
     private void follow(int followUserId, final int position) {
 
         SharedPreferences sp = Utils.UserSharedPreferences(context);
-        RequestParams requestParams = new RequestParams(Url.Url + "/user/followed");
+        RequestParams requestParams = new RequestParams(Url.Url + "/user/follow");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("followUserId", followUserId + "'");
+        requestParams.addBodyParameter("followUserId", followUserId + "");
         //  requestParams.addBodyParameter("status", 0 + "");                //0 否 1 是
 
 

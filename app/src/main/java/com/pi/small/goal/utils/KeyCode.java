@@ -25,4 +25,6 @@ public class KeyCode {
     public static final String USER_TOKEN= "token";
     public static final String USER_DEVICEID = "deviceId";
     public static final String USER_MOBILE = "mobile";
+
+    public static final String NO_DATA = "no data";
 }

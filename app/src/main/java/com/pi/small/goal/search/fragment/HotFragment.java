@@ -360,12 +360,13 @@ public class HotFragment extends Fragment {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RequestParams requestParams = new RequestParams(Url.Url + Url.Aim);
+                RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketThanksDraw);
                 requestParams.addHeader("token", Utils.GetToken(getActivity()));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
+                        System.out.println("=======感谢红包=========" + result);
                         try {
                             String code = new JSONObject(result).getString("code");
                             if (code.equals("0")) {
@@ -388,6 +389,8 @@ public class HotFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
+
+                        System.out.println("========ex.getMessage()========" + ex.getMessage());
 
                     }
 
@@ -486,8 +489,6 @@ public class HotFragment extends Fragment {
             }
             viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
 
-//        x.image().bind(viewHolder.head_image, Utils.GetPhotoPath(dataList.get(position).getAvatar()), imageOptions);
-
             if (!dynamicEntityList.get(position).getAvatar().equals("")) {
                 Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntityList.get(position).getAvatar())).into(viewHolder.headImage);
             } else {
@@ -506,8 +507,10 @@ public class HotFragment extends Fragment {
 
             if (dynamicEntityList.get(position).getUserId().equals(Utils.UserSharedPreferences(context).getString("id", ""))) {
                 viewHolder.attentionText.setVisibility(View.GONE);
+                viewHolder.moreLayout.setVisibility(View.GONE);
             } else {
                 viewHolder.attentionText.setVisibility(View.VISIBLE);
+                viewHolder.moreLayout.setVisibility(View.VISIBLE);
             }
             System.out.println("=============dynamicEntityList.get(position).getIsFollow()=========" + dynamicEntityList.get(position).getIsFollow());
             if (dynamicEntityList.get(position).getIsFollow().equals("0")) {
@@ -902,7 +905,8 @@ public class HotFragment extends Fragment {
             ImageView image2;
             @InjectView(R.id.image1)
             ImageView image1;
-
+            @InjectView(R.id.more_layout)
+            RelativeLayout moreLayout;
             @InjectView(R.id.money_text)
             TextView moneyText;
             @InjectView(R.id.money_image)

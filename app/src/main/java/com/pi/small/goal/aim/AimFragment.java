@@ -141,8 +141,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.right_image:
                 int size = dataList.size();
-//                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
-                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
+                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
+//                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
                 if (grade.equals("v0")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
