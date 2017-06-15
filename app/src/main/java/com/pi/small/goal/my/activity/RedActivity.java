@@ -18,6 +18,7 @@ import com.pi.small.goal.my.adapter.RedAdapter;
 import com.pi.small.goal.my.entry.RedGsonEntity;
 import com.pi.small.goal.my.entry.WalletEntry;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -95,7 +96,7 @@ public class RedActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 //[{"id":9,"aimId":17,"dynamicId":7,"money":10,"size":10,"remainMoney":10,"remainSize":10,"toUserId":48,"fromUserId":26,"createTime":1496717112000,"status":1}]
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
                     plvWallet.setVisibility(View.GONE);
                     return;
                 }

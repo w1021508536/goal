@@ -30,7 +30,6 @@ import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.aim.adapter.ViewPagerAdapter;
 import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.activity.RedActivity;
-import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
@@ -449,7 +448,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < dataList.size(); i++) {
             setView(i);
         }
-
 
         //添加小圆点的图片
         setPoint();

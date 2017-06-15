@@ -82,6 +82,7 @@ public class SettingActivity extends BaseActivity {
                 editor.clear();
                 editor.commit();
                 app.exit();
+
                 startActivity(new Intent(this, LoginActivity.class));
                 break;
             case R.id.rl_pass_setting:

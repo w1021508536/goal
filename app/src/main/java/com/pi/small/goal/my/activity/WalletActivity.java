@@ -1,6 +1,7 @@
 package com.pi.small.goal.my.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -8,10 +9,19 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.UerEntity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -67,9 +77,7 @@ public class WalletActivity extends BaseActivity {
         super.initData();
         nameTextInclude.setText("我的钱包");
         rightImageInclude.setVisibility(View.GONE);
-        UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
-        tvMoneyWallet.setText((userInfo.getAccount().getBalance() + userInfo.getAccount().getAim()) + "");
-        tvWalletMoneyWalllet.setText(userInfo.getAccount().getBalance() + "元");
+
     }
 
     @Override
@@ -92,5 +100,48 @@ public class WalletActivity extends BaseActivity {
                 startActivity(new Intent(this, ToMoneyActivity.class));
                 break;
         }
+    }
+
+    private void setData() {
+        UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
+        tvMoneyWallet.setText((userInfo.getAccount().getBalance() + userInfo.getAccount().getAim()) + "");
+        tvWalletMoneyWalllet.setText(userInfo.getAccount().getBalance() + "元");
+    }
+
+    @Override
+    public void getData() {
+        RequestParams requestParams = new RequestParams();
+        SharedPreferences sp = Utils.UserSharedPreferences(this);
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.setUri(Url.Url + "/user/my");
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!RenameActivity.callOk(result)) return;
+                Gson gson = new Gson();
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    UerEntity userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
+
+                    CacheUtil.getInstance().setUserInfo(userInfo);
+                    setData();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

@@ -21,6 +21,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.login.LoginActivity;
 import com.pi.small.goal.my.activity.AimActivity;
 import com.pi.small.goal.my.activity.CollectActivity;
+import com.pi.small.goal.my.activity.ExtensionActivity;
 import com.pi.small.goal.my.activity.FollowActivity;
 import com.pi.small.goal.my.activity.LevelActivity;
 import com.pi.small.goal.my.activity.RedActivity;
@@ -46,6 +47,8 @@ import org.xutils.image.ImageOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -118,6 +121,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             .build();
     private UerEntity userInfo;
     private SharedPreferences sp;
+    private UerEntity.AccountBean account;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -144,6 +148,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         contentTvFragment.setOnClickListener(this);
         llTransferFragment.setOnClickListener(this);
         llShoppingFragment.setOnClickListener(this);
+        llExtensionFragment.setOnClickListener(this);
     }
 
     private void initData() {
@@ -154,53 +159,23 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         drawable.setBounds(0, 0, Utils.dip2px(getContext(), 13), Utils.dip2px(getContext(), 10));
         tvLevelFragment.setCompoundDrawables(drawable, null, null, null);
 
-        getData();
+        // getData();
 
-    }
-
-    private void getData() {
-        RequestParams requestParams = new RequestParams();
-        SharedPreferences sp = Utils.UserSharedPreferences(getContext());
-        requestParams.addHeader("token", sp.getString("token", ""));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.setUri(Url.Url + "/user/my");
-        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
-
-        XUtil.get(requestParams, getContext(), new XUtil.XCallBackLinstener() {
-            @Override
-            public void onSuccess(String result) {
-                if (!RenameActivity.callOk(result)) return;
-                Gson gson = new Gson();
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
-
-                    setData();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void setData() {
+        userInfo = CacheUtil.getInstance().getUserInfo();
         if (userInfo == null) return;
-        CacheUtil.getInstance().setUserInfo(userInfo);
-        UerEntity.UserBean user = userInfo.getUser();
-        UerEntity.AccountBean account = userInfo.getAccount();
         UerEntity.TaskInfoBean taskInfo = userInfo.getTaskInfo();
         getSign(taskInfo);
+
+    }
+
+
+    private void setData() {
+        userInfo = CacheUtil.getInstance().getUserInfo();
+        if (userInfo == null) return;
+        UerEntity.UserBean user = userInfo.getUser();
+        account = userInfo.getAccount();
+        UerEntity.TaskInfoBean taskInfo = userInfo.getTaskInfo();
+
         tvOptionFragment.setText(account.getOption() + "");
         tvScoreFragment.setText(account.getScore() + "");
 
@@ -262,6 +237,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                     Date nowDate = new Date();
                     if (formatter.format(date).equals(formatter.format(nowDate))) {
                         CacheUtil.getInstance().setSignFlag(true);
+                        CacheUtil.getInstance().getMap().put(KeyCode.AIM_SIGN, true);
                     }
                     if (CacheUtil.getInstance().isSignFlag()) {
 
@@ -338,6 +314,9 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ll_shopping_fragment:
                 break;
+            case R.id.ll_extension_fragment:
+                startActivity(new Intent(getContext(), ExtensionActivity.class));
+                break;
             default:
                 break;
         }
@@ -357,12 +336,17 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         nameTextInclude.setText(sp.getString("nick", ""));
         String content = sp.getString("brief", "");
 
+        getData();
 
-        if (CacheUtil.getInstance().getUserInfo() != null) {
-            tvTaskNumsFragment.setText(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount() + "/" + CacheUtil.getInstance().getUserInfo().getTaskInfo().getTotalTaskCount());
-
+        Map<String, Boolean> map = CacheUtil.getInstance().getMap();
+        Set<String> strings = map.keySet();
+        int finishNums = 0;
+        for (String str : strings) {
+            if (map.get(str)) {
+                finishNums++;
+            }
         }
-
+        tvTaskNumsFragment.setText(finishNums + "/" + map.size());
 
         if (!"".equals(content)) {
             contentTvFragment.setBackground(null);
@@ -379,4 +363,42 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
+    private void getData() {
+        RequestParams requestParams = new RequestParams();
+        SharedPreferences sp = Utils.UserSharedPreferences(getContext());
+        requestParams.addHeader("token", sp.getString("token", ""));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.setUri(Url.Url + "/user/my");
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
+
+        XUtil.get(requestParams, getContext(), new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (!RenameActivity.callOk(result)) return;
+                Gson gson = new Gson();
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
+                    CacheUtil.getInstance().setUserInfo(userInfo);
+                    setData();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
 }

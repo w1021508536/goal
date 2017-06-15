@@ -18,6 +18,7 @@ import com.pi.small.goal.my.entry.EveryTaskAdapterEntity;
 import com.pi.small.goal.my.entry.EveryTaskGsonEntity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -91,6 +92,7 @@ public class TaskListActivity extends BaseActivity {
                     int status = (int) ((JSONObject) new JSONObject(result).get("result")).get("status");
                     if (status == 1) {
                         CacheUtil.getInstance().setSignFlag(true);
+                        CacheUtil.getInstance().getMap().put(KeyCode.AIM_SIGN, true);
                     }
 //                    if (CacheUtil.getInstance().isSignFlag()) {
 //                        tvGotoSignTask.setBackgroundResource(R.drawable.background_oval_gray_gray);

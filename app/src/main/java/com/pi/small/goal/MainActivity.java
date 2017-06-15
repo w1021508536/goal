@@ -1,8 +1,6 @@
 package com.pi.small.goal;
 
 import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,12 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,17 +27,16 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.pi.small.goal.aim.AimFragment;
-import com.pi.small.goal.aim.activity.AddAimActivity;
-import com.pi.small.goal.aim.activity.SaveMoneyActivity;
 import com.pi.small.goal.message.MessageFragment;
-import com.pi.small.goal.message.activity.FriendsListActivity;
 import com.pi.small.goal.my.MyFragment;
 import com.pi.small.goal.my.activity.RenameActivity;
+import com.pi.small.goal.my.entry.EveryTaskGsonEntity;
 import com.pi.small.goal.my.entry.UerEntity;
 import com.pi.small.goal.search.SearchFragment;
 import com.pi.small.goal.utils.CacheUtil;
-import com.pi.small.goal.utils.Code;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -55,10 +50,10 @@ import org.xutils.x;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
@@ -82,9 +77,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView my_image;
     private TextView my_text;
 
-    private RelativeLayout message_num_layout;
-    private TextView message_num_text;
-    private CircleImageView round_image;
+    private RelativeLayout message_top_layout;
+
 
     private FragmentManager fragmentManager;
 
@@ -120,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View currentView;
 
     private int totalUnreadCount;
+    private RelativeLayout message_num_layout;
+    private TextView message_num_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,10 +132,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastTime = utilsSharedPreferences.getLong("lastTime", 0);
         fragmentManager = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
-        initData();
+
         MyApplication app = (MyApplication) getApplication();
         app.addActivity(this);
 
+        initData();
+        getData();
     }
 
 
@@ -160,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         my_image = (ImageView) findViewById(R.id.my_image);
         my_text = (TextView) findViewById(R.id.my_text);
 
-        round_image = (CircleImageView) findViewById(R.id.round_image);
+
         message_num_layout = (RelativeLayout) findViewById(R.id.message_num_layout);
         message_num_text = (TextView) findViewById(R.id.message_num_text);
 
@@ -169,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         message_layout.setOnClickListener(this);
         my_layout.setOnClickListener(this);
 
+
         if (!imtoken.equals("")) {
             connect(imtoken);
             RongIM.getInstance().addUnReadMessageCountChangedObserver(new IUnReadMessageObserver() {
@@ -176,15 +175,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onCountChanged(int i) {
                     if (i == 0) {
                         message_num_layout.setVisibility(View.GONE);
-                        round_image.setVisibility(View.VISIBLE);
                     } else if (i > 99) {
                         message_num_layout.setVisibility(View.VISIBLE);
                         message_num_text.setText(99 + "+");
-                        round_image.setVisibility(View.GONE);
                     } else {
                         message_num_layout.setVisibility(View.VISIBLE);
                         message_num_text.setText(i + "");
-                        round_image.setVisibility(View.VISIBLE);
                     }
 
 
@@ -194,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             GetUserInfo();
 //            GetFriendsListData();
             GetFollowListData();
-//            getData();
+
             if (lastTime != 0) {
                 if (simpleDateFormat.format(new Date(lastTime)).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
                 } else {
@@ -216,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(600000);
+        mLocationOption.setInterval(0);
         //设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
@@ -245,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
                         userEditor.putString("city", aMapLocation.getCity());
                         userEditor.commit();
+                        mLocationClient.stopLocation();
 
                     } else {
                         //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
@@ -447,6 +444,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void connect(String token) {
         if (getApplicationInfo().packageName.equals(MyApplication.getCurProcessName(getApplicationContext()))) {
 
+            System.out.print("=");
+
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
 
                 /**
@@ -464,7 +463,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onSuccess(String userid) {
+                    System.out.println("====================" + userid);
                     Log.d("LoginActivity", "--onSuccess" + userid);
+//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                    finish();
 
                     userEditor.putString("RY_Id", userid);
                     userEditor.commit();
@@ -476,6 +478,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
+                    System.out.println("===========errorCode.getMessage()=========" + errorCode.getMessage());
                 }
             });
         }
@@ -502,7 +505,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         userEditor.putString("brief", userObject.optString("brief"));
                         userEditor.putString("wechatId", userObject.optString("wechatId"));
                         userEditor.putString("qqId", userObject.optString("qqId"));
-                        userEditor.putString("mobile", userObject.optString("mobile"));
+                        //    userEditor.putString("mobile", userObject.optString("mobile"));
                         userEditor.putString("city", userObject.optString("city"));
                         userEditor.putString("createTime", userObject.optString("createTime"));
                         userEditor.putString("updateTime", userObject.optString("updateTime"));
@@ -709,6 +712,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (CacheUtil.getInstance().isTaskToMainFlag()) {
+            setTabSelection(1);
+            CacheUtil.getInstance().setTaskToMainFlag(false);
+        } else if (CacheUtil.getInstance().isTaskAddMoneyToMainFlag()) {
+            setTabSelection(0);
+            CacheUtil.getInstance().setTaskAddMoneyToMainFlag(false);
+        }
+
+    }
+
     private void getData() {
         RequestParams requestParams = new RequestParams();
         SharedPreferences sp = Utils.UserSharedPreferences(this);
@@ -742,5 +758,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+        RequestParams requestParams1 = Utils.getRequestParams(this);
+        requestParams1.setUri(Url.Url + "/task");
+        XUtil.get(requestParams1, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+
+                if (!Utils.callOk(result)) return;
+                Gson gson = new Gson();
+                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
+                }.getType());
+                Map<String, Boolean> map = new HashMap<String, Boolean>();
+
+                List<String> mapKey = new ArrayList<String>();
+
+                mapKey.add(KeyCode.AIM_SIGN);
+                mapKey.add(KeyCode.AIM_COMMENT);
+                mapKey.add(KeyCode.AIM_SHARE);
+                mapKey.add(KeyCode.AIM_SUPPORT);
+                mapKey.add(KeyCode.AIM_VOTE);
+
+                for (EveryTaskGsonEntity entity : data) {
+                    for (int i = 0; i < mapKey.size(); i++) {
+                        if (entity.getAction().equals(mapKey.get(i))) {
+                            map.put(mapKey.get(i), entity.getFinish() == 1 ? true : false);
+                        }
+                    }
+                }
+                map.put(KeyCode.AIM_SIGN, false);
+
+//                map.put(KeyCode.AIM_COMMENT, false);
+//                map.put(KeyCode.AIM_SHARE, false);
+//                map.put(KeyCode.AIM_SUPPORT, false);
+//                map.put(KeyCode.AIM_VOTE, false);
+                CacheUtil.getInstance().setMap(map);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
     }
+
 }
+

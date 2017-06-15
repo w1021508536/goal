@@ -9,9 +9,17 @@
     android:paddingBottom="20dp">
 
     <RelativeLayout
+        android:id="@+id/rl_head"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:background="@drawable/image3">
+        android:layout_height="240dp">
+
+        <ImageView
+            android:id="@+id/img_bg_head"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image1" />
+
 
         <com.github.lzyzsd.circleprogress.DonutProgress
             android:id="@+id/progress"
@@ -50,7 +58,7 @@
                     style="@style/text_white_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10,000" />
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,7 +90,7 @@
                     style="@style/text_white_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1,600" />
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -113,7 +121,7 @@
                     style="@style/text_white_14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12" />
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -144,7 +152,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10.0"
+                    android:text="0.0"
                     android:textColor="@color/chat_top"
                     android:textSize="14dp" />
 
@@ -185,10 +193,10 @@
             android:orientation="horizontal">
 
             <!--<de.hdodenhof.circleimageview.CircleImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_margin="5dp"-->
-                <!--android:src="@mipmap/icon_user" />-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:src="@mipmap/icon_user" />-->
         </LinearLayout>
 
 

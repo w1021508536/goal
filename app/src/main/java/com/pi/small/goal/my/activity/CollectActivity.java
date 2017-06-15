@@ -17,6 +17,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.CollectAdapter;
 import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -91,13 +92,13 @@ public class CollectActivity extends BaseActivity {
                 getData();
             }
         });
-        plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-            @Override
-            public void onLastItemVisible() {
-                page++;
-                getData();
-            }
-        });
+//        plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+//            @Override
+//            public void onLastItemVisible() {
+//                page++;
+//                getData();
+//            }
+//        });
     }
 
     @Override
@@ -107,13 +108,13 @@ public class CollectActivity extends BaseActivity {
 
         requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/collect");
-        requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, ""));
         requestParams.addBodyParameter("p", page + "");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 JSONObject jsonObject = null;
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvCollect.setVisibility(View.GONE);
@@ -125,10 +126,11 @@ public class CollectActivity extends BaseActivity {
                     Gson gson = new Gson();
                     List<CollectEntity> data = gson.fromJson(jsonData, new TypeToken<List<CollectEntity>>() {
                     }.getType());
-                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
-                        adapter.addData(data);
-                    } else
-                        adapter.setData(data);
+//                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
+//                        adapter.addData(data);
+//                    } else
+//                        adapter.setData(data);
+                    adapter.setData(data);
                     plvCollect.onRefreshComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();

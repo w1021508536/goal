@@ -70,12 +70,18 @@ public class FriendsListActivity extends BaseActivity {
     private PinyinComparator pinyinComparator;
     private UserInfo userInfo;
 
+    public static final String KEY_TYPE = "type";
+    public static final int TYPE_OTHER = 1;
+    public static final int TYPE_TRANSFER = 2;
+    private int type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_friends_list);
         super.onCreate(savedInstanceState);
 
-        sharedPreferences = Utils.UserSharedPreferences(this);
+
+        sharedPreferences = Utils.UtilsSharedPreferences(this);
         editor = sharedPreferences.edit();
 
         friendList = new ArrayList<ContactBean>();
@@ -93,6 +99,8 @@ public class FriendsListActivity extends BaseActivity {
         search_layout = (LinearLayout) findViewById(R.id.search_layout);
         friends_list = (ListView) findViewById(R.id.friends_list);
         search_edit = (EditText) findViewById(R.id.search_edit);
+
+        type = getIntent().getIntExtra(KEY_TYPE, TYPE_OTHER);
 
         friends_list.setAdapter(friendsListAdapter);
 
@@ -123,6 +131,41 @@ public class FriendsListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
+
+//                userInfo = new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
+//              RongIM.getInstance().setCurrentUserInfo(userInfo);
+//                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
+//                    @Override
+//                    public UserInfo getUserInfo(String s) {
+//                        return new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
+//                    }
+//                }, false);
+
+//                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
+//                    @Override
+//                    public UserInfo getUserInfo(String s) {
+//
+//                        return new UserInfo("xmb_user_" + dataList.get(position).get("friendId"), dataList.get(position).get("nick"), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
+//                    }
+//                }, false);
+//                RongIM.getInstance().setMessageAttachedUserInfo(true);
+
+//                RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
+//                RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + dataList.get(position).get("friendId"), dataList.get(position).get("nick"), Uri.parse(Url.PhotoUrl + "/" + dataList.get(position).get("avatar"))));
+//                RongIM.getInstance().setMessageAttachedUserInfo(true);
+
+                if (type == TYPE_TRANSFER) {
+
+                    ContactBean contactBean = friendList.get(position);
+                    Intent intent = new Intent();
+                    intent.putExtra(KEY_TYPE, contactBean);
+                    setResult(TYPE_TRANSFER, intent);
+                    finish();
+                    return;
+                }
+
+
+
                 if (friendList.get(position).getRemark().equals("")) {
                     RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick(), Uri.parse(Utils.GetPhotoPath(friendList.get(position).getAvatar()))));
                 } else {
@@ -138,12 +181,6 @@ public class FriendsListActivity extends BaseActivity {
                     RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + Utils.UserSharedPreferences(FriendsListActivity.this).getString("id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse("")));
                 } else {
                     RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + Utils.UserSharedPreferences(FriendsListActivity.this).getString("id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse(Utils.GetPhotoPath(Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "")))));
-                }
-                RongIM.getInstance().setMessageAttachedUserInfo(true);
-                if (friendList.get(position).getRemark().equals("")) {
-                    RongIM.getInstance().startPrivateChat(FriendsListActivity.this, "xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick());
-                } else {
-                    RongIM.getInstance().startPrivateChat(FriendsListActivity.this, "xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getRemark());
                 }
             }
         });

@@ -46,7 +46,7 @@
         android:background="@drawable/selector_setting_orange"
         android:gravity="center"
         android:padding="10dp"
-        android:text="更换手机"
+        android:text="解绑手机"
         android:textColor="@color/white"
         android:textSize="18dp" />
 

@@ -17,10 +17,10 @@ public class RedMoreAdapterEntry {
     private long createTime;
     private int type;   //type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
     private int fromUserId;
-    private String fromUserNick;
-    private String fromUserAvatar;
+    private String fromUserNick= "";
+    private String fromUserAvatar= "";
     private int titleType;
-    private String title;
+    private String title= "";
     private float addMoney;     //标题里的总收益
     private float deletteMoney; //标题里的总支出
 

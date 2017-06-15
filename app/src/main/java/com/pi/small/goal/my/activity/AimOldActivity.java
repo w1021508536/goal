@@ -1,13 +1,17 @@
 package com.pi.small.goal.my.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.TargetOldAdapter;
@@ -50,6 +54,9 @@ public class AimOldActivity extends BaseActivity {
 
     private int page = 1;
     private TargetOldAdapter adapter;
+    private int position;
+    public static final int REQUEST_CHANGE_PHOTO = 111;
+    public static final String KEY_IMG = "img";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +90,7 @@ public class AimOldActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvTargetOld.setVisibility(View.GONE);
@@ -110,12 +117,12 @@ public class AimOldActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                plvTargetOld.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                plvTargetOld.onRefreshComplete();
             }
         });
     }
@@ -123,5 +130,37 @@ public class AimOldActivity extends BaseActivity {
     @Override
     public void initWeight() {
         super.initWeight();
+        plvTargetOld.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+
+                page = 1;
+                getData();
+
+            }
+        });
+
+        plvTargetOld.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                List<AimOldEntity> data = adapter.getData();
+                AimOldActivity.this.position = position - 1;
+                Intent intent = new Intent(AimOldActivity.this, AimMoreActivity.class);
+                intent.putExtra(AimMoreActivity.KEY_AIMID, data.get(position - 1).getId() + "");
+                startActivityForResult(intent, REQUEST_CHANGE_PHOTO);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) return;
+        if (requestCode == REQUEST_CHANGE_PHOTO) {
+            String photo = data.getStringExtra(KEY_IMG);
+            adapter.getData().get(position).setImg(photo);
+            adapter.notifyDataSetChanged();
+        }
     }
 }

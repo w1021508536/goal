@@ -31,10 +31,10 @@ public class RedMoreEntity {
     private long createTime;
     private int type;
     private int fromUserId;
-    private String fromUserNick;
-    private String fromUserAvatar;
-    private String nick;
-    private String avatar;
+    private String fromUserNick= "";
+    private String fromUserAvatar= "";
+    private String nick= "";
+    private String avatar= "";
 
     public int getRedPacketRecordId() {
         return redPacketRecordId;

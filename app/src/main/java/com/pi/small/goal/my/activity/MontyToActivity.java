@@ -14,14 +14,14 @@ import android.widget.TextView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.PayDetailActivity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pingplusplus.android.Pingpp;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
-
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -85,7 +85,7 @@ public class MontyToActivity extends BaseActivity {
     private String img1;
     private String img2;
     private String img3;
-    private String channel="wx";//支付方式  0: 余额  1：微信 wx   2:alipay
+    private String channel = "wx";//支付方式  0: 余额  1：微信 wx   2:alipay
 
     private Boolean isHook = true;
     public static IWXAPI wx_api;
@@ -176,7 +176,6 @@ public class MontyToActivity extends BaseActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        System.out.print("===============" + data.getExtras().getString("pay_result"));
         //支付页面返回处理
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -199,6 +198,8 @@ public class MontyToActivity extends BaseActivity {
                     intent.putExtra("card", "");
                     intent.putExtra("channel", channel);
                     startActivityForResult(intent, Code.Pay);
+
+                    CacheUtil.getInstance().getUserInfo().getAccount().setBalance(CacheUtil.getInstance().getUserInfo().getAccount().getBalance() + Utils.getPercentTwo(Float.valueOf(money)));
 
                 } else if (result.equals("fail")) {
                     Utils.showToast(MontyToActivity.this, "支付失败");

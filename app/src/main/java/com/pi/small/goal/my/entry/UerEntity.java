@@ -18,7 +18,7 @@ public class UerEntity {
     private UserBean user;
     private AccountBean account;
     private TaskInfoBean taskInfo;
-    private String grade;
+    private String grade= "";
 
     public UserBean getUser() {
         return user;
@@ -68,13 +68,13 @@ public class UerEntity {
          */
 
         private int id;
-        private String nick;
-        private String avatar;
-        private String brief;
-        private String wechatId;
-        private String qqId;
-        private String mobile;
-        private String city;
+        private String nick= "";
+        private String avatar= "";
+        private String brief= "";
+        private String wechatId= "";
+        private String qqId= "";
+        private String mobile= "";
+        private String city= "";
         private int sex;
         private long createTime;
         private long updateTime;
@@ -184,7 +184,7 @@ public class UerEntity {
         private int exp;
         private float balance;
         private int aim;
-        private int option;
+        private double option;
         private int score;
 
         public int getAccountId() {
@@ -227,11 +227,11 @@ public class UerEntity {
             this.aim = aim;
         }
 
-        public int getOption() {
+        public double getOption() {
             return option;
         }
 
-        public void setOption(int option) {
+        public void setOption(double option) {
             this.option = option;
         }
 

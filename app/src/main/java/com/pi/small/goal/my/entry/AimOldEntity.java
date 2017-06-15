@@ -32,22 +32,22 @@ public class AimOldEntity {
      */
 
     private int id;
-    private String name;
+    private String name = "";
     private int budget;
     private double money;
     private int cycle;
     private int current;
     private int userId;
-    private String province;
-    private String city;
-    private String brief;
-    private String position;
+    private String province = "";
+    private String city = "";
+    private String brief = "";
+    private String position = "";
     private int longitude;
     private int latitude;
     private int support;
     private long createTime;
     private int status;
-    private String img;
+    private String img = "";
     private int transfer;
 
     public int getId() {

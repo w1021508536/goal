@@ -42,8 +42,8 @@ public class WalletEntry {
     private int status;
     private int type;
     private int supportId;
-    private String fromUserNick;
-    private String fromUserAvatar;
+    private String fromUserNick= "";
+    private String fromUserAvatar= "";
     private int titleType;
 
     public WalletEntry(int id, int aimId, int dynamicId, float money, int size, double remainMoney, int remainSize, int toUserId, int fromUserId, long createTime, long updateTime, int status, int type, int supportId, String fromUserNick, String fromUserAvatar, int titleType) {

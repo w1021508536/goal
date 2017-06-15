@@ -20,15 +20,12 @@ import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.pingplusplus.android.Pingpp;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -240,9 +237,11 @@ public class SupportPayActivity extends BaseActivity {
         requestParams.addBodyParameter("money", money);
         requestParams.addBodyParameter("dynamicId", dynamicId);
         requestParams.addBodyParameter("channel", channel);
+
         XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+
                 System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");

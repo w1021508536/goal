@@ -26,13 +26,13 @@ public class EveryTaskGsonEntity {
 
     private int userTaskId;
     private int rewardType;
-    private String action;
+    private String action= "";
     private int taskType;
     private int reward;
     private int times;
     private int status;
     private long updateTime;
-    private String name;
+    private String name= "";
     private int upperLimit;
     private int finish;
 

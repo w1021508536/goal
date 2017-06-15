@@ -31,6 +31,7 @@
             android:text="请输入原支付密码，用于支付验证" />
 
         <LinearLayout
+            android:id="@+id/ll_key"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginLeft="18dp"

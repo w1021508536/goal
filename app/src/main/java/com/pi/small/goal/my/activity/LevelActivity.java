@@ -142,7 +142,7 @@ public class LevelActivity extends BaseActivity {
 //        }
         setImageView(grade);
 
-        aimRed = new Integer[][]{{0, 0}, {1, 25}, {1, 35}, {1, 50}, {2, 100}, {5, 150}, {10, 250}, {15, 400}, {20, 500}};
+        aimRed = new Integer[][]{{1, 0}, {1, 25}, {1, 35}, {1, 50}, {2, 100}, {5, 150}, {10, 250}, {15, 400}, {20, 500}};
 
         expArray = new Integer[]{0, 600, 900, 1500, 3000, 7500, 4500, 100000, 200000};
         linearLayouts = new LinearLayout[]{llLine1, llLine3, llLine4, llLine5, llLine6, llLine7, llLine8};
@@ -154,8 +154,7 @@ public class LevelActivity extends BaseActivity {
         imgIconLevel.setImageResource(bitmapRes[grade]);
 
         if (grade == 0) return;
-        float i = exp - expArray[grade];
-        float v = i / (expArray[grade + 1] - expArray[grade]);
+
 
         for (int y = 1; y < grade; y++) {
             LinearLayout linearLayout = linearLayouts[y - 1];
@@ -163,9 +162,12 @@ public class LevelActivity extends BaseActivity {
             view.setBackgroundResource(R.color.line_level_red);
         }
 
-
+        if (grade == 8) {
+            return;
+        }
         LinearLayout linearLayout = linearLayouts[grade - 1];
-
+        float i = exp - expArray[grade];
+        float v = i / (expArray[grade + 1] - expArray[grade]);
         View view1 = linearLayout.getChildAt(0);
         LinearLayout.LayoutParams l = (LinearLayout.LayoutParams) view1.getLayoutParams();
         l.weight = v;
@@ -173,6 +175,7 @@ public class LevelActivity extends BaseActivity {
         l.height = Utils.dip2px(this, 1);
         view1.setBackgroundResource(R.color.line_level_red);
         view1.setLayoutParams(l);
+
 
         ImageView oval = new ImageView(this);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.dip2px(this, 6), Utils.dip2px(this, 6));
@@ -193,7 +196,7 @@ public class LevelActivity extends BaseActivity {
         super.initWeight();
         llAimLevel.setOnClickListener(this);
         llRedLevel.setOnClickListener(this);
-    //    rlMoneyLevel.setOnClickListener(this);
+        //    rlMoneyLevel.setOnClickListener(this);
     }
 
     @Override

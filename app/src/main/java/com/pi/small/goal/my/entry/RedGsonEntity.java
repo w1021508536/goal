@@ -43,8 +43,8 @@ public class RedGsonEntity {
     private int status;
     private int type;
     private int supportId;
-    private String fromUserNick;
-    private String fromUserAvatar;
+    private String fromUserNick= "";
+    private String fromUserAvatar= "";
 
     public int getId() {
         return id;

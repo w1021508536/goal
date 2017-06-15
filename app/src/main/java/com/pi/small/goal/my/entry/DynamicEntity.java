@@ -97,18 +97,18 @@ public class DynamicEntity {
         private int id;
         private int aimId;
         private int userId;
-        private String nick;
-        private String avatar;
-        private String content;
-        private String city;
-        private int money;
-        private String img1;
-        private String img2;
-        private String img3;
+        private String nick= "";
+        private String avatar= "";
+        private String content= "";
+        private String city= "";
+        private double money;
+        private String img1= "";
+        private String img2= "";
+        private String img3= "";
         private String video;
         private long createTime;
         private long updateTime;
-        private String province;
+        private String province= "";
         private int isPaid;
 
         public int getId() {
@@ -167,11 +167,11 @@ public class DynamicEntity {
             this.city = city;
         }
 
-        public int getMoney() {
+        public double getMoney() {
             return money;
         }
 
-        public void setMoney(int money) {
+        public void setMoney(double money) {
             this.money = money;
         }
 
@@ -241,6 +241,11 @@ public class DynamicEntity {
     }
 
     public static class CommentsBean {
+        public CommentsBean(String content, String nick) {
+            this.content = content;
+            this.nick = nick;
+        }
+
         /**
          * commentId : 35
          * pid : 0
@@ -252,6 +257,9 @@ public class DynamicEntity {
          * nick : 杨晶晶
          * avatar : https://q.qlogo.cn/qqapp/1106004131/E174B73EF43BC3C4D2D8891B79E237AF/100
          */
+
+
+
 
         private int commentId;
         private int pid;

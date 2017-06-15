@@ -12,34 +12,34 @@ public class CollectEntity {
     // {"id":5,"name":"我的第二个目标","budget":1000,"money":0,"cycle":6,"current":0,"userId":11,"province":"山东","city":"青岛","brief":"实现梦想","position":"卓越","longitude":0.000000,"latitude":0.000000,"support":0,"createTime":1494974232000,"status":1,"img":""}
 
     private int id;
-    private String name;
+    private String name= "";
     private float budget;   //预算
-    private int money;
+    private double money;
     private int cycle;   //周期
     private int current;  //现在的
     private int userId;
-    private String province;  //省
-    private String city;
-    private String brief;                                                              //1496458648242
+    private String province= "";  //省
+    private String city= "";
+    private String brief= "";                                                              //1496458648242
     //"position":"卓越","longitude":0.000000,"latitude":0.000000,"support":0,"createTime":1494974232000,"status":1,"img":""
-    private String position;
+    private String position= "";
     private float longitude;
     private float latitude;
     private int support;   //支持人数
     private long createTime;
     private int status;
-    private String img;
+    private String img= "";
     //        "transfer": 0,
 //                "nick": "hh",
 //                "avatar": "jpg"
     private int transfer;
-    private String nick;
-    private String avatar;
+    private String nick= "";
+    private String avatar= "";
 
     public CollectEntity() {
     }
 
-    public CollectEntity(int id, String name, float budget, int money, int cycle, int current, int userId, String province, String city, String brief, String position, float longitude, float latitude, int support, long createTime, int status, String img) {
+    public CollectEntity(int id, String name, float budget, double money, int cycle, int current, int userId, String province, String city, String brief, String position, float longitude, float latitude, int support, long createTime, int status, String img) {
         this.id = id;
         this.name = name;
         this.budget = budget;
@@ -83,11 +83,11 @@ public class CollectEntity {
         this.budget = budget;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

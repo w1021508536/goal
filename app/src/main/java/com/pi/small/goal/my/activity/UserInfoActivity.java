@@ -15,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +39,9 @@ import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.squareup.picasso.Picasso;
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -387,16 +388,17 @@ public class UserInfoActivity extends BaseActivity {
         }
         String brief = sp.getString(KeyCode.USER_BRIEF, "");
         tvBriefUser.setText(brief);
-
+        UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
         String mobile = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
         String wechatId = CacheUtil.getInstance().getUserInfo().getUser().getWechatId();
-        if ("".equals(mobile)) {
+        Log.v("TAG", wechatId + "");
+        if (mobile == null || "".equals(mobile)) {
             tvPhoneBindUser.setText("未绑定");
         } else {
             tvPhoneBindUser.setText("已绑定");
             //     rlPhoneUser.setClickable(false);
         }
-        if ("".equals(wechatId)) {
+        if (wechatId == null || "".equals(wechatId)) {
             tvWxBindUser.setText("未绑定");
         } else {
             tvWxBindUser.setText("已绑定");
@@ -452,7 +454,8 @@ public class UserInfoActivity extends BaseActivity {
             } else if (requestCode == REQUESTCODE_DROP_IMAGE) {
                 Bitmap bitmap = data.getParcelableExtra("data");
                 //    File smallImageFile = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+                int scW = (int) (bitmap.getWidth() / (bitmap.getHeight() / 1080f));
+                File file = ImageUtils.getSmallImageFile(this, bitmap, 640, 640, true);
                 uploadFile(file);
             }
         }

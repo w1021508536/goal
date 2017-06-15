@@ -1,1 +1,1 @@
-include ':app', ':IMLib', ':IMKit', ':wjz', ':bdwallet_pay_sdk', ':pingpp'
+include ':app', ':IMLib', ':IMKit', ':cirprogress', ':pingpp', ':DatePicker', ':multi-image-selector'

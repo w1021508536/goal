@@ -158,11 +158,13 @@ public class RedAdapter extends BaseAdapter {
     private void obtainRed(final int position, String packetId) {
 
 
-        RequestParams requestParams = new RequestParams();
-        requestParams.setUri(Url.Url + "/redpacket/draw");
-        SharedPreferences sp = Utils.UserSharedPreferences(context);
-        requestParams.addHeader("token", sp.getString("token", ""));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        WalletEntry walletEntry = data.get(position);
+        RequestParams requestParams = Utils.getRequestParams(context);
+        if (walletEntry.getId() == walletEntry.getToUserId()) {
+            requestParams.setUri(Url.Url + "/redpacket/supprot/draw");
+        } else {
+            requestParams.setUri(Url.Url + "/redpacket/draw");
+        }
         requestParams.addBodyParameter("packetId", packetId);
 
         XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {

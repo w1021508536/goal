@@ -16,6 +16,7 @@ import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.XUtil;
 
@@ -140,16 +141,16 @@ public class SignActivity extends BaseActivity {
 
                     signTime = (long) ((JSONObject) new JSONObject(result).get("result")).get("lastSignInTime");
                     days = (int) ((JSONObject) new JSONObject(result).get("result")).get("days");
-                    tvSignDaysSign.setText(days + "");
+
 
                     Date date = new Date(signTime);
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
                     Date nowDate = new Date();
 
-                    Calendar   cal   =   Calendar.getInstance();
-                    cal.add(Calendar.DATE,   -1);
+                    Calendar cal = Calendar.getInstance();
+                    cal.add(Calendar.DATE, -1);
 
-                    if (!formatter.format(date).equals(formatter.format(cal.getTime()))&&!formatter.format(date).equals(formatter.format(nowDate))) {
+                    if (!formatter.format(date).equals(formatter.format(cal.getTime())) && !formatter.format(date).equals(formatter.format(nowDate))) {
                         days = 0;
                     }
 
@@ -158,6 +159,7 @@ public class SignActivity extends BaseActivity {
                         tvSignDaysSign.setVisibility(View.GONE);
                         tvSignHintDaySign.setVisibility(View.GONE);
                     }
+                    tvSignDaysSign.setText(days + "");
 
 //                    if (formatter.format(date).equals(formatter.format(nowDate)))
 //                        return;
@@ -238,6 +240,7 @@ public class SignActivity extends BaseActivity {
                     tvSingSign.setText("今日已签到");
                     tvSingSign.setBackgroundResource(R.mipmap.btn_signed);
                     CacheUtil.getInstance().setSignFlag(true);
+                    CacheUtil.getInstance().getMap().put(KeyCode.AIM_SIGN,true);
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setFinishTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount() + 1);
                 } catch (JSONException e) {
                 }

@@ -11,17 +11,17 @@ public class EveryTaskAdapterEntity {
 
     private int userTaskId;
     private int rewardType;
-    private String action;
+    private String action= "";
     private int taskType;
     private int reward;
     private int times;
     private int status;
     private long updateTime;
-    private String name;
+    private String name= "";
     private int upperLimit;
     private int finish;
     private int type;  //是否是title adater中
-    private String titleName;
+    private String titleName= "";
 
     public EveryTaskAdapterEntity(int userTaskId, int rewardType, String action, int taskType, int reward, int times, int status, long updateTime, String name, int upperLimit, int finish, int type, String titleName) {
         this.userTaskId = userTaskId;

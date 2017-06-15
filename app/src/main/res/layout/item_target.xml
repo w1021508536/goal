@@ -68,7 +68,7 @@
                     custom:donut_finished_color="@color/chat_top"
                     custom:donut_inner_drawable="@drawable/ic_star_black_48dp"
                     custom:donut_show_text="false"
-                    custom:donut_unfinished_color="@color/primary_material_light" />
+                    custom:donut_unfinished_color="#50ffffff" />
             </RelativeLayout>
         </RelativeLayout>
 

@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="50dp"
-                    android:text="助力好友" />
+                    android:text="助力他人" />
 
                 <TextView
                     style="@style/text_yellow_10"
@@ -251,6 +251,7 @@
                     android:text="+20经验/天" />
 
                 <TextView
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -365,6 +366,7 @@
                     android:text="+50经验/人" />
 
                 <TextView
+                    android:id="@+id/tv_invitationFriend_task"
                     style="@style/text_white_12"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
@@ -386,7 +388,8 @@
                 android:gravity="center"
                 android:padding="5dp"
                 android:text="— 新手任务 —"
-                android:textSize="12dp" />
+                android:textSize="12dp"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -395,7 +398,8 @@
                 android:paddingBottom="10dp"
                 android:paddingLeft="@dimen/top_left"
                 android:paddingRight="@dimen/top_left"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="35dp"

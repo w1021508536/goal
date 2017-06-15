@@ -14,7 +14,6 @@ import com.pi.small.goal.login.LoginActivity;
 import com.pi.small.goal.my.activity.RenameActivity;
 import com.pi.small.goal.my.entry.UerEntity;
 import com.pi.small.goal.utils.CacheUtil;
-import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -37,6 +36,7 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         sharedPreferences = Utils.UserSharedPreferences(WelcomeActivity.this);
         nick = sharedPreferences.getString("nick", "");
+  //      getData();
         init();
     }
 
@@ -85,7 +85,6 @@ public class WelcomeActivity extends AppCompatActivity {
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.setUri(Url.Url + "/user/my");
-        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
@@ -97,8 +96,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     UerEntity userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
 
                     CacheUtil.getInstance().setUserInfo(userInfo);
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -116,5 +113,4 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         });
     }
-
 }

@@ -1,15 +1,25 @@
 package com.pi.small.goal.my.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -17,8 +27,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.google.gson.Gson;
@@ -31,23 +43,35 @@ import com.pi.small.goal.my.entry.TargetHeadEntity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.EditTextHeightUtil;
+import com.pi.small.goal.utils.ImageUtils;
 import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.weight.PinchImageView;
 import com.squareup.picasso.Picasso;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.pi.small.goal.my.activity.AimOldActivity.KEY_IMG;
+import static com.pi.small.goal.my.activity.AimOldActivity.REQUEST_CHANGE_PHOTO;
+import static com.pi.small.goal.my.activity.UserInfoActivity.REQUEST_CODE_CAMERA;
+import static com.pi.small.goal.my.activity.UserInfoActivity.REQUEST_CODE_PHOTO;
 
 /**
  * 公司：小目标
@@ -87,6 +111,8 @@ public class AimMoreActivity extends BaseActivity {
     LinearLayout llBottom;
     @InjectView(R.id.rl_top)
     RelativeLayout rlTop;
+    @InjectView(R.id.rl_empty)
+    RelativeLayout rlEmpty;
     private int allDy;
     private View header;
     private TrajectoryAdapter adapter;
@@ -98,6 +124,8 @@ public class AimMoreActivity extends BaseActivity {
     private boolean myAim;
     private String commentId;
     private TargetHeadEntity targetHeadEntity;      //头部视图布局的数据
+    private int position;
+    private ImageView img_bg_head;   //头部布局的背景图片
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -138,7 +166,7 @@ public class AimMoreActivity extends BaseActivity {
         progress.setTextColor(getResources().getColor(R.color.white));
         progress.setFinishedStrokeColor(getResources().getColor(R.color.chat_top));
         progress.setUnfinishedStrokeColor(getResources().getColor(R.color.progress_unfinish_color));
-        progress.setProgress(16);
+        progress.setProgress(0.0f);
     }
 
     @Override
@@ -161,9 +189,9 @@ public class AimMoreActivity extends BaseActivity {
                     targetHeadEntity = gson.fromJson(jsonObj.toString(), TargetHeadEntity.class);
 
                     setHeadViewData(targetHeadEntity);
-                } catch (JSONException e) {
-
-
+                } catch (Exception e) {
+                    Log.v("TAG", "'");
+//com.google.gson.JsonSyntaxException: java.lang.NumberFormatException: Expected an int but was 0.9 at line 1 column 800 path $.supports[1].remainMoney
                 }
             }
 
@@ -194,7 +222,9 @@ public class AimMoreActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (RenameActivity.callOk(result)) {
+                if (!RenameActivity.callOk(result)) {
+                    rlEmpty.setVisibility(View.VISIBLE);
+                    return;
                 }
 
                 try {
@@ -207,6 +237,9 @@ public class AimMoreActivity extends BaseActivity {
                         adapter.setData(data);
                     } else {
                         adapter.addData(data);
+                    }
+                    if (data.size() == 0) {
+                        rlEmpty.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -233,68 +266,79 @@ public class AimMoreActivity extends BaseActivity {
 
     private void setHeadViewData(TargetHeadEntity targetHeadEntity) {
 
-        if (header == null) return;
-        TextView tv_budget = (TextView) header.findViewById(R.id.tv_budget_head);   //预算额度
-        TextView tv_money = (TextView) header.findViewById(R.id.tv_money_head);   //已存金额
-        TextView tv_cycle = (TextView) header.findViewById(R.id.tv_cycle_head);   //周期
-        TextView tv_supports = (TextView) header.findViewById(R.id.tv_goodNums_targetMOre);   //周期
-        LinearLayout ll_images = (LinearLayout) header.findViewById(R.id.ll_imags_head);
-        RelativeLayout rl_supports = (RelativeLayout) header.findViewById(R.id.rl_goodPeople_targetMore);
+        try {
+            nameTextInclude.setText(targetHeadEntity.getAim().getName());
+            if (header == null) return;
+            TextView tv_budget = (TextView) header.findViewById(R.id.tv_budget_head);   //预算额度
+            TextView tv_money = (TextView) header.findViewById(R.id.tv_money_head);   //已存金额
+            TextView tv_cycle = (TextView) header.findViewById(R.id.tv_cycle_head);   //周期
+            TextView tv_supports = (TextView) header.findViewById(R.id.tv_goodNums_targetMOre);   //周期
+            LinearLayout ll_images = (LinearLayout) header.findViewById(R.id.ll_imags_head);
+            RelativeLayout rl_supports = (RelativeLayout) header.findViewById(R.id.rl_goodPeople_targetMore);
+            img_bg_head = (ImageView) header.findViewById(R.id.img_bg_head);
 
-        if (targetHeadEntity.getSupports().size() == 0) {
-            rl_supports.setVisibility(View.GONE);
-        }
+            if (Utils.photoEmpty(targetHeadEntity.getAim().getImg())) {
+                Picasso.with(this).load(Utils.GetPhotoPath(targetHeadEntity.getAim().getImg())).into(img_bg_head);
+            }
+
+            if (targetHeadEntity.getSupports().size() == 0) {
+                rl_supports.setVisibility(View.GONE);
+            }
 
 //            JSONObject aimJsonObj = (JSONObject) jsonObj.get("aim");
 //            JSONObject userJsonObj = (JSONObject) jsonObj.get("user");
 //            int userId = (int) userJsonObj.get("id");
-        if ((targetHeadEntity.getUser().getId() + "").equals(sp.getString(KeyCode.USER_ID, "26"))) {
-            myAim = true;
-            collectImageInclude.setImageResource(R.mipmap.goals_setting_btn);
-            adapter.setOperationShowFlag(false);
-        } else {
-            myAim = false;
-            if (targetHeadEntity.getHaveCollect() == 1) {
-                collectImageInclude.setImageResource(R.mipmap.collection_btn_pressed);
+            if ((targetHeadEntity.getUser().getId() + "").equals(sp.getString(KeyCode.USER_ID, "26"))) {
+                myAim = true;
+                collectImageInclude.setImageResource(R.mipmap.goals_setting_btn);
+                adapter.setOperationShowFlag(false);
             } else {
-                collectImageInclude.setImageResource(R.mipmap.collection_btn);
+                myAim = false;
+                if (targetHeadEntity.getHaveCollect() == 1) {
+                    collectImageInclude.setImageResource(R.mipmap.collection_btn_pressed);
+                } else {
+                    collectImageInclude.setImageResource(R.mipmap.collection_btn);
+                }
+                adapter.setOperationShowFlag(true);
             }
-        }
 
-        tv_budget.setText(targetHeadEntity.getAim().getBudget() + "");
-        tv_money.setText(targetHeadEntity.getAim().getMoney() + "");
-        tv_cycle.setText(targetHeadEntity.getAim().getCycle() + "");
-        String percentOne = Utils.getPercentOne((float) targetHeadEntity.getAim().getMoney() / targetHeadEntity.getAim().getBudget());
 
-        progress.setProgress(Float.parseFloat(percentOne));
+            tv_budget.setText(targetHeadEntity.getAim().getBudget() + "");
+            tv_money.setText(targetHeadEntity.getAim().getMoney() + "");
+            tv_cycle.setText((targetHeadEntity.getAim().getCycle() * 30) + "");
+            String percentOne = Utils.getPercentOne((float) targetHeadEntity.getAim().getMoney() / targetHeadEntity.getAim().getBudget() * 100);
 
-        List<TargetHeadEntity.SupportsBean> supports = targetHeadEntity.getSupports();
-        CacheUtil.getInstance().setSupportEntityList(supports);
+            progress.setProgress(Float.parseFloat(percentOne));
 
-        tv_supports.setText(supports.size() + "助力");
-        for (int i = 0; i < 5; i++) {   //最多显示5个助力的人的头像
-            if (supports.size() > i) {
-                CircleImageView circleImageView = new CircleImageView(this);
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                layoutParams.setMargins(Utils.dip2px(this, 5), Utils.dip2px(this, 10), Utils.dip2px(this, 5), Utils.dip2px(this, 10));
-                circleImageView.setLayoutParams(layoutParams);
-                ll_images.addView(circleImageView);
-                circleImageView.setImageResource(R.mipmap.icon_user);
+            List<TargetHeadEntity.SupportsBean> supports = targetHeadEntity.getSupports();
+            CacheUtil.getInstance().setSupportEntityList(supports);
 
-                TargetHeadEntity.SupportsBean supportsBean = supports.get(i);
-                if (Utils.photoEmpty(supportsBean.getAvatar())) {
-                    Picasso.with(this).load(supportsBean.getAvatar()).into(circleImageView);
+            tv_supports.setText(supports.size() + "助力");
+            for (int i = 0; i < 5; i++) {   //最多显示5个助力的人的头像
+                if (supports.size() > i) {
+                    CircleImageView circleImageView = new CircleImageView(this);
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Utils.dip2px(this, 30), Utils.dip2px(this, 30));
+                    layoutParams.setMargins(Utils.dip2px(this, 5), Utils.dip2px(this, 10), Utils.dip2px(this, 5), Utils.dip2px(this, 10));
+                    circleImageView.setLayoutParams(layoutParams);
+                    ll_images.addView(circleImageView);
+                    circleImageView.setImageResource(R.mipmap.icon_user);
+                    TargetHeadEntity.SupportsBean supportsBean = supports.get(i);
+                    if (Utils.photoEmpty(supportsBean.getAvatar())) {   //1496802195021.jpg
+                        Picasso.with(this).load(Utils.GetPhotoPath(supportsBean.getAvatar())).into(circleImageView);
+                    }
                 }
             }
+
+
+            rl_supports.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(AimMoreActivity.this, SupportActivity.class));
+                }
+            });
+
+        } catch (NullPointerException e) {
         }
-
-
-        rl_supports.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AimMoreActivity.this, SupportActivity.class));
-            }
-        });
     }
 
     @Override
@@ -309,9 +353,8 @@ public class AimMoreActivity extends BaseActivity {
                 srflTargetMore.setRefreshing(false);
             }
         });
-
+        rightImageInclude.setOnClickListener(this);
         rlTop.setOnClickListener(this);
-
         lvTargetMore.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -354,8 +397,9 @@ public class AimMoreActivity extends BaseActivity {
             }
 
             @Override
-            public void comment(String id) {
+            public void comment(String id, int position) {
                 commentId = id;
+                AimMoreActivity.this.position = position;
                 etvTargetMore.setVisibility(View.VISIBLE);
                 rlTop.setVisibility(View.VISIBLE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -390,13 +434,19 @@ public class AimMoreActivity extends BaseActivity {
                         imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                         comment(commentId, etvTargetMore.getText().toString());
 
+                        List<DynamicEntity.CommentsBean> comments = adapter.getData().get(position).getComments();
+                        if (comments.size() > 0) {
+                            comments.add(0, new DynamicEntity.CommentsBean(etvTargetMore.getText().toString(), sp.getString(KeyCode.USER_NICK, "")));
+                            adapter.getData().get(position).setComments(comments);
+                            adapter.notifyDataSetChanged();
+                        }
+
                         break;
                 }
 
                 return true;
             }
         });
-
 
     }
 
@@ -495,7 +545,7 @@ public class AimMoreActivity extends BaseActivity {
             case R.id.collect_image_include:
                 if (targetHeadEntity == null) return;
                 if (myAim) {
-
+                    showSetPop(v);
                 } else {
 
                     if (targetHeadEntity.getHaveCollect() == 0) {
@@ -512,8 +562,284 @@ public class AimMoreActivity extends BaseActivity {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
                 break;
+            case R.id.right_image_include:
+                share();
+                break;
         }
     }
+
+    private void showSetPop(View v) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_aim_set, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, true);
+
+        TextView withdrawals_text = (TextView) windowView.findViewById(R.id.withdrawals_text);
+        TextView photo_text = (TextView) windowView.findViewById(R.id.photo_text);
+        TextView cancel_text = (TextView) windowView.findViewById(R.id.cancel_text);
+        withdrawals_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                System.out.println("======finalI===========" + finalI);
+////                            popupWindow.dismiss();
+            }
+        });
+
+        cancel_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        photo_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(AimMoreActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(AimMoreActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_PHOTO);
+                        return;
+                    } else {
+                        goGallery();
+                    }
+                } else
+                    goGallery();
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+    }
+
+    /**
+     * 获取相册
+     */
+    private void goGallery() {
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent, Code.RESULT_GALLERY_CODE);
+    }
+
+    /**
+     * 拍照获取照片
+     */
+    private void goCamera() {
+        Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
+        startActivityForResult(getImageByCamera, Code.RESULT_CAMERA_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    goCamera();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(AimMoreActivity.this, "您禁止了相机权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            case REQUEST_CODE_PHOTO:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    goCamera();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(AimMoreActivity.this, "您禁止了写入权限", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    /**
+     * 分享
+     * create  wjz
+     **/
+    private void share() {
+
+        new ShareAction(this).withText("hello")
+                .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .setCallback(umShareListener).open();
+    }
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            //分享开始的回调
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            Log.d("plat", "platform" + platform);
+
+            Toast.makeText(AimMoreActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(AimMoreActivity.this, platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+            if (t != null) {
+                Log.d("throw", "throw:" + t.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(AimMoreActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+
+        if (data != null) {
+            if (requestCode == Code.RESULT_GALLERY_CODE) {
+
+                Uri uri = data.getData();
+
+                Bitmap bitmap = ImageUtils.getBitmapFormUri(this, uri);
+//                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+//                iconUser.setImageBitmap(bitmap);
+//                uploadFile(file);
+                afterUploadVitmap(bitmap);
+
+            } else if (requestCode == Code.RESULT_CAMERA_CODE) {   //获取拍照的
+                Uri uri = data.getData();
+                if (uri == null) {
+                    //use bundle to get data
+                    Bundle bundle = data.getExtras();
+                    if (bundle != null) {
+                        Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
+
+//                        String xmb = ImageUtils.saveMyBitmap("xmb", photo);
+//                        Uri imageUri = Uri.fromFile(new File(xmb));
+//                        if (Integer.parseInt(Build.VERSION.SDK) >= 24) {
+//                            imageUri = FileProvider.getUriForFile(this, "com.pi.small.goal.FileProvider", new File(xmb));
+//                        }
+                        afterUploadVitmap(photo);
+//                        File file = ImageUtils.getSmallImageFile(this, photo, 1080, 1080, true);
+//                        iconUser.setImageBitmap(photo);
+//                        uploadFile(file);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                } else {
+                    //to do find the path of pic by uri
+                    Bitmap bitmap = ImageUtils.getBitmapFormUri(this, uri);
+//                    File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+//                    iconUser.setImageBitmap(bitmap);
+//                    uploadFile(file);
+                    //    doCrop(uri);
+
+                    afterUploadVitmap(bitmap);
+                }
+
+            }
+            //       else if (requestCode == REQUESTCODE_DROP_IMAGE) {
+//                Bitmap bitmap = data.getParcelableExtra("data");
+//                //    File smallImageFile = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+//                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+//                uploadFile(file);
+//                img_bg_head.setImageBitmap(bitmap);
+//            }
+        }
+    }
+
+    private void afterUploadVitmap(Bitmap bitmap) {
+        if (bitmap == null) return;
+        int scW = (int) (bitmap.getWidth() / (bitmap.getHeight() / 640f));
+
+        File file = ImageUtils.getSmallImageFile(this, bitmap, scW, 640, true);
+        img_bg_head.setImageBitmap(BitmapFactory.decodeFile(file.getPath()));
+        uploadFile(file);
+        bitmap.recycle();
+    }
+
+    /**
+     * 上传文件
+     * create  wjz
+     **/
+    public void uploadFile(File file) {
+        requestParams.setUri(Url.Url + "/file/picture");
+        requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
+        requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
+        requestParams.addBodyParameter("token", Utils.GetToken(this));
+        requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("picture", file);
+
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                try {
+                    JSONObject obj = (JSONObject) new JSONObject(result).get("result");
+                    String path = (String) obj.get("path");
+                    ChangeAimPhoto(path);
+                    //        updataIcon(path);
+
+                    Intent intent = new Intent();
+                    intent.putExtra(KEY_IMG, path);
+                    setResult(REQUEST_CHANGE_PHOTO, intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void ChangeAimPhoto(String img) {
+        requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + Url.Aim);
+        requestParams.addBodyParameter("aimId", aimId);
+        requestParams.addBodyParameter("img", img);
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========photo=========" + result);
+
+                if (!Utils.callOk(result)) return;
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
 
     private void collectAim(String aimId, String status) {
         requestParams = Utils.getRequestParams(this);
@@ -522,8 +848,10 @@ public class AimMoreActivity extends BaseActivity {
         requestParams.addBodyParameter("status", status);
         if (status.equals("1")) {
             collectImageInclude.setImageResource(R.mipmap.collection_btn_pressed);
+            targetHeadEntity.setHaveCollect(1);
         } else {
             collectImageInclude.setImageResource(R.mipmap.collection_btn);
+            targetHeadEntity.setHaveCollect(0);
         }
 
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {

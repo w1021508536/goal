@@ -17,11 +17,9 @@ import com.pi.small.goal.register.RegisterActivity;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
-import com.tencent.connect.UserInfo;
-
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.openapi.IWXAPI;
-import com.tencent.mm.sdk.openapi.WXAPIFactory;
+import com.tencent.connect.UserInfo;import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
 import com.tencent.tauth.UiError;

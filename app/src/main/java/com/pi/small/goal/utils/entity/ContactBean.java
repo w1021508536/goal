@@ -1,6 +1,8 @@
 package com.pi.small.goal.utils.entity;
 
-public class ContactBean {
+import java.io.Serializable;
+
+public class ContactBean implements Serializable {
 
 //	       map.put("id", jsonArray.getJSONObject(i).optString("id"));
 //                            map.put("userId", jsonArray.getJSONObject(i).optString("userId"));

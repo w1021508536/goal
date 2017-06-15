@@ -56,6 +56,11 @@ public class TrajectoryAdapter extends BaseAdapter {
 
     }
 
+    public List<DynamicEntity> getData() {
+        return data;
+    }
+
+
     //    dynamicId = getIntent().getStringExtra("dynamicId");
 //    aimId = getIntent().getStringExtra("aimId");
 //    nick = getIntent().getStringExtra("nick");
@@ -63,7 +68,7 @@ public class TrajectoryAdapter extends BaseAdapter {
     public interface myAdapterClickListener {
         void great(String id);  //点赞
 
-        void comment(String id); //评论
+        void comment(String id, int position); //评论
 
         void help(String id, String nick, String avatar);    //助力
     }
@@ -80,6 +85,7 @@ public class TrajectoryAdapter extends BaseAdapter {
 
     public void setOperationShowFlag(boolean operationShowFlag) {
         this.operationShowFlag = operationShowFlag;
+        notifyDataSetChanged();
     }
 
     public void setData(List<DynamicEntity> data) {
@@ -114,9 +120,9 @@ public class TrajectoryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_trajectory, null);
             vh = new ViewHolder(convertView);
             convertView.setTag(vh);
-//            if (!operationShowFlag) {
-//                vh.rlOperation.setVisibility(View.GONE);
-//            }
+            if (!operationShowFlag) {
+                vh.rlOperation.setVisibility(View.GONE);
+            }
             Drawable drawable = context.getResources().getDrawable(R.mipmap.local_icon);
             drawable.setBounds(0, 0, Utils.dip2px(context, 11), Utils.dip2px(context, 13));
             vh.tvCityItem.setCompoundDrawables(drawable, null, null, null);
@@ -142,6 +148,38 @@ public class TrajectoryAdapter extends BaseAdapter {
         vh.tvTitleItem.setText(dynamicEntity.getDynamic().getContent());
         vh.tvAddMoneyItem.setText(dynamicEntity.getDynamic().getMoney() + "");
         vh.tvSupportsItem.setText(dynamicEntity.getVotes() + "赞" + "  " + dynamicEntity.getSupports() + "助力");
+        vh.imgItem.setImageResource(R.drawable.image2);
+//1496736200354.jpg  1495527714097.jpg   1496737409748.jpg
+
+        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg1())) { //1496802195021.jpg
+            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1())).into(vh.imgItem);
+        }
+        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg2())) { //1496802195021.jpg
+            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg2())).into(vh.img2Item);
+        }
+        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg3())) { //1496802195021.jpg
+            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg3())).into(vh.img3Item);
+        }
+
+
+        vh.tvCityItem.setText(dynamicEntity.getDynamic().getProvince() + " " + dynamicEntity.getDynamic().getCity());
+
+        if (dynamicEntity.getDynamic().getImg1().length() == 0) {
+            vh.imgItem.setVisibility(View.GONE);
+        } else {
+            vh.imgItem.setVisibility(View.VISIBLE);
+        }
+        if (dynamicEntity.getDynamic().getImg2().length() == 0) {
+            vh.img2Item.setVisibility(View.GONE);
+        } else {
+            vh.img2Item.setVisibility(View.VISIBLE);
+        }
+        if (dynamicEntity.getDynamic().getImg3().length() == 0) {
+            vh.img3Item.setVisibility(View.GONE);
+        } else {
+            vh.img3Item.setVisibility(View.VISIBLE);
+        }
+
 
         if (position == 0) {
             vh.viewLineTop.setVisibility(View.INVISIBLE);
@@ -171,22 +209,9 @@ public class TrajectoryAdapter extends BaseAdapter {
             vh.imgGreat.setImageResource(R.mipmap.icon_vote_off);
         }
 
-        vh.imgItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                RelativeLayout rl_image = (RelativeLayout) ((Activity) context).findViewById(R.id.rl_image);
-                PinchImageView pimg = (PinchImageView) rl_image.getChildAt(0);
-                String s = Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1());
-                if (!Utils.photoEmpty(s)) {
-                    Picasso.with(context).load(Utils.GetPhotoPath(s)).into(pimg);
-                } else {
-                    pimg.setImageResource(R.drawable.image2);
-                }
-
-                rl_image.setVisibility(View.VISIBLE);
-            }
-        });
+        vh.imgItem.setOnClickListener(new myClick(data, position, vh));
+        vh.img2Item.setOnClickListener(new myClick(data, position, vh));
+        vh.img3Item.setOnClickListener(new myClick(data, position, vh));
 
         vh.tvSupportsNumsItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,7 +262,8 @@ public class TrajectoryAdapter extends BaseAdapter {
                     break;
                 case R.id.img_commit:
                     if (listener != null) {
-                        listener.comment(data.get(position).getDynamic().getId() + "");
+                        listener.comment(data.get(position).getDynamic().getId() + "", position);
+
                     }
                     break;
                 case R.id.img_help:
@@ -247,6 +273,28 @@ public class TrajectoryAdapter extends BaseAdapter {
                     break;
                 case R.id.img_more:
                     report(data.get(position).getDynamic().getId() + "", v);
+                    break;
+                case R.id.img_item:
+                case R.id.img2_item:
+                case R.id.img3_item:
+                    RelativeLayout rl_image = (RelativeLayout) ((Activity) context).findViewById(R.id.rl_image);
+                    String s;
+                    if (v.getId() == R.id.img_item) {
+                        s = Utils.GetPhotoPath(data.get(position).getDynamic().getImg1());
+                    } else if (v.getId() == R.id.img2_item) {
+                        s = Utils.GetPhotoPath(data.get(position).getDynamic().getImg2());
+                    } else {
+                        s = Utils.GetPhotoPath(data.get(position).getDynamic().getImg3());
+                    }
+                    PinchImageView pimg = (PinchImageView) rl_image.getChildAt(0);
+
+                    if (Utils.photoEmpty(s)) {
+                        Picasso.with(context).load(Utils.GetPhotoPath(s)).into(pimg);
+                    } else {
+                        pimg.setImageResource(R.drawable.image2);
+                    }
+
+                    rl_image.setVisibility(View.VISIBLE);
                     break;
             }
         }
@@ -318,6 +366,7 @@ public class TrajectoryAdapter extends BaseAdapter {
         popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
     }
 
+
     static class ViewHolder {
         @InjectView(R.id.view_line_top)
         View viewLineTop;
@@ -329,6 +378,12 @@ public class TrajectoryAdapter extends BaseAdapter {
         TextView tvTitleItem;
         @InjectView(R.id.img_item)
         ImageView imgItem;
+        @InjectView(R.id.img2_item)
+        ImageView img2Item;
+        @InjectView(R.id.img3_item)
+        ImageView img3Item;
+        @InjectView(R.id.ll_imgs)
+        LinearLayout llImgs;
         @InjectView(R.id.tv_addMoney_item)
         TextView tvAddMoneyItem;
         @InjectView(R.id.rl_money_item)

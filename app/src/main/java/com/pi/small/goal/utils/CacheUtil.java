@@ -5,7 +5,10 @@ import com.pi.small.goal.my.entry.DynamicEntity;
 import com.pi.small.goal.my.entry.TargetHeadEntity;
 import com.pi.small.goal.my.entry.UerEntity;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 公司：小目标
@@ -30,6 +33,19 @@ public class CacheUtil {
         return cacheUtil;
     }
 
+
+    public void setClear() {
+        userInfo = null;
+        oldPass = "";
+        newPass = "";
+        setPass = "";
+        forgetPassCode = "";   //重置密码时候的验证短信吗
+        signFlag = false;
+        supportEntityList.clear();
+        commentsBeanList.clear();
+        taskToMainFlag = false;
+    }
+
     public UerEntity userInfo;
 
     public String oldPass = "";
@@ -39,9 +55,13 @@ public class CacheUtil {
 
     public boolean signFlag = false;
 
-    public List<TargetHeadEntity.SupportsBean> supportEntityList;
+    public List<TargetHeadEntity.SupportsBean> supportEntityList = new ArrayList<>();
 
-    public List<DynamicEntity.CommentsBean> commentsBeanList;
+    public List<DynamicEntity.CommentsBean> commentsBeanList = new ArrayList<>();
+    public boolean taskToMainFlag = false;
+    public boolean taskAddMoneyToMainFlag = false;
+
+    public Map<String, Boolean> map = new HashMap<>();
 
     public boolean isSignFlag() {
         return signFlag;
@@ -106,5 +126,29 @@ public class CacheUtil {
 
     public void setForgetPassCode(String forgetPassCode) {
         this.forgetPassCode = forgetPassCode;
+    }
+
+    public boolean isTaskToMainFlag() {
+        return taskToMainFlag;
+    }
+
+    public void setTaskToMainFlag(boolean taskToMainFlag) {
+        this.taskToMainFlag = taskToMainFlag;
+    }
+
+    public boolean isTaskAddMoneyToMainFlag() {
+        return taskAddMoneyToMainFlag;
+    }
+
+    public void setTaskAddMoneyToMainFlag(boolean taskAddMoneyToMainFlag) {
+        this.taskAddMoneyToMainFlag = taskAddMoneyToMainFlag;
+    }
+
+    public Map<String, Boolean> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, Boolean> map) {
+        this.map = map;
     }
 }

@@ -14,6 +14,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.dialog.HuiFuDialog;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -23,6 +24,7 @@ import org.xutils.http.RequestParams;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import static com.pi.small.goal.my.activity.BindPhoneActivity.TYPE_BIND;
 import static com.pi.small.goal.my.activity.BindPhoneActivity.TYPE_FORGETPASS;
 import static com.pi.small.goal.my.activity.BindPhoneActivity.TYPE_SETPASS;
 import static com.pi.small.goal.my.activity.UpdataPassActivity.FLAG_FORGET_PASS;
@@ -81,27 +83,40 @@ public class BindPhoneNextActivity extends BaseActivity {
         nameTextInclude.setText("绑定手机");
         rightImageInclude.setVisibility(View.GONE);
         dialog = new HuiFuDialog(this, "你的手机号已绑定成功");
-        if (type == BindPhoneActivity.TYPE_UPDATA) {
+//        phone = getIntent().getStringExtra(KEY_PHONE);
+
+        if (type == TYPE_BIND) {
+            phone = getIntent().getStringExtra(KEY_PHONE);
+            tvPhoneNumber.setText("请输入" + phone + "的验证码");
+        } else if (type == BindPhoneActivity.TYPE_UPDATA) {
             nameTextInclude.setText("更换绑定手机");
-            dialog = new HuiFuDialog(this, "你的手机号已更换成功");
+            //      dialog = new HuiFuDialog(this, "你的手机号已更换成功");
         } else if (type == BindPhoneActivity.TYPE_UNBIND) {
-            nameTextInclude.setText("更换绑定手机");
             phone = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+            tvPhoneNumber.setText("请输入" + phone + "的验证码");
+            phone = sp.getString(KeyCode.USER_MOBILE, "");
+            nameTextInclude.setText("解绑手机");
+            dialog = new HuiFuDialog(this, "你的手机号已解绑成功");
         } else if (type == BindPhoneActivity.TYPE_SETPASS) {
-            phone = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+            //     phone = sp.getString(KeyCode.USER_MOBILE, "");
+
+            phone = getIntent().getStringExtra(KEY_PHONE);
+            phone = sp.getString(KeyCode.USER_MOBILE, "");
+            tvPhoneNumber.setText("请输入" + phone + "的验证码");
+
             nameTextInclude.setText("短信验证");
         } else if (type == TYPE_FORGETPASS) {
-            phone = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
+            phone = sp.getString(KeyCode.USER_MOBILE, "");
+            tvPhoneNumber.setText("请输入" + phone + "的验证码");
             nameTextInclude.setText("短信验证");
         }
 
-        tvPhoneNumber.setText("请输入" + phone + "的验证码");
-        phone = getIntent().getStringExtra(KEY_PHONE);
 
         TimeCount time = new TimeCount(60000, 1000);
         time.start();
 
         getCode();
+
     }
 
     @Override
@@ -136,14 +151,16 @@ public class BindPhoneNextActivity extends BaseActivity {
         params.addHeader("token", Utils.GetToken(this));
         params.addHeader("deviceId", MyApplication.deviceId);
         params.addBodyParameter("bindWay", "mobile");
-        params.addBodyParameter("openid", phone);
+        params.addBodyParameter("mobile", phone);
         params.addBodyParameter("verifyCode", code);
 
         XUtil.post(params, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 if (Utils.callOk(result)) {
-                    startActivity(new Intent(BindPhoneNextActivity.this, BindPhoneActivity.class));
+                    //       startActivity(new Intent(BindPhoneNextActivity.this, BindPhoneActivity.class));
+                    dialog.show();
+                    CacheUtil.getInstance().getUserInfo().getUser().setMobile("");
                 }
             }
 

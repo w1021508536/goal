@@ -25,7 +25,7 @@ import java.util.List;
  * Created by wang1 on 2017/1/23.
  * 创建人：王金壮
  * 公司：百讯
- * 描述：${TEXT}
+ * 描述：曲线图
  */
 public class BaseFundChartView extends View {
 

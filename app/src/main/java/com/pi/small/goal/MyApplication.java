@@ -2,12 +2,17 @@ package com.pi.small.goal;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.multidex.MultiDexApplication;
 import android.telephony.TelephonyManager;
 
+import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Utils;
+import com.umeng.socialize.Config;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
 
 import org.xutils.x;
 
@@ -20,12 +25,10 @@ import io.rong.imkit.RongIM;
  * Created by Administrator on 2017/5/22.
  */
 
-public class MyApplication extends Application {
+public class MyApplication extends MultiDexApplication {
 
     private TelephonyManager TelephonyMgr;
     public static String deviceId;
-
-
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -40,6 +43,7 @@ public class MyApplication extends Application {
         for (Activity activity : activityList) {
             activity.finish();
         }
+        CacheUtil.getInstance().setClear();
     }
 
     public List<Activity> getActivityList() {
@@ -60,6 +64,10 @@ public class MyApplication extends Application {
         TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         deviceId = TelephonyMgr.getDeviceId();
 
+        PlatformConfig.setWeixin(ThirdUtils.WX_APP_ID, ThirdUtils.WX_APP_SECRET);
+        PlatformConfig.setQQZone(ThirdUtils.QQ_APP_ID, ThirdUtils.QQ_APP_KEY);
+        UMShareAPI.get(this);
+        Config.DEBUG = true;
 //        //初始化定位参数
 //        mLocationOption = new AMapLocationClientOption();
 //        mLocationClient = new AMapLocationClient(this);

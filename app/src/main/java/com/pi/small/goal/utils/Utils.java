@@ -264,6 +264,16 @@ public class Utils {
         }
     }
 
+    /**
+     * 小格式化，小数点后省略二位
+     * create  wjz
+     **/
+
+    public static float getPercentTwo(float v) {
+        return (float) (Math.round(v * 100)) / 100;
+    }
+
+
     public static void putUser(String result, Context context) throws JSONException {
         JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
         String id = userObject.getString("id");

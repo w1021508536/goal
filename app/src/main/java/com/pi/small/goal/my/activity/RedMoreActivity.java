@@ -19,6 +19,7 @@ import com.pi.small.goal.my.dialog.MonthDialog;
 import com.pi.small.goal.my.entry.RedMoreAdapterEntry;
 import com.pi.small.goal.my.entry.RedMoreEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -98,7 +99,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
             public void onSuccess(String result) {
 //{"msg":"no data","code":100000,"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
 
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals("no data")) {
+                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
                     plv.setVisibility(View.GONE);
                     return;
                 }

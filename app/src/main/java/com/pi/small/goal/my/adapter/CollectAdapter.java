@@ -98,35 +98,31 @@ public class CollectAdapter extends BaseAdapter {
             Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgCityItem);
         }
 
-        vh.tvDayNumItem.setText(collectEntity.getCycle() + "");
+        //      vh.tvDayNumItem.setText(collectEntity.getCycle() + "");
         Date date = new Date();
         long l = date.getTime() - collectEntity.getCreateTime();
         long timeMinute = l / 60000;  //分钟
         long timeHour = timeMinute / 60;
         long timeDay = timeHour / 24;
-        if (timeMinute < 60)
-            vh.tvTimeItem.setText(timeMinute + "分钟前");
-        else if (timeHour < 24)
-            vh.tvTimeItem.setText(timeHour + "小时前");
-        else {
-            vh.tvTimeItem.setText(timeDay + "天前");
-            vh.tvDayNumItem.setText((collectEntity.getCycle() - timeDay) + "");
-        }
+
+        vh.tvDayNumItem.setText((collectEntity.getCycle() * 30 - timeDay) + "");
+
 //
 
 //        vh.tvTimeItem.setText(Utils.GetTime(collectEntity.getCreateTime()));
 
 
-        float v = collectEntity.getMoney() / collectEntity.getBudget();
+        float v = (float) (collectEntity.getMoney() / collectEntity.getBudget());
 
         DecimalFormat df = new DecimalFormat("#.0");
 
         //通过设置权重来改变横线块占比长度
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vh.imgProgressItem.getLayoutParams();
-        if (v < 1) {
-            vh.tvProgressItem.setText("0" + df.format(v) + "%");
+        String format = df.format(v * 100);
+        if (v < 0.01) {
+            vh.tvProgressItem.setText("0." + format + "%");
         } else {
-            vh.tvProgressItem.setText(df.format(v) + "%");
+            vh.tvProgressItem.setText(format + "%");
         }
 
         if (v < 0.01) {
@@ -152,7 +148,7 @@ public class CollectAdapter extends BaseAdapter {
         vh.imgCollectItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                collectAim(collectEntity.getId(),"0",position);
+                collectAim(collectEntity.getId(), "0", position);
             }
         });
         return convertView;

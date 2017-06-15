@@ -12,8 +12,8 @@ public class FollowEntry {
     private int followId;
     private int userId;
     private int followUserId;
-    private String nick;
-    private String avatar;
+    private String nick= "";
+    private String avatar= "";
 
     public FollowEntry() {
     }

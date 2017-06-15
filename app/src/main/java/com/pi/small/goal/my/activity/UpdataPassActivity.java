@@ -32,6 +32,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import static com.pi.small.goal.R.id.ll_key;
+
 /**
  * 公司：小目标
  * 创建者： 王金壮
@@ -81,6 +83,10 @@ public class UpdataPassActivity extends BaseActivity {
     LinearLayout llPass;
     @InjectView(R.id.tv_hint_pass)
     TextView tvHintPass;
+    @InjectView(R.id.view)
+    View view;
+    @InjectView(ll_key)
+    LinearLayout llKey;
 
     private GridView gridView;
     private TextView[] tvList;      //用数组保存6个TextView，为什么用数组？
@@ -124,6 +130,7 @@ public class UpdataPassActivity extends BaseActivity {
                 break;
             case FLAG_NEW_AGIN:
             case FLAG_SET_PASS_AGIN:
+            case FLAG_FORGET_PASS_AGIN:
                 tvHintPass.setText("请再次输入以确认");
                 break;
             case FLAG_SET_PASS:
@@ -154,6 +161,12 @@ public class UpdataPassActivity extends BaseActivity {
         imgList[5] = (ImageView) findViewById(R.id.img_pass6);
 
         dialog = new HuiFuDialog(this, "你的支付密码已设置成功");
+
+        int width = getWindowManager().getDefaultDisplay().getWidth() - Utils.dip2px(this, this.getResources().getDimension(R.dimen.top_left));
+        float v = width / 6.0f;
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) llKey.getLayoutParams();
+        layoutParams.height = (int) v;
+        llKey.setLayoutParams(layoutParams);
 
     }
 
@@ -273,9 +286,12 @@ public class UpdataPassActivity extends BaseActivity {
         });
     }
 
+    /**
+     * 重置密码
+     * create  wjz
+     **/
+
     private void forgetPass() {
-
-
         requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/pay/password/reset");
         requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
@@ -285,8 +301,7 @@ public class UpdataPassActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result
-                )) {
+                if (Utils.callOk(result)) {
                     dialog.show();
                 }
             }

@@ -22,11 +22,11 @@ public class SupportEntity {
     private int id;
     private int aimId;
     private int userId;
-    private int money;
-    private String message;
+    private double money;
+    private String message= "";
     private long createTime;
-    private String nick;
-    private String avatar;
+    private String nick= "";
+    private String avatar= "";
 
     public int getId() {
         return id;
@@ -52,11 +52,11 @@ public class SupportEntity {
         this.userId = userId;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 
-    public void setMoney(int money) {
+    public void setMoney(double money) {
         this.money = money;
     }
 

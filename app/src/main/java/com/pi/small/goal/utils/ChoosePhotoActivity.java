@@ -197,7 +197,7 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
             } else if (requestCode == REQUESTCODE_DROP_IMAGE) {
                 Bitmap bitmap = data.getParcelableExtra("data");
                 //    File smallImageFile = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
+                File file = ImageUtils.getSmallImageFile(this, bitmap, 640, 640, true);
                 Intent intent = new Intent();
                 intent.putExtra("path", file.getPath());
                 setResult(Code.RESULT_CAMERA_CODE, intent);

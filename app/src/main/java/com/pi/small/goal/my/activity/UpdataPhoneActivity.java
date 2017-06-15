@@ -14,6 +14,9 @@ import com.pi.small.goal.utils.CacheUtil;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import static com.pi.small.goal.my.activity.BindPhoneActivity.KEY_TYPE_UPDATA;
+import static com.pi.small.goal.my.activity.BindPhoneActivity.TYPE_UNBIND;
+
 /**
  * 公司：小目标
  * 创建者： 王金壮
@@ -52,7 +55,7 @@ public class UpdataPhoneActivity extends BaseActivity {
 
         String mobile = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
         tvPhoneUpdataPhone.setText(mobile);
-        nameTextInclude.setText("更换手机号");
+        nameTextInclude.setText("解绑手机");
         rightImageInclude.setVisibility(View.GONE);
     }
 
@@ -67,9 +70,14 @@ public class UpdataPhoneActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.next:
-                Intent intent = new Intent(this, BindPhoneActivity.class);
-                intent.putExtra(BindPhoneActivity.KEY_TYPE_UPDATA, BindPhoneActivity.TYPE_UPDATA);
+//                Intent intent = new Intent(this, BindPhoneActivity.class);
+//                intent.putExtra(BindPhoneActivity.KEY_TYPE_UPDATA, BindPhoneActivity.TYPE_UPDATA);
+//                startActivity(intent);
+                Intent intent = new Intent(this, BindPhoneNextActivity.class);
+                intent.putExtra(KEY_TYPE_UPDATA, TYPE_UNBIND);
+                //   intent.putExtra(BindPhoneNextActivity.KEY_PHONE, etvPhone.getText().toString());
                 startActivity(intent);
+                finish();
                 break;
         }
     }

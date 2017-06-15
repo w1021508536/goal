@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
-
+    <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" />
     <!-- 银联需要的权限 -->
     <uses-permission android:name="android.permission.NFC" />
 
@@ -114,6 +114,7 @@
 
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
@@ -228,7 +229,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.UpdataPassActivity"
-            android:label="修改支付密码"
+            android:label="设置、修改支付密码的复用页面"
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.ForgetActivity"
@@ -301,6 +302,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".my.activity.TaskActivity"
+            android:label="任务中心"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.ExtensionActivity"
+            android:label="推广码"
             android:screenOrientation="portrait" />
         <activity
             android:name=".aim.activity.PositionActivity"
@@ -364,6 +370,10 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
 
         <!-- ping++ -->
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="593f80146e27a41956000bd3"></meta-data>
 
         <activity
             android:name=".search.activity.RedHaveActivity"

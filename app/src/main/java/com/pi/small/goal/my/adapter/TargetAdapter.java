@@ -1,7 +1,6 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.entry.CollectEntity;
 import com.pi.small.goal.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -49,6 +47,10 @@ public class TargetAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public List<CollectEntity> getData() {
+        return data;
+    }
+
     @Override
     public int getCount() {
         return data.size();
@@ -82,20 +84,21 @@ public class TargetAdapter extends BaseAdapter {
         final CollectEntity collectEntity = data.get(position);
         vh.tvNameItem.setText(collectEntity.getName());
         vh.tvMoneyItem.setText("已转入 " + collectEntity.getMoney() + "/" + ((int) collectEntity.getBudget()) + "元");
-        vh.progressItem.setProgress(collectEntity.getMoney() / collectEntity.getBudget());
+        vh.progressItem.setProgress((float) (collectEntity.getMoney() * 10 / collectEntity.getBudget()));
+        vh.imgBgItem.setImageResource(R.drawable.image4);
 
         if (!"".equals(collectEntity.getImg())) {
             Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgBgItem);
         }
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, AimMoreActivity.class);
-                intent.putExtra(AimMoreActivity.KEY_AIMID, collectEntity.getId() + "");
-                context.startActivity(intent);
-            }
-        });
+//        convertView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context, AimMoreActivity.class);
+//                intent.putExtra(AimMoreActivity.KEY_AIMID, collectEntity.getId() + "");
+//                context.startActivity(intent);
+//            }
+//        });
 
         return convertView;
     }

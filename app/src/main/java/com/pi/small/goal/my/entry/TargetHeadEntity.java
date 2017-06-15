@@ -11,20 +11,19 @@ import java.util.List;
  **/
 public class TargetHeadEntity {
 
-
     /**
-     * aim : {"id":17,"name":"哦哦","budget":3000,"money":24.95,"cycle":1,"current":33,"userId":48,"province":"山东省","city":"青岛市","brief":"","position":"青岛东晖国际大酒店","longitude":0,"latitude":0,"support":0,"createTime":1495527352000,"status":3,"img":"","transfer":0}
-     * user : {"id":48,"nick":"花重锦官城","avatar":"http://img.smallaim.cn/1496900672239.jpeg","brief":"涂涂乐仑头诺拖他老婆磕头out偷摸楼父母色色偷摸T1可怕怕蛇","city":"","sex":0,"status":1,"aim":0,"login":0,"follow":1,"beFollowed":0}
-     * count : 3
-     * supports : [{"id":50,"aimId":17,"dynamicId":7,"fromUserId":32,"money":1000,"message":"","createTime":1497230454000,"isPaid":1,"toUserId":48,"remainMoney":1000,"drew":1,"nick":"杨晶晶","avatar":"https://q.qlogo.cn/qqapp/1106004131/E174B73EF43BC3C4D2D8891B79E237AF/100"},{"id":11,"aimId":17,"dynamicId":7,"fromUserId":11,"money":1,"message":"","createTime":1496640447000,"isPaid":1,"toUserId":0,"remainMoney":0,"drew":1,"nick":"hh","avatar":"1496802195021.jpg"},{"id":10,"aimId":17,"dynamicId":7,"fromUserId":26,"money":1,"message":"","createTime":1496640400000,"isPaid":1,"toUserId":0,"remainMoney":0,"drew":1,"nick":"44","avatar":""}]
+     * aim : {"id":18,"name":"买双鞋","budget":6000,"money":151.09,"cycle":1,"current":20,"userId":27,"province":"山东省","city":"青岛市","brief":"买双鞋子","position":"万锦律师","longitude":0,"latitude":0,"support":0,"createTime":1495527450000,"status":1,"img":"1497234921125.jpg","transfer":0,"isFinish":0}
+     * user : {"id":27,"nick":"1234","avatar":"1496802195021.jpg","brief":"12345678","city":"","sex":0,"status":1,"aim":0,"login":0,"follow":2,"beFollowed":7}
+     * count : 5
+     * supports : [{"id":124,"aimId":18,"dynamicId":65,"fromUserId":63,"money":30,"message":"","createTime":1497342023000,"isPaid":1,"toUserId":27,"remainMoney":27,"drew":1,"nick":"曈","avatar":"1497344401703.jpg"},{"id":123,"aimId":18,"dynamicId":65,"fromUserId":59,"money":1,"message":"","createTime":1497341655000,"isPaid":1,"toUserId":27,"remainMoney":0.9,"drew":1,"nick":"云鹏","avatar":"http://wx.qlogo.cn/mmopen/DibTKUUzk82tX46rsqOodMiciadWSqtVW040sdjPiaMQoyo2PbEy24QcEia1nIH4zSYd8dqmHaWPhDEcgRxTVEGJRUlGPWzVhPgE6/0"},{"id":79,"aimId":18,"dynamicId":65,"fromUserId":43,"money":1,"message":"","createTime":1497246001000,"isPaid":1,"toUserId":27,"remainMoney":1,"drew":1,"nick":"13693361208","avatar":""},{"id":78,"aimId":18,"dynamicId":65,"fromUserId":43,"money":1,"message":"","createTime":1497245884000,"isPaid":1,"toUserId":27,"remainMoney":1,"drew":1,"nick":"13693361208","avatar":""},{"id":75,"aimId":18,"dynamicId":65,"fromUserId":43,"money":1,"message":"","createTime":1497244830000,"isPaid":1,"toUserId":27,"remainMoney":1,"drew":1,"nick":"13693361208","avatar":""}]
      * haveCollect : 0
      */
 
     private AimBean aim;
     private UserBean user;
     private int count;
-    private int haveCollect;
     private List<SupportsBean> supports;
+    private int haveCollect;
 
     public AimBean getAim() {
         return aim;
@@ -68,24 +67,25 @@ public class TargetHeadEntity {
 
     public static class AimBean {
         /**
-         * id : 17
-         * name : 哦哦
-         * budget : 3000
-         * money : 24.95
+         * id : 18
+         * name : 买双鞋
+         * budget : 6000
+         * money : 151.09
          * cycle : 1
-         * current : 33
-         * userId : 48
+         * current : 20
+         * userId : 27
          * province : 山东省
          * city : 青岛市
-         * brief :
-         * position : 青岛东晖国际大酒店
+         * brief : 买双鞋子
+         * position : 万锦律师
          * longitude : 0
          * latitude : 0
          * support : 0
-         * createTime : 1495527352000
-         * status : 3
-         * img :
+         * createTime : 1495527450000
+         * status : 1
+         * img : 1497234921125.jpg
          * transfer : 0
+         * isFinish : 0
          */
 
         private int id;
@@ -106,6 +106,7 @@ public class TargetHeadEntity {
         private int status;
         private String img;
         private int transfer;
+        private int isFinish;
 
         public int getId() {
             return id;
@@ -250,21 +251,29 @@ public class TargetHeadEntity {
         public void setTransfer(int transfer) {
             this.transfer = transfer;
         }
+
+        public int getIsFinish() {
+            return isFinish;
+        }
+
+        public void setIsFinish(int isFinish) {
+            this.isFinish = isFinish;
+        }
     }
 
     public static class UserBean {
         /**
-         * id : 48
-         * nick : 花重锦官城
-         * avatar : http://img.smallaim.cn/1496900672239.jpeg
-         * brief : 涂涂乐仑头诺拖他老婆磕头out偷摸楼父母色色偷摸T1可怕怕蛇
+         * id : 27
+         * nick : 1234
+         * avatar : 1496802195021.jpg
+         * brief : 12345678
          * city :
          * sex : 0
          * status : 1
          * aim : 0
          * login : 0
-         * follow : 1
-         * beFollowed : 0
+         * follow : 2
+         * beFollowed : 7
          */
 
         private int id;
@@ -370,31 +379,31 @@ public class TargetHeadEntity {
 
     public static class SupportsBean {
         /**
-         * id : 50
-         * aimId : 17
-         * dynamicId : 7
-         * fromUserId : 32
-         * money : 1000
+         * id : 124
+         * aimId : 18
+         * dynamicId : 65
+         * fromUserId : 63
+         * money : 30
          * message :
-         * createTime : 1497230454000
+         * createTime : 1497342023000
          * isPaid : 1
-         * toUserId : 48
-         * remainMoney : 1000
+         * toUserId : 27
+         * remainMoney : 27
          * drew : 1
-         * nick : 杨晶晶
-         * avatar : https://q.qlogo.cn/qqapp/1106004131/E174B73EF43BC3C4D2D8891B79E237AF/100
+         * nick : 曈
+         * avatar : 1497344401703.jpg
          */
 
         private int id;
         private int aimId;
         private int dynamicId;
         private int fromUserId;
-        private int money;
+        private double money;
         private String message;
         private long createTime;
         private int isPaid;
         private int toUserId;
-        private int remainMoney;
+        private double remainMoney;
         private int drew;
         private String nick;
         private String avatar;
@@ -431,11 +440,11 @@ public class TargetHeadEntity {
             this.fromUserId = fromUserId;
         }
 
-        public int getMoney() {
+        public double getMoney() {
             return money;
         }
 
-        public void setMoney(int money) {
+        public void setMoney(double money) {
             this.money = money;
         }
 
@@ -471,11 +480,11 @@ public class TargetHeadEntity {
             this.toUserId = toUserId;
         }
 
-        public int getRemainMoney() {
+        public double getRemainMoney() {
             return remainMoney;
         }
 
-        public void setRemainMoney(int remainMoney) {
+        public void setRemainMoney(double remainMoney) {
             this.remainMoney = remainMoney;
         }
 

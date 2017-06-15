@@ -46,6 +46,7 @@
     <color name="line_level_red">#C05492</color>
     <color name="line_level_gray">#C1BCD3</color>
     <color name="progress_unfinish_color">#50ffffff</color>
+    <color name="translucence">#50000000</color>
     <color name="sign_line">#E5DBD7</color>
     <color name="basefundchatview_line">#E0E0E0</color>
 </resources>

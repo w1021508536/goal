@@ -44,9 +44,9 @@
                     android:layout_height="@dimen/rl_height"
                     android:layout_below="@+id/tv_expNums_level"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="@dimen/top_left"
                     android:layout_marginRight="@dimen/top_left"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -60,8 +60,8 @@
                         android:id="@+id/ll_line1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -84,8 +84,8 @@
                         android:id="@+id/ll_line3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -108,8 +108,8 @@
                         android:id="@+id/ll_line4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -132,8 +132,8 @@
                         android:id="@+id/ll_line5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -156,8 +156,8 @@
                         android:id="@+id/ll_line6"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -180,8 +180,8 @@
                         android:id="@+id/ll_line7"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -204,8 +204,8 @@
                         android:id="@+id/ll_line8"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <View
@@ -264,6 +264,7 @@
                         android:id="@+id/imageView8"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:src="@mipmap/left_iocn" />
 
                     <LinearLayout
@@ -281,7 +282,7 @@
                             android:id="@+id/tv_aimNums_level"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="1"
                             android:textColor="@color/chat_top" />
 
                         <TextView
@@ -304,6 +305,7 @@
                     <ImageView
                         android:layout_width="48dp"
                         android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:src="@mipmap/right_icon" />
 
                     <LinearLayout
@@ -447,6 +449,7 @@
                         android:id="@+id/img_great_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:src="@mipmap/exp_great_icon" />
 
 
@@ -569,6 +572,7 @@
                         android:id="@+id/img_money_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:src="@mipmap/exp_money_icon" />
 
 
@@ -579,7 +583,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_toRightOf="@id/img_money_level"
                         android:singleLine="true"
-                        android:text="+X" />
+                        android:text="+∞exp" />
 
                     <TextView
                         style="@style/text_white_12"
