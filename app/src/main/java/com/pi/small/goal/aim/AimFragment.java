@@ -30,6 +30,7 @@ import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.aim.adapter.ViewPagerAdapter;
 import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.activity.RedActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
@@ -82,7 +83,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
 
     private ImageOptions imageOptions = new ImageOptions.Builder()
-            .setImageScaleType(ImageView.ScaleType.FIT_XY)
+            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
             .setLoadingDrawableId(R.drawable.image1)
             .setFailureDrawableId(R.drawable.image1)
             .build();
@@ -90,6 +91,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
     private String img;
     private String path;
+
+    private int photoFrom = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,8 +143,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.right_image:
                 int size = dataList.size();
-//                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
-                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
+                String grade = CacheUtil.getInstance().getUserInfo().getGrade();
+//                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
                 if (grade.equals("v0")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
@@ -242,9 +245,11 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
         } else if (resultCode == Code.RESULT_CAMERA_CODE) {
             path = data.getStringExtra("path");
+            photoFrom = 0;
             UpPicture();
         } else if (resultCode == Code.RESULT_GALLERY_CODE) {
             path = data.getStringExtra("path");
+            photoFrom = 0;
             UpPicture();
         } else if (resultCode == Code.SupportAim) {
             String money = data.getStringExtra("money");
@@ -267,6 +272,15 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
             weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
             viewPagerAdapter.notifyDataSetChanged();
+        } else if (resultCode == Code.RESULT_OWM_CODE) {
+
+            System.out.println("===================" + data.getStringExtra("path"));
+            if (!data.getStringExtra("path").equals("")) {
+                photoFrom = 1;
+                img = data.getStringExtra("path");
+                ChangeAimPhoto();
+            }
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -332,7 +346,12 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
                         ImageView aim_image = (ImageView) viewList.get(position).findViewById(R.id.aim_image);
-                        aim_image.setImageBitmap(BitmapFactory.decodeFile(path));
+                        if (photoFrom == 1) {
+                            x.image().bind(aim_image, Utils.GetPhotoPath(img), imageOptions);
+                        } else {
+                            aim_image.setImageBitmap(BitmapFactory.decodeFile(path));
+                        }
+
                         dataList.get(position).setImg(img);
                         viewPagerAdapter.notifyDataSetChanged();
                     } else {

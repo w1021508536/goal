@@ -231,6 +231,8 @@ public class BindPhoneNextActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+
+                System.out.println("==========getCode=========" + result);
                 if (!Utils.callOk(result))
                     Utils.showToast(BindPhoneNextActivity.this, Utils.getMsg(result));
                 return;

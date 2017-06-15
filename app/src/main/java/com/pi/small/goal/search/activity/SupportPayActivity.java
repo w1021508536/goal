@@ -13,7 +13,10 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.PayDetailActivity;
+import com.pi.small.goal.my.activity.PayPassActivity;
+import com.pi.small.goal.utils.BalancePayActivity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
@@ -78,11 +81,14 @@ public class SupportPayActivity extends BaseActivity {
 
     public static IWXAPI wx_api;
 
+    private String password;
+
+    private String linkId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_pay);
+        super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
 
 
@@ -101,11 +107,11 @@ public class SupportPayActivity extends BaseActivity {
 
     @OnClick({R.id.left_image, R.id.right_image, R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, R.id.union_layout, R.id.pay_text})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
-
             case R.id.left_image:
                 Utils.showToast(SupportPayActivity.this, "支付取消");
-                Intent intent = new Intent();
+
                 setResult(Code.FailCode, intent);
                 finish();
                 break;
@@ -154,7 +160,18 @@ public class SupportPayActivity extends BaseActivity {
 
                 break;
             case R.id.pay_text:
-                DynamicAim();
+                if (channel.equals("balance")) {
+                    int payPassword = Utils.UserSharedPreferences(this).getInt("payPassword", 0);
+                    if (payPassword == 0) {
+                        Utils.showToast(this, getResources().getString(R.string.set_password));
+                        startActivity(new Intent(this, PayPassActivity.class));
+                    } else {
+                        intent.setClass(this, BalancePayActivity.class);
+                        startActivityForResult(intent, Code.BalancePay);
+                    }
+                } else {
+                    DynamicAim();
+                }
                 break;
         }
     }
@@ -212,8 +229,13 @@ public class SupportPayActivity extends BaseActivity {
             Intent intent = new Intent();
             setResult(Code.SupportAim, intent);
             finish();
-
-
+        } else if (requestCode == Code.BalancePay) {
+            if (data.getStringExtra("password").length() == 6) {
+                password = data.getStringExtra("password");
+                DynamicAim();
+            } else {
+                Utils.showToast(SupportPayActivity.this, "取消输入支付密码");
+            }
         }
     }
 
@@ -225,9 +247,55 @@ public class SupportPayActivity extends BaseActivity {
     }
 
 
+    private void BalancePay() {
+        System.out.println("====================" + aimId + "===" + dynamicId + "-==" + money + "==" + channel);
+
+        RequestParams requestParams = new RequestParams(Url.Url + Url.PayBalance);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("linkId", linkId);
+        requestParams.addBodyParameter("amount", money);
+        requestParams.addBodyParameter("password", password);
+        requestParams.addBodyParameter("type", "1");
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("==============AimDynamic=========" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        Intent intent = new Intent();
+                        intent.setClass(SupportPayActivity.this, PayDetailActivity.class);
+                        intent.putExtra("money", money);
+                        intent.putExtra("card", "");
+                        intent.putExtra("channel", channel);
+                        startActivityForResult(intent, Code.Pay);
+                    } else {
+                        Utils.showToast(SupportPayActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (ex.getMessage() != null) {
+                    Utils.showToast(SupportPayActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+    }
+
     private void DynamicAim() {
-
-
         System.out.println("====================" + aimId + "===" + dynamicId + "-==" + money + "==" + channel);
 
         RequestParams requestParams = new RequestParams(Url.Url + Url.AimSupport);
@@ -246,11 +314,15 @@ public class SupportPayActivity extends BaseActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
+                        if (channel.equals("balance")) {
+                            linkId = new JSONObject(result).getJSONObject("result").getJSONObject("support").getString("id");
+                            BalancePay();
+                        } else {
+                            String json = new JSONObject(result).getJSONObject("result").getString("charge");
+                            System.out.println("==============AimDynamic=====json====" + json);
+                            Pingpp.createPayment(SupportPayActivity.this, json);
+                        }
 
-                        String json = new JSONObject(result).getJSONObject("result").getString("charge");
-
-                        System.out.println("==============AimDynamic=====json====" + json);
-                        Pingpp.createPayment(SupportPayActivity.this, json);
                     } else {
                         Utils.showToast(SupportPayActivity.this, new JSONObject(result).getString("msg"));
                     }

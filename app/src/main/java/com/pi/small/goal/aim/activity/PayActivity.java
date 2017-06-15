@@ -13,11 +13,15 @@ import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.PayPassActivity;
+import com.pi.small.goal.search.activity.SupportPayActivity;
+import com.pi.small.goal.utils.BalancePayActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pingplusplus.android.Pingpp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -95,6 +99,9 @@ public class PayActivity extends BaseActivity {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM月dd日");
 
+    private String password;
+    private String linkId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,11 +127,11 @@ public class PayActivity extends BaseActivity {
 
     @OnClick({R.id.left_image, R.id.right_image, R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, R.id.union_layout, R.id.hook_layout, R.id.pay_text})
     public void onViewClicked(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
 
             case R.id.left_image:
                 Utils.showToast(PayActivity.this, "支付取消");
-                Intent intent = new Intent();
                 setResult(Code.FailCode, intent);
                 finish();
                 break;
@@ -183,7 +190,19 @@ public class PayActivity extends BaseActivity {
                 break;
             case R.id.pay_text:
                 if (isHook) {
-                    DynamicAim();
+                    if (channel.equals("balance")) {
+                        int payPassword = Utils.UserSharedPreferences(this).getInt("payPassword", 0);
+                        if (payPassword == 0) {
+                            Utils.showToast(this, getResources().getString(R.string.set_password));
+                            startActivity(new Intent(this, PayPassActivity.class));
+                        } else {
+                            intent.setClass(this, BalancePayActivity.class);
+                            startActivityForResult(intent, Code.BalancePay);
+                        }
+
+                    } else {
+                        DynamicAim();
+                    }
                 } else {
                     Utils.showToast(this, "请仔细阅读相关协议");
                 }
@@ -248,14 +267,20 @@ public class PayActivity extends BaseActivity {
             setResult(Code.SupportAim, intent);
             finish();
 
-
+        } else if (requestCode == Code.BalancePay) {
+            if (data.getStringExtra("password").length() == 6) {
+                password = data.getStringExtra("password");
+                DynamicAim();
+            } else {
+                Utils.showToast(PayActivity.this, "取消输入支付密码");
+            }
         }
     }
 
 
     private void init() {
         union_layout.setVisibility(View.GONE);
-        money_text.setText(money+".00");
+        money_text.setText(money + ".00");
         balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
 
         long currentTime = System.currentTimeMillis();
@@ -265,10 +290,6 @@ public class PayActivity extends BaseActivity {
 
 
     private void DynamicAim() {
-
-
-        System.out.println("====================" + aimId + "===" + content + "-==" + money + "==" + channel);
-
         RequestParams requestParams = new RequestParams(Url.Url + Url.AimDynamic);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -289,11 +310,15 @@ public class PayActivity extends BaseActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
+                        if (channel.equals("balance")) {
+                            linkId = new JSONObject(result).getJSONObject("result").getJSONObject("dynamic").getString("id");
+                            BalancePay();
+                        } else {
+                            String json = new JSONObject(result).getJSONObject("result").getString("charge");
+                            System.out.println("==============AimDynamic=====json====" + json);
+                            Pingpp.createPayment(PayActivity.this, json);
+                        }
 
-                        String json = new JSONObject(result).getJSONObject("result").getString("charge");
-
-                        System.out.println("==============AimDynamic=====json====" + json);
-                        Pingpp.createPayment(PayActivity.this, json);
                     } else {
                         Utils.showToast(PayActivity.this, new JSONObject(result).getString("msg"));
                     }
@@ -321,6 +346,54 @@ public class PayActivity extends BaseActivity {
             }
         });
 
+
+    }
+
+    private void BalancePay() {
+
+        RequestParams requestParams = new RequestParams(Url.Url + Url.PayBalance);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("linkId", linkId);
+        requestParams.addBodyParameter("amount", money);
+        requestParams.addBodyParameter("password", password);
+        requestParams.addBodyParameter("type", "2");
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+
+                System.out.println("==============AimDynamic=========" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        Intent intent = new Intent();
+                        intent.setClass(PayActivity.this, PayDetailActivity.class);
+                        intent.putExtra("money", money);
+                        intent.putExtra("card", "");
+                        intent.putExtra("channel", channel);
+                        startActivityForResult(intent, Code.Pay);
+
+                    } else {
+                        Utils.showToast(PayActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (ex.getMessage() != null) {
+                    Utils.showToast(PayActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
 
     }
 

@@ -97,4 +97,34 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/city_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="20dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/icon_location" />
+
+        <TextView
+            android:id="@+id/city_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:background="@null"
+            android:gravity="center"
+            android:hint="青岛"
+            android:textColor="@color/text_aim"
+            android:textColorHint="@color/text_aim"
+            android:textSize="12dp" />
+
+    </LinearLayout>
+
 </LinearLayout>

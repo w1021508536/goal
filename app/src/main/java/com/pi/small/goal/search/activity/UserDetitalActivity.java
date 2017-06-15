@@ -145,6 +145,8 @@ public class UserDetitalActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(true);
         }
+        utilsSharedPreferences = Utils.UtilsSharedPreferences(this);
+        utilsEditor = utilsSharedPreferences.edit();
 
         width = (getWindowManager().getDefaultDisplay().getWidth() - 130);
 
@@ -179,9 +181,13 @@ public class UserDetitalActivity extends BaseActivity {
                 new GetUpDataTask().execute();
             }
         });
+        if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
+            followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(this).getString("followList", ""));
+        }
 
         for (int i = 0; i < followList.size(); i++) {
             if (userId.equals(followList.get(i).get("followUserId"))) {
+                System.out.print("==========haha===========" + userId + "=============" + followList.get(i).get("followUserId"));
                 isFollow = 1;
             }
         }
@@ -342,8 +348,8 @@ public class UserDetitalActivity extends BaseActivity {
                             utilsEditor.commit();
 
                         }
-                        isDown = true;
-                        GetHotData("1", page * 10 + "");
+//                        isDown = true;
+//                        GetHotData("1", page * 10 + "");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

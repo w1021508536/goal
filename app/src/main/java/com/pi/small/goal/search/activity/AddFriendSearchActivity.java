@@ -87,7 +87,7 @@ public class AddFriendSearchActivity extends BaseActivity {
 
         width = (getWindowManager().getDefaultDisplay().getWidth() - 130);
         followList = new ArrayList<Map<String, String>>();
-        aimEntityList = new ArrayList<AimEntity>();
+
         userSearchEntityList = new ArrayList<UserSearchEntity>();
         if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
             followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(this).getString("followList", ""));
@@ -98,11 +98,6 @@ public class AddFriendSearchActivity extends BaseActivity {
     }
 
     private void init() {
-
-
-//        addFriendSearchAdapter = new AddFriendSearchAdapter( this);
-//        userList.setAdapter(addFriendSearchAdapter);
-
         GetUserRecommend();
 
     }
@@ -140,6 +135,7 @@ public class AddFriendSearchActivity extends BaseActivity {
                             userSearchEntity.setBeFollowed(jsonArray.getJSONObject(i).getJSONObject("user").getString("beFollowed"));
                             userSearchEntity.setIsFollowed("0");
                             JSONArray aimsArray = jsonArray.getJSONObject(i).optJSONArray("aims");
+                            aimEntityList = new ArrayList<AimEntity>();
                             for (int j = 0; j < aimsArray.length(); j++) {
                                 aimEntity = new AimEntity();
                                 aimEntity.setId(aimsArray.getJSONObject(j).optString("id"));
@@ -162,12 +158,17 @@ public class AddFriendSearchActivity extends BaseActivity {
 
                                 aimEntityList.add(aimEntity);
                             }
+
+                            System.out.println("=============aimEntityList=============" + aimEntityList.size() + "====" + i);
                             userSearchEntity.setAimEntityList(aimEntityList);
                             userSearchEntityList.add(userSearchEntity);
+
                         }
 
+                        for (int i = 0; i < userSearchEntityList.size(); i++) {
+                            System.out.println("=============userSearchEntityList=============" + userSearchEntityList.get(i).getAimEntityList().size() + "====" + i);
+                        }
 //                        addFriendSearchAdapter.notifyDataSetChanged();
-                        System.out.println("=====exddddd=======");
                         addFriendSearchAdapter = new AddFriendSearchAdapter(AddFriendSearchActivity.this);
                         userList.setAdapter(addFriendSearchAdapter);
                     } else {
@@ -224,6 +225,8 @@ public class AddFriendSearchActivity extends BaseActivity {
                 .setLoadingDrawableId(R.mipmap.background_load)
                 .setFailureDrawableId(R.mipmap.background_fail)
                 .build();
+
+        List<Map<String, String>> imageList;
 
         public AddFriendSearchAdapter(Context context) {
             this.context = context;
@@ -341,14 +344,12 @@ public class AddFriendSearchActivity extends BaseActivity {
                 }
             });
 
-            final List<Map<String, String>> imageList = new ArrayList<Map<String, String>>();
+            imageList = new ArrayList<Map<String, String>>();
             if (userSearchEntityList.get(position).getAimEntityList().size() < 1) {
                 viewHolder.imageLayout.setVisibility(View.GONE);
             } else {
-                System.out.println("================" + userSearchEntityList.get(position).getAimEntityList().size() + "=========img====" + "========" + position);
                 viewHolder.imageLayout.setVisibility(View.VISIBLE);
-
-
+                System.out.println("=============position====userSearchEntityList=======" + position + "====" + userSearchEntityList.get(position).getAimEntityList().size());
                 for (int i = 0; i < userSearchEntityList.get(position).getAimEntityList().size(); i++) {
                     if (imageList.size() < 3) {
                         if (!userSearchEntityList.get(position).getAimEntityList().get(i).getImg().equals("")) {
@@ -359,6 +360,8 @@ public class AddFriendSearchActivity extends BaseActivity {
                         }
                     }
                 }
+
+                System.out.println("=============position===========" + position + "====" + imageList.size());
 
                 if (imageList.size() == 1) {
                     viewHolder.image1.setVisibility(View.VISIBLE);
@@ -436,6 +439,12 @@ public class AddFriendSearchActivity extends BaseActivity {
                     startActivity(intent);
                 }
             });
+            if (userSearchEntityList.get(position).getCity().equals("")) {
+                viewHolder.cityLayout.setVisibility(View.GONE);
+            } else {
+                viewHolder.cityLayout.setVisibility(View.VISIBLE);
+                viewHolder.cityText.setText(userSearchEntityList.get(position).getCity());
+            }
 
             return convertView;
         }
@@ -458,6 +467,10 @@ public class AddFriendSearchActivity extends BaseActivity {
             ImageView image2;
             @InjectView(R.id.image1)
             ImageView image1;
+            @InjectView(R.id.city_text)
+            TextView cityText;
+            @InjectView(R.id.city_layout)
+            LinearLayout cityLayout;
 
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);

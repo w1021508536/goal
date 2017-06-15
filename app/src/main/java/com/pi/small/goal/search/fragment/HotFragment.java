@@ -419,7 +419,6 @@ public class HotFragment extends Fragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=============ex.getMessage()==============" + ex.getMessage());
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
@@ -980,6 +979,14 @@ public class HotFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            if (dynamicEntityList.get(position).getCity().equals("")) {
+                viewHolder.cityLayout.setVisibility(View.GONE);
+            } else {
+                viewHolder.cityLayout.setVisibility(View.VISIBLE);
+                viewHolder.cityText.setText(dynamicEntityList.get(position).getCity());
+            }
+
             return convertView;
         }
 
@@ -1027,7 +1034,6 @@ public class HotFragment extends Fragment {
             @InjectView(R.id.comment_list)
             MyListView commentList;
 
-
             @InjectView(R.id.money_layout)
             RelativeLayout moneyLayout;
             @InjectView(R.id.icon_money_text)
@@ -1037,6 +1043,10 @@ public class HotFragment extends Fragment {
 
             @InjectView(R.id.comment_more_text)
             TextView commentMoreText;
+            @InjectView(R.id.city_text)
+            TextView cityText;
+            @InjectView(R.id.city_layout)
+            LinearLayout cityLayout;
             private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {

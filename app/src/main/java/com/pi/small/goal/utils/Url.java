@@ -36,6 +36,7 @@ public class Url {
 
 
     public static String AimSupport = "/aim/support";//支持目标
+    public static String PayBalance = "/pay/balance";//余额支付
 
 
     //Message

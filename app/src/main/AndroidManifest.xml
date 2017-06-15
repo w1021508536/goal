@@ -373,7 +373,7 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="593f80146e27a41956000bd3"></meta-data>
+            android:value="593f80146e27a41956000bd3" />
 
         <activity
             android:name=".search.activity.RedHaveActivity"
@@ -405,7 +405,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".search.activity.InviteActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".utils.GetPhotosActivity" />
+        <activity android:name=".utils.BalancePayActivity"></activity>
     </application>
 
 </manifest>

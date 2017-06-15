@@ -125,11 +125,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        setContentView(R.layout.activity_main);
         userSharedPreferences = Utils.UserSharedPreferences(this);
         userEditor = userSharedPreferences.edit();
+
         imtoken = userSharedPreferences.getString("imtoken", "");
+        lastTime = userSharedPreferences.getLong("lastTime", 0);
 
         utilsSharedPreferences = Utils.UtilsSharedPreferences(this);
         utilsEditor = utilsSharedPreferences.edit();
-        lastTime = utilsSharedPreferences.getLong("lastTime", 0);
+
         fragmentManager = getSupportFragmentManager();
         super.onCreate(savedInstanceState);
 
@@ -187,18 +189,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }, Conversation.ConversationType.PRIVATE);
 
-            GetUserInfo();
 //            GetFriendsListData();
             GetFollowListData();
 
             if (lastTime != 0) {
-                if (simpleDateFormat.format(new Date(lastTime)).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
-                } else {
+                if (!simpleDateFormat.format(new Date(lastTime)).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
                     userEditor.putLong("lastTime", System.currentTimeMillis());
+                    userEditor.commit();
                     GetRed();
                 }
             } else {
                 userEditor.putLong("lastTime", System.currentTimeMillis());
+                userEditor.commit();
                 GetRed();
             }
 
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(0);
+        mLocationOption.setInterval(500000);
         //设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
@@ -244,10 +246,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mLocationClient.stopLocation();
 
                     } else {
+                        userEditor.putString("city", "青岛");
+                        userEditor.commit();
                         //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                         Log.e("AmapError", "location Error, ErrCode:"
                                 + aMapLocation.getErrorCode() + ", errInfo:"
                                 + aMapLocation.getErrorInfo());
+                        mLocationClient.stopLocation();
                     }
                 }
             }
@@ -484,70 +489,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void GetUserInfo() {
-        RequestParams requestParams = new RequestParams(Url.Url + Url.UserMy);
-        requestParams.addHeader("token", Utils.GetToken(this));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                System.out.println("=============GetUserInfo==========" + result);
-
-                try {
-                    String code = new JSONObject(result).getString("code");
-                    if (code.equals("0")) {
-                        JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
-                        JSONObject accountObject = new JSONObject(result).getJSONObject("result").getJSONObject("account");
-                        JSONObject taskInfoObject = new JSONObject(result).getJSONObject("result").getJSONObject("taskInfo");
-                        userEditor.putString("id", userObject.getString("id"));
-                        userEditor.putString("nick", userObject.getString("nick"));
-                        userEditor.putString("avatar", userObject.optString("avatar"));
-                        userEditor.putString("brief", userObject.optString("brief"));
-                        userEditor.putString("wechatId", userObject.optString("wechatId"));
-                        userEditor.putString("qqId", userObject.optString("qqId"));
-                        //    userEditor.putString("mobile", userObject.optString("mobile"));
-                        userEditor.putString("city", userObject.optString("city"));
-                        userEditor.putString("createTime", userObject.optString("createTime"));
-                        userEditor.putString("updateTime", userObject.optString("updateTime"));
-
-                        userEditor.putString("accountId", accountObject.getString("accountId"));
-                        userEditor.putString("userId", accountObject.getString("userId"));
-                        userEditor.putString("exp", accountObject.getString("exp"));
-                        userEditor.putString("balance", accountObject.getString("balance"));
-                        userEditor.putString("aim", accountObject.getString("aim"));
-                        userEditor.putString("option", accountObject.getString("option"));
-                        userEditor.putString("score", accountObject.getString("score"));
-
-                        userEditor.putString("totalTaskCount", taskInfoObject.getString("totalTaskCount"));
-                        userEditor.putString("finishTaskCount", taskInfoObject.getString("finishTaskCount"));
-
-                        userEditor.putString("grade", new JSONObject(result).getJSONObject("result").getString("grade"));
-
-                        userEditor.commit();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
     private void GetFriendsListData() {
         RequestParams requestParams = new RequestParams(Url.Url + Url.FriendList);
         requestParams.addHeader("token", Utils.GetToken(this));
@@ -599,8 +540,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (code.equals("0")) {
 
                         String money = new JSONObject(result).getJSONObject("result").getString("amount");
-
-                        GetRedWindow(money);
+                        if (Double.valueOf(new JSONObject(result).getJSONObject("result").getString("amount")) != 0) {
+                            GetRedWindow(money);
+                        }
                     }
 //                    GetRedWindow("8.88");
                 } catch (JSONException e) {

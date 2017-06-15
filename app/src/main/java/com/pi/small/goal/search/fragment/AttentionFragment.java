@@ -875,6 +875,14 @@ public class AttentionFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+            if (dynamicEntityList.get(position).getCity().equals("")) {
+                viewHolder.cityLayout.setVisibility(View.GONE);
+            } else {
+                viewHolder.cityLayout.setVisibility(View.VISIBLE);
+                viewHolder.cityText.setText(dynamicEntityList.get(position).getCity());
+            }
+
             return convertView;
         }
 
@@ -932,6 +940,10 @@ public class AttentionFragment extends Fragment {
 
             @InjectView(R.id.comment_more_text)
             TextView commentMoreText;
+            @InjectView(R.id.city_text)
+            TextView cityText;
+            @InjectView(R.id.city_layout)
+            LinearLayout cityLayout;
             private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {

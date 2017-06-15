@@ -21,6 +21,7 @@ import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -37,10 +38,18 @@ public class FollowAdapter extends BaseAdapter {
 
     private Context context;
     private List<FollowEntry> data;
+    private SharedPreferences utilsSharedPreferences;
+    private SharedPreferences.Editor utilsEditor;
+    private List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
 
     public FollowAdapter(Context context) {
         this.context = context;
         data = new ArrayList<>();
+        utilsSharedPreferences = Utils.UtilsSharedPreferences(context);
+        utilsEditor = utilsSharedPreferences.edit();
+        if (!Utils.UtilsSharedPreferences(context).getString("followList", "").equals("")) {
+            followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(context).getString("followList", ""));
+        }
     }
 
     public void setData(List<FollowEntry> data) {
@@ -101,7 +110,7 @@ public class FollowAdapter extends BaseAdapter {
      * create  wjz
      **/
 
-    private void follow(int followUserId, final int position) {
+    private void follow(final int followUserId, final int position) {
 
         SharedPreferences sp = Utils.UserSharedPreferences(context);
         RequestParams requestParams = new RequestParams(Url.Url + "/user/follow");
@@ -117,6 +126,13 @@ public class FollowAdapter extends BaseAdapter {
 
                 if (!RenameActivity.callOk(result)) return;
                 data.remove(position);
+                for (int i = 0; i < followList.size(); i++) {
+                    if (String.valueOf(followUserId).equals(followList.get(i).get("followUserId"))) {
+                        followList.remove(i);
+                    }
+                }
+                utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                utilsEditor.commit();
                 notifyDataSetChanged();
             }
 

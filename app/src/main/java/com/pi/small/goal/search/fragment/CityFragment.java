@@ -218,7 +218,6 @@ public class CityFragment extends Fragment {
 
 
     private void GetHotData(String page, String r) {
-        state = hotList.getRefreshableView().onSaveInstanceState();
         RequestParams requestParams = new RequestParams(Url.Url + Url.CitySearch);
         requestParams.addHeader("token", Utils.GetToken(getActivity()));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -228,7 +227,7 @@ public class CityFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=======GetHotData=============" + result);
+                System.out.println("=======GetCityData=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -300,9 +299,7 @@ public class CityFragment extends Fragment {
                         }
 
                         hotAdapter.notifyDataSetChanged();
-                        hotList.getRefreshableView().onRestoreInstanceState(state);
                     } else if (code.equals("100000")) {
-                        System.out.println("========code===222=========" + code);
                         if (isDown) {
                             dynamicEntityList.clear();
                         }
@@ -310,7 +307,6 @@ public class CityFragment extends Fragment {
                             nullLayout.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        System.out.println("========code====333========" + code);
                         Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
@@ -883,6 +879,13 @@ public class CityFragment extends Fragment {
                 }
             });
 
+            if (dynamicEntityList.get(position).getCity().equals("")) {
+                viewHolder.cityLayout.setVisibility(View.GONE);
+            } else {
+                viewHolder.cityLayout.setVisibility(View.VISIBLE);
+                viewHolder.cityText.setText(dynamicEntityList.get(position).getCity());
+            }
+
             return convertView;
         }
 
@@ -940,6 +943,11 @@ public class CityFragment extends Fragment {
 
             @InjectView(R.id.comment_more_text)
             TextView commentMoreText;
+
+            @InjectView(R.id.city_text)
+            TextView cityText;
+            @InjectView(R.id.city_layout)
+            LinearLayout cityLayout;
             private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {

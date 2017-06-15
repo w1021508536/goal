@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.io.File;
@@ -86,6 +87,13 @@ public class AddAimActivity extends BaseActivity {
 
     String cutPath;
     String newPath;
+
+    private int photoFrom = 0;
+    private ImageOptions imageOptions = new ImageOptions.Builder()
+            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+            .setLoadingDrawableId(R.drawable.image1)
+            .setFailureDrawableId(R.drawable.image1)
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -274,13 +282,22 @@ public class AddAimActivity extends BaseActivity {
                 setResult(Code.AddAimCode, intent);
                 finish();
             } else if (resultCode == Code.RESULT_CAMERA_CODE) {
+                photoFrom = 0;
                 imgLoad = data.getStringExtra("path");
                 System.out.println("===============CAMERA======imgLoad======" + imgLoad);
                 photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
             } else if (resultCode == Code.RESULT_GALLERY_CODE) {
+                photoFrom = 0;
                 imgLoad = data.getStringExtra("path");
                 System.out.println("===============imgLoad============" + imgLoad);
                 photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
+            } else if (resultCode == Code.RESULT_OWM_CODE) {
+                if (!data.getStringExtra("path").equals("")) {
+                    photoFrom = 1;
+                    img = data.getStringExtra("path");
+                    x.image().bind(photo_image, Utils.GetPhotoPath(img), imageOptions);
+                }
+
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

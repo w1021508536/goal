@@ -73,6 +73,10 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
 
         type = getIntent().getIntExtra(KEY_TYPE, TYPE_ONE);
         nums = getIntent().getIntExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 3);
+
+        if (type == TYPE_MORE) {
+            own_text.setVisibility(View.GONE);
+        }
     }
 
 
@@ -101,7 +105,8 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                 goCamera();
                 break;
             case R.id.own_text:
-
+                Intent intent = new Intent(this, GetPhotosActivity.class);
+                startActivityForResult(intent, Code.RESULT_OWM_CODE);
                 break;
         }
     }
@@ -208,6 +213,11 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                 intent.putExtra("path", "");
                 intent.putExtra(EXTRA_RESULT, morePhotoDatas);
                 setResult(Code.RESULT_GALLERY_CODE, intent);
+                finish();
+            } else if (requestCode == Code.RESULT_OWM_CODE) {
+                Intent intent = new Intent();
+                intent.putExtra("path", data.getStringExtra("path"));
+                setResult(Code.RESULT_OWM_CODE, intent);
                 finish();
             }
         }
