@@ -193,45 +193,6 @@ public class SearchFragment extends Fragment {
     }
 
 
-    private void GetFollowListData() {
-        RequestParams requestParams = new RequestParams(Url.Url + Url.FollowedList);
-        requestParams.addHeader("token", Utils.GetToken(getActivity()));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-
-                System.out.println("==========GetFollowListData===========" + result);
-
-                try {
-                    String code = new JSONObject(result).getString("code");
-                    if (code.equals("0")) {
-                        Utils.UtilsSharedPreferences(getActivity()).edit().putString("followList", new JSONObject(result).getString("result"));
-                        Utils.UtilsSharedPreferences(getActivity()).edit().commit();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
 //    @Override
 //    public void onResume() {
 //        GetFollowListData();

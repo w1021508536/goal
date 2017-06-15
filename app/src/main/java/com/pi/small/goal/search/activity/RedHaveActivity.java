@@ -331,12 +331,14 @@ public class RedHaveActivity extends AppCompatActivity {
             }
         }
 
-
-        for (int i = 0; i < relativeLayoutList.size(); i++) {
-            relativeLayoutList.get(i).setVisibility(View.VISIBLE);
-        }
-        for (int i = 7; i > displayList.size() - 1; i--) {
+        for (int i = 0; i < 8; i++) {
             relativeLayoutList.get(i).setVisibility(View.GONE);
+        }
+//        for (int i = 0; i < relativeLayoutList.size(); i++) {
+//            relativeLayoutList.get(i).setVisibility(View.VISIBLE);
+//        }
+        for (int i = 0; i < displayList.size(); i++) {
+            relativeLayoutList.get(i).setVisibility(View.VISIBLE);
         }
 //
         for (int i = 0; i < displayList.size(); i++) {

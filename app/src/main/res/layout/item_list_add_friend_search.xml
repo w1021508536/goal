@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -44,7 +44,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="3dp" />
+                android:layout_marginTop="3dp"
+                android:ellipsize="end"
+                android:maxEms="10"
+                android:singleLine="true" />
 
         </LinearLayout>
 
@@ -67,6 +70,7 @@
         android:id="@+id/image_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="horizontal">
@@ -91,8 +95,6 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1" />
 
-
     </LinearLayout>
-
 
 </LinearLayout>

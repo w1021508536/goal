@@ -90,7 +90,8 @@
                 android:imeOptions="actionSearch"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:textColor="#8E8D93"
+                android:textColorHint="@color/gray_heavy"
+                android:textColor="@color/gray_heavy"
                 android:textSize="14dp" />
 
             <ImageView

@@ -73,7 +73,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#F8F8F8"
+                android:background="#efeff4"
                 android:paddingBottom="10dp"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -149,10 +149,10 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:src="@color/gray_line" />
+                    android:src="#e2e3e3" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="361dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -241,18 +241,16 @@
             <com.pi.small.goal.utils.MyListView
                 android:id="@+id/user_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
                 android:divider="@null"
-                android:dividerHeight="2dp"
+                android:dividerHeight="0.5dp"
                 android:fadingEdge="none"
                 android:fastScrollEnabled="false"
                 android:footerDividersEnabled="false"
                 android:headerDividersEnabled="false"
                 android:scrollbars="none"
                 android:smoothScrollbar="true" />
-
-
         </LinearLayout>
 
     </ScrollView>

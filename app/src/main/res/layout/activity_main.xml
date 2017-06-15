@@ -5,17 +5,16 @@
     android:orientation="vertical">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/background_fragment" />
-
-
     <FrameLayout
         android:id="@+id/framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
+        android:background="@color/background_fragment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
         android:background="@color/background_fragment" />
 
     <LinearLayout
@@ -126,14 +125,15 @@
                         android:id="@+id/message_num_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:layout_alignParentRight="true">
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone">
 
                         <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/round_image"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
-                            android:src="@color/red"/>
+                            android:src="@color/red" />
+
                         <TextView
                             android:id="@+id/message_num_text"
                             android:layout_width="wrap_content"

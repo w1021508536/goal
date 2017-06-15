@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -29,15 +32,18 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.aim.AimFragment;
 import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.search.activity.UserDetitalActivity;
 import com.pi.small.goal.search.adapter.CommentAdapter;
+import com.pi.small.goal.search.adapter.ViewPagerSearchAdapter;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.MyListView;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.WrapContentHeightViewPager;
 import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.CommentEntity;
 import com.pi.small.goal.utils.entity.DynamicEntity;
@@ -57,6 +63,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.Attributes;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -78,6 +85,7 @@ public class HotFragment extends Fragment {
     @InjectView(R.id.null_layout)
     RelativeLayout nullLayout;
 
+    private ListView listView;
 
     private List<DynamicEntity> dynamicEntityList;
     private List<CommentEntity> commentEntityList;
@@ -101,6 +109,12 @@ public class HotFragment extends Fragment {
     private SharedPreferences utilsSharedPreferences;
     private SharedPreferences.Editor utilsEditor;
 
+    private int position = 0;
+
+    private List<View> viewList;
+    private View itemView;
+    private ImageView[] imageViews;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -119,12 +133,17 @@ public class HotFragment extends Fragment {
         utilsEditor = utilsSharedPreferences.edit();
         dynamicEntityList = new ArrayList<DynamicEntity>();
         hotAdapter = new HotAdapter(getActivity());
+        viewList = new ArrayList<View>();
         hotList.setAdapter(hotAdapter);
         init();
     }
 
 
     private void init() {
+
+//        itemView = LayoutInflater.from(getActivity()).inflate(
+//                R.layout.view_viewpager_hot, null);
+
         hotList.setMode(PullToRefreshBase.Mode.BOTH);
         hotList.setAdapter(hotAdapter);
 
@@ -144,6 +163,86 @@ public class HotFragment extends Fragment {
         });
 
         GetHotData(page + "", "10");
+        AddHeadView();
+    }
+
+
+    private void AddHeadView() {
+
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.view_viewpager_hot, null);
+        for (int i = 0; i < 3; i++) {
+            itemView = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.item_view_pager_hot, null);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100);
+            itemView.setLayoutParams(params);
+            ImageView banner_image = (ImageView) itemView.findViewById(R.id.banner_image);
+            banner_image.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.banner));
+            viewList.add(itemView);
+        }
+
+
+        WrapContentHeightViewPager viewPager = (WrapContentHeightViewPager) view.findViewById(R.id.view_pager);
+
+        LinearLayout viewGroup = (LinearLayout) view.findViewById(R.id.viewGroup);
+        setPoint(viewGroup);
+        ViewPagerSearchAdapter viewPagerSearchAdapter = new ViewPagerSearchAdapter(getActivity(), viewList);
+        viewPager.setAdapter(viewPagerSearchAdapter);
+        listView = hotList.getRefreshableView();
+        listView.addHeaderView(view);
+        viewPager.setOnPageChangeListener(new GuidePageChangeListener());
+    }
+
+    private void setPoint(LinearLayout viewGroup) {
+        imageViews = new ImageView[viewList.size()];
+        for (int i = 0; i < viewList.size(); i++) {
+            ImageView imageView = new ImageView(getActivity());
+            //设置小圆点imageview的参数
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10, 10);
+            params.setMargins(10, 0, 10, 0);
+            imageView.setLayoutParams(params);//创建一个宽高均为20 的布局
+            //将小圆点layout添加到数组中
+            imageViews[i] = imageView;
+
+            //默认选中的是第一张图片，此时第一个小圆点是选中状态，其他不是
+            if (i == 0) {
+                imageViews[i].setBackgroundResource(R.mipmap.icon_dian_yellow);
+            } else {
+                imageViews[i].setBackgroundResource(R.mipmap.icon_dian_white);
+            }
+
+            //将imageviews添加到小圆点视图组
+            viewGroup.addView(imageViews[i]);
+        }
+    }
+
+    class GuidePageChangeListener implements ViewPager.OnPageChangeListener {
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            // TODO Auto-generated method stub
+            position = position;
+            for (int i = 0; i < imageViews.length; i++) {
+                imageViews[position].setBackgroundResource(R.mipmap.icon_dian_yellow);
+                //不是当前选中的page，其小圆点设置为未选中的状态
+                if (position != i) {
+                    imageViews[i].setBackgroundResource(R.mipmap.icon_dian_white);
+                }
+            }
+
+        }
     }
 
     /**
@@ -320,7 +419,8 @@ public class HotFragment extends Fragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                if (ex.getMessage() != null) {
+                System.out.println("=============ex.getMessage()==============" + ex.getMessage());
+                if (!ex.getMessage().equals("")) {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
             }

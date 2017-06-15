@@ -23,7 +23,7 @@
         android:layout_toRightOf="@id/head_image"
         android:text="xxx"
         android:textColor="@color/black"
-        android:textSize="14dp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/add_text"

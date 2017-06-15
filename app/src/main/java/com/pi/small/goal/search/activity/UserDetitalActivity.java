@@ -2,31 +2,42 @@ package com.pi.small.goal.search.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Parcelable;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.activity.AimMoreActivity;
+import com.pi.small.goal.search.adapter.CommentAdapter;
+import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.MyListView;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
+import com.pi.small.goal.utils.entity.CommentEntity;
 import com.pi.small.goal.utils.entity.DynamicEntity;
 import com.pi.small.goal.weight.PinchImageView;
 import com.squareup.picasso.Picasso;
@@ -41,7 +52,9 @@ import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -50,10 +63,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
-public class UserDetitalActivity extends AppCompatActivity {
+public class UserDetitalActivity extends BaseActivity {
 
     @InjectView(R.id.head_layout)
     LinearLayout headLayout;
+    @InjectView(R.id.top_layout)
+    RelativeLayout topLayout;
     @InjectView(R.id.left_image)
     ImageView leftImage;
     @InjectView(R.id.more_image)
@@ -78,6 +93,10 @@ public class UserDetitalActivity extends AppCompatActivity {
     TextView beFollowsText;
     @InjectView(R.id.follows_text)
     TextView followsText;
+    @InjectView(R.id.scrollView)
+    PullToRefreshScrollView scrollView;
+    @InjectView(R.id.attention_text)
+    TextView attentionText;
 
     private String userId;
 
@@ -94,13 +113,28 @@ public class UserDetitalActivity extends AppCompatActivity {
     private String beFollowed;
 
     private List<DynamicEntity> dynamicEntityList;
+    private List<CommentEntity> commentEntityList;
+    private CommentEntity commentEntity;
     private DynamicEntity dynamicEntity;
-
-    private int page = 1;
 
     private HotAdapter hotAdapter;
 
+    private View currentView;
+
     private int width;
+    private List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
+    private Parcelable state;
+    private int currentPosition;
+
+    private boolean isDown = false;
+    private int page = 1;
+
+    private int total;
+
+    private SharedPreferences utilsSharedPreferences;
+    private SharedPreferences.Editor utilsEditor;
+
+    private int isFollow = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,10 +156,118 @@ public class UserDetitalActivity extends AppCompatActivity {
 //        dataList.setMode(PullToRefreshBase.Mode.BOTH);
         dataList.setAdapter(hotAdapter);
 
+        scrollView.setMode(PullToRefreshBase.Mode.BOTH);
+//        scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+//            @Override
+//            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+//                new GetDownDataTask().execute();
+//            }
+//
+//            @Override
+//            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+//                new GetUpDataTask().execute();
+//            }
+//        });
+        scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                new GetDownDataTask().execute();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
+                new GetUpDataTask().execute();
+            }
+        });
+
+        for (int i = 0; i < followList.size(); i++) {
+            if (userId.equals(followList.get(i).get("followUserId"))) {
+                isFollow = 1;
+            }
+        }
+
+        if (isFollow == 1) {
+            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
+            attentionText.setText("已关注");
+        } else {
+            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
+            attentionText.setText("关注");
+        }
+
         GetUserData();
     }
 
-    @OnClick({R.id.left_image, R.id.more_image, R.id.chat_image})
+    /**
+     * 下拉刷新
+     */
+    private class GetDownDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
+
+        //子线程请求数据
+        @Override
+        protected List<DynamicEntity> doInBackground(Void... params) {
+            isDown = true;
+            page = 1;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            GetHotData(page + "", "10");
+            return dynamicEntityList;
+        }
+
+        //主线程更新UI
+        @Override
+        protected void onPostExecute(List<DynamicEntity> result) {
+
+//            hotAdapter.notifyDataSetChanged();
+            //通知RefreshListView 我们已经更新完成
+            scrollView.onRefreshComplete();
+
+            super.onPostExecute(result);
+        }
+    }
+
+    /**
+     * 模拟网络加载数据的   异步请求类
+     * 上拉加载
+     */
+    private class GetUpDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
+
+        //子线程请求数据
+        @Override
+        protected List<DynamicEntity> doInBackground(Void... params) {
+            isDown = false;
+
+            if (page * 10 >= total) {
+
+            } else {
+                page = page + 1;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                GetHotData(page + "", "10");
+            }
+
+
+            return dynamicEntityList;
+        }
+
+        //主线程更新UI
+        @Override
+        protected void onPostExecute(List<DynamicEntity> result) {
+//            hotAdapter.notifyDataSetChanged();
+            scrollView.onRefreshComplete();
+            if (page * 10 >= total) {
+                Utils.showToast(UserDetitalActivity.this, "没有更多数据了");
+            }
+            super.onPostExecute(result);
+        }
+    }
+
+    @OnClick({R.id.left_image, R.id.more_image, R.id.chat_image, R.id.attention_text})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_image:
@@ -133,6 +275,9 @@ public class UserDetitalActivity extends AppCompatActivity {
                 break;
             case R.id.more_image:
                 GetMore(view);
+                break;
+            case R.id.attention_text:
+                Attention();
                 break;
             case R.id.chat_image:
                 RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + userId, nick, Uri.parse(Utils.GetPhotoPath(avatar))));
@@ -149,6 +294,72 @@ public class UserDetitalActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    private void Attention() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.Follow);
+        requestParams.addHeader("token", Utils.GetToken(UserDetitalActivity.this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("followUserId", userId);
+        XUtil.post(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("==========Attention============" + result);
+                try {
+                    if (new JSONObject(result).getString("code").equals("0")) {
+                        //1 是已关注 0 是未关注
+                        if (isFollow == 1) {
+                            isFollow = 0;
+                            beFollowed = String.valueOf(Integer.valueOf(beFollowed) - 1);
+                            beFollowsText.setText(beFollowed);
+
+                            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
+                            attentionText.setText("关注");
+                            for (int i = 0; i < followList.size(); i++) {
+                                if (userId.equals(followList.get(i).get("followUserId"))) {
+                                    followList.remove(i);
+                                }
+                            }
+                            utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                            utilsEditor.commit();
+
+
+                        } else {
+                            isFollow = 1;
+                            beFollowed = String.valueOf(Integer.valueOf(beFollowed) + 1);
+                            beFollowsText.setText(beFollowed);
+                            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
+                            attentionText.setText("已关注");
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("followId", new JSONObject(result).getJSONObject("result").optString("followId"));
+                            map.put("userId", new JSONObject(result).getJSONObject("result").optString("userId"));
+                            map.put("followUserId", new JSONObject(result).getJSONObject("result").optString("followUserId"));
+                            map.put("nick", nick);
+                            map.put("avatar", avatar);
+                            map.put("status", new JSONObject(result).getJSONObject("result").optString("status"));
+                            followList.add(map);
+                            utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                            utilsEditor.commit();
+
+                        }
+                        isDown = true;
+                        GetHotData("1", page * 10 + "");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void GetUserData() {
@@ -190,7 +401,7 @@ public class UserDetitalActivity extends AppCompatActivity {
                         nickText.setText(nick);
                         briefText.setText(brief);
 
-                        GetData();
+                        GetHotData(page + "", "10");
                     } else {
                         Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
                     }
@@ -212,56 +423,102 @@ public class UserDetitalActivity extends AppCompatActivity {
         });
     }
 
-
-    private void GetData() {
+    private void GetHotData(String page, String r) {
         RequestParams requestParams = new RequestParams(Url.Url + Url.AimDynamicUser);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("p", page);
+        requestParams.addBodyParameter("r", r);
         requestParams.addBodyParameter("uid", userId);
-        requestParams.addBodyParameter("r", "30");
-        requestParams.addBodyParameter("p", page + "");
-        XUtil.get(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("========GetData========" + result);
+                System.out.println("=======GetHotData=============" + result);
                 try {
-                    if (new JSONObject(result).getString("code").equals("0")) {
-
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        total = Integer.valueOf(new JSONObject(result).getString("total"));
                         JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
-                        for (int i = 0; i < jsonArray.length(); i++) {
+                        if (isDown) {
+                            dynamicEntityList.clear();
+                        }
+                        if (!Utils.UtilsSharedPreferences(UserDetitalActivity.this).getString("followList", "").equals("")) {
+                            followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(UserDetitalActivity.this).getString("followList", ""));
+                        } else {
+                            followList.clear();
+                        }
+                        for (int j = 0; j < jsonArray.length(); j++) {
+                            JSONObject dynamicObject = jsonArray.getJSONObject(j).getJSONObject("dynamic");
+                            JSONArray commentsArray = jsonArray.getJSONObject(j).getJSONArray("comments");
+
+                            commentEntityList = new ArrayList<CommentEntity>();
                             dynamicEntity = new DynamicEntity();
 
-                            dynamicEntity.setId(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("id"));
-                            dynamicEntity.setAimId(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("aimId"));
-                            dynamicEntity.setUserId(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("userId"));
-                            dynamicEntity.setContent(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("content"));
-                            dynamicEntity.setCity(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("city"));
-                            dynamicEntity.setMoney(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("money"));
-                            dynamicEntity.setImg3(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("img3"));
-                            dynamicEntity.setImg2(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("img2"));
-                            dynamicEntity.setImg1(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("img1"));
-                            dynamicEntity.setVideo(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("video"));
-                            dynamicEntity.setCreateTime(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("createTime"));
-                            dynamicEntity.setUpdateTime(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("updateTime"));
-                            dynamicEntity.setProvince(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("province"));
-                            dynamicEntity.setIsPaid(jsonArray.getJSONObject(i).getJSONObject("dynamic").getString("isPaid"));
+                            dynamicEntity.setId(dynamicObject.optString("id"));
+                            dynamicEntity.setAimId(dynamicObject.optString("aimId"));
+                            dynamicEntity.setUserId(dynamicObject.getString("userId"));
+                            dynamicEntity.setNick(dynamicObject.optString("nick"));
+                            dynamicEntity.setAvatar(dynamicObject.optString("avatar"));
+                            dynamicEntity.setContent(dynamicObject.optString("content"));
+                            dynamicEntity.setCity(dynamicObject.optString("city"));
+                            dynamicEntity.setMoney(dynamicObject.optString("money"));
 
+                            dynamicEntity.setImg1(dynamicObject.optString("img1"));
+                            dynamicEntity.setImg2(dynamicObject.optString("img2"));
+                            dynamicEntity.setImg3(dynamicObject.optString("img3"));
+                            dynamicEntity.setVideo(dynamicObject.optString("video"));
+
+                            dynamicEntity.setCreateTime(dynamicObject.optString("createTime"));
+                            dynamicEntity.setUpdateTime(dynamicObject.optString("updateTime"));
+                            dynamicEntity.setProvince(dynamicObject.optString("province"));
+                            dynamicEntity.setIsPaid(dynamicObject.optString("isPaid"));
+
+
+                            dynamicEntity.setSupports(jsonArray.getJSONObject(j).optString("supports"));
+                            dynamicEntity.setHaveRedPacket(jsonArray.getJSONObject(j).optString("haveRedPacket"));
+                            dynamicEntity.setVotes(jsonArray.getJSONObject(j).optString("votes"));
+                            dynamicEntity.setHaveVote(jsonArray.getJSONObject(j).optString("haveVote"));
+
+                            for (int i = 0; i < commentsArray.length(); i++) {
+                                commentEntity = new CommentEntity();
+                                commentEntity.setCommentId(commentsArray.getJSONObject(i).optString("commentId"));
+                                commentEntity.setUserId(commentsArray.getJSONObject(i).optString("userId"));
+                                commentEntity.setPid(commentsArray.getJSONObject(i).optString("pid"));
+                                commentEntity.setContent(commentsArray.getJSONObject(i).optString("content"));
+                                commentEntity.setAimId(commentsArray.getJSONObject(i).optString("aimId"));
+                                commentEntity.setDynamicId(commentsArray.getJSONObject(i).optString("dynamicId"));
+                                commentEntity.setCreateTime(commentsArray.getJSONObject(i).optString("createTime"));
+                                commentEntity.setNick(commentsArray.getJSONObject(i).optString("nick"));
+                                commentEntity.setAvatar(commentsArray.getJSONObject(i).optString("avatar"));
+
+                                commentEntityList.add(commentEntity);
+                            }
+                            dynamicEntity.setCommentList(commentEntityList);
                             dynamicEntityList.add(dynamicEntity);
                         }
 
                         hotAdapter.notifyDataSetChanged();
+                    } else if (code.equals("100000")) {
+                        if (isDown) {
+                            dynamicEntityList.clear();
+                        }
                     } else {
                         Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                System.out.println("=============ex.getMessage()==============" + ex.getMessage());
+                if (!ex.getMessage().equals("")) {
+                    Utils.showToast(UserDetitalActivity.this, ex.getMessage());
+                }
             }
 
             @Override
@@ -269,7 +526,6 @@ public class UserDetitalActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void setTranslucentStatus(boolean on) {
@@ -283,7 +539,8 @@ public class UserDetitalActivity extends AppCompatActivity {
         }
         win.setAttributes(winParams);
         headLayout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
-        ;
+        System.out.println("============Utils.getStatusBarHeight(this)==================" + Utils.getStatusBarHeight(this));
+//        topLayout.setLayoutParams();;
     }
 
     public class HotAdapter extends BaseAdapter {
@@ -321,14 +578,17 @@ public class UserDetitalActivity extends AppCompatActivity {
         public View getView(final int position, View convertView, ViewGroup parent) {
             final ViewHolder viewHolder;
             if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_list_user_detital, parent, false);
+
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_list_hot, parent, false);
                 viewHolder = new ViewHolder(convertView);
+
                 convertView.setTag(viewHolder);
+
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.nameText.setText(nick);
+            viewHolder.nameText.setText(dynamicEntityList.get(position).getNick());
 
             if (dynamicEntityList.get(position).getContent().equals("")) {
                 viewHolder.contentText.setVisibility(View.GONE);
@@ -338,49 +598,27 @@ public class UserDetitalActivity extends AppCompatActivity {
             }
             viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
 
-//        x.image().bind(viewHolder.head_image, Utils.GetPhotoPath(dataList.get(position).getAvatar()), imageOptions);
-
-            if (!avatar.equals("")) {
-                Picasso.with(context).load(Utils.GetPhotoPath(avatar)).into(viewHolder.headImage);
+            if (!dynamicEntityList.get(position).getAvatar().equals("")) {
+                Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntityList.get(position).getAvatar())).into(viewHolder.headImage);
             } else {
                 viewHolder.headImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
             }
 
-            viewHolder.headImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setClass(UserDetitalActivity.this, UserDetitalActivity.class);
-                    intent.putExtra("uid", dynamicEntityList.get(position).getUserId());
-                    startActivity(intent);
-                }
-            });
 
-//            if (dynamicEntityList.get(position).getUserId().equals(Utils.UserSharedPreferences(context).getString("id", ""))) {
-//                viewHolder.attentionText.setVisibility(View.GONE);
-//            } else {
-//                viewHolder.attentionText.setVisibility(View.VISIBLE);
-//            }
-            System.out.println("=============dynamicEntityList.get(position).getIsFollow()=========" + dynamicEntityList.get(position).getIsFollow());
-//            if (dynamicEntityList.get(position).getIsFollow().equals("0")) {
-//                viewHolder.attentionText.setBackgroundDrawable(UserDetitalActivity.this.getResources().getDrawable(R.drawable.background_white_yellow_corner));
-//                viewHolder.attentionText.setTextColor(UserDetitalActivity.this.getResources().getColor(R.color.yellow_light));
-//                viewHolder.attentionText.setText("关注");
-//
-//            } else {
-//                viewHolder.attentionText.setBackgroundDrawable(UserDetitalActivity.this.getResources().getDrawable(R.drawable.background_white_gray_corner));
-//                viewHolder.attentionText.setTextColor(UserDetitalActivity.this.getResources().getColor(R.color.gray_heavy));
-//                viewHolder.attentionText.setText("已关注");
-//
-//            }
+            if (dynamicEntityList.get(position).getUserId().equals(Utils.UserSharedPreferences(context).getString("id", ""))) {
+                viewHolder.moreLayout.setVisibility(View.GONE);
+            } else {
+                viewHolder.moreLayout.setVisibility(View.VISIBLE);
+            }
+            viewHolder.attentionText.setVisibility(View.GONE);
+            viewHolder.moreImage.setVisibility(View.GONE);
 
-
-//            if (Integer.valueOf(dynamicEntityList.get(position).getHaveRedPacket()) > 0) {
-//                viewHolder.moneyImage.setVisibility(View.VISIBLE);
-//            } else {
-//                viewHolder.moneyImage.setVisibility(View.GONE);
-//            }
-            viewHolder.moneyImage.setVisibility(View.GONE);
+            if (Integer.valueOf(dynamicEntityList.get(position).getHaveRedPacket()) > 0) {
+                viewHolder.moneyImage.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.moneyImage.setVisibility(View.GONE);
+            }
+//            viewHolder.moneyImage.setVisibility(View.VISIBLE);
             viewHolder.moneyImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -390,7 +628,164 @@ public class UserDetitalActivity extends AppCompatActivity {
                 }
             });
 
+            viewHolder.voteNumberText.setText(dynamicEntityList.get(position).getVotes());
+            viewHolder.supportNumberText.setText(dynamicEntityList.get(position).getSupports());
+            if (dynamicEntityList.get(position).getHaveVote().equals("0")) {
+                viewHolder.voteImage.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_vote_off));
+            } else {
+                viewHolder.voteImage.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_vote_on));
+            }
+            viewHolder.voteImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("==============dynamicEntityList.get(position).getId()=======" + dynamicEntityList.get(position).getId());
+                    RequestParams requestParams = new RequestParams(Url.Url + Url.Vote);
+                    requestParams.addHeader("token", Utils.GetToken(UserDetitalActivity.this));
+                    requestParams.addHeader("deviceId", MyApplication.deviceId);
+                    requestParams.addBodyParameter("objectId", dynamicEntityList.get(position).getId());
+
+                    XUtil.post(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
+                        @Override
+                        public void onSuccess(String result) {
+                            System.out.println("================点赞===========" + result);
+                            try {
+                                String code = new JSONObject(result).getString("code");
+                                if (code.equals("0")) {
+                                    if (dynamicEntityList.get(position).getHaveVote().equals("0")) {
+                                        viewHolder.voteImage.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_vote_on));
+                                        dynamicEntityList.get(position).setHaveVote("1");
+                                        dynamicEntityList.get(position).setVotes(String.valueOf(Integer.valueOf(dynamicEntityList.get(position).getVotes()) + 1));
+                                        viewHolder.voteNumberText.setText(dynamicEntityList.get(position).getVotes());
+                                    } else {
+                                        viewHolder.voteImage.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_vote_off));
+                                        dynamicEntityList.get(position).setHaveVote("0");
+                                        dynamicEntityList.get(position).setVotes(String.valueOf(Integer.valueOf(dynamicEntityList.get(position).getVotes()) - 1));
+                                        viewHolder.voteNumberText.setText(dynamicEntityList.get(position).getVotes());
+                                    }
+
+                                } else {
+                                    Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(Throwable ex, boolean isOnCallback) {
+                            if (!ex.getMessage().equals("")) {
+                                Utils.showToast(UserDetitalActivity.this, ex.getMessage());
+                            }
+                        }
+
+                        @Override
+                        public void onFinished() {
+
+                        }
+                    });
+
+                }
+            });
+
             viewHolder.moneyText.setText(dynamicEntityList.get(position).getMoney());
+            viewHolder.commentImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    View windowView = LayoutInflater.from(UserDetitalActivity.this).inflate(
+                            R.layout.window_comments, null);
+                    final PopupWindow popupWindow = new PopupWindow(windowView,
+                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, true);
+                    final EditText comment_edit = (EditText) windowView.findViewById(R.id.comment_edit);
+                    comment_edit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        @Override
+                        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                                if (!comment_edit.getText().toString().trim().equals("")) {
+                                    RequestParams requestParams = new RequestParams(Url.Url + Url.AimDynamicComment);
+                                    requestParams.addHeader("token", Utils.GetToken(UserDetitalActivity.this));
+                                    requestParams.addHeader("deviceId", MyApplication.deviceId);
+                                    requestParams.addBodyParameter("dynamicId", dynamicEntityList.get(position).getId());
+                                    requestParams.addBodyParameter("content", comment_edit.getText().toString().trim());
+                                    XUtil.put(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
+                                        @Override
+                                        public void onSuccess(String result) {
+                                            try {
+                                                String code = new JSONObject(result).getString("code");
+                                                if (code.equals("0")) {
+
+                                                    commentEntity = new CommentEntity();
+                                                    commentEntity.setCommentId(new JSONObject(result).getJSONObject("result").getString("commentId"));
+                                                    commentEntity.setPid(new JSONObject(result).getJSONObject("result").getString("pid"));
+                                                    commentEntity.setUserId(new JSONObject(result).getJSONObject("result").getString("userId"));
+                                                    commentEntity.setContent(new JSONObject(result).getJSONObject("result").getString("content"));
+                                                    commentEntity.setAimId(new JSONObject(result).getJSONObject("result").getString("aimId"));
+                                                    commentEntity.setDynamicId(new JSONObject(result).getJSONObject("result").getString("dynamicId"));
+                                                    commentEntity.setCreateTime(new JSONObject(result).getJSONObject("result").getString("createTime"));
+                                                    commentEntity.setNick(new JSONObject(result).getJSONObject("result").getString("nick"));
+                                                    commentEntity.setAvatar(new JSONObject(result).getJSONObject("result").getString("avatar"));
+
+                                                    dynamicEntityList.get(position).getCommentList().add(0, commentEntity);
+
+                                                    Utils.showToast(UserDetitalActivity.this, "评论成功");
+                                                    popupWindow.dismiss();
+                                                    notifyDataSetChanged();
+
+                                                } else {
+                                                    Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
+                                                    popupWindow.dismiss();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable ex, boolean isOnCallback) {
+                                            System.out.println("======================" + ex.getMessage());
+                                            Utils.showToast(UserDetitalActivity.this, ex.getMessage());
+                                        }
+
+                                        @Override
+                                        public void onFinished() {
+
+                                        }
+                                    });
+                                }
+
+
+                            }
+                            return false;
+                        }
+                    });
+
+                    popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+                    popupWindow.setTouchable(true);
+                    popupWindow.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
+                    popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+                    // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+                    // 我觉得这里是API的一个bug
+                    popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+                    // 设置好参数之后再show
+                    popupWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
+                }
+            });
+
+            viewHolder.payImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    currentPosition = position;
+                    Intent intent = new Intent(UserDetitalActivity.this, SupportMoneyActivity.class);
+                    intent.putExtra("dynamicId", dynamicEntityList.get(position).getId());
+                    intent.putExtra("aimId", dynamicEntityList.get(position).getAimId());
+                    intent.putExtra("nick", dynamicEntityList.get(position).getNick());
+                    intent.putExtra("avatar", dynamicEntityList.get(position).getAvatar());
+                    startActivityForResult(intent, Code.SupportAim);
+
+                }
+            });
 
 
             if (dynamicEntityList.get(position).getImg1().equals("") && dynamicEntityList.get(position).getImg2().equals("") && dynamicEntityList.get(position).getImg3().equals("")) {
@@ -460,34 +855,61 @@ public class UserDetitalActivity extends AppCompatActivity {
                 }
             }
 
-            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
+//            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
+//                }
+//            });
+//            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
+//                }
+//            });
+//            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    imageLayout.setVisibility(View.VISIBLE);
+//                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
+//                }
+//            });
+
+            viewHolder.commentMoreText.setText("查看全部" + dynamicEntityList.get(position).getCommentList().size() + "条评论");
+            if (dynamicEntityList.get(position).getCommentList().size() > 2) {
+                viewHolder.commentAdapter = new CommentAdapter(UserDetitalActivity.this, dynamicEntityList.get(position).getCommentList(), 2);
+                viewHolder.commentList.setAdapter(viewHolder.commentAdapter);
+                viewHolder.commentMoreText.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.commentAdapter = new CommentAdapter(UserDetitalActivity.this, dynamicEntityList.get(position).getCommentList(), dynamicEntityList.get(position).getCommentList().size());
+                viewHolder.commentList.setAdapter(viewHolder.commentAdapter);
+                viewHolder.commentMoreText.setVisibility(View.GONE);
+            }
+            viewHolder.commentMoreText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
-                }
-            });
-            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
-                }
-            });
-            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imageLayout.setVisibility(View.VISIBLE);
-                    x.image().bind(pinchImage, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
+                    viewHolder.commentAdapter.SetNumber(dynamicEntityList.get(position).getCommentList().size());
+                    viewHolder.commentMoreText.setVisibility(View.GONE);
                 }
             });
 
-
+            viewHolder.hot_layout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(UserDetitalActivity.this, AimMoreActivity.class);
+                    intent.putExtra(AimMoreActivity.KEY_AIMID, dynamicEntityList.get(position).getAimId());
+                    startActivity(intent);
+                }
+            });
             return convertView;
         }
 
 
         class ViewHolder {
+            @InjectView(R.id.hot_layout)
+            LinearLayout hot_layout;
             @InjectView(R.id.head_image)
             CircleImageView headImage;
             @InjectView(R.id.name_text)
@@ -507,11 +929,38 @@ public class UserDetitalActivity extends AppCompatActivity {
             ImageView image2;
             @InjectView(R.id.image1)
             ImageView image1;
-
+            @InjectView(R.id.more_layout)
+            RelativeLayout moreLayout;
             @InjectView(R.id.money_text)
             TextView moneyText;
             @InjectView(R.id.money_image)
             ImageView moneyImage;
+            @InjectView(R.id.vote_image)
+            ImageView voteImage;
+            @InjectView(R.id.comment_image)
+            ImageView commentImage;
+            @InjectView(R.id.pay_image)
+            ImageView payImage;
+            @InjectView(R.id.more_image)
+            ImageView moreImage;
+            @InjectView(R.id.vote_number_text)
+            TextView voteNumberText;
+            @InjectView(R.id.support_number_text)
+            TextView supportNumberText;
+            @InjectView(R.id.comment_list)
+            MyListView commentList;
+
+
+            @InjectView(R.id.money_layout)
+            RelativeLayout moneyLayout;
+            @InjectView(R.id.icon_money_text)
+            TextView iconMoneyText;
+            @InjectView(R.id.icon_money_image)
+            ImageView iconMoneyImage;
+
+            @InjectView(R.id.comment_more_text)
+            TextView commentMoreText;
+            private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);

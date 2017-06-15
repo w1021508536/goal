@@ -201,6 +201,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     userEditor.putLong("lastTime", System.currentTimeMillis());
                     GetRed();
                 }
+            } else {
+                userEditor.putLong("lastTime", System.currentTimeMillis());
+                GetRed();
             }
 
         }
@@ -587,6 +590,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                System.out.println("===========GetRed===========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

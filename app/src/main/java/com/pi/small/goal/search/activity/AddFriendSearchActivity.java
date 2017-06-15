@@ -1,8 +1,13 @@
 package com.pi.small.goal.search.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -11,7 +16,7 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.activity.AddFriendActivity;
-import com.pi.small.goal.search.adapter.AddFriendSearchAdapter;
+import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.MyListView;
 import com.pi.small.goal.utils.Url;
@@ -19,18 +24,24 @@ import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.AimEntity;
 import com.pi.small.goal.utils.entity.UserSearchEntity;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddFriendSearchActivity extends BaseActivity {
 
@@ -61,6 +72,9 @@ public class AddFriendSearchActivity extends BaseActivity {
     private AimEntity aimEntity;
     private List<AimEntity> aimEntityList;
 
+    private SharedPreferences utilsSharedPreferences;
+    private SharedPreferences.Editor utilsEditor;
+    private List<Map<String, String>> followList;
     public static int width;
 
     @Override
@@ -68,15 +82,26 @@ public class AddFriendSearchActivity extends BaseActivity {
         setContentView(R.layout.activity_add_friend_search);
         ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
+        utilsSharedPreferences = Utils.UtilsSharedPreferences(AddFriendSearchActivity.this);
+        utilsEditor = utilsSharedPreferences.edit();
 
         width = (getWindowManager().getDefaultDisplay().getWidth() - 130);
+        followList = new ArrayList<Map<String, String>>();
+        aimEntityList = new ArrayList<AimEntity>();
+        userSearchEntityList = new ArrayList<UserSearchEntity>();
+        if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
+            followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(this).getString("followList", ""));
+        } else {
+            followList.clear();
+        }
         init();
     }
 
     private void init() {
-        userSearchEntityList = new ArrayList<UserSearchEntity>();
-        addFriendSearchAdapter = new AddFriendSearchAdapter(userSearchEntityList, this);
-        userList.setAdapter(addFriendSearchAdapter);
+
+
+//        addFriendSearchAdapter = new AddFriendSearchAdapter( this);
+//        userList.setAdapter(addFriendSearchAdapter);
 
         GetUserRecommend();
 
@@ -114,37 +139,37 @@ public class AddFriendSearchActivity extends BaseActivity {
                             userSearchEntity.setFollow(jsonArray.getJSONObject(i).getJSONObject("user").getString("follow"));
                             userSearchEntity.setBeFollowed(jsonArray.getJSONObject(i).getJSONObject("user").getString("beFollowed"));
                             userSearchEntity.setIsFollowed("0");
-                            JSONArray aimsArray = jsonArray.getJSONObject(i).getJSONArray("aims");
-                            aimEntityList = new ArrayList<AimEntity>();
+                            JSONArray aimsArray = jsonArray.getJSONObject(i).optJSONArray("aims");
                             for (int j = 0; j < aimsArray.length(); j++) {
                                 aimEntity = new AimEntity();
-                                aimEntity.setId(aimsArray.getJSONObject(i).getString("id"));
-                                aimEntity.setName(aimsArray.getJSONObject(i).getString("name"));
-                                aimEntity.setBudget(aimsArray.getJSONObject(i).getString("budget"));
-                                aimEntity.setMoney(aimsArray.getJSONObject(i).getString("money"));
-                                aimEntity.setCycle(aimsArray.getJSONObject(i).getString("cycle"));
-                                aimEntity.setCurrent(aimsArray.getJSONObject(i).getString("current"));
-                                aimEntity.setUserId(aimsArray.getJSONObject(i).getString("userId"));
-
-                                aimEntity.setProvince(aimsArray.getJSONObject(i).getString("province"));
-                                aimEntity.setCity(aimsArray.getJSONObject(i).getString("city"));
-                                aimEntity.setBrief(aimsArray.getJSONObject(i).getString("brief"));
-                                aimEntity.setPosition(aimsArray.getJSONObject(i).getString("position"));
-                                aimEntity.setLongitude(aimsArray.getJSONObject(i).getString("longitude"));
-                                aimEntity.setLatitude(aimsArray.getJSONObject(i).getString("latitude"));
-                                aimEntity.setSupport(aimsArray.getJSONObject(i).getString("support"));
-                                aimEntity.setCreateTime(aimsArray.getJSONObject(i).getString("createTime"));
-                                aimEntity.setStatus(aimsArray.getJSONObject(i).getString("status"));
-                                aimEntity.setImg(aimsArray.getJSONObject(i).getString("img"));
+                                aimEntity.setId(aimsArray.getJSONObject(j).optString("id"));
+                                aimEntity.setName(aimsArray.getJSONObject(j).getString("name"));
+                                aimEntity.setBudget(aimsArray.getJSONObject(j).getString("budget"));
+                                aimEntity.setMoney(aimsArray.getJSONObject(j).getString("money"));
+                                aimEntity.setCycle(aimsArray.getJSONObject(j).getString("cycle"));
+                                aimEntity.setCurrent(aimsArray.getJSONObject(j).getString("current"));
+                                aimEntity.setUserId(aimsArray.getJSONObject(j).getString("userId"));
+                                aimEntity.setProvince(aimsArray.getJSONObject(j).getString("province"));
+                                aimEntity.setCity(aimsArray.getJSONObject(j).getString("city"));
+                                aimEntity.setBrief(aimsArray.getJSONObject(j).getString("brief"));
+                                aimEntity.setPosition(aimsArray.getJSONObject(j).getString("position"));
+                                aimEntity.setLongitude(aimsArray.getJSONObject(j).getString("longitude"));
+                                aimEntity.setLatitude(aimsArray.getJSONObject(j).getString("latitude"));
+                                aimEntity.setSupport(aimsArray.getJSONObject(j).getString("support"));
+                                aimEntity.setCreateTime(aimsArray.getJSONObject(j).getString("createTime"));
+                                aimEntity.setStatus(aimsArray.getJSONObject(j).getString("status"));
+                                aimEntity.setImg(aimsArray.getJSONObject(j).getString("img"));
 
                                 aimEntityList.add(aimEntity);
                             }
                             userSearchEntity.setAimEntityList(aimEntityList);
                             userSearchEntityList.add(userSearchEntity);
-                            addFriendSearchAdapter.notifyDataSetChanged();
                         }
 
-
+//                        addFriendSearchAdapter.notifyDataSetChanged();
+                        System.out.println("=====exddddd=======");
+                        addFriendSearchAdapter = new AddFriendSearchAdapter(AddFriendSearchActivity.this);
+                        userList.setAdapter(addFriendSearchAdapter);
                     } else {
                         Utils.showToast(AddFriendSearchActivity.this, new JSONObject(result).getString("msg"));
                     }
@@ -188,6 +213,255 @@ public class AddFriendSearchActivity extends BaseActivity {
                 break;
             case R.id.wb_layout:
                 break;
+        }
+    }
+
+    class AddFriendSearchAdapter extends BaseAdapter {
+
+        private Context context;
+        private ImageOptions imageOptions = new ImageOptions.Builder()
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setLoadingDrawableId(R.mipmap.background_load)
+                .setFailureDrawableId(R.mipmap.background_fail)
+                .build();
+
+        public AddFriendSearchAdapter(Context context) {
+            this.context = context;
+        }
+
+
+        @Override
+        public int getCount() {
+            return userSearchEntityList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+
+            final ViewHolder viewHolder;
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.item_list_add_friend_search, parent, false);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+            System.out.println("================" + userSearchEntityList.get(position).getAimEntityList().size() + "===========" + position);
+            if (!userSearchEntityList.get(position).getAvatar().equals("")) {
+                Picasso.with(context).load(Utils.GetPhotoPath(userSearchEntityList.get(position).getAvatar())).into(viewHolder.headImage);
+            } else {
+                viewHolder.headImage.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
+            }
+
+            viewHolder.headImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(context, UserDetitalActivity.class);
+                    intent.putExtra("userId", userSearchEntityList.get(position).getId());
+                    context.startActivity(intent);
+                }
+            });
+
+            viewHolder.nameText.setText(userSearchEntityList.get(position).getNick());
+            viewHolder.briefText.setText(userSearchEntityList.get(position).getBrief());
+            viewHolder.attentionText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_white_yellow_corner));
+            viewHolder.attentionText.setTextColor(context.getResources().getColor(R.color.yellow_light));
+            viewHolder.attentionText.setText("关注");
+
+            viewHolder.attentionText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestParams requestParams = new RequestParams(Url.Url + Url.Follow);
+                    requestParams.addHeader("token", Utils.GetToken(context));
+                    requestParams.addHeader("deviceId", MyApplication.deviceId);
+                    requestParams.addBodyParameter("followUserId", userSearchEntityList.get(position).getId());
+                    XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
+                        @Override
+                        public void onSuccess(String result) {
+                            System.out.println("==========attention==============" + result);
+                            try {
+                                if (new JSONObject(result).getString("code").equals("0")) {
+                                    if (userSearchEntityList.get(position).getIsFollowed().equals("0")) {
+                                        userSearchEntityList.get(position).setIsFollowed("1");
+                                        viewHolder.attentionText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_white_gray_corner));
+                                        viewHolder.attentionText.setTextColor(context.getResources().getColor(R.color.gray_heavy));
+                                        viewHolder.attentionText.setText("已关注");
+                                        Map<String, String> map = new HashMap<String, String>();
+
+                                        map.put("followId", new JSONObject(result).getJSONObject("result").optString("followId"));
+                                        map.put("userId", new JSONObject(result).getJSONObject("result").optString("userId"));
+                                        map.put("followUserId", new JSONObject(result).getJSONObject("result").optString("followUserId"));
+                                        map.put("nick", userSearchEntityList.get(position).getNick());
+                                        map.put("avatar", userSearchEntityList.get(position).getAvatar());
+                                        followList.add(map);
+
+                                        utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                                        utilsEditor.commit();
+                                    } else {
+                                        userSearchEntityList.get(position).setIsFollowed("0");
+                                        viewHolder.attentionText.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.background_white_yellow_corner));
+                                        viewHolder.attentionText.setTextColor(context.getResources().getColor(R.color.yellow_light));
+                                        viewHolder.attentionText.setText("关注");
+                                        for (int i = 0; i < followList.size(); i++) {
+                                            if (userSearchEntityList.get(position).getId().equals(followList.get(i).get("followUserId"))) {
+                                                followList.remove(i);
+                                            }
+                                        }
+                                        utilsEditor.putString("followList", Utils.changeFollowToJson(followList));
+                                        utilsEditor.commit();
+                                    }
+
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable ex, boolean isOnCallback) {
+
+                        }
+
+                        @Override
+                        public void onFinished() {
+
+                        }
+                    });
+                }
+            });
+
+            final List<Map<String, String>> imageList = new ArrayList<Map<String, String>>();
+            if (userSearchEntityList.get(position).getAimEntityList().size() < 1) {
+                viewHolder.imageLayout.setVisibility(View.GONE);
+            } else {
+                System.out.println("================" + userSearchEntityList.get(position).getAimEntityList().size() + "=========img====" + "========" + position);
+                viewHolder.imageLayout.setVisibility(View.VISIBLE);
+
+
+                for (int i = 0; i < userSearchEntityList.get(position).getAimEntityList().size(); i++) {
+                    if (imageList.size() < 3) {
+                        if (!userSearchEntityList.get(position).getAimEntityList().get(i).getImg().equals("")) {
+                            Map<String, String> map = new HashMap<String, String>();
+                            map.put("img", userSearchEntityList.get(position).getAimEntityList().get(i).getImg());
+                            map.put("aimId", userSearchEntityList.get(position).getAimEntityList().get(i).getId());
+                            imageList.add(map);
+                        }
+                    }
+                }
+
+                if (imageList.size() == 1) {
+                    viewHolder.image1.setVisibility(View.VISIBLE);
+                    viewHolder.image2.setVisibility(View.GONE);
+                    viewHolder.image3.setVisibility(View.GONE);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0).get("img")), imageOptions);
+                    ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
+                    layoutParams1.height = width / 2;
+                    layoutParams1.width = width;
+                    viewHolder.image1.setLayoutParams(layoutParams1);
+
+                } else if (imageList.size() == 2) {
+                    viewHolder.image1.setVisibility(View.VISIBLE);
+                    viewHolder.image2.setVisibility(View.VISIBLE);
+                    viewHolder.image3.setVisibility(View.GONE);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0).get("img")), imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1).get("img")), imageOptions);
+
+
+                    ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
+                    layoutParams1.height = width / 2;
+                    layoutParams1.width = width / 2;
+                    ViewGroup.LayoutParams layoutParams2 = viewHolder.image2.getLayoutParams();
+                    layoutParams2.height = width / 2;
+                    layoutParams2.width = width / 2;
+
+                    viewHolder.image1.setLayoutParams(layoutParams1);
+                    viewHolder.image2.setLayoutParams(layoutParams2);
+
+                } else if (imageList.size() == 3) {
+                    viewHolder.image1.setVisibility(View.VISIBLE);
+                    viewHolder.image2.setVisibility(View.VISIBLE);
+                    viewHolder.image3.setVisibility(View.VISIBLE);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0).get("img")), imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1).get("img")), imageOptions);
+                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(imageList.get(2).get("img")), imageOptions);
+
+                    ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
+                    layoutParams1.height = width / 3;
+                    layoutParams1.width = width / 3;
+                    ViewGroup.LayoutParams layoutParams2 = viewHolder.image2.getLayoutParams();
+                    layoutParams2.height = width / 3;
+                    layoutParams2.width = width / 3;
+                    ViewGroup.LayoutParams layoutParams3 = viewHolder.image3.getLayoutParams();
+                    layoutParams3.height = width / 3;
+                    layoutParams3.width = width / 3;
+
+                    viewHolder.image1.setLayoutParams(layoutParams1);
+                    viewHolder.image2.setLayoutParams(layoutParams2);
+                    viewHolder.image3.setLayoutParams(layoutParams3);
+                }
+            }
+            viewHolder.image1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(AddFriendSearchActivity.this, AimMoreActivity.class);
+                    intent.putExtra(AimMoreActivity.KEY_AIMID, imageList.get(0).get("aimId"));
+                    startActivity(intent);
+                }
+            });
+            viewHolder.image2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(AddFriendSearchActivity.this, AimMoreActivity.class);
+                    intent.putExtra(AimMoreActivity.KEY_AIMID, imageList.get(1).get("aimId"));
+                    startActivity(intent);
+                }
+            });
+
+            viewHolder.image3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(AddFriendSearchActivity.this, AimMoreActivity.class);
+                    intent.putExtra(AimMoreActivity.KEY_AIMID, imageList.get(2).get("aimId"));
+                    startActivity(intent);
+                }
+            });
+
+            return convertView;
+        }
+
+        class ViewHolder {
+            @InjectView(R.id.head_image)
+            CircleImageView headImage;
+            @InjectView(R.id.name_text)
+            TextView nameText;
+            @InjectView(R.id.brief_text)
+            TextView briefText;
+            @InjectView(R.id.attention_text)
+            TextView attentionText;
+
+            @InjectView(R.id.image_layout)
+            LinearLayout imageLayout;
+            @InjectView(R.id.image3)
+            ImageView image3;
+            @InjectView(R.id.image2)
+            ImageView image2;
+            @InjectView(R.id.image1)
+            ImageView image1;
+
+            ViewHolder(View view) {
+                ButterKnife.inject(this, view);
+            }
         }
     }
 }

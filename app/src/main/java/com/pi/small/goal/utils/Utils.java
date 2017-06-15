@@ -63,7 +63,7 @@ public class Utils {
         }
         mToast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         mToast.setText(text);
-        mToast.setGravity(Gravity.BOTTOM, 0, 0);
+        mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.setDuration(Toast.LENGTH_SHORT);
         mToast.show();
     }
