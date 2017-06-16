@@ -12,6 +12,7 @@ import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -97,7 +98,7 @@ public class AddFriendAdapter extends BaseAdapter {
                 requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("uid", dataList.get(position).get("id"));
 
-                x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                XUtil.get(requestParams, context, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         System.out.println("==========申请添加好友===========" + result);
@@ -116,11 +117,6 @@ public class AddFriendAdapter extends BaseAdapter {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(CancelledException cex) {
 
                     }
 

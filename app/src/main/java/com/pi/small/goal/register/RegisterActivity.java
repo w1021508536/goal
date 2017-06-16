@@ -3,13 +3,18 @@ package com.pi.small.goal.register;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.R;
 import com.pi.small.goal.login.LoginActivity;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 
@@ -28,10 +34,10 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView left_image;
-
+    private RelativeLayout whole_layout;
     private TextView code_text;
 
     private EditText invitation_code_edit;
@@ -83,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void init() {
 
         left_image = (ImageView) findViewById(R.id.left_image);
-
+        whole_layout = (RelativeLayout) findViewById(R.id.whole_layout);
         code_text = (TextView) findViewById(R.id.code_text);
         invitation_code_edit = (EditText) findViewById(R.id.invitation_code_edit);
         phone_edit = (EditText) findViewById(R.id.phone_edit);
@@ -105,6 +111,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         policy_text.setOnClickListener(this);
         code_text.setOnClickListener(this);
         register_text.setOnClickListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
     }
 
     @Override
@@ -295,5 +304,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             code_text.setClickable(false);
             code_text.setText(millisUntilFinished / 1000 + "秒");
         }
+    }
+
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+        whole_layout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/whole_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/background_register">
@@ -12,7 +13,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/right_text"
@@ -33,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="80dp"
             android:src="@mipmap/icon_login_logo" />
 
 
@@ -42,16 +44,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:text="寻 找 梦 想 同 行 者"
+            android:text="寻  找  梦  想  同  行  者"
             android:textColor="@color/white"
             android:textSize="18dp" />
 
         <TextView
             android:id="@+id/phone_text"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
             android:background="@drawable/background_yellow_corner"
             android:gravity="center"
             android:padding="10dp"
@@ -67,14 +71,16 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="使用账号密码登陆"
-            android:textColor="@color/white"
+            android:textColor="@color/line_level_gray"
             android:textSize="14dp" />
 
         <LinearLayout
             android:id="@+id/wx_layout"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/background_transparent_white_corner"
             android:gravity="center_horizontal"
@@ -95,9 +101,11 @@
 
         <LinearLayout
             android:id="@+id/qq_layout"
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/background_transparent_white_corner"
             android:gravity="center_horizontal"
@@ -133,16 +141,15 @@
             android:layout_height="wrap_content"
             android:text="还没有账号?注册"
             android:textColor="@color/white"
-            android:textSize="14dp" />
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/register_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="小目标账号"
-
             android:textColor="@color/white"
-            android:textSize="14dp" />
+            android:textSize="12dp" />
     </LinearLayout>
 
 

@@ -2,9 +2,13 @@ package com.pi.small.goal.welcome;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.pi.small.goal.MainActivity;
@@ -25,7 +29,7 @@ import org.xutils.http.RequestParams;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-
+    private RelativeLayout whole_layout;
     private SharedPreferences sharedPreferences;
 
     private String nick;
@@ -36,7 +40,12 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         sharedPreferences = Utils.UserSharedPreferences(WelcomeActivity.this);
         nick = sharedPreferences.getString("nick", "");
-  //      getData();
+        //      getData();
+
+        whole_layout = (RelativeLayout) findViewById(R.id.whole_layout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
         init();
     }
 
@@ -79,38 +88,17 @@ public class WelcomeActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void getData() {
-        RequestParams requestParams = new RequestParams();
-        SharedPreferences sp = Utils.UserSharedPreferences(this);
-        requestParams.addHeader("token", sp.getString("token", ""));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.setUri(Url.Url + "/user/my");
 
-        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
-            @Override
-            public void onSuccess(String result) {
-                if (!RenameActivity.callOk(result)) return;
-                Gson gson = new Gson();
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    UerEntity userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
-
-                    CacheUtil.getInstance().setUserInfo(userInfo);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+        whole_layout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
     }
 }

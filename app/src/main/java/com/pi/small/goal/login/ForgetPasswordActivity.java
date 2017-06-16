@@ -1,18 +1,23 @@
 package com.pi.small.goal.login;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -24,9 +29,10 @@ import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-public class ForgetPasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class ForgetPasswordActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView left_image;
+    private RelativeLayout whole_layout;
     private EditText phone_edit;
     private TextView code_text;
     private EditText code_edit;
@@ -58,7 +64,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
     private void init() {
 
         left_image = (ImageView) findViewById(R.id.left_image);
-
+        whole_layout = (RelativeLayout) findViewById(R.id.whole_layout);
         code_text = (TextView) findViewById(R.id.code_text);
         phone_edit = (EditText) findViewById(R.id.phone_edit);
         code_edit = (EditText) findViewById(R.id.code_edit);
@@ -73,6 +79,10 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         left_image.setOnClickListener(this);
         code_text.setOnClickListener(this);
         modify_text.setOnClickListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
     }
 
     @Override
@@ -121,7 +131,7 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
         requestParams.addHeader("deviceId", deviceId);
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("==========code=========" + result);
@@ -146,15 +156,11 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
+
     }
 
     private void ModifyPassword() {
@@ -221,5 +227,18 @@ public class ForgetPasswordActivity extends AppCompatActivity implements View.On
             code_text.setClickable(false);
             code_text.setText(millisUntilFinished / 1000 + "秒");
         }
+    }
+
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+        whole_layout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
     }
 }

@@ -2,7 +2,6 @@ package com.pi.small.goal.aim.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.activity.PayPassActivity;
-import com.pi.small.goal.search.activity.SupportPayActivity;
 import com.pi.small.goal.utils.BalancePayActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
@@ -83,8 +81,6 @@ public class PayActivity extends BaseActivity {
     @InjectView(R.id.profit_text)
     TextView profit_text;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     private String content;
     private String aimId;
@@ -104,8 +100,8 @@ public class PayActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+        super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
 
         money = getIntent().getStringExtra("money");
@@ -301,8 +297,7 @@ public class PayActivity extends BaseActivity {
         requestParams.addBodyParameter("img3", img3);
         requestParams.addBodyParameter("video", "");
         requestParams.addBodyParameter("channel", channel);
-
-        x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -336,16 +331,10 @@ public class PayActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
-
 
     }
 

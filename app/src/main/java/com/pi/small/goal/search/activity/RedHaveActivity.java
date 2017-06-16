@@ -3,7 +3,6 @@ package com.pi.small.goal.search.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -32,7 +32,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class RedHaveActivity extends AppCompatActivity {
+public class RedHaveActivity extends BaseActivity {
 
 
     @InjectView(R.id.left_image)
@@ -118,7 +118,7 @@ public class RedHaveActivity extends AppCompatActivity {
     private List<RelativeLayout> relativeLayoutList;//item 整体集合
     private List<TextView> textViewList;//姓名集合
     private List<ImageView> radImageList;//红包图标集合
-
+    private List<Integer> isPointList;
     private int page = 1;
 
     private int total;
@@ -139,6 +139,7 @@ public class RedHaveActivity extends AppCompatActivity {
         redPacketEntityList = new ArrayList<RedPacketEntity>();
         circleImageViewList = new ArrayList<CircleImageView>();
         relativeLayoutList = new ArrayList<RelativeLayout>();
+        isPointList = new ArrayList<Integer>();
         textViewList = new ArrayList<TextView>();
         radImageList = new ArrayList<ImageView>();
 
@@ -201,41 +202,70 @@ public class RedHaveActivity extends AppCompatActivity {
                     } else {
                         page = page + 1;
                     }
-
                     if (redPacketEntityList.size() < total) {
                         GetRedList();
-
                     } else {
                         SetDataList();
                     }
-
                 }
                 break;
             case R.id.right_image:
                 break;
             case R.id.four_layout:
-                DrawRedPacket(redPacketEntityList.get(3).getId(), redPacketEntityList.get(3).getFromUserNick(), redPacketEntityList.get(3).getFromUserAvatar());
+                if (isPointList.get(3) == 1) {
+                    DrawRedPacket(3, redPacketEntityList.get(3).getId(), redPacketEntityList.get(3).getFromUserNick(), redPacketEntityList.get(3).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(3).getId(), redPacketEntityList.get(3).getFromUserNick(), redPacketEntityList.get(3).getFromUserAvatar());
+                }
                 break;
             case R.id.three_layout:
-                DrawRedPacket(redPacketEntityList.get(2).getId(), redPacketEntityList.get(2).getFromUserNick(), redPacketEntityList.get(2).getFromUserAvatar());
+                if (isPointList.get(2) == 1) {
+                    DrawRedPacket(2, redPacketEntityList.get(2).getId(), redPacketEntityList.get(2).getFromUserNick(), redPacketEntityList.get(2).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(2).getId(), redPacketEntityList.get(2).getFromUserNick(), redPacketEntityList.get(2).getFromUserAvatar());
+                }
                 break;
             case R.id.six_layout:
-                DrawRedPacket(redPacketEntityList.get(5).getId(), redPacketEntityList.get(5).getFromUserNick(), redPacketEntityList.get(5).getFromUserAvatar());
+                if (isPointList.get(5) == 1) {
+                    DrawRedPacket(5, redPacketEntityList.get(5).getId(), redPacketEntityList.get(5).getFromUserNick(), redPacketEntityList.get(5).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(5).getId(), redPacketEntityList.get(5).getFromUserNick(), redPacketEntityList.get(5).getFromUserAvatar());
+                }
                 break;
             case R.id.seven_layout:
-                DrawRedPacket(redPacketEntityList.get(6).getId(), redPacketEntityList.get(6).getFromUserNick(), redPacketEntityList.get(6).getFromUserAvatar());
+                if (isPointList.get(6) == 1) {
+                    DrawRedPacket(6, redPacketEntityList.get(6).getId(), redPacketEntityList.get(6).getFromUserNick(), redPacketEntityList.get(6).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(6).getId(), redPacketEntityList.get(6).getFromUserNick(), redPacketEntityList.get(6).getFromUserAvatar());
+                }
                 break;
             case R.id.two_layout:
-                DrawRedPacket(redPacketEntityList.get(1).getId(), redPacketEntityList.get(1).getFromUserNick(), redPacketEntityList.get(1).getFromUserAvatar());
+                if (isPointList.get(1) == 1) {
+                    DrawRedPacket(1, redPacketEntityList.get(1).getId(), redPacketEntityList.get(1).getFromUserNick(), redPacketEntityList.get(1).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(1).getId(), redPacketEntityList.get(1).getFromUserNick(), redPacketEntityList.get(1).getFromUserAvatar());
+                }
                 break;
             case R.id.one_layout:
-                DrawRedPacket(redPacketEntityList.get(0).getId(), redPacketEntityList.get(0).getFromUserNick(), redPacketEntityList.get(0).getFromUserAvatar());
+                if (isPointList.get(0) == 1) {
+                    DrawRedPacket(0, redPacketEntityList.get(0).getId(), redPacketEntityList.get(0).getFromUserNick(), redPacketEntityList.get(0).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(0).getId(), redPacketEntityList.get(0).getFromUserNick(), redPacketEntityList.get(0).getFromUserAvatar());
+                }
                 break;
             case R.id.five_layout:
-                DrawRedPacket(redPacketEntityList.get(4).getId(), redPacketEntityList.get(4).getFromUserNick(), redPacketEntityList.get(4).getFromUserAvatar());
+                if (isPointList.get(4) == 1) {
+                    DrawRedPacket(4, redPacketEntityList.get(4).getId(), redPacketEntityList.get(4).getFromUserNick(), redPacketEntityList.get(4).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(4).getId(), redPacketEntityList.get(4).getFromUserNick(), redPacketEntityList.get(4).getFromUserAvatar());
+                }
                 break;
             case R.id.eight_layout:
-                DrawRedPacket(redPacketEntityList.get(7).getId(), redPacketEntityList.get(7).getFromUserNick(), redPacketEntityList.get(7).getFromUserAvatar());
+                if (isPointList.get(7) == 1) {
+                    DrawRedPacket(7, redPacketEntityList.get(7).getId(), redPacketEntityList.get(7).getFromUserNick(), redPacketEntityList.get(7).getFromUserAvatar());
+                } else {
+                    GetRedPacketData(redPacketEntityList.get(7).getId(), redPacketEntityList.get(7).getFromUserNick(), redPacketEntityList.get(7).getFromUserAvatar());
+                }
                 break;
         }
     }
@@ -321,6 +351,7 @@ public class RedHaveActivity extends AppCompatActivity {
         }
 
         displayList.clear();
+        isPointList.clear();
         if (page * 8 > redPacketEntityList.size()) {
             for (int i = (page - 1) * 8; i < redPacketEntityList.size(); i++) {
                 displayList.add(redPacketEntityList.get(i));
@@ -354,18 +385,22 @@ public class RedHaveActivity extends AppCompatActivity {
             if (Integer.valueOf(displayList.get(i).getRemainSize()) > 0) {
                 if (displayList.get(i).getDrew().equals("0")) {
                     radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_on));
+                    isPointList.add(1);
                 } else {
                     radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_off));
+                    isPointList.add(0);
                 }
             } else {
                 radImageList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_off));
+                isPointList.add(0);
+
             }
         }
     }
 
 
     //抢红包
-    private void DrawRedPacket(String packetId, final String nick, final String avatar) {
+    private void DrawRedPacket(final int position, String packetId, final String nick, final String avatar) {
         RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketDraw);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -377,10 +412,13 @@ public class RedHaveActivity extends AppCompatActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
+                        radImageList.get(position).setImageDrawable(getResources().getDrawable(R.mipmap.icon_money_radar_off));
+                        isPointList.set(position, 0);
                         Intent intent = new Intent(RedHaveActivity.this, RedPacketActivity.class);
                         intent.putExtra("nick", nick);
                         intent.putExtra("avatar", avatar);
                         intent.putExtra("json", result);
+                        intent.putExtra("isHave", "0");
                         startActivity(intent);
                     } else {
                         Utils.showToast(RedHaveActivity.this, new JSONObject(result).getString("msg"));
@@ -394,6 +432,51 @@ public class RedHaveActivity extends AppCompatActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("")) {
+                    Utils.showToast(RedHaveActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    //获取指定领取红包记录
+    private void GetRedPacketData(String packetId, final String nick, final String avatar) {
+
+        RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketRecord);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("packetId", packetId);
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========GetRedPacketData=============" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        Intent intent = new Intent(RedHaveActivity.this, RedPacketActivity.class);
+                        intent.putExtra("nick", nick);
+                        intent.putExtra("avatar", avatar);
+                        intent.putExtra("json", result);
+                        intent.putExtra("isHave", "1");
+                        startActivity(intent);
+                    } else {
+                        Utils.showToast(RedHaveActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("=========GetRedPacketData===ex==========" + ex.getMessage());
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(RedHaveActivity.this, ex.getMessage());
                 }

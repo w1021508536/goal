@@ -14,6 +14,7 @@ import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.SwipeListView;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FriendsMessageListActivity extends BaseActivity  {
+public class FriendsMessageListActivity extends BaseActivity {
 
 
     private ImageView left_image;
@@ -43,8 +44,8 @@ public class FriendsMessageListActivity extends BaseActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_message_list);
+        super.onCreate(savedInstanceState);
 
         dataList = new ArrayList<Map<String, String>>();
 
@@ -70,7 +71,7 @@ public class FriendsMessageListActivity extends BaseActivity  {
                 requestParams.addHeader("token", Utils.GetToken(FriendsMessageListActivity.this));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("msgId", dataList.get(position).get("id"));
-                x.http().post(requestParams, new Callback.CommonCallback<String>() {
+                XUtil.post(requestParams, FriendsMessageListActivity.this, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         try {
@@ -92,11 +93,6 @@ public class FriendsMessageListActivity extends BaseActivity  {
                     }
 
                     @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
                     public void onFinished() {
 
                     }
@@ -113,7 +109,7 @@ public class FriendsMessageListActivity extends BaseActivity  {
                 requestParams.addHeader("token", Utils.GetToken(FriendsMessageListActivity.this));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("uid", dataList.get(position).get("sendUserId"));
-                x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                XUtil.get(requestParams, FriendsMessageListActivity.this, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         try {
@@ -135,16 +131,10 @@ public class FriendsMessageListActivity extends BaseActivity  {
                     }
 
                     @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
                     public void onFinished() {
 
                     }
                 });
-
 
             }
         });
@@ -156,7 +146,7 @@ public class FriendsMessageListActivity extends BaseActivity  {
                 requestParams.addHeader("token", Utils.GetToken(FriendsMessageListActivity.this));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("uid", dataList.get(position).get("sendUserId"));
-                x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                XUtil.get(requestParams, FriendsMessageListActivity.this, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         try {
@@ -178,16 +168,10 @@ public class FriendsMessageListActivity extends BaseActivity  {
                     }
 
                     @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
                     public void onFinished() {
 
                     }
                 });
-
 
             }
         });
@@ -211,7 +195,7 @@ public class FriendsMessageListActivity extends BaseActivity  {
         RequestParams requestParams = new RequestParams(Url.Url + Url.FriendsMessageList);
         requestParams.addHeader("token", Utils.GetToken(FriendsMessageListActivity.this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -222,11 +206,6 @@ public class FriendsMessageListActivity extends BaseActivity  {
                     if (code.equals("0")) {
                         dataList.clear();
                         JSONArray contentObject = new JSONObject(result).getJSONArray("result");
-
-//                        {"id":18,"userId":43,"createTime":1495848554000,"msgType":2,
-//                                "content":"{\"operate\":\"APPLY_ADD_FRIEND\",\"user\":{\"id\":43,\"nick\":\"13693361208\",\"avatar\":\"\"," +
-//                                "\"brief\":\"\",\"city\":\"\",\"sex\":0}}","status":0,"isRead":1},
-
                         //status  0 未处理  1 已同意  -1 已拒绝
                         for (int i = 0; i < contentObject.length(); i++) {
                             map = new HashMap<String, String>();
@@ -265,11 +244,6 @@ public class FriendsMessageListActivity extends BaseActivity  {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -282,7 +256,7 @@ public class FriendsMessageListActivity extends BaseActivity  {
         RequestParams requestParams = new RequestParams(Url.Url + Url.FriendsMessageListClear);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 try {
@@ -302,11 +276,6 @@ public class FriendsMessageListActivity extends BaseActivity  {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
 
             }
 

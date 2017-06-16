@@ -41,7 +41,6 @@ import com.pi.small.goal.utils.entity.AimEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -56,7 +55,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
 
     private ImageView right_image;
-//    private ImageView left_image;
 
     private ViewPager viewPager;
     private ViewGroup viewGroup;
@@ -97,7 +95,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         currentView = inflater.inflate(R.layout.fragment_aim, container, false);
         View topView = currentView.findViewById(R.id.view);
@@ -105,7 +102,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         int sysVersion = Integer.parseInt(Build.VERSION.SDK);
         if (sysVersion >= 19) {
             getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         } else {
             topView.setVisibility(View.GONE);
         }
@@ -113,9 +109,9 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         dataList = new ArrayList<AimEntity>();
         viewList = new ArrayList<View>();
         customTransformer = new CustomTransformer();
-
+        itemView = LayoutInflater.from(getActivity()).inflate(
+                R.layout.item_viewpager_aim, null);
         right_image = (ImageView) currentView.findViewById(R.id.right_image);
-//        left_image = (ImageView) currentView.findViewById(R.id.left_image);
         viewPager = (ViewPager) currentView.findViewById(R.id.view_pager);
         viewGroup = (ViewGroup) currentView.findViewById(R.id.viewGroup);
         money_gift_image = (ImageView) currentView.findViewById(R.id.money_gift_image);
@@ -123,7 +119,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         aim_text = (TextView) currentView.findViewById(R.id.aim_text);
 
         right_image.setOnClickListener(this);
-//        left_image.setOnClickListener(this);
         money_gift_image.setOnClickListener(this);
         aim_text.setOnClickListener(this);
 
@@ -144,7 +139,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             case R.id.right_image:
                 int size = dataList.size();
                 String grade = CacheUtil.getInstance().getUserInfo().getGrade();
-//                String grade = Utils.UserSharedPreferences(getActivity()).getString("grade", "");
                 if (grade.equals("v0")) {
                     if (size < 1) {
                         intent.setClass(getActivity(), AddAimActivity.class);
@@ -217,9 +211,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 intent.setClass(getActivity(), RedActivity.class);
                 startActivity(intent);
                 break;
-//            case R.id.left_image:
-//                startActivity(new Intent(getContext(), SignActivity.class));
-//                break;
         }
     }
 
@@ -230,11 +221,18 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             if (list.size() == 0) {
 
             } else {
-                AimEntity aimEntity = list.get(0);
-                dataList.add(aimEntity);
-                addViewPager(dataList.size() - 1);
-                // viewPagerAdapter.notifyDataSetChanged();
-                viewPagerAdapter.setViewList(viewList);
+                if (dataList.size() == 0) {
+
+                    AimEntity aimEntity = list.get(0);
+                    dataList.add(aimEntity);
+                    SetViewPager();
+                } else {
+                    AimEntity aimEntity = list.get(0);
+                    dataList.add(aimEntity);
+                    addViewPager(dataList.size() - 1);
+                    viewPagerAdapter.setViewList(viewList);
+                }
+
 
             }
             if (dataList.size() == 0) {
@@ -254,8 +252,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         } else if (resultCode == Code.SupportAim) {
             String money = data.getStringExtra("money");
 
-            double totalMoney = Double.valueOf(dataList.get(position).getMoney());
-            totalMoney = totalMoney + Double.valueOf(money);
+            double totalMoney = Float.valueOf(dataList.get(position).getMoney());
+            totalMoney = totalMoney + Float.valueOf(money);
             dataList.get(position).setMoney(totalMoney + "");
 
             TextView tv_money = (TextView) viewList.get(position).findViewById(R.id.money_text);
@@ -267,14 +265,12 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             tv_money.setText(dataList.get(position).getMoney());
             line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getBudget()) - Float.valueOf(dataList.get(position).getMoney())));
             line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getMoney())));
-//            weight_text.setText(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100 + "%");
 
             String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
             weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
             viewPagerAdapter.notifyDataSetChanged();
         } else if (resultCode == Code.RESULT_OWM_CODE) {
 
-            System.out.println("===================" + data.getStringExtra("path"));
             if (!data.getStringExtra("path").equals("")) {
                 photoFrom = 1;
                 img = data.getStringExtra("path");
@@ -292,11 +288,9 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         requestParams.addBodyParameter("token", Utils.GetToken(getActivity()));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", new File(path));
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("=========photo=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -320,11 +314,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -341,7 +330,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========photo=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -385,7 +373,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("userId", Utils.UserSharedPreferences(getActivity()).getString("id", ""));
         requestParams.addBodyParameter("aimId", "");
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("============GetAim==========" + result);
@@ -447,11 +435,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
                 right_image.setClickable(true);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
             }
 
             @Override
@@ -564,10 +547,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         } else {
             day_text.setText(Long.valueOf(dataList.get(i).getCycle()) * 30 - day + "");
         }
-//            Float.valueOf(dataList.get(i).getBudget())-Float.valueOf(dataList.get(i).getMoney())
         line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
         line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getMoney())));
-//        weight_text.setText(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100 + "%");
         String weight = String.valueOf(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100);
         weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
         if (!dataList.get(i).getMoney().equals(dataList.get(i).getBudget())) {

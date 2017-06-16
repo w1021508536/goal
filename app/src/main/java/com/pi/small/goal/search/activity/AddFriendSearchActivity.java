@@ -1,9 +1,14 @@
 package com.pi.small.goal.search.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -205,8 +210,32 @@ public class AddFriendSearchActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.phone_layout:
-                intent.setClass(this, InviteActivity.class);
-                startActivity(intent);
+                if (Build.VERSION.SDK_INT >= 23) {
+                    int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS);
+                    if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 101);
+                        return;
+                    } else {
+                        int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+                        if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 102);
+                            return;
+                        } else {
+                            int checkCallPhonePermission3 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
+                            if (checkCallPhonePermission3 != PackageManager.PERMISSION_GRANTED) {
+                                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CONTACTS}, 103);
+                                return;
+                            } else {
+                                    intent.setClass(this, InviteActivity.class);
+                                    startActivity(intent);
+                            }
+                        }
+                    }
+                } else {
+                    intent.setClass(this, InviteActivity.class);
+                    startActivity(intent);
+                }
+
                 break;
             case R.id.wx_layout:
                 break;
@@ -216,6 +245,59 @@ public class AddFriendSearchActivity extends BaseActivity {
                 break;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 101:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    int checkCallPhonePermission2 = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+                    if (checkCallPhonePermission2 != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, 102);
+                        return;
+                    } else {
+                        int checkCallPhonePermission3 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
+                        if (checkCallPhonePermission3 != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CONTACTS}, 103);
+                            return;
+                        } else {
+                            Intent intent = new Intent();
+                            intent.setClass(this, InviteActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                } else {
+                    Utils.showToast(AddFriendSearchActivity.this, "您禁止了短信权限");
+                }
+                break;
+            case 102:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    int checkCallPhonePermission3 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS);
+                    if (checkCallPhonePermission3 != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CONTACTS}, 103);
+                        return;
+                    } else {
+                        Intent intent = new Intent();
+                        intent.setClass(this, InviteActivity.class);
+                        startActivity(intent);
+                    }
+                } else {
+                    Utils.showToast(AddFriendSearchActivity.this, "您禁止了读取权限");
+                }
+                break;
+            case 103:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent();
+                    intent.setClass(this, InviteActivity.class);
+                    startActivity(intent);
+                } else {
+                    Utils.showToast(AddFriendSearchActivity.this, "您禁止了写入权限");
+                }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
 
     class AddFriendSearchAdapter extends BaseAdapter {
 

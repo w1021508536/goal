@@ -42,8 +42,8 @@ public class SystemMessageListAdapter extends BaseAdapter {
 
         imageOptions = new ImageOptions.Builder()
                 .setImageScaleType(ImageView.ScaleType.FIT_XY)
-                .setLoadingDrawableId(R.mipmap.icon_head)
-                .setFailureDrawableId(R.mipmap.icon_head)
+                .setLoadingDrawableId(R.mipmap.background_load)
+                .setFailureDrawableId(R.mipmap.background_fail)
                 .build();
     }
 

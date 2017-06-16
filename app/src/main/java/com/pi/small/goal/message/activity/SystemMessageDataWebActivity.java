@@ -21,8 +21,8 @@ public class SystemMessageDataWebActivity extends BaseActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_message_data_web);
+        super.onCreate(savedInstanceState);
 
         Url = getIntent().getStringExtra("url");
 

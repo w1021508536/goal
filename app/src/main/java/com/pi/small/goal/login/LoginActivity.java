@@ -3,21 +3,28 @@ package com.pi.small.goal.login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.R;
 import com.pi.small.goal.register.RegisterActivity;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.ThirdUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
-import com.tencent.connect.UserInfo;import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.pi.small.goal.utils.XUtil;
+import com.tencent.connect.UserInfo;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.tauth.IUiListener;
@@ -31,10 +38,11 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private TextView right_text;
 
+    private RelativeLayout whole_layout;
 
     private TextView phone_text;
     private TextView password_text;
@@ -104,7 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void init() {
         right_text = (TextView) findViewById(R.id.right_text);
-
+        whole_layout = (RelativeLayout) findViewById(R.id.whole_layout);
         phone_text = (TextView) findViewById(R.id.phone_text);
         password_text = (TextView) findViewById(R.id.password_text);
         wx_layout = (LinearLayout) findViewById(R.id.wx_layout);
@@ -121,6 +129,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         qq_layout.setOnClickListener(this);
         wx_layout.setOnClickListener(this);
         register_text.setOnClickListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
     }
 
     @Override
@@ -232,7 +244,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         requestParams.addBodyParameter("nick", nick_qq);
         requestParams.addBodyParameter("avatar", avatar_qq);
         requestParams.addBodyParameter("deviceId", deviceId);
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -270,11 +282,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -300,8 +307,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+        whole_layout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
     }
 }

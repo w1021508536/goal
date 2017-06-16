@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/whole_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/background_register"
@@ -127,7 +128,10 @@
                 android:layout_centerVertical="true"
                 android:background="@drawable/background_yellow_corner"
                 android:gravity="center"
-                android:padding="2dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
                 android:text="获取验证码"
                 android:textColor="@color/white"
                 android:textSize="16dp" />

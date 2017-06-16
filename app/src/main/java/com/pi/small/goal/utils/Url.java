@@ -72,6 +72,7 @@ public class Url {
     //红包
     public static String TestRedSet = "/test/red/set";//发红包
     public static String RedpacketDraw = "/redpacket/draw";//抢红包
+    public static String RedpacketRecord = "/redpacket/record";//获取指定红包领取记录
 
     public static String Redpacket = "/redpacket";//用户的红包
     public static String RedpacketUnraw = "/redpacket/undraw";//用户未领取的红包

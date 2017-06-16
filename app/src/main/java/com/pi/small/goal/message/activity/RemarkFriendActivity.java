@@ -13,6 +13,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +24,7 @@ import org.xutils.x;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
 
-public class RemarkFriendActivity extends BaseActivity  {
+public class RemarkFriendActivity extends BaseActivity {
 
 
     private ImageView left_image;
@@ -35,8 +36,8 @@ public class RemarkFriendActivity extends BaseActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remark_friend);
+        super.onCreate(savedInstanceState);
         userId = getIntent().getStringExtra("userId");
 
         init();
@@ -73,7 +74,7 @@ public class RemarkFriendActivity extends BaseActivity  {
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("friendId", userId);
         requestParams.addBodyParameter("remark", remark_edit.getText().toString().trim());
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("==========拉黑========" + result);
@@ -96,11 +97,6 @@ public class RemarkFriendActivity extends BaseActivity  {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Utils.showToast(RemarkFriendActivity.this, ex.getMessage());
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
             }
 
             @Override

@@ -18,6 +18,7 @@ import com.pi.small.goal.message.adapter.AddFriendAdapter;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,7 +127,7 @@ public class AddFriendActivity extends BaseActivity {
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("nick", search_edit.getText().toString().trim());
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("================searchuser========" + result);
@@ -159,11 +160,6 @@ public class AddFriendActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
 
             }
 

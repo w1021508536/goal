@@ -57,8 +57,8 @@ public class SaveMoneyActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_save_money);
+        super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
 
         sharedPreferences = Utils.UserSharedPreferences(this);

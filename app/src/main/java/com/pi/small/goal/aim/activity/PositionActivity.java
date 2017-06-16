@@ -61,8 +61,8 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_position);
+        super.onCreate(savedInstanceState);
 
         page = 1;
 

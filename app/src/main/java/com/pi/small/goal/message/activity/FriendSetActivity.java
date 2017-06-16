@@ -14,6 +14,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,8 +44,8 @@ public class FriendSetActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_set);
+        super.onCreate(savedInstanceState);
 
         RY_userId = getIntent().getStringExtra("RY_userId");
         userId = RY_userId.substring(RY_userId.length() - 2, RY_userId.length());
@@ -118,7 +119,7 @@ public class FriendSetActivity extends BaseActivity {
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("friendId", userId);
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("==========拉黑========" + result);
@@ -141,11 +142,6 @@ public class FriendSetActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -157,7 +153,7 @@ public class FriendSetActivity extends BaseActivity {
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("friendId", userId);
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("==========移除拉黑========" + result);
@@ -180,11 +176,6 @@ public class FriendSetActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -197,7 +188,7 @@ public class FriendSetActivity extends BaseActivity {
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("uid", userId);
-        x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 try {
@@ -216,11 +207,6 @@ public class FriendSetActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Utils.showToast(FriendSetActivity.this, ex.getMessage());
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
             }
 
             @Override

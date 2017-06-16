@@ -10,14 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:background="@drawable/background_white_corner_15"
+        android:background="@drawable/view_shadow_corner_15"
         android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="190dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
@@ -109,15 +109,16 @@
 
     <RelativeLayout
         android:layout_width="250dp"
-        android:layout_height="300dp"
+        android:layout_height="290dp"
         android:layout_gravity="center_horizontal"
+        android:background="@drawable/view_shadow"
         android:gravity="center">
 
         <ImageView
             android:id="@+id/aim_image"
-            android:layout_width="250dp"
-            android:layout_height="300dp"
-            android:background="@drawable/view_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:scaleType="fitXY"
             android:src="@drawable/image1" />
 

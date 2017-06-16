@@ -2,7 +2,6 @@ package com.pi.small.goal.aim.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,8 +37,8 @@ public class PayDetailActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_detail);
+        super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
 
         money = getIntent().getExtras().getString("money", "0");
@@ -68,7 +67,7 @@ public class PayDetailActivity extends BaseActivity {
 
     private void init() {
 
-        money_text.setText(getResources().getText(R.string.money_sign) + money);
+        money_text.setText(getResources().getText(R.string.money_sign) + money + "(元)");
 
         if (channel.equals("balance")) {
             pay_mode_text.setText(" 余额");

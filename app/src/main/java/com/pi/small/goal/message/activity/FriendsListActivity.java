@@ -17,8 +17,10 @@ import android.widget.ListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.adapter.FriendsListAdapter;
+import com.pi.small.goal.search.activity.UserDetitalActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CharacterParser;
+import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.ContactBean;
 import com.pi.small.goal.utils.FirstLetterUtil;
 import com.pi.small.goal.utils.PinyinComparator;
@@ -132,28 +134,6 @@ public class FriendsListActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
 
-//                userInfo = new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
-//              RongIM.getInstance().setCurrentUserInfo(userInfo);
-//                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-//                    @Override
-//                    public UserInfo getUserInfo(String s) {
-//                        return new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
-//                    }
-//                }, false);
-
-//                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-//                    @Override
-//                    public UserInfo getUserInfo(String s) {
-//
-//                        return new UserInfo("xmb_user_" + dataList.get(position).get("friendId"), dataList.get(position).get("nick"), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg"));
-//                    }
-//                }, false);
-//                RongIM.getInstance().setMessageAttachedUserInfo(true);
-
-//                RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
-//                RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + dataList.get(position).get("friendId"), dataList.get(position).get("nick"), Uri.parse(Url.PhotoUrl + "/" + dataList.get(position).get("avatar"))));
-//                RongIM.getInstance().setMessageAttachedUserInfo(true);
-
                 if (type == TYPE_TRANSFER) {
 
                     ContactBean contactBean = friendList.get(position);
@@ -164,24 +144,11 @@ public class FriendsListActivity extends BaseActivity {
                     return;
                 }
 
+                Intent intent = new Intent();
+                intent.setClass(FriendsListActivity.this, UserDetitalActivity.class);
+                intent.putExtra("userId", friendList.get(position).getFriendId());
+                startActivity(intent);
 
-
-                if (friendList.get(position).getRemark().equals("")) {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getNick(), Uri.parse(Utils.GetPhotoPath(friendList.get(position).getAvatar()))));
-                } else {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + friendList.get(position).getFriendId(), friendList.get(position).getRemark(), Uri.parse(Utils.GetPhotoPath(friendList.get(position).getAvatar()))));
-                }
-
-                RongIM.getInstance().setMessageAttachedUserInfo(true);
-
-//                RongIM.getInstance().setCurrentUserInfo(new UserInfo(sharedPreferences.getString("RY_Id", ""), sharedPreferences.getString("nick", ""), Uri.parse("http://www.ghost64.com/qqtupian/zixunImg/local/2016/11/22/14798003915289.jpg")));
-
-
-                if (Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "").equals("")) {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + Utils.UserSharedPreferences(FriendsListActivity.this).getString("id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse("")));
-                } else {
-                    RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + Utils.UserSharedPreferences(FriendsListActivity.this).getString("id", ""), Utils.UserSharedPreferences(FriendsListActivity.this).getString("nick", ""), Uri.parse(Utils.GetPhotoPath(Utils.UserSharedPreferences(FriendsListActivity.this).getString("avatar", "")))));
-                }
             }
         });
 
@@ -210,7 +177,7 @@ public class FriendsListActivity extends BaseActivity {
         RequestParams requestParams = new RequestParams(Url.Url + Url.FriendList);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -219,25 +186,6 @@ public class FriendsListActivity extends BaseActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-//                        id":21,"userId":43,"friendId":44,"remark":"","createTime":1495868168000,"nick":"求己","avatar":"","brief":"","isBlack":0
-//                        JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
-//                        dataList.clear();
-//                        for (int i = 0; i < jsonArray.length(); i++) {
-//                            map = new HashMap<String, String>();
-//
-//                            map.put("id", jsonArray.getJSONObject(i).optString("id"));
-//                            map.put("userId", jsonArray.getJSONObject(i).optString("userId"));
-//                            map.put("avatar", jsonArray.getJSONObject(i).optString("avatar"));
-//                            map.put("friendId", jsonArray.getJSONObject(i).optString("friendId"));
-//                            map.put("remark", jsonArray.getJSONObject(i).optString("remark"));
-//                            map.put("createTime", jsonArray.getJSONObject(i).optString("createTime"));
-//                            map.put("nick", jsonArray.getJSONObject(i).optString("nick"));
-//                            map.put("brief", jsonArray.getJSONObject(i).optString("brief"));
-//                            map.put("isBlack", jsonArray.getJSONObject(i).optString("isBlack"));
-//
-//                            dataList.add(map);
-//                        }
-//                        friendsListAdapter.notifyDataSetChanged();
 
                         editor.putString("friendsList", result);
                         editor.commit();
@@ -255,11 +203,6 @@ public class FriendsListActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
 
             }
 

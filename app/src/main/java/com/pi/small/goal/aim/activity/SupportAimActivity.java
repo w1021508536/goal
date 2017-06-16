@@ -8,10 +8,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +27,12 @@ import com.pi.small.goal.utils.ChoosePhotoActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.AimEntity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,6 +51,9 @@ public class SupportAimActivity extends BaseActivity {
     private ImageView photo_image;
     private RelativeLayout position_layout;
     private TextView position_text;
+
+    private RelativeLayout money_layout;
+    private TextView money_text;
 
     private String aimId;
     private String money;
@@ -76,6 +82,8 @@ public class SupportAimActivity extends BaseActivity {
     private String img2 = "";
     private String img3 = "";
 
+    private String payMoney="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_support_aim);
@@ -97,7 +105,8 @@ public class SupportAimActivity extends BaseActivity {
         photo3_image = (ImageView) findViewById(R.id.photo3_image);
         position_layout = (RelativeLayout) findViewById(R.id.position_layout);
         position_text = (TextView) findViewById(R.id.position_text);
-
+        money_layout = (RelativeLayout) findViewById(R.id.money_layout);
+        money_text = (TextView) findViewById(R.id.money_text);
 
         left_image.setOnClickListener(this);
         right_text.setOnClickListener(this);
@@ -106,7 +115,7 @@ public class SupportAimActivity extends BaseActivity {
         photo_image.setOnClickListener(this);
         photo2_image.setOnClickListener(this);
         photo3_image.setOnClickListener(this);
-
+        money_layout.setOnClickListener(this);
         initImageView();
 
     }
@@ -135,28 +144,26 @@ public class SupportAimActivity extends BaseActivity {
                 break;
             case R.id.right_text:
                 System.out.println("=========dianji=========");
-                if (selectPhotoPaths.size() > 0) {
-                    UpPicture1();
-                } else {
-                    intent.setClass(this, SaveMoneyActivity.class);
-                    intent.putExtra("img1", img1);
-                    intent.putExtra("img2", img2);
-                    intent.putExtra("img3", img3);
-                    intent.putExtra("money", money);
-                    intent.putExtra("budget", budget);
-                    intent.putExtra("aimId", aimId);
-                    intent.putExtra("content", content_edit.getText().toString().trim());
-                    startActivityForResult(intent, Code.SupportAim);
+
+                if (payMoney.equals("")){
+                    Utils.showToast(this,"请填写存入金额");
+
+                }else {
+                    if (selectPhotoPaths.size() > 0) {
+                        UpPicture1();
+                    } else {
+
+                        intent.setClass(this, PayActivity.class);
+                        intent.putExtra("aimId", aimId);
+                        intent.putExtra("money", payMoney);
+                        intent.putExtra("img1", img1);
+                        intent.putExtra("img2", img2);
+                        intent.putExtra("img3", img3);
+                        intent.putExtra("content",  content_edit.getText().toString().trim());
+                        startActivityForResult(intent, Code.SupportAim);
+                    }
                 }
-//                intent.setClass(this, SaveMoneyActivity.class);
-//                intent.putExtra("img1", "");
-//                intent.putExtra("img2", "");
-//                intent.putExtra("img3", "");
-//                intent.putExtra("money", money);
-//                intent.putExtra("budget", budget);
-//                intent.putExtra("aimId", aimId);
-//                intent.putExtra("content", content_edit.getText().toString().trim());
-//                startActivityForResult(intent, Code.SupportAim);
+
 
                 break;
             case R.id.position_layout:
@@ -164,6 +171,9 @@ public class SupportAimActivity extends BaseActivity {
                 intent.setClass(this, PositionActivity.class);
                 startActivityForResult(intent, Code.PositionCode);
 
+                break;
+            case R.id.money_layout:
+                GetBudget(v);
                 break;
 
             case R.id.photo1_image:
@@ -269,14 +279,13 @@ public class SupportAimActivity extends BaseActivity {
                 setPhoto(selectPhotoPaths);
             }
         } else if (resultCode == Code.SupportAim) {
-            money = String.valueOf(Float.valueOf(money) + Float.valueOf(data.getStringExtra("money")));
             Intent intent = new Intent();
-            intent.putExtra("money", money);
+            intent.putExtra("money", payMoney);
             setResult(Code.SupportAim, intent);
             finish();
         } else if (resultCode == Code.FailCode) {
             Intent intent = new Intent();
-            intent.putExtra("money", money);
+            intent.putExtra("money", "0");
             setResult(Code.SupportAim, intent);
             finish();
         } else if (resultCode == Code.PositionCode) {
@@ -319,7 +328,7 @@ public class SupportAimActivity extends BaseActivity {
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", new File(selectPhotoPaths.get(0)));
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -329,27 +338,17 @@ public class SupportAimActivity extends BaseActivity {
                     if (code.equals("0")) {
                         img1 = new JSONObject(result).getJSONObject("result").getString("path");
 
-//                        if (selectPhotoPaths.size() > 0) {
-//                            intent.putExtra("img1", selectPhotoPaths.get(0));
-//                        }
-//                        if (selectPhotoPaths.size() > 1) {
-//                            intent.putExtra("img2", selectPhotoPaths.get(1));
-//                        }
-//                        if (selectPhotoPaths.size() > 2) {
-//                            intent.putExtra("img3", selectPhotoPaths.get(2));
-//                        }
                         if (selectPhotoPaths.size() > 1) {
                             UpPicture2();
                         } else {
                             Intent intent = new Intent();
-                            intent.setClass(SupportAimActivity.this, SaveMoneyActivity.class);
+                            intent.setClass(SupportAimActivity.this, PayActivity.class);
+                            intent.putExtra("aimId", aimId);
+                            intent.putExtra("money", payMoney);
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
-                            intent.putExtra("money", money);
-                            intent.putExtra("budget", budget);
-                            intent.putExtra("aimId", aimId);
-                            intent.putExtra("content", content_edit.getText().toString().trim());
+                            intent.putExtra("content",  content_edit.getText().toString().trim());
                             startActivityForResult(intent, Code.SupportAim);
                         }
 
@@ -369,11 +368,6 @@ public class SupportAimActivity extends BaseActivity {
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(SupportAimActivity.this, ex.getMessage());
                 }
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
             }
 
             @Override
@@ -391,7 +385,7 @@ public class SupportAimActivity extends BaseActivity {
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", new File(selectPhotoPaths.get(1)));
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -405,14 +399,13 @@ public class SupportAimActivity extends BaseActivity {
                             UpPicture3();
                         } else {
                             Intent intent = new Intent();
-                            intent.setClass(SupportAimActivity.this, SaveMoneyActivity.class);
+                            intent.setClass(SupportAimActivity.this, PayActivity.class);
+                            intent.putExtra("aimId", aimId);
+                            intent.putExtra("money", payMoney);
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
-                            intent.putExtra("money", money);
-                            intent.putExtra("budget", budget);
-                            intent.putExtra("aimId", aimId);
-                            intent.putExtra("content", content_edit.getText().toString().trim());
+                            intent.putExtra("content",  content_edit.getText().toString().trim());
                             startActivityForResult(intent, Code.SupportAim);
                         }
                     } else {
@@ -433,11 +426,6 @@ public class SupportAimActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -452,7 +440,7 @@ public class SupportAimActivity extends BaseActivity {
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", new File(selectPhotoPaths.get(2)));
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -463,14 +451,13 @@ public class SupportAimActivity extends BaseActivity {
 
                         img3 = new JSONObject(result).getJSONObject("result").getString("path");
                         Intent intent = new Intent();
-                        intent.setClass(SupportAimActivity.this, SaveMoneyActivity.class);
+                        intent.setClass(SupportAimActivity.this, PayActivity.class);
+                        intent.putExtra("aimId", aimId);
+                        intent.putExtra("money", payMoney);
                         intent.putExtra("img1", img1);
                         intent.putExtra("img2", img2);
                         intent.putExtra("img3", img3);
-                        intent.putExtra("money", money);
-                        intent.putExtra("budget", budget);
-                        intent.putExtra("aimId", aimId);
-                        intent.putExtra("content", content_edit.getText().toString().trim());
+                        intent.putExtra("content",  content_edit.getText().toString().trim());
                         startActivityForResult(intent, Code.SupportAim);
                     } else {
                         Utils.showToast(SupportAimActivity.this, new JSONObject(result).getString("msg"));
@@ -489,16 +476,66 @@ public class SupportAimActivity extends BaseActivity {
                 }
             }
 
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
 
             @Override
             public void onFinished() {
 
             }
         });
+    }
+
+    private void GetBudget(View view) {
+
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_aim_budget, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, true);
+        TextView title_text = (TextView) windowView.findViewById(R.id.title_text);
+        TextView cancel_text = (TextView) windowView.findViewById(R.id.cancel_text);
+        TextView ok_text = (TextView) windowView.findViewById(R.id.ok_text);
+        final EditText money_edit = (EditText) windowView.findViewById(R.id.money_edit);
+        title_text.setText("存入金额");
+        money_edit.setHint("最大存入金額"+(Float.valueOf(budget)-Float.valueOf(money)));
+        cancel_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        ok_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (money_edit.getText().toString().trim().equals("")) {
+                    popupWindow.dismiss();
+                } else {
+                    if (Float.valueOf(money_edit.getText().toString().trim()) > (Float.valueOf(budget)-Float.valueOf(money))) {
+                        Utils.showToast(SupportAimActivity.this, "存入金額不得大于"+(Float.valueOf(budget)-Float.valueOf(money)));
+                    } else {
+                        payMoney = money_edit.getText().toString().trim();
+                        money_text.setText(payMoney);
+                        popupWindow.dismiss();
+                    }
+                }
+            }
+        });
+
+        windowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
 
     }
 

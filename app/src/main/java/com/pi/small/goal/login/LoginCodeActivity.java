@@ -2,20 +2,27 @@ package com.pi.small.goal.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.R;
+import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,14 +30,14 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-public class LoginCodeActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginCodeActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView left_image;
     private EditText phone_edit;
     private EditText code_edit;
     private TextView code_text;
     private TextView login_text;
-
+    private LinearLayout whole_layout;
 
     private TelephonyManager TelephonyMgr;
     private String deviceId;
@@ -74,11 +81,15 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
         code_edit = (EditText) findViewById(R.id.code_edit);
         code_text = (TextView) findViewById(R.id.code_text);
         login_text = (TextView) findViewById(R.id.login_text);
-
+        whole_layout = (LinearLayout) findViewById(R.id.whole_layout);
 
         left_image.setOnClickListener(this);
         login_text.setOnClickListener(this);
         code_text.setOnClickListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
     }
 
     @Override
@@ -115,7 +126,7 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
         requestParams.addHeader("deviceId", deviceId);
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
 
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 System.out.println("==========code=========" + result);
@@ -140,11 +151,6 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -157,8 +163,7 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
         requestParams.addBodyParameter("deviceId", deviceId);
         requestParams.addBodyParameter("verifyCode", code_edit.getText().toString().trim());
-
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -196,11 +201,6 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
@@ -227,5 +227,19 @@ public class LoginCodeActivity extends AppCompatActivity implements View.OnClick
             code_text.setClickable(false);
             code_text.setText(millisUntilFinished / 1000 + "秒");
         }
+    }
+
+    private void setTranslucentStatus(boolean on) {
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+        if (on) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        win.setAttributes(winParams);
+        whole_layout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
+
     }
 }

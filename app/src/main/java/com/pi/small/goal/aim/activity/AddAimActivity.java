@@ -31,6 +31,7 @@ import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.ScrollerNumberPicker;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.AimEntity;
 
 import org.json.JSONException;
@@ -311,7 +312,7 @@ public class AddAimActivity extends BaseActivity {
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", new File(imgLoad));
-        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -342,16 +343,10 @@ public class AddAimActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
-
     }
 
     private void NewAim(final View view) {
@@ -366,7 +361,7 @@ public class AddAimActivity extends BaseActivity {
         requestParams.addBodyParameter("brief", brief);
         requestParams.addBodyParameter("province", province);
         requestParams.addBodyParameter("img", img);
-        x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -421,16 +416,10 @@ public class AddAimActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
             public void onFinished() {
 
             }
         });
-
 
     }
 

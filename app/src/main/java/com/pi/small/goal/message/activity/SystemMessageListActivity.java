@@ -15,6 +15,7 @@ import com.pi.small.goal.message.adapter.SystemMessageListAdapter;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,8 +45,8 @@ public class SystemMessageListActivity extends BaseActivity  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_message_list);
+        super.onCreate(savedInstanceState);
 
         sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
@@ -100,7 +101,7 @@ public class SystemMessageListActivity extends BaseActivity  {
         RequestParams requestParams = new RequestParams(Url.Url + Url.SystemMessageList);
         requestParams.addHeader("token", token);
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 try {
@@ -138,11 +139,6 @@ public class SystemMessageListActivity extends BaseActivity  {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
 
             }
 

@@ -22,6 +22,7 @@ import com.pi.small.goal.message.activity.SystemMessageListActivity;
 import com.pi.small.goal.message.adapter.MessageListAdapter;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -157,7 +158,7 @@ public class MessageFragment extends ConversationListFragment implements View.On
         RequestParams requestParams = new RequestParams(Url.Url + Url.LastMessage);
         requestParams.addHeader("token", token);
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
                 try {
@@ -202,11 +203,6 @@ public class MessageFragment extends ConversationListFragment implements View.On
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
 
             }
 

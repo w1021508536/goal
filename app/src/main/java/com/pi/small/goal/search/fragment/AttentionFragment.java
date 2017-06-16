@@ -976,7 +976,7 @@ public class AttentionFragment extends Fragment {
                 requestParams.addHeader("token", Utils.GetToken(getActivity()));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("uid", dynamicEntityList.get(position).getUserId());
-                x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+                XUtil.put(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         try {
@@ -1001,11 +1001,6 @@ public class AttentionFragment extends Fragment {
                         Utils.showToast(getActivity(), ex.getMessage());
                         report_text.setClickable(true);
                         popupWindow.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-
                     }
 
                     @Override
