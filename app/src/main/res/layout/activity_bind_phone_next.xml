@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:paddingLeft="@dimen/top_left"
-        android:text="请输入18369679851收到的验证码" />
+        android:text="请输入收到的验证码" />
 
     <RelativeLayout
         android:layout_width="match_parent"

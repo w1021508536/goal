@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.KeyCode;
@@ -21,6 +20,7 @@ import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -116,9 +116,8 @@ public class RenameActivity extends BaseActivity {
         if (etvNameUser.getText().toString().length() == 0) {
             return;
         }
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/user");
-        requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
-        requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         if (type == TYPE_NICK) {
             requestParams.addBodyParameter(KeyCode.USER_NICK, etvNameUser.getText().toString());
         } else {

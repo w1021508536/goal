@@ -45,6 +45,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.io.File;
 import java.util.List;
@@ -493,9 +494,8 @@ public class UserInfoActivity extends BaseActivity {
      **/
 
     private void updataIcon(final String iconPath) {
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/user");
-        requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
-        requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         requestParams.addBodyParameter("avatar", Url.PhotoUrl + "/" + iconPath);
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
@@ -527,9 +527,8 @@ public class UserInfoActivity extends BaseActivity {
      * create  wjz
      **/
     public void uploadFile(File file) {
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/file/picture");
-        requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
-        requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", file);

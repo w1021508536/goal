@@ -133,12 +133,23 @@ public class CityFragment extends Fragment {
         hotList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetDownDataTask().execute();
+                //   new GetDownDataTask().execute();
+                isDown = true;
+                page = 1;
+                GetHotData(page + "", "10");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetUpDataTask().execute();
+                //     new GetUpDataTask().execute();
+                isDown = false;
+
+                if (page * 10 >= total) {
+
+                } else {
+                    page = page + 1;
+                    GetHotData(page + "", "10");
+                }
             }
         });
 
@@ -321,11 +332,12 @@ public class CityFragment extends Fragment {
                 if (ex.getMessage() != null) {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
+                hotList.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                hotList.onRefreshComplete();
             }
         });
     }

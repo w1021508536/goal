@@ -25,6 +25,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_APN_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <!-- 银联需要的权限 -->
     <uses-permission android:name="android.permission.NFC" />
 
@@ -307,6 +308,10 @@
         <activity
             android:name=".my.activity.ExtensionActivity"
             android:label="推广码"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.activity.TransferMoreActivity"
+            android:label="期权转让明细"
             android:screenOrientation="portrait" />
         <activity
             android:name=".aim.activity.PositionActivity"

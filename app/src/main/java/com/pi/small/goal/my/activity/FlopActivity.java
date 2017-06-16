@@ -11,11 +11,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
+
+import org.xutils.http.RequestParams;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -123,10 +125,8 @@ public class FlopActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
-
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/game/card");
-        requestParams.addHeader("token", sp.getString("token", ""));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {

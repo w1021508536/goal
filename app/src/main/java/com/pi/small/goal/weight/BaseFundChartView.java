@@ -42,6 +42,7 @@ public class BaseFundChartView extends View {
     private int yellowColor;
     private float myLastPointX;
     private float myLastPointY;
+    private String drawText = "";
 
     public BaseFundChartView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -75,14 +76,14 @@ public class BaseFundChartView extends View {
 //        linePaint.setStrokeWidth((float) 0.7);  //#F5F5F5
         linePaint.setStrokeWidth((float) 1.0);             //设置线宽
 
-        linePaint.setColor(getResources().getColor(R.color.basefundchatview_line));
+        linePaint.setColor(getResources().getColor(R.color.text_small_light));
 
         linePaint.setAntiAlias(true);// 锯齿不显示
 
         //XY刻度上的字
         textPaint.setStyle(Paint.Style.FILL);// 设置非填充
         textPaint.setStrokeWidth(1);// 笔宽10像素
-        textPaint.setColor(getResources().getColor(R.color.basefundchatview_line));// 设置yanse
+        textPaint.setColor(getResources().getColor(R.color.text_small_light));// 设置yanse
         textPaint.setAntiAlias(true);// 锯齿不显示
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(15);
@@ -140,6 +141,7 @@ public class BaseFundChartView extends View {
 
     public void setData(List<List<Float>> data) {
         this.data = data;
+        invalidate();
     }
 
     public List<String> getDateX() {
@@ -166,6 +168,9 @@ public class BaseFundChartView extends View {
         this.lowIndex = lowIndex;
     }
 
+    public void setDrawText(String drawText) {
+        this.drawText = drawText;
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -177,7 +182,7 @@ public class BaseFundChartView extends View {
         gridY = getHeight() - 50;
         //XY间隔。
         if (dateX != null && dateX.size() > 0) {
-            xSpace = (getWidth() - gridX - 30) / (dateX.size() - 1);
+            xSpace = (getWidth() - gridX - 40) / (dateX.size() - 1);
         }
 
         if (dateY != null && dateY.size() > 0) {
@@ -253,7 +258,7 @@ public class BaseFundChartView extends View {
                 x = gridX + (n) * xSpace;//在原点(0,0)处也画刻度（不画的话就是n+1）,向右移动一个跨度。
                 //画X轴具体刻度值。
                 if (dateX.get(n) != null) {
-                    //canvas.drawLine(x, gridY - 30, x, gridY - 18, linePaint);//短X刻度。
+                    canvas.drawLine(x, gridY - 30, x, gridY - 18, linePaint);//短X刻度。
                     canvas.drawText(dateX.get(n), x, gridY + 5, textPaint);//X具体刻度值。
                 }
             }
@@ -271,11 +276,14 @@ public class BaseFundChartView extends View {
                 canvas.drawText(String.valueOf(dateY.get(n)), gridX - 15, my, textPaint);
 
                 if (my != gridY - 30) {
-                    //       linePaint.setPathEffect(effect);//设法虚线间隔样式。
-                    //画除X轴之外的------背景虚线一条-------
-                    path.moveTo(gridX, my);//背景【虚线起点】。
-                    path.lineTo(getWidth() - 30, my);//背景【虚线终点】。
-                    canvas.drawPath(path, linePaint);
+//                         linePaint.setPathEffect(effect);//设法虚线间隔样式。
+//                    //画除X轴之外的------背景虚线一条-------
+//                    path.moveTo(gridX, my);//背景【虚线起点】。
+//                    path.lineTo(getWidth() - 30, my);//背景【虚线终点】。
+//                    canvas.drawPath(path, linePaint);
+
+                    canvas.drawLine(gridX, my, getWidth() - 30, my, linePaint);//画一条条的y线
+
                 }
 
             }
@@ -361,10 +369,10 @@ public class BaseFundChartView extends View {
 
         Paint.FontMetrics fm = textPaint.getFontMetrics();
         int textHeight = (int) (Math.ceil(fm.descent - fm.ascent) + 2);
-        float textLength = textPaint.measureText("6666");
+        float textLength = textPaint.measureText(drawText);
 
         float drawX = (width1 - textLength) / 2;
-        canvas.drawText("6666", myLastPointX - width1 + drawX, v + (height1 - 14) / 2f + textHeight / 4f, textPaint);
+        canvas.drawText(drawText, myLastPointX - width1 + drawX, v + (height1 - 14) / 2f + textHeight / 4f, textPaint);
 
 
 //    /**
@@ -431,6 +439,7 @@ public class BaseFundChartView extends View {
         }
         return cubics;
     }
+
 
     class Cubic {
         float a, b, c, d;         /* a + b*u + c*u^2 +d*u^3 */

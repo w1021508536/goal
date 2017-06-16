@@ -24,6 +24,7 @@ import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.util.List;
 
@@ -57,6 +58,7 @@ public class AimOldActivity extends BaseActivity {
     private int position;
     public static final int REQUEST_CHANGE_PHOTO = 111;
     public static final String KEY_IMG = "img";
+    private boolean addFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,9 +82,9 @@ public class AimOldActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/history");
-        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, ""));
         requestParams.addBodyParameter("p", page + "");
 
 
@@ -90,7 +92,7 @@ public class AimOldActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
+                if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvTargetOld.setVisibility(View.GONE);
@@ -109,6 +111,9 @@ public class AimOldActivity extends BaseActivity {
                     } else {
                         adapter.setData(data);
                         plvTargetOld.setAdapter(adapter);
+                    }
+                    if (data.size() >= 9) {
+                        addFlag = true;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -137,6 +142,16 @@ public class AimOldActivity extends BaseActivity {
                 page = 1;
                 getData();
 
+            }
+        });
+        plvTargetOld.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                if (addFlag) {
+                    page++;
+                    getData();
+                    addFlag=false;
+                }
             }
         });
 

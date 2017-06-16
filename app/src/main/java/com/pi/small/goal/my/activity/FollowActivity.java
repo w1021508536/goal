@@ -23,6 +23,7 @@ import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class FollowActivity extends BaseActivity {
     PullToRefreshListView plvCollect;
     private FollowAdapter adapter;
     private int page = 1;
+    private boolean addFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,17 +87,17 @@ public class FollowActivity extends BaseActivity {
 // {"followId":3,"userId":26,"followUserId":9,"nick":"ff","avatar":"jpg"}],"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
     @Override
     public void getData() {
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/user/followed");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("userId", "26");
+        requestParams.addBodyParameter("userId", "");
         requestParams.addBodyParameter("p", page + "");
 
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
+                if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvCollect.setVisibility(View.GONE);
@@ -111,6 +113,10 @@ public class FollowActivity extends BaseActivity {
                         adapter.addData(data);
                     } else
                         adapter.setData(data);
+                    if (data.size() >= 9) {
+                        addFlag = true;
+                    }
+
                     plvCollect.onRefreshComplete();
 
                 } catch (JSONException e) {
@@ -143,8 +149,11 @@ public class FollowActivity extends BaseActivity {
         plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
-                page++;
-                getData();
+                if (addFlag) {
+                    page++;
+                    getData();
+                    addFlag=false;
+                }
             }
         });
 

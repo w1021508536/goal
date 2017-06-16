@@ -16,6 +16,7 @@ import com.pi.small.goal.message.activity.FriendsListActivity;
 import com.pi.small.goal.my.dialog.HuiFuDialog;
 import com.pi.small.goal.my.dialog.KeyBoardDialog;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.CacheUtil;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -64,10 +65,15 @@ public class TransferNextActivity extends BaseActivity {
     TextView tvOk;
     @InjectView(R.id.tv_hint)
     TextView tvHint;
+    @InjectView(R.id.tv_myTransfer)
+    TextView tvMyTransfer;
+    @InjectView(R.id.tv_all)
+    TextView tvAll;
 
     private ContactBean contactBean;
     private HuiFuDialog dialog;
     private KeyBoardDialog keyBoardDialog;
+    private double option;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +96,10 @@ public class TransferNextActivity extends BaseActivity {
         dialog = new HuiFuDialog(this, "期权转出成功");
 
         keyBoardDialog = new KeyBoardDialog(this);
+        etvMoney.setSelection(etvMoney.getText().length());
+
+        option = CacheUtil.getInstance().getUserInfo().getAccount().getOption();
+        tvMyTransfer.setText("剩余可以转让 " + option + "个");
 
     }
 
@@ -98,14 +108,13 @@ public class TransferNextActivity extends BaseActivity {
         super.initWeight();
         rlSelectFriends.setOnClickListener(this);
         tvOk.setOnClickListener(this);
-
         keyBoardDialog.setOnKeyBoardLinener(new KeyBoardDialog.OnKeyBoardLinener() {
             @Override
             public void onKey(String key) {
                 verifyPass(key);
             }
         });
-
+        tvAll.setOnClickListener(this);
     }
 
 
@@ -124,6 +133,8 @@ public class TransferNextActivity extends BaseActivity {
             public void onSuccess(String result) {
                 if (Utils.callOk(result)) {
                     transfer(strPassword);
+                } else {
+                    Utils.showToast(TransferNextActivity.this, Utils.getMsg(result));
                 }
             }
 
@@ -155,6 +166,9 @@ public class TransferNextActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 if (!Utils.callOk(result)) return;
+                option -= Double.valueOf(etvMoney.getText().toString());
+                tvMyTransfer.setText("剩余可以转让 " + option + "个");
+                CacheUtil.getInstance().getUserInfo().getAccount().setOption(option);
                 if (dialog != null) {
                     dialog.show();
                     keyBoardDialog.dismiss();
@@ -201,6 +215,13 @@ public class TransferNextActivity extends BaseActivity {
                 }
 
                 break;
+            case R.id.tv_all:
+                etvMoney.setText(option + "");
+                etvMoney.setSelection(etvMoney.getText().toString().length());
+                break;
+            default:
+                break;
+
         }
     }
 

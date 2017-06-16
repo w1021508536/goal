@@ -26,6 +26,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,13 @@ public class TrajectoryAdapter extends BaseAdapter {
     private boolean operationShowFlag;
     private List<DynamicEntity> data;
     private myAdapterClickListener listener;
+
+
+    private ImageOptions imageOptions = new ImageOptions.Builder()
+            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+            .setLoadingDrawableId(R.mipmap.background_load)
+            .setFailureDrawableId(R.mipmap.background_fail)
+            .build();
 
     public TrajectoryAdapter(Context context) {
         this.context = context;
@@ -149,20 +158,39 @@ public class TrajectoryAdapter extends BaseAdapter {
         vh.tvAddMoneyItem.setText(dynamicEntity.getDynamic().getMoney() + "");
         vh.tvSupportsItem.setText(dynamicEntity.getVotes() + "赞" + "  " + dynamicEntity.getSupports() + "助力");
         vh.imgItem.setImageResource(R.drawable.image2);
+        vh.tvCityItem.setText(dynamicEntity.getDynamic().getProvince() + " " + dynamicEntity.getDynamic().getCity());
+
+        if (position == data.size() - 1) {
+            vh.imgFlag.setImageResource(R.mipmap.icon_start_dream);
+            if (dynamicEntity.getDynamic().getMoney() == 0) {
+                vh.rlBottom.setVisibility(View.GONE);
+                vh.rlOperation.setVisibility(View.GONE);
+            }
+        } else {
+            vh.imgFlag.setImageResource(R.mipmap.timeline_all_icon);
+        }
+
+        if (data.get(position).getHaveVote() == 1) {
+            vh.imgGreat.setImageResource(R.mipmap.icon_vote_on);
+        } else {
+            vh.imgGreat.setImageResource(R.mipmap.icon_vote_off);
+        }
 //1496736200354.jpg  1495527714097.jpg   1496737409748.jpg
 
-        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg1())) { //1496802195021.jpg
-            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1())).into(vh.imgItem);
-        }
-        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg2())) { //1496802195021.jpg
-            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg2())).into(vh.img2Item);
-        }
-        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg3())) { //1496802195021.jpg
-            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg3())).into(vh.img3Item);
-        }
+//        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg1())) { //1496802195021.jpg
+//            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1())).into(vh.imgItem);
+//        }
+//        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg2())) { //1496802195021.jpg
+//            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg2())).into(vh.img2Item);
+//        }
+//        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg3())) { //1496802195021.jpg
+//            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg3())).into(vh.img3Item);
+//        }
 
+        x.image().bind(vh.imgItem, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()), imageOptions);
+        x.image().bind(vh.img2Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()), imageOptions);
+        x.image().bind(vh.img3Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()), imageOptions);
 
-        vh.tvCityItem.setText(dynamicEntity.getDynamic().getProvince() + " " + dynamicEntity.getDynamic().getCity());
 
         if (dynamicEntity.getDynamic().getImg1().length() == 0) {
             vh.imgItem.setVisibility(View.GONE);
@@ -180,11 +208,9 @@ public class TrajectoryAdapter extends BaseAdapter {
             vh.img3Item.setVisibility(View.VISIBLE);
         }
 
-
         if (position == 0) {
             vh.viewLineTop.setVisibility(View.INVISIBLE);
         }
-
         List<DynamicEntity.CommentsBean> comments = dynamicEntity.getComments();
         final CommentAdapter adapter = new CommentAdapter(context, comments);
         vh.lvItem.setAdapter(adapter);
@@ -201,12 +227,6 @@ public class TrajectoryAdapter extends BaseAdapter {
 //            vh.tvContentSupport2Item.setText(comments.get(1).getContent());
 //            vh.llSupport2Item.setVisibility(View.VISIBLE);
             vh.tvSupportsNumsItem.setVisibility(View.VISIBLE);
-        }
-
-        if (data.get(position).getHaveVote() == 1) {
-            vh.imgGreat.setImageResource(R.mipmap.icon_vote_on);
-        } else {
-            vh.imgGreat.setImageResource(R.mipmap.icon_vote_off);
         }
 
         vh.imgItem.setOnClickListener(new myClick(data, position, vh));
@@ -370,6 +390,8 @@ public class TrajectoryAdapter extends BaseAdapter {
     static class ViewHolder {
         @InjectView(R.id.view_line_top)
         View viewLineTop;
+        @InjectView(R.id.img_flag)
+        ImageView imgFlag;
         @InjectView(R.id.tv_time_item)
         TextView tvTimeItem;
         @InjectView(R.id.tv_timeDay_item)
@@ -406,6 +428,8 @@ public class TrajectoryAdapter extends BaseAdapter {
         ListView lvItem;
         @InjectView(R.id.tv_supportsNums_item)
         TextView tvSupportsNumsItem;
+        @InjectView(R.id.rl_bottom)
+        RelativeLayout rlBottom;
         @InjectView(R.id.rl_operation_item)
         LinearLayout rlOperationItem;
 

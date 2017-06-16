@@ -3,7 +3,9 @@ package com.pi.small.goal.my.dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,7 +25,7 @@ public class LoadingDialog extends ProgressDialog {
     Context context;
 
     public LoadingDialog(Context context, String content) {
-        super(context, R.style.loading_dialog);
+        super(context, R.style.MyDialogStyle);
         this.content = content;
         this.context = context;
         this.setCanceledOnTouchOutside(false);
@@ -33,6 +35,14 @@ public class LoadingDialog extends ProgressDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_loading);
+
+
+        int sysVersion = Integer.parseInt(Build.VERSION.SDK);
+        if (sysVersion >= 19) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        } else {
+        }
 
         tv = (TextView) findViewById(R.id.text);
         ImageView img_loading = (ImageView) findViewById(R.id.img_loading);

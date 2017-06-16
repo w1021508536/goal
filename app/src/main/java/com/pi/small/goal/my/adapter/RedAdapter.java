@@ -2,6 +2,8 @@ package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.WalletEntry;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -160,20 +163,23 @@ public class RedAdapter extends BaseAdapter {
 
         WalletEntry walletEntry = data.get(position);
         RequestParams requestParams = Utils.getRequestParams(context);
-        if (walletEntry.getId() == walletEntry.getToUserId()) {
-            requestParams.setUri(Url.Url + "/redpacket/supprot/draw");
+        SharedPreferences sp = Utils.UserSharedPreferences(context);
+        String userId = sp.getString(KeyCode.USER_ID, "");
+
+        if (!"".equals(userId) && Integer.valueOf(userId) == walletEntry.getToUserId()) {
+            requestParams.setUri(Url.Url + "/redpacket/support/draw");
         } else {
             requestParams.setUri(Url.Url + "/redpacket/draw");
         }
         requestParams.addBodyParameter("packetId", packetId);
-
+        data.remove(position);
+        notifyDataSetChanged();
         XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
                 if (!Utils.callOk(result)) return;
-                data.remove(position);
-                notifyDataSetChanged();
+
 
             }
 
@@ -189,9 +195,20 @@ public class RedAdapter extends BaseAdapter {
         });
     }
 
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+
+            int position = msg.what;
+
+
+            return false;
+        }
+    });
+
     @Override
     public int getViewTypeCount() {
-        return 2;
+        return 3;
     }
 
     @Override

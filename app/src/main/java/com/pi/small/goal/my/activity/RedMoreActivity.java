@@ -61,6 +61,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
     private String startTime = "";
     private String endTime = "";
     private RedMoreAdapter adapter;
+    private boolean addFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +100,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
             public void onSuccess(String result) {
 //{"msg":"no data","code":100000,"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
 
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
+                if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
                     plv.setVisibility(View.GONE);
                     return;
                 }
@@ -125,6 +126,10 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
                     } else
                         adapter.setData(newData);
 
+                    if (newData.size() > 9) {
+                        addFlag = true;
+                    }
+
                 } catch (JSONException e) {
                 }
             }
@@ -148,7 +153,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
     private List<RedMoreAdapterEntry> setTimeData(List<RedMoreEntity> data) {
 
         Map<String, List<RedMoreEntity>> timeData = new HashMap<>();
-
+//先将数据根据时间归为几个集合
         for (RedMoreEntity one : data) {
 
             Date date = new Date(one.getCreateTime());
@@ -170,7 +175,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
                 timeData.put(time, oneDatas);
             }
         }
-
+//在将数据取出来，将总收入和总支出算出来
         Set<String> titles = timeData.keySet();
         List<RedMoreAdapterEntry> adapterData = new ArrayList<>();
         for (String title : titles) {
@@ -197,6 +202,16 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 page = 1;
                 getData();
+            }
+        });
+        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                if (startTime.equals("") && addFlag) {
+                    page++;
+                    getData();
+                    addFlag = false;
+                }
             }
         });
     }

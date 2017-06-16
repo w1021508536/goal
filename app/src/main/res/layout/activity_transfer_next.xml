@@ -56,12 +56,14 @@
                 android:paddingTop="10dp">
 
                 <TextView
+                    android:id="@+id/tv_myTransfer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="剩余可以转让 80个"
                     android:textSize="12dp" />
 
                 <TextView
+                    android:id="@+id/tv_all"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

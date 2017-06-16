@@ -177,7 +177,7 @@ public class BindPhoneNextActivity extends BaseActivity {
     }
 
     public void verificationCode() {
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/verifycode/verify");
         requestParams.addBodyParameter("mobile", phone);
         requestParams.addBodyParameter("code", etvCode.getText().toString());
@@ -225,7 +225,7 @@ public class BindPhoneNextActivity extends BaseActivity {
      * create  wjz
      **/
     private void getCode() {
-
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/sms/verifycode/send");
         requestParams.addBodyParameter("mobile", phone);
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {

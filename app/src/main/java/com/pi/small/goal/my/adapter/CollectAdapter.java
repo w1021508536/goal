@@ -120,7 +120,7 @@ public class CollectAdapter extends BaseAdapter {
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) vh.imgProgressItem.getLayoutParams();
         String format = df.format(v * 100);
         if (v < 0.01) {
-            vh.tvProgressItem.setText("0." + format + "%");
+            vh.tvProgressItem.setText("0" + format + "%");
         } else {
             vh.tvProgressItem.setText(format + "%");
         }

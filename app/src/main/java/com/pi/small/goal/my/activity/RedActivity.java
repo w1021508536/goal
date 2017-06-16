@@ -52,6 +52,7 @@ public class RedActivity extends BaseActivity {
 
     private int page = 1;
     private RedAdapter adapter;
+    private boolean addFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,7 +89,7 @@ public class RedActivity extends BaseActivity {
         requestParams.setUri(Url.Url + "/redpacket/undraw");
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        String id = sp.getString("id", "26");
+        String id = sp.getString("id", "");
         requestParams.addBodyParameter("userId", id);
         requestParams.addBodyParameter("p", page + "");
 
@@ -96,7 +97,7 @@ public class RedActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 //[{"id":9,"aimId":17,"dynamicId":7,"money":10,"size":10,"remainMoney":10,"remainSize":10,"toUserId":48,"fromUserId":26,"createTime":1496717112000,"status":1}]
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
+                if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
                     plvWallet.setVisibility(View.GONE);
                     return;
                 }
@@ -119,7 +120,9 @@ public class RedActivity extends BaseActivity {
                         adapter.addData(newData);
                     } else
                         adapter.setData(newData);
-
+                    if (newData.size() >= 9) {
+                        addFlag = true;
+                    }
 
                 } catch (JSONException e) {
                 }
@@ -148,6 +151,16 @@ public class RedActivity extends BaseActivity {
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 page = 1;
                 getData();
+            }
+        });
+        plvWallet.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+            @Override
+            public void onLastItemVisible() {
+                if (addFlag) {
+                    page++;
+                    getData();
+                    addFlag=false;
+                }
             }
         });
     }

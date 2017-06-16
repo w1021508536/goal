@@ -370,7 +370,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.setUri(Url.Url + "/user/my");
-        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, ""));
 
         XUtil.get(requestParams, getContext(), new XUtil.XCallBackLinstener() {
             @Override

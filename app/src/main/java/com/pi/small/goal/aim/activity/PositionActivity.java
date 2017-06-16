@@ -125,14 +125,23 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
         position_list.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetDownDataTask().execute();
+                //      new GetDownDataTask().execute();
+                Refresh();
+                position_list.onRefreshComplete();
             }
 
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
 
-                new GetUpEvaluateDataTask().execute();
+                //     new GetUpEvaluateDataTask().execute();
+                if (MaxPage == -1) {
+                    page = page + 1;
+
+                    query.setPageNum(page);
+                    poiSearch.searchPOIAsyn();
+                }
+                position_list.onRefreshComplete();
             }
         });
 

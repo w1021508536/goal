@@ -22,12 +22,13 @@ public class KeyCode {
     public static final String USER_BRIEF = "brief";   //签名
     public static final String USER_WECHATID = "wechatId";
     public static final String USER_QQID = "qqId";
-    public static final String USER_TOKEN= "token";
+    public static final String USER_TOKEN = "token";
     public static final String USER_DEVICEID = "deviceId";
     public static final String USER_MOBILE = "mobile";
+    public static final String USER_PAY_PASS = "payPassword";
     public static final String NO_DATA = "no data";
 
-    public static final String AIM_VOTE= "aim_vote";
+    public static final String AIM_VOTE = "aim_vote";
     public static final String AIM_COMMENT = "aim_comment";
     public static final String AIM_SHARE = "aim_share";
     public static final String AIM_SUPPORT = "aim_support";
