@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.FollowAdapter;
@@ -49,8 +48,6 @@ public class FollowActivity extends BaseActivity {
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
-    @InjectView(R.id.plv_collect)
-    PullToRefreshListView plvCollect;
     private FollowAdapter adapter;
     private int page = 1;
     private boolean addFlag;
@@ -67,7 +64,7 @@ public class FollowActivity extends BaseActivity {
     public void initData() {
         super.initData();
         adapter = new FollowAdapter(this);
-        plvCollect.setAdapter(adapter);
+        plv.setAdapter(adapter);
         nameTextInclude.setText("我的关注");
         rightImageInclude.setVisibility(View.GONE);
         getData();
@@ -100,7 +97,7 @@ public class FollowActivity extends BaseActivity {
                 if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
-                    plvCollect.setVisibility(View.GONE);
+                    plv.setVisibility(View.GONE);
                     return;
                 }
                 try {
@@ -117,7 +114,7 @@ public class FollowActivity extends BaseActivity {
                         addFlag = true;
                     }
 
-                    plvCollect.onRefreshComplete();
+                    plv.onRefreshComplete();
 
                 } catch (JSONException e) {
                 }
@@ -125,12 +122,12 @@ public class FollowActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                plvCollect.onRefreshComplete();
+                plv.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-                plvCollect.onRefreshComplete();
+                plv.onRefreshComplete();
             }
         });
     }
@@ -139,20 +136,20 @@ public class FollowActivity extends BaseActivity {
     public void initWeight() {
         super.initWeight();
 
-        plvCollect.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 page = 1;
                 getData();
             }
         });
-        plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 if (addFlag) {
                     page++;
                     getData();
-                    addFlag=false;
+                    addFlag = false;
                 }
             }
         });

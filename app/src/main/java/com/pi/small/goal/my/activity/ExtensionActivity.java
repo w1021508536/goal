@@ -1,5 +1,8 @@
 package com.pi.small.goal.my.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -70,7 +73,19 @@ public class ExtensionActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.tv_agent:
-
+                new AlertDialog.Builder(this).setView(R.layout.dialog_hint)
+                          .setTitle("成为代理商")
+                        //         .setMessage("1.成为代理商需要支付698元;" + "\n" + "2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;")
+                        .setPositiveButton("去支付", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //     unBindWx();
+                                dialog.dismiss();
+                                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
+                                intent.putExtra("money", "698");
+                                startActivity(intent);
+                            }
+                        }).show();
                 break;
             case R.id.tv_extension:
                 share();

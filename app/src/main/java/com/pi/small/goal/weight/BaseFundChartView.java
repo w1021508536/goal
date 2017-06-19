@@ -352,27 +352,29 @@ public class BaseFundChartView extends View {
             }
         }
 
-        //画最后的一个点
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.dot);
+        if (myLastPointX != 0 && myLastPointY != 0) {
+            //画最后的一个点
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.dot);
 
-        int width = bitmap.getWidth();
-        canvas.drawBitmap(bitmap, myLastPointX - width / 2, myLastPointY - width / 2, linePaint);
-        //画显示数字的表卡
-        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.bg_number);
-        int width1 = bitmap1.getWidth();
-        int height1 = bitmap1.getHeight();
-        float v = myLastPointY - width / 2 - height1 - 20;
-        canvas.drawBitmap(bitmap1, myLastPointX - width1, v, linePaint);
-        Paint textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(50);
+            int width = bitmap.getWidth();
+            canvas.drawBitmap(bitmap, myLastPointX - width / 2, myLastPointY - width / 2, linePaint);
+            //画显示数字的表卡
+            Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.mipmap.bg_number);
+            int width1 = bitmap1.getWidth();
+            int height1 = bitmap1.getHeight();
+            float v = myLastPointY - width / 2 - height1 - 20;
+            canvas.drawBitmap(bitmap1, myLastPointX - width1, v, linePaint);
+            Paint textPaint = new Paint();
+            textPaint.setColor(Color.WHITE);
+            textPaint.setTextSize(50);
 
-        Paint.FontMetrics fm = textPaint.getFontMetrics();
-        int textHeight = (int) (Math.ceil(fm.descent - fm.ascent) + 2);
-        float textLength = textPaint.measureText(drawText);
+            Paint.FontMetrics fm = textPaint.getFontMetrics();
+            int textHeight = (int) (Math.ceil(fm.descent - fm.ascent) + 2);
+            float textLength = textPaint.measureText(drawText);
 
-        float drawX = (width1 - textLength) / 2;
-        canvas.drawText(drawText, myLastPointX - width1 + drawX, v + (height1 - 14) / 2f + textHeight / 4f, textPaint);
+            float drawX = (width1 - textLength) / 2;
+            canvas.drawText(drawText, myLastPointX - width1 + drawX, v + (height1 - 14) / 2f + textHeight / 4f, textPaint);
+        }
 
 
 //    /**

@@ -10,7 +10,17 @@
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="110sp"
-        android:src="@mipmap/icon_radar" />
+
+        android:src="@mipmap/scan_circle" />
+
+    <ImageView
+        android:id="@+id/img_rotat"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"
+        android:src="@mipmap/scan_part_circle"
+        android:visibility="visible" />
 
     <RelativeLayout
         android:layout_width="match_parent"

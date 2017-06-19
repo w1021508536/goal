@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.CollectAdapter;
 import com.pi.small.goal.my.entry.CollectEntity;
@@ -52,8 +51,6 @@ public class CollectActivity extends BaseActivity {
     TextView tvOkInclude;
     @InjectView(R.id.tv_cancel_collect)
     TextView tvCancelCollect;
-    @InjectView(R.id.plv_collect)
-    PullToRefreshListView plvCollect;
     @InjectView(R.id.etv_seach_collect)
     EditText etvSeachCollect;
     private CollectAdapter adapter;
@@ -71,7 +68,7 @@ public class CollectActivity extends BaseActivity {
     public void initData() {
         super.initData();
         adapter = new CollectAdapter(this);
-        plvCollect.setAdapter(adapter);
+        plv.setAdapter(adapter);
         nameTextInclude.setText("我的收藏");
         rightImageInclude.setVisibility(View.GONE);
 
@@ -86,7 +83,7 @@ public class CollectActivity extends BaseActivity {
     @Override
     public void initWeight() {
         super.initWeight();
-        plvCollect.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 page = 1;
@@ -117,7 +114,7 @@ public class CollectActivity extends BaseActivity {
                 if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
-                    plvCollect.setVisibility(View.GONE);
+                    plv.setVisibility(View.GONE);
                     return;
                 }
                 try {
@@ -131,7 +128,7 @@ public class CollectActivity extends BaseActivity {
 //                    } else
 //                        adapter.setData(data);
                     adapter.setData(data);
-                    plvCollect.onRefreshComplete();
+                    plv.onRefreshComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -139,12 +136,12 @@ public class CollectActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                plvCollect.onRefreshComplete();
+                plv.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-                plvCollect.onRefreshComplete();
+                plv.onRefreshComplete();
             }
         });
     }

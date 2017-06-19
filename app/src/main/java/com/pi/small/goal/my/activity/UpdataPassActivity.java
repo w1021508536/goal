@@ -336,12 +336,15 @@ public class UpdataPassActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+
                 if (Utils.callOk(result)) {
                     Intent intent = new Intent(UpdataPassActivity.this, UpdataPassActivity.class);
                     intent.putExtra(KEY_FLAG, FLAG_NEW);
                     startActivity(intent);
                     CacheUtil.getInstance().setOldPass(strPassword);
                     finish();
+                } else {
+                    Utils.showToast(UpdataPassActivity.this, Utils.getMsg(result));
                 }
             }
 

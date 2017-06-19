@@ -3,9 +3,13 @@ package com.pi.small.goal.search.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -107,6 +111,8 @@ public class RedHaveActivity extends BaseActivity {
     RelativeLayout layout;
     @InjectView(R.id.change_image)
     ImageView changeImage;
+    @InjectView(R.id.img_rotat)
+    ImageView imgRotat;
 
 
     private String dynamicId;
@@ -124,6 +130,7 @@ public class RedHaveActivity extends BaseActivity {
     private int total;
     private int pageTotal;
     private boolean isChange = false;
+    private RotateAnimation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,7 +277,18 @@ public class RedHaveActivity extends BaseActivity {
         }
     }
 
-    private void GetRedList() {
+    Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+
+            getRedListNext();
+
+            return false;
+        }
+    });
+
+    private void getRedListNext() {
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketDynamic);
         System.out.println("=========GetRedList======change=======" + page);
         requestParams.addHeader("token", Utils.GetToken(this));
@@ -330,13 +348,33 @@ public class RedHaveActivity extends BaseActivity {
                 if (ex.getMessage() != null) {
                     Utils.showToast(RedHaveActivity.this, ex.getMessage());
                 }
+                animation.cancel();
+                imgRotat.setVisibility(View.GONE);
             }
 
             @Override
             public void onFinished() {
-
+                animation.cancel();
+                imgRotat.setVisibility(View.GONE);
             }
         });
+
+    }
+
+    private void GetRedList() {
+
+        animation = new RotateAnimation(0f, 360f, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        animation.setDuration(1000);//设置动画持续时间
+/** 常用方法 */
+        animation.setRepeatCount(10000);//设置重复次数
+animation.setFillAfter(true);//动画执行完后是否停留在执行完的状态
+//animation.setStartOffset(long startOffset);//执行前的等待时间
+
+        imgRotat.setAnimation(animation);
+        animation.start();
+
+        handler.sendMessageDelayed(new Message(), 2000);
 
     }
 

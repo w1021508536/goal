@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.TargetAdapter;
 import com.pi.small.goal.my.entry.CollectEntity;
@@ -53,8 +52,6 @@ public class AimActivity extends BaseActivity {
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
-    @InjectView(R.id.plv_target)
-    PullToRefreshListView plvTarget;
     private TargetAdapter adapter;
 
     private int page = 1;
@@ -75,7 +72,7 @@ public class AimActivity extends BaseActivity {
         rightImageInclude.setImageResource(R.mipmap.icon_aim_history2x);
 
         adapter = new TargetAdapter(this);
-        plvTarget.setAdapter(adapter);
+        plv.setAdapter(adapter);
 
     }
 
@@ -83,14 +80,14 @@ public class AimActivity extends BaseActivity {
     public void initWeight() {
         super.initWeight();
         rightImageInclude.setOnClickListener(this);
-        plvTarget.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 page = 1;
                 getData();
             }
         });
-        plvTarget.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 if (!addFlag) return;
@@ -116,7 +113,7 @@ public class AimActivity extends BaseActivity {
                 if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
-                    plvTarget.setVisibility(View.GONE);
+                    plv.setVisibility(View.GONE);
                     return;
                 }
                 try {
@@ -137,7 +134,7 @@ public class AimActivity extends BaseActivity {
 
                 } catch (JSONException e) {
                 }
-                plvTarget.onRefreshComplete();
+                plv.onRefreshComplete();
 
             }
 
@@ -151,7 +148,7 @@ public class AimActivity extends BaseActivity {
 
             }
         });
-        plvTarget.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        plv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 

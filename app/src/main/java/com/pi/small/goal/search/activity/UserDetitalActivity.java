@@ -162,12 +162,23 @@ public class UserDetitalActivity extends BaseActivity {
         scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                new GetDownDataTask().execute();
+                //        new GetDownDataTask().execute();
+                isDown = true;
+                page = 1;
+                GetHotData(page + "", "10");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                new GetUpDataTask().execute();
+                //  new GetUpDataTask().execute();
+                isDown = false;
+
+                if (page * 10 >= total) {
+
+                } else {
+                    page = page + 1;
+                    GetHotData(page + "", "10");
+                }
             }
         });
         if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
@@ -522,11 +533,12 @@ public class UserDetitalActivity extends BaseActivity {
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(UserDetitalActivity.this, ex.getMessage());
                 }
+                scrollView.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                scrollView.onRefreshComplete();
             }
         });
     }

@@ -47,6 +47,7 @@
 
     </RelativeLayout>
 
+
     <fragment
         android:id="@+id/conversation"
         android:name="io.rong.imkit.fragment.ConversationFragment"

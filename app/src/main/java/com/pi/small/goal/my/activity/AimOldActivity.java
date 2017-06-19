@@ -12,7 +12,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.TargetOldAdapter;
 import com.pi.small.goal.my.entry.AimOldEntity;
@@ -50,8 +49,6 @@ public class AimOldActivity extends BaseActivity {
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
-    @InjectView(R.id.plv_target_old)
-    PullToRefreshListView plvTargetOld;
 
     private int page = 1;
     private TargetOldAdapter adapter;
@@ -95,7 +92,7 @@ public class AimOldActivity extends BaseActivity {
                 if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
-                    plvTargetOld.setVisibility(View.GONE);
+                    plv.setVisibility(View.GONE);
                     return;
                 }
 
@@ -110,7 +107,7 @@ public class AimOldActivity extends BaseActivity {
 
                     } else {
                         adapter.setData(data);
-                        plvTargetOld.setAdapter(adapter);
+                        plv.setAdapter(adapter);
                     }
                     if (data.size() >= 9) {
                         addFlag = true;
@@ -122,12 +119,12 @@ public class AimOldActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                plvTargetOld.onRefreshComplete();
+                plv.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-                plvTargetOld.onRefreshComplete();
+                plv.onRefreshComplete();
             }
         });
     }
@@ -135,7 +132,7 @@ public class AimOldActivity extends BaseActivity {
     @Override
     public void initWeight() {
         super.initWeight();
-        plvTargetOld.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
 
@@ -144,7 +141,7 @@ public class AimOldActivity extends BaseActivity {
 
             }
         });
-        plvTargetOld.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 if (addFlag) {
@@ -155,7 +152,7 @@ public class AimOldActivity extends BaseActivity {
             }
         });
 
-        plvTargetOld.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        plv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 

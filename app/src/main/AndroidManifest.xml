@@ -304,6 +304,10 @@
             android:label="期权转让明细"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".my.activity.ExtensionPayActivity"
+            android:label="成为代理的支付页面"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".aim.activity.PositionActivity"
             android:screenOrientation="portrait" />
         <activity

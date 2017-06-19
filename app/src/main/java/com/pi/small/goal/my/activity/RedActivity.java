@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.adapter.RedAdapter;
@@ -47,8 +46,6 @@ public class RedActivity extends BaseActivity {
     TextView nameTextInclude;
     @InjectView(R.id.right_image_include)
     ImageView rightImageInclude;
-    @InjectView(R.id.plv_wallet)
-    PullToRefreshListView plvWallet;
 
     private int page = 1;
     private RedAdapter adapter;
@@ -76,7 +73,7 @@ public class RedActivity extends BaseActivity {
 //            }
 //        }
         adapter = new RedAdapter(this, data);
-        plvWallet.setAdapter(adapter);
+        plv.setAdapter(adapter);
 //        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_red, null);
 //        plvWallet.setEmptyView(emptyView);
 
@@ -98,7 +95,7 @@ public class RedActivity extends BaseActivity {
             public void onSuccess(String result) {
 //[{"id":9,"aimId":17,"dynamicId":7,"money":10,"size":10,"remainMoney":10,"remainSize":10,"toUserId":48,"fromUserId":26,"createTime":1496717112000,"status":1}]
                 if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
-                    plvWallet.setVisibility(View.GONE);
+                    plv.setVisibility(View.GONE);
                     return;
                 }
                 try {
@@ -131,12 +128,12 @@ public class RedActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                plvWallet.onRefreshComplete();
+                plv.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-                plvWallet.onRefreshComplete();
+                plv.onRefreshComplete();
             }
         });
     }
@@ -146,14 +143,14 @@ public class RedActivity extends BaseActivity {
         super.initWeight();
         rightImageInclude.setOnClickListener(this);
 
-        plvWallet.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
             @Override
             public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 page = 1;
                 getData();
             }
         });
-        plvWallet.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
                 if (addFlag) {

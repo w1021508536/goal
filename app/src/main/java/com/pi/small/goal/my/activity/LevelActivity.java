@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.AddAimActivity;
 import com.pi.small.goal.my.entry.UerEntity;
@@ -142,7 +143,7 @@ public class LevelActivity extends BaseActivity {
 //        }
         setImageView(grade);
 
-        aimRed = new Integer[][]{{1, 0}, {1, 25}, {1, 35}, {1, 50}, {2, 100}, {5, 150}, {10, 250}, {15, 400}, {20, 500}};
+        aimRed = new Integer[][]{{1, 0}, {1, 5}, {1, 7}, {1, 10}, {2, 15}, {5, 30}, {10, 50}, {15, 80}, {20, 100}};
 
         expArray = new Integer[]{0, 600, 900, 1500, 3000, 7500, 4500, 100000, 200000};
         linearLayouts = new LinearLayout[]{llLine1, llLine3, llLine4, llLine5, llLine6, llLine7, llLine8};
@@ -207,7 +208,9 @@ public class LevelActivity extends BaseActivity {
                 startActivity(new Intent(this, AddAimActivity.class));
                 break;
             case R.id.ll_red_level:
-                startActivity(new Intent(this, RedActivity.class));
+                //      startActivity(new Intent(this, RedActivity.class));
+                CacheUtil.getInstance().setTaskToMainFlag(true);
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.rl_money_level:
                 // startActivity(new Intent(this,MontyToActivity.class));

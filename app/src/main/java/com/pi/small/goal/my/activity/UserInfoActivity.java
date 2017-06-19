@@ -1,7 +1,9 @@
 package com.pi.small.goal.my.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -28,6 +30,7 @@ import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.dialog.HuiFuDialog;
 import com.pi.small.goal.my.entry.UerEntity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
@@ -54,6 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.pi.small.goal.R.id.tv_wxBind_user;
 import static com.pi.small.goal.my.activity.RenameActivity.TYPE_NICK;
 import static com.pi.small.goal.my.activity.RenameActivity.callOk;
 
@@ -103,7 +107,7 @@ public class UserInfoActivity extends BaseActivity {
     TextView tvPhoneBindUser;
     @InjectView(R.id.tv_level_user)
     TextView tvLevelUser;
-    @InjectView(R.id.tv_wxBind_user)
+    @InjectView(tv_wxBind_user)
     TextView tvWxBindUser;
     @InjectView(R.id.black_layout)
     RelativeLayout blackLayout;
@@ -113,6 +117,7 @@ public class UserInfoActivity extends BaseActivity {
     public static final String BIND_WX = "bind_wx";
     final public static int REQUEST_CODE_CAMERA = 123;
     final public static int REQUEST_CODE_PHOTO = 124;
+    private HuiFuDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,6 +137,7 @@ public class UserInfoActivity extends BaseActivity {
         super.initData();
         //  x.image().bind(sp.getString("avatar", ""), iconUser);
 
+        dialog = new HuiFuDialog(this, "微信解绑成功");
 
         UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
         //微信
@@ -218,13 +224,65 @@ public class UserInfoActivity extends BaseActivity {
                 }
                 break;
             case R.id.rl_wx_user:
-                wxLogin();
+
+                String wx = CacheUtil.getInstance().getUserInfo().getUser().getWechatId();
+                if ("".equals(wx)) {
+                    wxLogin();
+                } else {
+
+                    new AlertDialog.Builder(this)
+                            .setTitle("解绑微信")
+                            .setMessage("确认解绑？")
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    unBindWx();
+                                    dialog.dismiss();
+                                }
+                            }).show();
+                }
                 break;
             case R.id.black_layout:
 
                 startActivity(new Intent(this, BlackListActivity.class));
                 break;
         }
+    }
+
+    private void unBindWx() {
+
+        RequestParams requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/user/unbind");
+        requestParams.addBodyParameter("bindWay", "wechat");
+        requestParams.addBodyParameter("verifyCode", "");
+        requestParams.addBodyParameter("mobile", "");
+
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (Utils.callOk(result)) {
+                    dialog.show();
+                    tvWxBindUser.setText("解绑");
+                    CacheUtil.getInstance().getUserInfo().getUser().setWechatId("");
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     /**

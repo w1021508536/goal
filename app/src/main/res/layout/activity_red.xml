@@ -61,7 +61,7 @@
     </RelativeLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/plv_wallet"
+        android:id="@+id/plv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="@null"

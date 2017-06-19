@@ -172,11 +172,12 @@ public class BalancePayActivity extends BaseActivity {
                         strPassword += tvList[i].getText().toString().trim();
                     }
                     System.out.println("strPassword :" + strPassword);
-
                     Intent intent = new Intent();
                     intent.putExtra("password", strPassword);
                     setResult(Code.BalancePay, intent);
                     finish();
+
+
                 }
             }
         });

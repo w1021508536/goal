@@ -296,7 +296,8 @@ public class AimMoreActivity extends BaseActivity {
 //            if (Utils.photoEmpty(targetHeadEntity.getAim().getImg())) {
 //                Picasso.with(this).load(Utils.GetPhotoPath(targetHeadEntity.getAim().getImg())).into(img_bg_head);
 //            }
-            x.image().bind(img_bg_head, Utils.GetPhotoPath(targetHeadEntity.getAim().getImg()), imageOptions);
+            if (Utils.photoEmpty(targetHeadEntity.getAim().getImg()))
+                x.image().bind(img_bg_head, Utils.GetPhotoPath(targetHeadEntity.getAim().getImg()), imageOptions);
             if (targetHeadEntity.getSupports().size() == 0) {
                 rl_supports.setVisibility(View.GONE);
             }
@@ -323,8 +324,9 @@ public class AimMoreActivity extends BaseActivity {
             tv_money.setText(targetHeadEntity.getAim().getMoney() + "");
             tv_cycle.setText((targetHeadEntity.getAim().getCycle() * 30) + "");
             String percentOne = Utils.getPercentOne((float) targetHeadEntity.getAim().getMoney() / targetHeadEntity.getAim().getBudget() * 100);
+            Float aFloat = Float.valueOf(percentOne);
 
-            progress.setProgress(Float.parseFloat(percentOne));
+            progress.setProgress(aFloat);
 
             List<TargetHeadEntity.SupportsBean> supports = targetHeadEntity.getSupports();
             CacheUtil.getInstance().setSupportEntityList(supports);

@@ -57,7 +57,7 @@
         android:background="@color/background_system_list" />
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/plv_collect"
+        android:id="@+id/plv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
