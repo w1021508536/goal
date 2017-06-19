@@ -10,8 +10,6 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -32,7 +30,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.aim.AimFragment;
 import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
@@ -63,7 +60,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.jar.Attributes;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -153,12 +149,23 @@ public class HotFragment extends Fragment {
         hotList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetDownDataTask().execute();
+                //   new GetDownDataTask().execute();
+                isDown = true;
+                page = 1;
+                GetHotData(page + "", "10");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetUpDataTask().execute();
+                //        new GetUpDataTask().execute();
+                isDown = false;
+
+                if (page * 10 >= total) {
+
+                } else {
+                    page = page + 1;
+                    GetHotData(page + "", "10");
+                }
             }
         });
 
@@ -422,11 +429,12 @@ public class HotFragment extends Fragment {
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
+                hotList.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                hotList.onRefreshComplete();
             }
         });
     }

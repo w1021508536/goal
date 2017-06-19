@@ -2,37 +2,25 @@ package com.pi.small.goal.search;
 
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.search.activity.AddFriendSearchActivity;
 import com.pi.small.goal.search.activity.SearchKeyActivity;
 import com.pi.small.goal.search.fragment.AttentionFragment;
 import com.pi.small.goal.search.fragment.CityFragment;
 import com.pi.small.goal.search.fragment.HotFragment;
-import com.pi.small.goal.utils.PagerSlidingTabStrip;
-import com.pi.small.goal.utils.Url;
-import com.pi.small.goal.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +45,7 @@ public class SearchFragment extends Fragment {
     @InjectView(R.id.view_pager)
     ViewPager view_pager;
     @InjectView(R.id.tabs)
-    PagerSlidingTabStrip tabs;
+    TabLayout tabs;
 
 
     private List<Fragment> dataList;
@@ -86,7 +74,7 @@ public class SearchFragment extends Fragment {
         ButterKnife.inject(this, view);
 
 
-        setTabsValue();
+     //   setTabsValue();
 
         dataList = new ArrayList<Fragment>();
 
@@ -94,7 +82,10 @@ public class SearchFragment extends Fragment {
         view_pager.setAdapter(searchViewPagerAdapter);
 //        view_pager.set
         view_pager.setOffscreenPageLimit(2);
-        tabs.setViewPager(view_pager);
+        tabs.setupWithViewPager(view_pager);
+//        for (int i=0;i<tabs.getChildCount();i++){
+//            tabs.getTabAt(i).
+//        }
         return view;
     }
 
@@ -120,32 +111,32 @@ public class SearchFragment extends Fragment {
         }
     }
 
-    /**
-     * 对PagerSlidingTabStrip的各项属性进行赋值。
-     */
-    private void setTabsValue() {
-        // 设置Tab是自动填充满屏幕的
-        tabs.setShouldExpand(true);
-        // 设置Tab的分割线是透明的
-        tabs.setDividerColor(Color.TRANSPARENT);
-        // 设置Tab底部线的高度
-//        tabs.setUnderlineHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
-        tabs.setUnderlineHeight(0);
-        // 设置Tab Indicator的高度
-        tabs.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
-
-        // 设置Tab标题文字的大小
-        tabs.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
-        // 设置Tab Indicator的颜色
-        tabs.setIndicatorColor(Color.parseColor("#ffffff"));//#d83737   #d83737(绿)
-//        // 设置选中Tab文字的颜色 (这是我自定义的一个方法)
-//        tabs.setSelectedTextColor(Color.parseColor("#ffffff"));
-        // 取消点击Tab时的背景色
-        tabs.setTabBackground(0);
-
-        tabs.setTextColor(getActivity().getResources().getColor(R.color.white));
-        tabs.setDividerPadding(115);
-    }
+//    /**
+//     * 对PagerSlidingTabStrip的各项属性进行赋值。
+//     */
+//    private void setTabsValue() {
+//        // 设置Tab是自动填充满屏幕的
+//        tabs.setShouldExpand(true);
+//        // 设置Tab的分割线是透明的
+//        tabs.setDividerColor(Color.TRANSPARENT);
+//        // 设置Tab底部线的高度
+////        tabs.setUnderlineHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
+//        tabs.setUnderlineHeight(0);
+//        // 设置Tab Indicator的高度
+//        tabs.setIndicatorHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()));
+//
+//        // 设置Tab标题文字的大小
+//        tabs.setTextSize((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
+//        // 设置Tab Indicator的颜色
+//        tabs.setIndicatorColor(Color.parseColor("#ffffff"));//#d83737   #d83737(绿)
+////        // 设置选中Tab文字的颜色 (这是我自定义的一个方法)
+////        tabs.setSelectedTextColor(Color.parseColor("#ffffff"));
+//        // 取消点击Tab时的背景色
+//        tabs.setTabBackground(0);
+//
+//        tabs.setTextColor(getActivity().getResources().getColor(R.color.white));
+//        tabs.setDividerPadding(115);
+//    }
 
 
     private class SearchViewPagerAdapter extends FragmentPagerAdapter {

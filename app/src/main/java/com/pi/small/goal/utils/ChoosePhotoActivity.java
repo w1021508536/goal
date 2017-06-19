@@ -179,6 +179,7 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                         Intent intent = new Intent();
                         intent.putExtra("path", smallImageFile.getPath());
                         setResult(Code.RESULT_CAMERA_CODE, intent);
+                        photo.recycle();
                         finish();
 //                        Uri imageUri = Uri.fromFile(new File(xmb));
 //                        if (Integer.parseInt(Build.VERSION.SDK) >= 24) {
@@ -207,6 +208,7 @@ public class ChoosePhotoActivity extends Activity implements View.OnClickListene
                 intent.putExtra("path", file.getPath());
                 setResult(Code.RESULT_CAMERA_CODE, intent);
                 finish();
+                bitmap.recycle();
             } else if (requestCode == TYPE_MORE) {      //多图选择
                 ArrayList<String> morePhotoDatas = data.getStringArrayListExtra(EXTRA_RESULT);
                 Intent intent = new Intent();

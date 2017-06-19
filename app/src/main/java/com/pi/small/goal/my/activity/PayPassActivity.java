@@ -66,12 +66,15 @@ public class PayPassActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences sp = Utils.UserSharedPreferences(this);
-        int payPassword = sp.getInt("payPassword", 0);
+        int payPassword = sp.getInt(KeyCode.USER_PAY_PASS, 0);
         if (payPassword == 0) {
             rlUpdatapassPass.setVisibility(View.GONE);
             rlForgetPassPass.setVisibility(View.GONE);
+            rlSetPassPass.setVisibility(View.VISIBLE);
         } else {
             rlSetPassPass.setVisibility(View.GONE);
+            rlUpdatapassPass.setVisibility(View.VISIBLE);
+            rlForgetPassPass.setVisibility(View.VISIBLE);
         }
     }
 

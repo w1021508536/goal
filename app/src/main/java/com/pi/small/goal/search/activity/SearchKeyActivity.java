@@ -99,7 +99,9 @@ public class SearchKeyActivity extends BaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                new GetUpDataTask().execute();
+                //         new GetUpDataTask().execute();
+                page = page + 1;
+                GetData();
             }
         });
 
@@ -254,11 +256,12 @@ public class SearchKeyActivity extends BaseActivity {
             public void onError(Throwable ex, boolean isOnCallback) {
                 System.out.println("=====getaim=======" + ex.getMessage());
                 Utils.showToast(SearchKeyActivity.this, ex.getMessage());
+                searchList.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-
+                searchList.onRefreshComplete();
             }
         });
     }

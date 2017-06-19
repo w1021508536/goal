@@ -297,18 +297,16 @@
         android:id="@+id/pay_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
         android:background="@drawable/background_yellow_gray_right_corner"
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/pay"
         android:textColor="@color/white"
-        android:textSize="18dp" />
+        android:textSize="18dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

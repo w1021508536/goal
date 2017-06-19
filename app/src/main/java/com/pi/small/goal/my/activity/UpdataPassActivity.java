@@ -22,10 +22,13 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.my.dialog.HuiFuDialog;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.CacheUtil;
+import com.pi.small.goal.utils.KeyCode;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.weight.VirtualKeyboardView;
+
+import org.xutils.http.RequestParams;
 
 import java.util.List;
 
@@ -292,7 +295,7 @@ public class UpdataPassActivity extends BaseActivity {
      **/
 
     private void forgetPass() {
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/pay/password/reset");
         requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
         requestParams.addBodyParameter("verifyCode", CacheUtil.getInstance().getForgetPassCode());
@@ -366,7 +369,7 @@ public class UpdataPassActivity extends BaseActivity {
 
                 if (Utils.callOk(result)) {
                     dialog.show();
-                    sp.edit().putInt("payPassword", 1).commit();
+                    sp.edit().putInt(KeyCode.USER_PAY_PASS, 1).commit();
 
                     List<Activity> activityList = app.getActivityList();
                     for (Activity activity : activityList) {
@@ -395,7 +398,7 @@ public class UpdataPassActivity extends BaseActivity {
      **/
 
     private void updataPass() {
-
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/pay/password");
         requestParams.addBodyParameter("password", CacheUtil.getInstance().getNewPass());
         requestParams.addBodyParameter("oldPassword", CacheUtil.getInstance().getOldPass());

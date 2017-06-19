@@ -20,6 +20,7 @@
             android:background="@color/background_system_list" />
 
         <ImageView
+            android:id="@+id/img_flag"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="1dp"
@@ -222,6 +223,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp">
@@ -267,10 +269,7 @@
                         android:visibility="gone" />
                 </LinearLayout>
             </RelativeLayout>
-
         </LinearLayout>
-
-
     </RelativeLayout>
 
 </LinearLayout>

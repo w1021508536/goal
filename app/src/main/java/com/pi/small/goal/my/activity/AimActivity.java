@@ -24,6 +24,7 @@ import com.pi.small.goal.utils.XUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.http.RequestParams;
 
 import java.util.List;
 
@@ -58,6 +59,7 @@ public class AimActivity extends BaseActivity {
 
     private int page = 1;
     private int position;
+    private boolean addFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,8 +93,10 @@ public class AimActivity extends BaseActivity {
         plvTarget.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
             @Override
             public void onLastItemVisible() {
+                if (!addFlag) return;
                 page++;
                 getData();
+                addFlag=false;
             }
         });
     }
@@ -100,16 +104,16 @@ public class AimActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim");
-        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, "26"));
+        requestParams.addBodyParameter("userId", sp.getString(KeyCode.USER_ID, ""));
         requestParams.addBodyParameter("p", page + "");
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
-                if (!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) {
+                if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
 //                    View emptyView = LayoutInflater.from(AimActivity.this).inflate(R.layout.view_empty_nodata, null);
 //                    plvTarget.setEmptyView(emptyView);
                     plvTarget.setVisibility(View.GONE);
@@ -126,7 +130,9 @@ public class AimActivity extends BaseActivity {
 
                     } else {
                         adapter.setData(data);
-
+                    }
+                    if (data.size() >= 9) {
+                        addFlag = true;
                     }
 
                 } catch (JSONException e) {

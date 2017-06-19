@@ -111,12 +111,12 @@
 
             <FrameLayout
                 android:layout_width="80dp"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <RelativeLayout
                     android:id="@+id/rl1_card_flop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@mipmap/card_front2x">
 
                     <ImageView
@@ -143,18 +143,19 @@
                     android:id="@+id/imageView1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:visibility="visible"
                     android:background="@mipmap/card_back2x" />
             </FrameLayout>
 
             <FrameLayout
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp">
 
                 <RelativeLayout
                     android:id="@+id/rl2_card_flop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@mipmap/card_front2x">
 
                     <ImageView
@@ -186,13 +187,13 @@
 
             <FrameLayout
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp">
 
                 <RelativeLayout
                     android:id="@+id/rl3_card_flop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@mipmap/card_front2x">
 
                     <ImageView
@@ -230,12 +231,12 @@
 
             <FrameLayout
                 android:layout_width="80dp"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <RelativeLayout
                     android:id="@+id/rl4_card_flop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@mipmap/card_front2x">
 
                     <ImageView
@@ -267,13 +268,13 @@
 
             <FrameLayout
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp">
 
                 <RelativeLayout
                     android:id="@+id/rl5_card_flop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@mipmap/card_front2x">
 
                     <ImageView
@@ -305,13 +306,13 @@
 
             <FrameLayout
                 android:layout_width="80dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp">
 
                 <RelativeLayout
                     android:id="@+id/rl6_card_flop"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:background="@mipmap/card_front2x">
 
                     <ImageView

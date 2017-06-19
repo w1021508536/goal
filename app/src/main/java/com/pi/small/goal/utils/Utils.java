@@ -273,6 +273,19 @@ public class Utils {
         return (float) (Math.round(v * 100)) / 100;
     }
 
+    /**
+     * 小格式化，小数点后省略两位
+     * create  wjz
+     **/
+
+    public static String getPercentTwoStr(float v) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        if (v < 1) {
+            return "0" + df.format(v);
+        } else {
+            return df.format(v);
+        }
+    }
 
     public static void putUser(String result, Context context) throws JSONException {
         JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
@@ -305,7 +318,7 @@ public class Utils {
         editor.putString("updateTime", updateTime);
         editor.putString("token", token);
         editor.putString("imtoken", imtoken);
-        editor.putInt("payPassword", payPassword);
+        editor.putInt(KeyCode.USER_PAY_PASS, payPassword);
         editor.commit();
     }
 

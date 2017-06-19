@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.dialog.MonthDialog;
 import com.pi.small.goal.my.entry.RedMoreAdapterEntry;
+import com.pi.small.goal.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +45,20 @@ public class RedMoreAdapter extends BaseAdapter {
     }
 
     public void addData(List<RedMoreAdapterEntry> data) {
+
+        if (data.size() == 0) return;
+        RedMoreAdapterEntry entry1 = data.get(0);
+        for (RedMoreAdapterEntry entry : this.data) {
+
+            if (entry.getTitleType() == RedAdapter.TYPE_TITLE) {
+                if (entry.getTitle().equals(entry1.getTitle())) {
+                    entry.setAddMoney(entry.getAddMoney() + entry1.getAddMoney());
+                    data.remove(0);
+                }
+            } else {
+
+            }
+        }
         this.data.addAll(data);
         notifyDataSetChanged();
     }
@@ -78,7 +93,7 @@ public class RedMoreAdapter extends BaseAdapter {
             RedMoreAdapterEntry redMoreAdapterEntry = data.get(position);
             titleViewHolder.tvTimeItem.setText(redMoreAdapterEntry.getTitle());
             //  titleViewHolder.tvMoneyItem.setText("支出 ¥" + redMoreAdapterEntry.getDeletteMoney() + "  收入 ¥" + redMoreAdapterEntry.getAddMoney());
-            titleViewHolder.tvMoneyItem.setText("收入 ¥" + redMoreAdapterEntry.getAddMoney());
+            titleViewHolder.tvMoneyItem.setText("收入 ¥" + Utils.getPercentTwoStr(redMoreAdapterEntry.getAddMoney()));
             if (position == 0 && titleViewHolder != null) {
                 titleViewHolder.imgMonthItem.setVisibility(View.VISIBLE);
             }
@@ -115,7 +130,7 @@ public class RedMoreAdapter extends BaseAdapter {
                     break;
 
             }
-            contentViewHolder.tvMoneyItem.setText("+" +redMoreAdapterEntry.getMoney());
+            contentViewHolder.tvMoneyItem.setText("+" + redMoreAdapterEntry.getMoney());
 
             String timeDate = getTimeDate(redMoreAdapterEntry.getCreateTime());
             contentViewHolder.tvTimeItem.setText(timeDate);

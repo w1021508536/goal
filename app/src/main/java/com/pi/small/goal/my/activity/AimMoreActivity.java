@@ -56,10 +56,13 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
 
 import java.io.File;
 import java.util.List;
@@ -126,6 +129,8 @@ public class AimMoreActivity extends BaseActivity {
     private TargetHeadEntity targetHeadEntity;      //头部视图布局的数据
     private int position;
     private ImageView img_bg_head;   //头部布局的背景图片
+    private int page = 1;
+    private boolean addFlag;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,6 +177,7 @@ public class AimMoreActivity extends BaseActivity {
     @Override
     public void getData() {
         super.getData();
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim");
         requestParams.addBodyParameter("aimId", aimId);
         requestParams.addBodyParameter("userId", userId);
@@ -216,13 +222,14 @@ public class AimMoreActivity extends BaseActivity {
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.setUri(Url.Url + "/aim/dynamic");
         requestParams.addBodyParameter("aimId", aimId);
+        requestParams.addBodyParameter("p", page + "");
         //      requestParams.addBodyParameter("userId", userId);
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
-                if (!RenameActivity.callOk(result)) {
+                if (!RenameActivity.callOk(result) && page == 1) {
                     rlEmpty.setVisibility(View.VISIBLE);
                     return;
                 }
@@ -238,8 +245,11 @@ public class AimMoreActivity extends BaseActivity {
                     } else {
                         adapter.addData(data);
                     }
-                    if (data.size() == 0) {
+                    if (data.size() == 0 && page == 1) {
                         rlEmpty.setVisibility(View.VISIBLE);
+                    }
+                    if (data.size() >= 9) {
+                        addFlag = true;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -264,6 +274,12 @@ public class AimMoreActivity extends BaseActivity {
      * create  wjz
      **/
 
+    private ImageOptions imageOptions = new ImageOptions.Builder()
+            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+            .setLoadingDrawableId(R.drawable.image1)
+            .setFailureDrawableId(R.drawable.image1)
+            .build();
+
     private void setHeadViewData(TargetHeadEntity targetHeadEntity) {
 
         try {
@@ -277,10 +293,10 @@ public class AimMoreActivity extends BaseActivity {
             RelativeLayout rl_supports = (RelativeLayout) header.findViewById(R.id.rl_goodPeople_targetMore);
             img_bg_head = (ImageView) header.findViewById(R.id.img_bg_head);
 
-            if (Utils.photoEmpty(targetHeadEntity.getAim().getImg())) {
-                Picasso.with(this).load(Utils.GetPhotoPath(targetHeadEntity.getAim().getImg())).into(img_bg_head);
-            }
-
+//            if (Utils.photoEmpty(targetHeadEntity.getAim().getImg())) {
+//                Picasso.with(this).load(Utils.GetPhotoPath(targetHeadEntity.getAim().getImg())).into(img_bg_head);
+//            }
+            x.image().bind(img_bg_head, Utils.GetPhotoPath(targetHeadEntity.getAim().getImg()), imageOptions);
             if (targetHeadEntity.getSupports().size() == 0) {
                 rl_supports.setVisibility(View.GONE);
             }
@@ -288,7 +304,7 @@ public class AimMoreActivity extends BaseActivity {
 //            JSONObject aimJsonObj = (JSONObject) jsonObj.get("aim");
 //            JSONObject userJsonObj = (JSONObject) jsonObj.get("user");
 //            int userId = (int) userJsonObj.get("id");
-            if ((targetHeadEntity.getUser().getId() + "").equals(sp.getString(KeyCode.USER_ID, "26"))) {
+            if ((targetHeadEntity.getUser().getId() + "").equals(sp.getString(KeyCode.USER_ID, ""))) {
                 myAim = true;
                 collectImageInclude.setImageResource(R.mipmap.goals_setting_btn);
                 adapter.setOperationShowFlag(false);
@@ -364,6 +380,11 @@ public class AimMoreActivity extends BaseActivity {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount > 0) {
                     // 滚动到最后一行了
+                    if (addFlag) {
+                        page++;
+                        getTargetDynamic();
+                        addFlag = false;
+                    }
                 }
 
                 //顶部渐变色
@@ -670,7 +691,8 @@ public class AimMoreActivity extends BaseActivity {
      **/
     private void share() {
 
-        new ShareAction(this).withText("hello")
+        UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
+        new ShareAction(this).withText("测试").withMedia(image)
                 .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .setCallback(umShareListener).open();
     }
@@ -686,6 +708,33 @@ public class AimMoreActivity extends BaseActivity {
             Log.d("plat", "platform" + platform);
 
             Toast.makeText(AimMoreActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+
+            RequestParams requestParams = Utils.getRequestParams(AimMoreActivity.this);
+            requestParams.setUri(Url.Url + "/aim/share");
+
+            requestParams.addBodyParameter("aimId", aimId);
+            XUtil.post(requestParams, AimMoreActivity.this, new XUtil.XCallBackLinstener() {
+                @Override
+                public void onSuccess(String result) {
+
+                    if (Utils.callOk(result)) {
+                        CacheUtil.getInstance().getMap().put(KeyCode.AIM_SHARE, true);
+                    }
+
+
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
 
         }
 
@@ -747,7 +796,6 @@ public class AimMoreActivity extends BaseActivity {
 //                    iconUser.setImageBitmap(bitmap);
 //                    uploadFile(file);
                     //    doCrop(uri);
-
                     afterUploadVitmap(bitmap);
                 }
 
@@ -777,9 +825,8 @@ public class AimMoreActivity extends BaseActivity {
      * create  wjz
      **/
     public void uploadFile(File file) {
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/file/picture");
-        requestParams.addHeader(KeyCode.USER_TOKEN, sp.getString(KeyCode.USER_TOKEN, ""));
-        requestParams.addHeader(KeyCode.USER_DEVICEID, MyApplication.deviceId);
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("picture", file);
@@ -816,7 +863,7 @@ public class AimMoreActivity extends BaseActivity {
     }
 
     private void ChangeAimPhoto(String img) {
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + Url.Aim);
         requestParams.addBodyParameter("aimId", aimId);
         requestParams.addBodyParameter("img", img);
@@ -842,7 +889,7 @@ public class AimMoreActivity extends BaseActivity {
 
 
     private void collectAim(String aimId, String status) {
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/collect");
         requestParams.addBodyParameter("aimId", aimId + "");
         requestParams.addBodyParameter("status", status);

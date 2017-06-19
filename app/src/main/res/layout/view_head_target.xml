@@ -183,7 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="1鼓励" />
+            android:text="0鼓励" />
 
         <LinearLayout
             android:id="@+id/ll_imags_head"
