@@ -47,6 +47,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -191,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //            GetFriendsListData();
             GetFollowListData();
+
 
             if (lastTime != 0) {
                 if (!simpleDateFormat.format(new Date(lastTime)).equals(simpleDateFormat.format(new Date(System.currentTimeMillis())))) {
@@ -534,17 +536,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("===========GetRed===========" + result);
+
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
 
                         String money = new JSONObject(result).getJSONObject("result").getString("amount");
-                        if (Double.valueOf(new JSONObject(result).getJSONObject("result").getString("amount")) != 0) {
+                        BigDecimal data1 = new BigDecimal(money);
+                        BigDecimal data2 = new BigDecimal(0);
+
+                        if (data1.compareTo(data2) != 0) {
                             GetRedWindow(money);
                         }
                     }
-//                    GetRedWindow("8.88");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

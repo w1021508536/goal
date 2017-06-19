@@ -94,8 +94,8 @@ public class SaveMoneyActivity extends BaseActivity {
                 if (money_edit.getText().toString().trim().equals("")) {
                     Utils.showToast(this, "金额不能为空");
                 } else {
-                    if (Integer.valueOf(money_edit.getText().toString().trim()) > MaxMoney) {
-                        Utils.showToast(this, "输入金额不得超过" + MaxMoney);
+                    if (Integer.valueOf(money_edit.getText().toString().trim()) < 10) {
+                        Utils.showToast(this, "输入金额不得小于10元" );
                     } else {
                         if (!isRead) {
                             Utils.showToast(this, "请仔细阅读相关协议");

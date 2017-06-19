@@ -291,6 +291,17 @@
                 android:src="@mipmap/icon_location" />
 
             <TextView
+                android:id="@+id/province_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@null"
+                android:gravity="center"
+                android:textColor="@color/text_aim"
+                android:textColorHint="@color/text_aim"
+                android:textSize="12dp" />
+
+            <TextView
                 android:id="@+id/city_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

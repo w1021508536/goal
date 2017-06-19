@@ -58,6 +58,8 @@ public class RedPacketActivity extends BaseActivity {
     ImageView view;
     @InjectView(R.id.money_layout)
     LinearLayout moneyLayout;
+    @InjectView(R.id.text)
+    TextView text;
     private RedPacketAdapter redPacketAdapter;
 
     private List<Map<String, String>> dataList;
@@ -105,9 +107,12 @@ public class RedPacketActivity extends BaseActivity {
 
         if (isHave.equals("1")) {
             moneyLayout.setVisibility(View.GONE);
+//            text.setVisibility(View.GONE);
             if (!json.equals("")) {
 
                 try {
+
+
                     JSONArray jsonArray = new JSONObject(json).getJSONArray("result");
                     System.out.println("==========jsonArray===============" + jsonArray.length());
                     for (int i = 0; i < jsonArray.length(); i++) {

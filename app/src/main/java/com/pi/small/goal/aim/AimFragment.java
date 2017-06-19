@@ -82,8 +82,9 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
     private ImageOptions imageOptions = new ImageOptions.Builder()
             .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-            .setLoadingDrawableId(R.drawable.image1)
             .setFailureDrawableId(R.drawable.image1)
+            .setLoadingDrawableId(R.drawable.image1)
+            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
             .build();
     private View currentView;
 
@@ -252,22 +253,29 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         } else if (resultCode == Code.SupportAim) {
             String money = data.getStringExtra("money");
 
-            double totalMoney = Float.valueOf(dataList.get(position).getMoney());
+            Float totalMoney = Float.valueOf(dataList.get(position).getMoney());
             totalMoney = totalMoney + Float.valueOf(money);
             dataList.get(position).setMoney(totalMoney + "");
 
             TextView tv_money = (TextView) viewList.get(position).findViewById(R.id.money_text);
-            ImageView line_left_image = (ImageView) viewList.get(position).findViewById(R.id.line_left_image);
             ImageView line_right_image = (ImageView) viewList.get(position).findViewById(R.id.line_right_image);
             TextView weight_text = (TextView) viewList.get(position).findViewById(R.id.weight_text);
-
+            ImageView line_left_image = (ImageView) itemView.findViewById(R.id.line_left_image);
 
             tv_money.setText(dataList.get(position).getMoney());
-            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getBudget()) - Float.valueOf(dataList.get(position).getMoney())));
-            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getMoney())));
-
-            String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
-            weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
+            if ((Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget())) > 0.98) {
+//            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
+//            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getMoney())));
+                String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
+                weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
+                line_right_image.setVisibility(View.GONE);
+            } else {
+                line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, (Float.valueOf(dataList.get(position).getBudget()) - Float.valueOf(dataList.get(position).getMoney())) / Float.valueOf(dataList.get(position).getBudget())));
+                line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget())));
+                String weight = String.valueOf(Float.valueOf(dataList.get(position).getMoney()) / Float.valueOf(dataList.get(position).getBudget()) * 100);
+                weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
+                line_right_image.setVisibility(View.VISIBLE);
+            }
             viewPagerAdapter.notifyDataSetChanged();
         } else if (resultCode == Code.RESULT_OWM_CODE) {
 
@@ -512,7 +520,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         set_text = (TextView) itemView.findViewById(R.id.set_text);
         aim_image = (ImageView) itemView.findViewById(R.id.aim_image);
         process_text = (TextView) itemView.findViewById(R.id.process_text);
-
         line_left_image = (ImageView) itemView.findViewById(R.id.line_left_image);
         line_right_image = (ImageView) itemView.findViewById(R.id.line_right_image);
         weight_text = (TextView) itemView.findViewById(R.id.weight_text);
@@ -547,10 +554,22 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         } else {
             day_text.setText(Long.valueOf(dataList.get(i).getCycle()) * 30 - day + "");
         }
-        line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
-        line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getMoney())));
-        String weight = String.valueOf(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100);
-        weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
+
+        if ((Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget())) > 0.98) {
+//            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())));
+//            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getMoney())));
+            String weight = String.valueOf(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100);
+            weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
+            line_right_image.setVisibility(View.GONE);
+        } else {
+            line_left_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, (Float.valueOf(dataList.get(i).getBudget()) - Float.valueOf(dataList.get(i).getMoney())) / Float.valueOf(dataList.get(i).getBudget())));
+            line_right_image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 8, Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget())));
+            String weight = String.valueOf(Float.valueOf(dataList.get(i).getMoney()) / Float.valueOf(dataList.get(i).getBudget()) * 100);
+            weight_text.setText(weight.substring(0, weight.indexOf(".")) + "%");
+            line_right_image.setVisibility(View.VISIBLE);
+        }
+
+
         if (!dataList.get(i).getMoney().equals(dataList.get(i).getBudget())) {
             process_text.setText("向小目标更进一步");
             process_text.setOnClickListener(new View.OnClickListener() {

@@ -21,6 +21,7 @@ import com.pi.small.goal.R;
 import com.pi.small.goal.login.LoginActivity;
 import com.pi.small.goal.my.activity.AimActivity;
 import com.pi.small.goal.my.activity.CollectActivity;
+import com.pi.small.goal.my.activity.DistributionActivity;
 import com.pi.small.goal.my.activity.ExtensionActivity;
 import com.pi.small.goal.my.activity.FollowActivity;
 import com.pi.small.goal.my.activity.LevelActivity;
@@ -114,11 +115,10 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     ImageView rightImageInclude;
     @InjectView(R.id.ll_shopping_fragment)
     LinearLayout llShoppingFragment;
-    private ImageOptions imageOptions = new ImageOptions.Builder()
-            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-            .setLoadingDrawableId(R.mipmap.icon_user)
-            .setFailureDrawableId(R.mipmap.icon_user)
-            .build();
+
+    @InjectView(R.id.distribution_layout)
+    LinearLayout distributionLayout;
+
     private UerEntity userInfo;
     private SharedPreferences sp;
     private UerEntity.AccountBean account;
@@ -149,6 +149,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         llTransferFragment.setOnClickListener(this);
         llShoppingFragment.setOnClickListener(this);
         llExtensionFragment.setOnClickListener(this);
+        distributionLayout.setOnClickListener(this);
     }
 
     private void initData() {
@@ -316,6 +317,9 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ll_extension_fragment:
                 startActivity(new Intent(getContext(), ExtensionActivity.class));
+                break;
+            case R.id.distribution_layout:
+                startActivity(new Intent(getContext(), DistributionActivity.class));
                 break;
             default:
                 break;

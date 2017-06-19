@@ -226,8 +226,8 @@ public class AddFriendSearchActivity extends BaseActivity {
                                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_CONTACTS}, 103);
                                 return;
                             } else {
-                                    intent.setClass(this, InviteActivity.class);
-                                    startActivity(intent);
+                                intent.setClass(this, InviteActivity.class);
+                                startActivity(intent);
                             }
                         }
                     }
@@ -521,11 +521,12 @@ public class AddFriendSearchActivity extends BaseActivity {
                     startActivity(intent);
                 }
             });
-            if (userSearchEntityList.get(position).getCity().equals("")) {
+            if (userSearchEntityList.get(position).getAimEntityList().get(0).getCity().equals("")) {
                 viewHolder.cityLayout.setVisibility(View.GONE);
             } else {
                 viewHolder.cityLayout.setVisibility(View.VISIBLE);
-                viewHolder.cityText.setText(userSearchEntityList.get(position).getCity());
+                viewHolder.cityText.setText(userSearchEntityList.get(position).getAimEntityList().get(0).getCity());
+                viewHolder.provinceText.setText(userSearchEntityList.get(position).getAimEntityList().get(0).getProvince());
             }
 
             return convertView;
@@ -553,6 +554,8 @@ public class AddFriendSearchActivity extends BaseActivity {
             TextView cityText;
             @InjectView(R.id.city_layout)
             LinearLayout cityLayout;
+            @InjectView(R.id.province_text)
+            TextView provinceText;
 
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);

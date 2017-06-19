@@ -881,6 +881,7 @@ public class AttentionFragment extends Fragment {
             } else {
                 viewHolder.cityLayout.setVisibility(View.VISIBLE);
                 viewHolder.cityText.setText(dynamicEntityList.get(position).getCity());
+                viewHolder.provinceText.setText(dynamicEntityList.get(position).getProvince());
             }
 
             return convertView;
@@ -944,6 +945,8 @@ public class AttentionFragment extends Fragment {
             TextView cityText;
             @InjectView(R.id.city_layout)
             LinearLayout cityLayout;
+            @InjectView(R.id.province_text)
+            TextView provinceText;
             private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {

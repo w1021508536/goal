@@ -470,7 +470,7 @@ public class HotFragment extends Fragment {
                         try {
                             String code = new JSONObject(result).getString("code");
                             if (code.equals("0")) {
-                                String money = new JSONObject(result).optString("money");
+                                String money = new JSONObject(result).getJSONObject("result").optString("money");
                                 if (money.equals("")) {
                                     Utils.showToast(getActivity(), "恭喜您获取红包");
                                 } else {
@@ -985,6 +985,7 @@ public class HotFragment extends Fragment {
             } else {
                 viewHolder.cityLayout.setVisibility(View.VISIBLE);
                 viewHolder.cityText.setText(dynamicEntityList.get(position).getCity());
+                viewHolder.provinceText.setText(dynamicEntityList.get(position).getProvince());
             }
 
             return convertView;
@@ -1047,6 +1048,8 @@ public class HotFragment extends Fragment {
             TextView cityText;
             @InjectView(R.id.city_layout)
             LinearLayout cityLayout;
+            @InjectView(R.id.province_text)
+            TextView provinceText;
             private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {

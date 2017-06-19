@@ -159,17 +159,6 @@ public class UserDetitalActivity extends BaseActivity {
         dataList.setAdapter(hotAdapter);
 
         scrollView.setMode(PullToRefreshBase.Mode.BOTH);
-//        scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-//            @Override
-//            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-//                new GetDownDataTask().execute();
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-//                new GetUpDataTask().execute();
-//            }
-//        });
         scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
@@ -198,6 +187,14 @@ public class UserDetitalActivity extends BaseActivity {
         } else {
             attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
             attentionText.setText("关注");
+        }
+
+        if (userId.equals(Utils.UserSharedPreferences(this).getString("id", ""))) {
+            chatImage.setVisibility(View.GONE);
+            moreImage.setVisibility(View.GONE);
+        } else {
+            chatImage.setVisibility(View.VISIBLE);
+            moreImage.setVisibility(View.VISIBLE);
         }
 
         GetUserData();
@@ -594,7 +591,7 @@ public class UserDetitalActivity extends BaseActivity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            viewHolder.nameText.setText(dynamicEntityList.get(position).getNick());
+            viewHolder.nameText.setText(nick);
 
             if (dynamicEntityList.get(position).getContent().equals("")) {
                 viewHolder.contentText.setVisibility(View.GONE);
@@ -604,8 +601,8 @@ public class UserDetitalActivity extends BaseActivity {
             }
             viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
 
-            if (!dynamicEntityList.get(position).getAvatar().equals("")) {
-                Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntityList.get(position).getAvatar())).into(viewHolder.headImage);
+            if (!avatar.equals("")) {
+                Picasso.with(context).load(Utils.GetPhotoPath(avatar)).into(viewHolder.headImage);
             } else {
                 viewHolder.headImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
             }
@@ -909,6 +906,15 @@ public class UserDetitalActivity extends BaseActivity {
                     startActivity(intent);
                 }
             });
+
+            if (dynamicEntityList.get(position).getCity().equals("")) {
+                viewHolder.cityLayout.setVisibility(View.GONE);
+            } else {
+                viewHolder.cityLayout.setVisibility(View.VISIBLE);
+                viewHolder.cityText.setText(dynamicEntityList.get(position).getCity());
+                viewHolder.provinceText.setText(dynamicEntityList.get(position).getProvince());
+            }
+
             return convertView;
         }
 
@@ -966,6 +972,13 @@ public class UserDetitalActivity extends BaseActivity {
 
             @InjectView(R.id.comment_more_text)
             TextView commentMoreText;
+
+            @InjectView(R.id.city_text)
+            TextView cityText;
+            @InjectView(R.id.city_layout)
+            LinearLayout cityLayout;
+            @InjectView(R.id.province_text)
+            TextView provinceText;
             private CommentAdapter commentAdapter;
 
             ViewHolder(View view) {

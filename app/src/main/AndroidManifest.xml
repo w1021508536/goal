@@ -42,9 +42,9 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon_logo_desktop"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icon_logo_desktop"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".welcome.WelcomeActivity">
@@ -101,16 +101,6 @@
             android:value="ba47c3f72135168a4b805af7d8dcd40b" />
 
         <service android:name="com.amap.api.location.APSService" />
-
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.pi.small.goal.FileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/rc_file_path" />
-        </provider>
 
         <activity
             android:name=".MainActivity"
@@ -407,7 +397,10 @@
             android:name=".search.activity.InviteActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".utils.GetPhotosActivity" />
-        <activity android:name=".utils.BalancePayActivity"></activity>
+        <activity android:name=".utils.BalancePayActivity" />
+        <activity android:name=".my.activity.BlackListActivity" />
+        <activity android:name=".my.activity.DistributionActivity" />
+        <activity android:name=".my.activity.DistributionMemberActivity"></activity>
     </application>
 
 </manifest>

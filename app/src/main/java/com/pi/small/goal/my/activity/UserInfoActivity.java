@@ -104,6 +104,9 @@ public class UserInfoActivity extends BaseActivity {
     TextView tvLevelUser;
     @InjectView(R.id.tv_wxBind_user)
     TextView tvWxBindUser;
+    @InjectView(R.id.black_layout)
+    RelativeLayout blackLayout;
+
     private IWXAPI wx_api;
 
     public static final String BIND_WX = "bind_wx";
@@ -178,6 +181,7 @@ public class UserInfoActivity extends BaseActivity {
         rlDenjiUser.setOnClickListener(this);
         rlPhoneUser.setOnClickListener(this);
         rlWxUser.setOnClickListener(this);
+        blackLayout.setOnClickListener(this);
     }
 
     @Override
@@ -211,10 +215,13 @@ public class UserInfoActivity extends BaseActivity {
                 } else {
                     startActivity(new Intent(this, UpdataPhoneActivity.class));
                 }
-
                 break;
             case R.id.rl_wx_user:
                 wxLogin();
+                break;
+            case R.id.black_layout:
+
+                startActivity(new Intent(this, BlackListActivity.class));
                 break;
         }
     }

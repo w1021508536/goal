@@ -82,7 +82,7 @@ public class SupportAimActivity extends BaseActivity {
     private String img2 = "";
     private String img3 = "";
 
-    private String payMoney="";
+    private String payMoney = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,10 +145,10 @@ public class SupportAimActivity extends BaseActivity {
             case R.id.right_text:
                 System.out.println("=========dianji=========");
 
-                if (payMoney.equals("")){
-                    Utils.showToast(this,"请填写存入金额");
+                if (payMoney.equals("")) {
+                    Utils.showToast(this, "请填写存入金额");
 
-                }else {
+                } else {
                     if (selectPhotoPaths.size() > 0) {
                         UpPicture1();
                     } else {
@@ -159,7 +159,7 @@ public class SupportAimActivity extends BaseActivity {
                         intent.putExtra("img1", img1);
                         intent.putExtra("img2", img2);
                         intent.putExtra("img3", img3);
-                        intent.putExtra("content",  content_edit.getText().toString().trim());
+                        intent.putExtra("content", content_edit.getText().toString().trim());
                         startActivityForResult(intent, Code.SupportAim);
                     }
                 }
@@ -348,7 +348,7 @@ public class SupportAimActivity extends BaseActivity {
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
-                            intent.putExtra("content",  content_edit.getText().toString().trim());
+                            intent.putExtra("content", content_edit.getText().toString().trim());
                             startActivityForResult(intent, Code.SupportAim);
                         }
 
@@ -405,7 +405,7 @@ public class SupportAimActivity extends BaseActivity {
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
-                            intent.putExtra("content",  content_edit.getText().toString().trim());
+                            intent.putExtra("content", content_edit.getText().toString().trim());
                             startActivityForResult(intent, Code.SupportAim);
                         }
                     } else {
@@ -457,7 +457,7 @@ public class SupportAimActivity extends BaseActivity {
                         intent.putExtra("img1", img1);
                         intent.putExtra("img2", img2);
                         intent.putExtra("img3", img3);
-                        intent.putExtra("content",  content_edit.getText().toString().trim());
+                        intent.putExtra("content", content_edit.getText().toString().trim());
                         startActivityForResult(intent, Code.SupportAim);
                     } else {
                         Utils.showToast(SupportAimActivity.this, new JSONObject(result).getString("msg"));
@@ -496,7 +496,7 @@ public class SupportAimActivity extends BaseActivity {
         TextView ok_text = (TextView) windowView.findViewById(R.id.ok_text);
         final EditText money_edit = (EditText) windowView.findViewById(R.id.money_edit);
         title_text.setText("存入金额");
-        money_edit.setHint("最大存入金額"+(Float.valueOf(budget)-Float.valueOf(money)));
+        money_edit.setHint("最少存入10元");
         cancel_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -509,8 +509,8 @@ public class SupportAimActivity extends BaseActivity {
                 if (money_edit.getText().toString().trim().equals("")) {
                     popupWindow.dismiss();
                 } else {
-                    if (Float.valueOf(money_edit.getText().toString().trim()) > (Float.valueOf(budget)-Float.valueOf(money))) {
-                        Utils.showToast(SupportAimActivity.this, "存入金額不得大于"+(Float.valueOf(budget)-Float.valueOf(money)));
+                    if (Float.valueOf(money_edit.getText().toString().trim()) < (Float.valueOf(10))) {
+                        Utils.showToast(SupportAimActivity.this, "存入金額不得小于10元");
                     } else {
                         payMoney = money_edit.getText().toString().trim();
                         money_text.setText(payMoney);
