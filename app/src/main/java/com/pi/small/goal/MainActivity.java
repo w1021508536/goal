@@ -246,7 +246,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         aMapLocation.getLongitude();//获取经度
                         aMapLocation.getAccuracy();//获取精度信息
 
-
                         userEditor.putString("latitude", String.valueOf(aMapLocation.getLatitude()));
                         userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
                         userEditor.putString("city", aMapLocation.getCity());
