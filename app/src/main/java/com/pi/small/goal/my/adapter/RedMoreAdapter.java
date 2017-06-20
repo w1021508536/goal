@@ -116,13 +116,13 @@ public class RedMoreAdapter extends BaseAdapter {
                 contentViewHolder = (ContentViewHolder) convertView.getTag();
             }
             RedMoreAdapterEntry redMoreAdapterEntry = data.get(position);
-            switch (redMoreAdapterEntry.getType()) {//type: 1:公共红包(可抢)  2:助力红包（用户收取的别人的助力） 3:收益红包
+            switch (redMoreAdapterEntry.getType()) {//type: 1:助力红包  2:感谢红包 3:收益红包
                 case 1:   //
-                    contentViewHolder.tvNameItem.setText("公共红包—来自");
+                    contentViewHolder.tvNameItem.setText("助力红包—来自");
                     contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
                     break;
                 case 2:   //
-                    contentViewHolder.tvNameItem.setText("助力红包—来自");
+                    contentViewHolder.tvNameItem.setText("感谢红包—来自");
                     contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
                     break;
                 case 3:  //

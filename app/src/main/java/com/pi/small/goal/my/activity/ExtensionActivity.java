@@ -1,7 +1,5 @@
 package com.pi.small.goal.my.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.pi.small.goal.R;
+import com.pi.small.goal.my.dialog.ExtensionDialog;
 import com.pi.small.goal.utils.BaseActivity;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -48,6 +47,7 @@ public class ExtensionActivity extends BaseActivity {
     TextView tvAgent;
     @InjectView(R.id.tv_extension)
     TextView tvExtension;
+    private ExtensionDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class ExtensionActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
+        dialog = new ExtensionDialog(this);
     }
 
     @Override
@@ -66,6 +67,15 @@ public class ExtensionActivity extends BaseActivity {
         super.initWeight();
         tvAgent.setOnClickListener(this);
         tvExtension.setOnClickListener(this);
+        dialog.setOnClickGoListener(new ExtensionDialog.onClickGoListener() {
+            @Override
+            public void onclick() {
+                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
+                intent.putExtra("money", "698");
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override
@@ -73,19 +83,21 @@ public class ExtensionActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.tv_agent:
-                new AlertDialog.Builder(this).setView(R.layout.dialog_hint)
-                          .setTitle("成为代理商")
-                        //         .setMessage("1.成为代理商需要支付698元;" + "\n" + "2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;")
-                        .setPositiveButton("去支付", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //     unBindWx();
-                                dialog.dismiss();
-                                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
-                                intent.putExtra("money", "698");
-                                startActivity(intent);
-                            }
-                        }).show();
+//                View view = LayoutInflater.from(this).inflate(R.layout.dialog_hint, null);
+//                new AlertDialog.Builder(this).setView(view)
+//                        .setTitle("成为代理商")
+//                        //   .setMessage("1.成为代理商需要支付698元;" + "\n" + "2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;")
+//                        .setPositiveButton("去支付", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                //     unBindWx();
+//                                dialog.dismiss();
+//                                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
+//                                intent.putExtra("money", "698");
+//                                startActivity(intent);
+//                            }
+//                        }).show();
+                dialog.show();
                 break;
             case R.id.tv_extension:
                 share();

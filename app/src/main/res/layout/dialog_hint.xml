@@ -1,60 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="40dp"
+    android:layout_marginRight="40dp"
+    android:background="@drawable/background_oval_white_white"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
         android:orientation="vertical">
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text="成为代理"-->
-            <!--android:textColor="@color/text_aim"-->
-            <!--android:textSize="20dp" />-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@mipmap/bg_ex"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="成为代理商"
+            android:textColor="@color/white"
+            android:textSize="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="如何成为代理商"
+            android:textColor="@color/text_aim"
+            android:textSize="20dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:layout_marginTop="5dp"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
             <TextView
-                style="@style/text_black_14"
+                android:id="@+id/tv_haveMoney"
+                style="@style/text_black_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1.成为代理商需要支付"
+                android:text="成为代理商需要支付698元;即可获得代理商用户专享的推广码，成为代理商"
                 android:textSize="14dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="698"
-                android:textColor="@color/red"
-                android:textSize="14dp" />
-
-            <TextView
-                style="@style/text_black_14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="元;" />
         </LinearLayout>
 
         <TextView
-            style="@style/text_black_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;" />
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:text="代理商享受的收益"
+            android:textColor="@color/text_aim"
+            android:textSize="20dp" />
 
+        <TextView
+            android:id="@+id/tv_good"
+            style="@style/text_black_16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
+            android:text="成为代理商的" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/sign_line" />
+
+        <TextView
+            android:id="@+id/tv_go"
+            style="@style/text_white_16"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/selector_blue_extension"
+            android:gravity="center"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:text="去 支 付" />
     </LinearLayout>
 </LinearLayout>
