@@ -35,12 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-import static com.pi.small.goal.R.id.alipay_right_image;
-import static com.pi.small.goal.R.id.balance_right_image;
-import static com.pi.small.goal.R.id.hook_image;
-import static com.pi.small.goal.R.id.money_text;
 import static com.pi.small.goal.R.id.union_layout;
-import static com.pi.small.goal.R.id.wechat_right_image;
 
 /**
  * 公司：小目标
@@ -51,29 +46,32 @@ import static com.pi.small.goal.R.id.wechat_right_image;
  **/
 public class ExtensionPayActivity extends BaseActivity {
 
-    @InjectView(R.id.view)
-    View view;
-    @InjectView(R.id.left_image)
-    ImageView leftImage;
-    @InjectView(R.id.right_image)
-    ImageView rightImage;
-    @InjectView(money_text)
+
+    @InjectView(R.id.left_image_include)
+    ImageView leftImageInclude;
+    @InjectView(R.id.name_text_include)
+    TextView nameTextInclude;
+    @InjectView(R.id.right_image_include)
+    ImageView rightImageInclude;
+    @InjectView(R.id.tv_ok_include)
+    TextView tvOkInclude;
+    @InjectView(R.id.money_text)
     TextView moneyText;
     @InjectView(R.id.balance_image)
     ImageView balanceImage;
-    @InjectView(balance_right_image)
+    @InjectView(R.id.balance_right_image)
     ImageView balanceRightImage;
     @InjectView(R.id.balance_layout)
     RelativeLayout balanceLayout;
     @InjectView(R.id.wechat_image)
     ImageView wechatImage;
-    @InjectView(wechat_right_image)
+    @InjectView(R.id.wechat_right_image)
     ImageView wechatRightImage;
     @InjectView(R.id.wechat_layout)
     RelativeLayout wechatLayout;
     @InjectView(R.id.alipay_image)
     ImageView alipayImage;
-    @InjectView(alipay_right_image)
+    @InjectView(R.id.alipay_right_image)
     ImageView alipayRightImage;
     @InjectView(R.id.alipay_layout)
     RelativeLayout alipayLayout;
@@ -83,9 +81,9 @@ public class ExtensionPayActivity extends BaseActivity {
     ImageView unionRightImage;
     @InjectView(R.id.card_text)
     TextView cardText;
-    @InjectView(union_layout)
+    @InjectView(R.id.union_layout)
     RelativeLayout unionLayout;
-    @InjectView(hook_image)
+    @InjectView(R.id.hook_image)
     ImageView hookImage;
     @InjectView(R.id.hook_layout)
     LinearLayout hookLayout;
@@ -132,20 +130,25 @@ public class ExtensionPayActivity extends BaseActivity {
         wx_api.registerApp(ThirdUtils.WX_APP_ID);
     }
 
+    @Override
+    public void initData() {
+        super.initData();
 
-    @OnClick({R.id.left_image, R.id.right_image, R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, union_layout, R.id.hook_layout, R.id.pay_text})
+        channel = "balance";
+
+        imageViews = new ImageView[]{balanceRightImage, wechatRightImage, alipayRightImage, unionRightImage};
+        payTypes = new String[]{"balance", "wx", "alipay", "balance"};
+        clickIds = new int[]{R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, R.id.union_layout};
+
+        nameTextInclude.setText("成为代理");
+        rightImageInclude.setVisibility(View.GONE);
+
+    }
+
+    @OnClick({R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, union_layout, R.id.hook_layout, R.id.pay_text})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
-
-            case R.id.left_image:
-                Utils.showToast(this, "支付取消");
-                setResult(Code.FailCode, intent);
-                finish();
-                break;
-            case R.id.right_image:
-
-                break;
             case R.id.balance_layout:
             case R.id.wechat_layout:
             case R.id.alipay_layout:
@@ -186,8 +189,8 @@ public class ExtensionPayActivity extends BaseActivity {
                         }
 
                     } else {
-                        //   DynamicAim();
-                        Utils.showToast(this, "准备支付了");
+                           DynamicAim();
+                      //  Utils.showToast(this, "准备支付了");
                     }
                 } else {
                     Utils.showToast(this, "请仔细阅读相关协议");
@@ -248,15 +251,10 @@ public class ExtensionPayActivity extends BaseActivity {
                 }
 
             }
-        } else if (requestCode == Code.Pay) {
-            Intent intent = new Intent();
-            setResult(Code.SupportAim, intent);
-            finish();
-
-        } else if (requestCode == Code.BalancePay) {
+        }  else if (requestCode == Code.BalancePay) {
             if (data.getStringExtra("password").length() == 6) {
                 password = data.getStringExtra("password");
-                //     DynamicAim();
+                     DynamicAim();
             } else {
                 Utils.showToast(this, "取消输入支付密码");
             }
@@ -264,40 +262,11 @@ public class ExtensionPayActivity extends BaseActivity {
     }
 
 
-//    private void init() {
-//        union_layout.setVisibility(View.GONE);
-//        money_text.setText(money + ".00");
-//        balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
-//
-//        long currentTime = System.currentTimeMillis();
-//        profit_text.setText("预计" + simpleDateFormat.format(new Date(currentTime + 86400000)) + "产生收益," + simpleDateFormat.format(new Date(currentTime + 172800000)) + "收益到账");
-//
-//    }
-
-    @Override
-    public void initData() {
-        super.initData();
-
-        channel = "balance";
-
-        imageViews = new ImageView[]{balanceRightImage, wechatRightImage, alipayRightImage, unionRightImage};
-        payTypes = new String[]{"balance", "wx", "alipay", "balance"};
-        clickIds = new int[]{R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, R.id.union_layout};
-
-
-    }
-
     private void DynamicAim() {
-        RequestParams requestParams = new RequestParams(Url.Url + Url.AimDynamic);
-        requestParams.addHeader("token", Utils.GetToken(this));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("content", content);
-        requestParams.addBodyParameter("aimId", aimId);
-        requestParams.addBodyParameter("money", money);
-        requestParams.addBodyParameter("img1", img1);
-        requestParams.addBodyParameter("img2", img2);
-        requestParams.addBodyParameter("img3", img3);
-        requestParams.addBodyParameter("video", "");
+        RequestParams requestParams = Utils.getRequestParams(this);
+
+        requestParams.setUri(Url.Url + "/agent/buy");
+        requestParams.addBodyParameter("code", "");
         requestParams.addBodyParameter("channel", channel);
         XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
@@ -305,11 +274,9 @@ public class ExtensionPayActivity extends BaseActivity {
 
                 System.out.println("==============AimDynamic=========" + result);
                 try {
-                    String code = new JSONObject(result).getString("code");
-                    if (code.equals("0")) {
+                    if (Utils.callOk(result)) {
                         if (channel.equals("balance")) {
-                            linkId = new JSONObject(result).getJSONObject("result").getJSONObject("dynamic").getString("id");
-                            BalancePay();
+                          //  BalancePay();
                         } else {
                             String json = new JSONObject(result).getJSONObject("result").getString("charge");
                             System.out.println("==============AimDynamic=====json====" + json);

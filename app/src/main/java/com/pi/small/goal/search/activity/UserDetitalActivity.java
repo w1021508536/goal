@@ -65,36 +65,39 @@ import io.rong.imlib.model.UserInfo;
 
 public class UserDetitalActivity extends BaseActivity {
 
-    @InjectView(R.id.head_layout)
-    LinearLayout headLayout;
-    @InjectView(R.id.top_layout)
-    RelativeLayout topLayout;
+
     @InjectView(R.id.left_image)
     ImageView leftImage;
     @InjectView(R.id.more_image)
     ImageView moreImage;
     @InjectView(R.id.chat_image)
     ImageView chatImage;
-    @InjectView(R.id.data_list)
-    MyListView dataList;
-    @InjectView(R.id.pinch_image)
-    PinchImageView pinchImage;
-    @InjectView(R.id.image_layout)
-    RelativeLayout imageLayout;
+    @InjectView(R.id.top_layout)
+    RelativeLayout topLayout;
     @InjectView(R.id.head_image)
     CircleImageView headImage;
     @InjectView(R.id.nick_text)
     TextView nickText;
     @InjectView(R.id.brief_text)
     TextView briefText;
+    @InjectView(R.id.attention_text)
+    TextView attentionText;
     @InjectView(R.id.aims_text)
     TextView aimsText;
     @InjectView(R.id.be_follows_text)
     TextView beFollowsText;
     @InjectView(R.id.follows_text)
     TextView followsText;
+    @InjectView(R.id.head_layout)
+    LinearLayout headLayout;
+    @InjectView(R.id.data_list)
+    MyListView dataList;
     @InjectView(R.id.scrollView)
     PullToRefreshScrollView scrollView;
+    @InjectView(R.id.pinch_image)
+    PinchImageView pinchImage;
+    @InjectView(R.id.image_layout)
+    RelativeLayout imageLayout;
     @InjectView(R.id.attention_text)
     TextView attentionText;
 
@@ -158,6 +161,7 @@ public class UserDetitalActivity extends BaseActivity {
         hotAdapter = new HotAdapter(this);
 //        dataList.setMode(PullToRefreshBase.Mode.BOTH);
         dataList.setAdapter(hotAdapter);
+
 
         scrollView.setMode(PullToRefreshBase.Mode.BOTH);
         scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
@@ -227,6 +231,126 @@ public class UserDetitalActivity extends BaseActivity {
         GetUserData();
     }
 
+    @Override
+    public void initWeight() {
+        super.initWeight();
+
+//        dataList.setOnScrollListener(new AbsListView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//
+//            }
+//
+//            @Override
+//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                //顶部渐变色
+//                if (hotAdapter == null)
+//                    return;
+//                int heigh = headLayout.getHeight();
+//                if (heigh < getScrollY()) {
+//
+//                    //Color.argb(255,0,178,238)
+//                    llTop.setBackgroundColor(Color.argb(255, 255, 255, 255));
+//                } else {
+//                    Log.i("scl", getScrollY() + "");
+//                    float a = 255.0f / (float) heigh;
+//                    a = a * (float) getScrollY();
+//                    if (a > 255)
+//                        a = 255;
+//                    else if (a < 0)
+//                        a = 0;
+//
+//                    llTop.setBackgroundColor(Color.argb((int) a, 255, 255, 255));
+//                    if(a>=250){
+//                        leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
+// moreImage.setImageBitmap(R.mipmap.more_btn_white);
+//                        chatImage.setImageResource(R.mipmap);
+//                    }
+//                }
+//            }
+//        });
+
+    }
+
+    public int getScrollY() {
+        View c = headLayout.getChildAt(0);
+        if (c == null) {
+            return 0;
+        }
+        int firstVisiblePosition = dataList.getFirstVisiblePosition();
+        int top = c.getTop();
+        return -top + firstVisiblePosition * c.getHeight();
+    }
+
+    /**
+     * 下拉刷新
+     */
+    private class GetDownDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
+
+        //子线程请求数据
+        @Override
+        protected List<DynamicEntity> doInBackground(Void... params) {
+            isDown = true;
+            page = 1;
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            GetHotData(page + "", "10");
+            return dynamicEntityList;
+        }
+
+        //主线程更新UI
+        @Override
+        protected void onPostExecute(List<DynamicEntity> result) {
+
+//            hotAdapter.notifyDataSetChanged();
+            //通知RefreshListView 我们已经更新完成
+            scrollView.onRefreshComplete();
+
+            super.onPostExecute(result);
+        }
+    }
+
+    /**
+     * 模拟网络加载数据的   异步请求类
+     * 上拉加载
+     */
+    private class GetUpDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
+
+        //子线程请求数据
+        @Override
+        protected List<DynamicEntity> doInBackground(Void... params) {
+            isDown = false;
+
+            if (page * 10 >= total) {
+
+            } else {
+                page = page + 1;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                GetHotData(page + "", "10");
+            }
+
+
+            return dynamicEntityList;
+        }
+
+        //主线程更新UI
+        @Override
+        protected void onPostExecute(List<DynamicEntity> result) {
+//            hotAdapter.notifyDataSetChanged();
+            scrollView.onRefreshComplete();
+            if (page * 10 >= total) {
+                Utils.showToast(UserDetitalActivity.this, "没有更多数据了");
+            }
+            super.onPostExecute(result);
+        }
+    }
 
     @OnClick({R.id.left_image, R.id.more_image, R.id.chat_image, R.id.attention_text})
     public void onViewClicked(View view) {
@@ -769,7 +893,7 @@ public class UserDetitalActivity extends BaseActivity {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)) + Url.SMALL_PHOTO_URL, imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 2;
                     layoutParams1.width = width;
@@ -779,8 +903,8 @@ public class UserDetitalActivity extends BaseActivity {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)), imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1)), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1)) + Url.SMALL_PHOTO_URL, imageOptions);
 
 
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
@@ -797,9 +921,9 @@ public class UserDetitalActivity extends BaseActivity {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
-                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()) + Url.SMALL_PHOTO_URL, imageOptions);
 
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 3;

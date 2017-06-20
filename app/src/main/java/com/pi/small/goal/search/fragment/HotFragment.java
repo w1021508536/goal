@@ -819,7 +819,7 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)+Url.SMALL_PHOTO_URL2), imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 2;
                     layoutParams1.width = width;
@@ -829,8 +829,8 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)), imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1)), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)+Url.SMALL_PHOTO_URL), imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1)+Url.SMALL_PHOTO_URL), imageOptions);
 
 
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
@@ -847,10 +847,9 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()), imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()), imageOptions);
-                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()), imageOptions);
-
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1())+Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2())+Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3())+Url.SMALL_PHOTO_URL, imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 3;
                     layoutParams1.width = width / 3;

@@ -1,5 +1,6 @@
 package com.pi.small.goal.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -39,7 +40,10 @@ public class XUtil {
 
         loadingDialog = new LoadingDialog(context, "");
 
-        loadingDialog.show();
+        if (((Activity) context).isDestroyed()) {
+
+        } else
+            loadingDialog.show();
 
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -83,7 +87,10 @@ public class XUtil {
 
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
 
-        loadingDialog.show();
+        if (((Activity) context).isDestroyed()) {
+
+        } else
+            loadingDialog.show();
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -123,7 +130,10 @@ public class XUtil {
     public static <T> void put(final RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
 
-        loadingDialog.show();
+        if (((Activity) context).isDestroyed()) {
+
+        } else
+            loadingDialog.show();
 
 
         x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {

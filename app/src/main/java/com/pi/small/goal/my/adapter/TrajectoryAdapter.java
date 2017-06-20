@@ -57,6 +57,7 @@ public class TrajectoryAdapter extends BaseAdapter {
             .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
             .setLoadingDrawableId(R.mipmap.background_load)
             .setFailureDrawableId(R.mipmap.background_fail)
+
             .build();
 
     public TrajectoryAdapter(Context context) {
@@ -186,10 +187,14 @@ public class TrajectoryAdapter extends BaseAdapter {
 //        if (Utils.photoEmpty(dynamicEntity.getDynamic().getImg3())) { //1496802195021.jpg
 //            Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg3())).into(vh.img3Item);
 //        }
+        String addSmallPhoto = Url.SMALL_PHOTO_URL;
+        if ("".equals(dynamicEntity.getDynamic().getImg2())) {
+            addSmallPhoto = Url.SMALL_PHOTO_URL2;
+        }
 
-        x.image().bind(vh.imgItem, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()), imageOptions);
-        x.image().bind(vh.img2Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()), imageOptions);
-        x.image().bind(vh.img3Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()), imageOptions);
+        x.image().bind(vh.imgItem, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()) + addSmallPhoto, imageOptions);
+        x.image().bind(vh.img2Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg2()) + addSmallPhoto, imageOptions);
+        x.image().bind(vh.img3Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg3()) + addSmallPhoto, imageOptions);
 
 
         if (dynamicEntity.getDynamic().getImg1().length() == 0) {

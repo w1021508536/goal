@@ -9,6 +9,8 @@ public class Url {
 
     public static String Url = "http://47.92.79.222:8081";
     public static String PhotoUrl = "http://img.smallaim.cn";
+    public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_300,w_300";
+    public static final String SMALL_PHOTO_URL2 = "?x-oss-process=image/resize,m_lfit,h_600,w_600";
 
     public static String GetCode = "/sms/verifycode/send";
     public static String Register = "/user/register";

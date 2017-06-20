@@ -60,6 +60,7 @@ import io.rong.imkit.manager.IUnReadMessageObserver;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout aim_layout;
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int totalUnreadCount;
     private RelativeLayout message_num_layout;
     private TextView message_num_text;
+    private final static int CWJ_HEAP_SIZE = 55 * 1024 * 1024;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initData();
         getData();
+
+
+   //     VMRuntime.getRuntime().setMinimumHeapSize(CWJ_HEAP_SIZE);
+
     }
 
 
