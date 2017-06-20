@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,9 +74,10 @@ public class ExtensionActivity extends BaseActivity {
         super.onClick(v);
         switch (v.getId()) {
             case R.id.tv_agent:
-                new AlertDialog.Builder(this).setView(R.layout.dialog_hint)
-                          .setTitle("成为代理商")
-                        //         .setMessage("1.成为代理商需要支付698元;" + "\n" + "2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;")
+                View view = LayoutInflater.from(this).inflate(R.layout.dialog_hint, null);
+                new AlertDialog.Builder(this).setView(view)
+                        .setTitle("成为代理商")
+                        //   .setMessage("1.成为代理商需要支付698元;" + "\n" + "2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;")
                         .setPositiveButton("去支付", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

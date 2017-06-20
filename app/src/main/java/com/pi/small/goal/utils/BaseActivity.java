@@ -102,6 +102,7 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         requestParams.addHeader("token", sp.getString("token", ""));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
     }
+
     @Override
     public void onClick(View v) {
 
@@ -123,4 +124,12 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
         return ni != null && ni.isConnectedOrConnecting();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (XUtil.loadingDialog != null) {
+            System.out.println("========not===null=====destroy====");
+            XUtil.loadingDialog.dismiss();
+        }
+    }
 }

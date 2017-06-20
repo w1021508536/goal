@@ -50,8 +50,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -95,7 +93,7 @@ public class HotFragment extends Fragment {
     private int width;
     private List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
     private Parcelable state;
-    private int currentPosition;
+
 
     private boolean isDown = false;
     private int page = 1;
@@ -105,11 +103,13 @@ public class HotFragment extends Fragment {
     private SharedPreferences utilsSharedPreferences;
     private SharedPreferences.Editor utilsEditor;
 
-    private int position = 0;
-
+    private int position_dian = 0;
+    private int currentPosition;
     private List<View> viewList;
     private View itemView;
     private ImageView[] imageViews;
+
+    private TextView text_zhuli;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -161,7 +161,13 @@ public class HotFragment extends Fragment {
                 isDown = false;
 
                 if (page * 10 >= total) {
-
+                    hotList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(getActivity(), "没有更多数据了");
+                            hotList.onRefreshComplete();
+                        }
+                    }, 1000);
                 } else {
                     page = page + 1;
                     GetHotData(page + "", "10");
@@ -187,8 +193,6 @@ public class HotFragment extends Fragment {
             banner_image.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.banner));
             viewList.add(itemView);
         }
-
-
         WrapContentHeightViewPager viewPager = (WrapContentHeightViewPager) view.findViewById(R.id.view_pager);
 
         LinearLayout viewGroup = (LinearLayout) view.findViewById(R.id.viewGroup);
@@ -240,7 +244,7 @@ public class HotFragment extends Fragment {
         @Override
         public void onPageSelected(int position) {
             // TODO Auto-generated method stub
-            position = position;
+            position_dian = position;
             for (int i = 0; i < imageViews.length; i++) {
                 imageViews[position].setBackgroundResource(R.mipmap.icon_dian_yellow);
                 //不是当前选中的page，其小圆点设置为未选中的状态
@@ -249,76 +253,6 @@ public class HotFragment extends Fragment {
                 }
             }
 
-        }
-    }
-
-    /**
-     * 下拉刷新
-     */
-    private class GetDownDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = true;
-            page = 1;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            GetHotData(page + "", "10");
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-
-//            hotAdapter.notifyDataSetChanged();
-            //通知RefreshListView 我们已经更新完成
-            hotList.onRefreshComplete();
-
-            super.onPostExecute(result);
-        }
-    }
-
-    /**
-     * 模拟网络加载数据的   异步请求类
-     * 上拉加载
-     */
-    private class GetUpDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = false;
-
-            if (page * 10 >= total) {
-
-            } else {
-                page = page + 1;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                GetHotData(page + "", "10");
-            }
-
-
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-//            hotAdapter.notifyDataSetChanged();
-            hotList.onRefreshComplete();
-            if (page * 10 >= total) {
-                Utils.showToast(getActivity(), "没有更多数据了");
-            }
-            super.onPostExecute(result);
         }
     }
 
@@ -333,7 +267,6 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=======GetHotData=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -379,7 +312,6 @@ public class HotFragment extends Fragment {
                             dynamicEntity.setVotes(jsonArray.getJSONObject(j).optString("votes"));
                             dynamicEntity.setHaveVote(jsonArray.getJSONObject(j).optString("haveVote"));
 
-                            System.out.println("=============followJson======" + Utils.UtilsSharedPreferences(getActivity()).getString("followList", ""));
                             dynamicEntity.setIsFollow("0");
                             for (int i = 0; i < followList.size(); i++) {
                                 if (dynamicEntity.getUserId().equals(followList.get(i).get("followUserId"))) {
@@ -406,6 +338,7 @@ public class HotFragment extends Fragment {
                         }
 
                         hotAdapter.notifyDataSetChanged();
+                        hotList.onRefreshComplete();
 //                        hotList.getRefreshableView().onRestoreInstanceState(state);
                     } else if (code.equals("100000")) {
                         if (isDown) {
@@ -448,6 +381,10 @@ public class HotFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Code.SupportAim) {
+
+            int number = Integer.valueOf(dynamicEntityList.get(currentPosition).getSupports()) + 1;
+            dynamicEntityList.get(currentPosition).setSupports(number + "");
+            text_zhuli.setText("" + number);
             PutRedWindow();
         } else if (resultCode == Code.FailCode) {
             System.out.println("==========支付失败============");
@@ -474,7 +411,6 @@ public class HotFragment extends Fragment {
                     @Override
                     public void onSuccess(String result) {
                         Utils.showToast(getActivity(), result);
-                        System.out.println("=======感谢红包=========" + result);
                         try {
                             String code = new JSONObject(result).getString("code");
                             if (code.equals("0")) {
@@ -498,7 +434,6 @@ public class HotFragment extends Fragment {
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
                         popupWindow.dismiss();
-                        System.out.println("========ex.getMessage()========" + ex.getMessage());
                         Utils.showToast(getActivity(), ex.getMessage());
                     }
 
@@ -511,12 +446,6 @@ public class HotFragment extends Fragment {
         });
 
 
-//        windowView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                popupWindow.dismiss();
-//            }
-//        });
         popupWindow.setAnimationStyle(R.style.MyDialogStyle);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
@@ -595,7 +524,9 @@ public class HotFragment extends Fragment {
                 viewHolder.contentText.setVisibility(View.VISIBLE);
                 viewHolder.contentText.setText(dynamicEntityList.get(position).getContent());
             }
-            viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
+            if (!dynamicEntityList.get(position).getUpdateTime().equals("")) {
+                viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
+            }
 
             if (!dynamicEntityList.get(position).getAvatar().equals("")) {
                 Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntityList.get(position).getAvatar())).into(viewHolder.headImage);
@@ -620,7 +551,6 @@ public class HotFragment extends Fragment {
                 viewHolder.attentionText.setVisibility(View.VISIBLE);
                 viewHolder.moreLayout.setVisibility(View.VISIBLE);
             }
-            System.out.println("=============dynamicEntityList.get(position).getIsFollow()=========" + dynamicEntityList.get(position).getIsFollow());
             if (dynamicEntityList.get(position).getIsFollow().equals("0")) {
                 viewHolder.attentionText.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.background_white_yellow_corner));
                 viewHolder.attentionText.setTextColor(getActivity().getResources().getColor(R.color.yellow_light));
@@ -715,7 +645,6 @@ public class HotFragment extends Fragment {
             viewHolder.voteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("==============dynamicEntityList.get(position).getId()=======" + dynamicEntityList.get(position).getId());
                     RequestParams requestParams = new RequestParams(Url.Url + Url.Vote);
                     requestParams.addHeader("token", Utils.GetToken(getActivity()));
                     requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -724,7 +653,6 @@ public class HotFragment extends Fragment {
                     XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("================点赞===========" + result);
                             try {
                                 String code = new JSONObject(result).getString("code");
                                 if (code.equals("0")) {
@@ -820,7 +748,6 @@ public class HotFragment extends Fragment {
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
-                                            System.out.println("======================" + ex.getMessage());
                                             Utils.showToast(getActivity(), ex.getMessage());
                                         }
 
@@ -853,6 +780,7 @@ public class HotFragment extends Fragment {
             viewHolder.payImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    text_zhuli = viewHolder.supportNumberText;
                     currentPosition = position;
                     Intent intent = new Intent(getActivity(), SupportMoneyActivity.class);
                     intent.putExtra("dynamicId", dynamicEntityList.get(position).getId());

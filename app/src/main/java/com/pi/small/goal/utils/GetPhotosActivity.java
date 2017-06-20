@@ -54,7 +54,7 @@ public class GetPhotosActivity extends BaseActivity {
     private void init() {
 //        http://img.smallaim.cn/aim/aim_1.jpg
         for (int i = 1; i < 35; i++) {
-            dataList.add("aim/aim_" + i + ".jpg");
+            dataList.add("aim/aim_" + i + ".jpg?x-oss-process=image/resize,m_lfit,h_300,w_300");
         }
         gridView.setAdapter(photosAdapter);
 

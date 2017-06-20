@@ -20,6 +20,8 @@ import org.xutils.x;
 public class XUtil {
 
 
+    public static LoadingDialog loadingDialog;
+
     public interface XCallBackLinstener {
         void onSuccess(String result);
 
@@ -35,7 +37,7 @@ public class XUtil {
 
     public static void post(final RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
 
-        final LoadingDialog loadingDialog = new LoadingDialog(context, "");
+        loadingDialog = new LoadingDialog(context, "");
 
         loadingDialog.show();
 
@@ -43,6 +45,7 @@ public class XUtil {
             @Override
             public void onSuccess(String result) {
                 //     Utils.showToast(context, Utils.getMsg(result));
+                loadingDialog.dismiss();
                 xCallBackLinstener.onSuccess(result);
 
                 if (requestParams.getUri().equals(Url.Url + "/vote/vote")) {
@@ -53,19 +56,19 @@ public class XUtil {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                xCallBackLinstener.onError(ex, isOnCallback);
                 loadingDialog.dismiss();
+                xCallBackLinstener.onError(ex, isOnCallback);
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onFinished() {
+//                loadingDialog.dismiss();
                 xCallBackLinstener.onFinished();
-                loadingDialog.dismiss();
             }
         });
 
@@ -86,6 +89,7 @@ public class XUtil {
             @Override
             public void onSuccess(String result) {
                 //        Utils.showToast(context, Utils.getMsg(result));
+                loadingDialog.dismiss();
                 xCallBackLinstener.onSuccess(result);
                 Log.v("TAg", Utils.getMsg(result));
             }
@@ -93,19 +97,21 @@ public class XUtil {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
                 Log.v("TAg", ex.getMessage());
-                loadingDialog.dismiss();
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
+                System.out.println("========not===null===get==cancelled====");
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onFinished() {
                 xCallBackLinstener.onFinished();
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
             }
         });
 
@@ -124,6 +130,7 @@ public class XUtil {
             @Override
             public void onSuccess(String result) {
                 //        Utils.showToast(context, Utils.getMsg(result));
+                loadingDialog.dismiss();
                 xCallBackLinstener.onSuccess(result);
 
                 if (requestParams.getUri().equals(Url.Url + "/aim/dynamic/comment")) {
@@ -136,21 +143,23 @@ public class XUtil {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                xCallBackLinstener.onError(ex, isOnCallback);
                 loadingDialog.dismiss();
+                xCallBackLinstener.onError(ex, isOnCallback);
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
-
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onFinished() {
                 xCallBackLinstener.onFinished();
-                loadingDialog.dismiss();
+//                loadingDialog.dismiss();
             }
         });
 
     }
+
+
 }

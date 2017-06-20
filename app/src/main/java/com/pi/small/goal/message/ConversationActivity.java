@@ -2,41 +2,45 @@ package com.pi.small.goal.message;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.activity.FriendSetActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Utils;
 
-import butterknife.ButterKnife;
-
-public class ConversationActivity extends BaseActivity {
+public class ConversationActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView left_image;
     private ImageView right_image;
     private TextView name_text;
-
+    private View view;
     private String name;
-
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
-
     private String RY_userId;
+    private MyApplication myApplication;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_conversation);
-        ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_conversation);
+
+
 
         sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
+//        myApplication = new MyApplication();
+//        myApplication.addActivity(this);
 
         RY_userId = getIntent().getData().getQueryParameter("targetId");//单聊   userId
         name = getIntent().getData().getQueryParameter("title");// 昵称
@@ -48,9 +52,17 @@ public class ConversationActivity extends BaseActivity {
         left_image = (ImageView) findViewById(R.id.left_image);
         right_image = (ImageView) findViewById(R.id.right_image);
         name_text = (TextView) findViewById(R.id.name_text);
-
+        view = findViewById(R.id.view);
         if (name != null) {
             name_text.setText(name);
+        }
+
+        int sysVersion = Integer.parseInt(Build.VERSION.SDK);
+        if (sysVersion >= 19) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        } else {
+            view.setVisibility(View.GONE);
         }
 
         left_image.setOnClickListener(this);

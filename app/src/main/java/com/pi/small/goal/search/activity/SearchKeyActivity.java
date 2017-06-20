@@ -100,8 +100,13 @@ public class SearchKeyActivity extends BaseActivity {
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 //         new GetUpDataTask().execute();
-                page = page + 1;
-                GetData();
+                if (page * 10 >= total) {
+                    searchList.onRefreshComplete();
+                    Utils.showToast(SearchKeyActivity.this, "没有更多数据了");
+                } else {
+                    page = page + 1;
+                    GetData();
+                }
             }
         });
 
@@ -246,6 +251,7 @@ public class SearchKeyActivity extends BaseActivity {
                     } else {
                         Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
                     }
+                    searchList.onRefreshComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

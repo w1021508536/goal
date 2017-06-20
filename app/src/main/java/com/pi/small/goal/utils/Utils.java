@@ -90,7 +90,7 @@ public class Utils {
         if (path.equals("")) {
             return "";
         } else if (path.indexOf("http") == -1) {
-            photoPath = Url.PhotoUrl + "/" + path;
+            photoPath = Url.PhotoUrl + "/" + path+"?x-oss-process=image/resize,m_lfit,h_400,w_400";
         } else {
             photoPath = path;
         }

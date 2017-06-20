@@ -290,7 +290,6 @@ public class RedHaveActivity extends BaseActivity {
     private void getRedListNext() {
 
         RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketDynamic);
-        System.out.println("=========GetRedList======change=======" + page);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("dynamicId", dynamicId);
@@ -303,7 +302,7 @@ public class RedHaveActivity extends BaseActivity {
 //    remainMoney":10.00,"remainSize":10,"toUserId":27,"fromUserId":26,"
 //    createTime":1496885913000,"status":1,"type":1,"fromUserNick":"44","fromUserAvatar":""}
 
-                System.out.println("=========GetRedList=============" + result);
+//                System.out.println("=========GetRedList=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -344,7 +343,7 @@ public class RedHaveActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=========getMessage=============" + ex.getMessage());
+//                System.out.println("=========getMessage=============" + ex.getMessage());
                 if (ex.getMessage() != null) {
                     Utils.showToast(RedHaveActivity.this, ex.getMessage());
                 }
@@ -368,7 +367,7 @@ public class RedHaveActivity extends BaseActivity {
         animation.setDuration(1000);//设置动画持续时间
 /** 常用方法 */
         animation.setRepeatCount(10000);//设置重复次数
-animation.setFillAfter(true);//动画执行完后是否停留在执行完的状态
+        animation.setFillAfter(true);//动画执行完后是否停留在执行完的状态
 //animation.setStartOffset(long startOffset);//执行前的等待时间
 
         imgRotat.setAnimation(animation);
@@ -412,10 +411,8 @@ animation.setFillAfter(true);//动画执行完后是否停留在执行完的状�
 //
         for (int i = 0; i < displayList.size(); i++) {
 //            relativeLayoutList.get(i).setVisibility(View.VISIBLE);
-            System.out.println("===========textViewList============" + textViewList.size());
             textViewList.get(i).setText(displayList.get(i).getFromUserNick());
             if (!displayList.get(i).getFromUserAvatar().equals("")) {
-                System.out.println("============displayList.get(i).getFromUserAvatar()==========" + displayList.get(i).getFromUserAvatar());
                 Picasso.with(this).load(Utils.GetPhotoPath(displayList.get(i).getFromUserAvatar())).into(circleImageViewList.get(i));
             } else {
                 circleImageViewList.get(i).setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));

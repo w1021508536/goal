@@ -66,6 +66,11 @@
             android:layout_height="wrap_content" />
 
 
+        <include
+            android:id="@+id/null_layout"
+            layout="@layout/view_empty_member" />
+
+
     </LinearLayout>
 
 </LinearLayout>

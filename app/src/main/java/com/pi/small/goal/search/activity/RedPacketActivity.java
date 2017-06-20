@@ -108,13 +108,13 @@ public class RedPacketActivity extends BaseActivity {
         if (isHave.equals("1")) {
             moneyLayout.setVisibility(View.GONE);
 //            text.setVisibility(View.GONE);
+
             if (!json.equals("")) {
 
                 try {
 
-
+//                    text.setText();
                     JSONArray jsonArray = new JSONObject(json).getJSONArray("result");
-                    System.out.println("==========jsonArray===============" + jsonArray.length());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         map = new HashMap<String, String>();
                         map.put("nick", jsonArray.getJSONObject(i).getString("nick"));

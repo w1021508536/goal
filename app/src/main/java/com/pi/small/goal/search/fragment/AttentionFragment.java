@@ -92,11 +92,14 @@ public class AttentionFragment extends Fragment {
     private int currentPosition;
 
     private boolean isDown = false;
-    private int page = 1;
+    private int intPage = 1;
 
     private int total;
     private SharedPreferences utilsSharedPreferences;
     private SharedPreferences.Editor utilsEditor;
+
+    private TextView text_zhuli;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,102 +135,41 @@ public class AttentionFragment extends Fragment {
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 //          new GetDownDataTask().execute();
                 isDown = true;
-                page = 1;
+                intPage = 1;
 
-                GetHotData(page + "", "10");
+                GetHotData(intPage + "", "10");
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                // new GetUpDataTask().execute();
+
                 isDown = false;
-
-                if (page * 10 >= total) {
-
+                if (intPage * 10 >= total) {
+                    hotList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(getActivity(), "没有更多数据了");
+                            hotList.onRefreshComplete();
+                        }
+                    }, 1000);
                 } else {
-                    page = page + 1;
-                    GetHotData(page + "", "10");
+                    intPage = intPage + 1;
+                    GetHotData(intPage + "", "10");
                 }
+            }
+
+            @Override
+            protected Object clone() throws CloneNotSupportedException {
+                return super.clone();
             }
         });
 
 
-        GetHotData(page + "", "10");
+        GetHotData(intPage + "", "10");
     }
-
-    /**
-     * 下拉刷新
-     */
-    private class GetDownDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = true;
-            page = 1;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            GetHotData(page + "", "10");
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-
-//            hotAdapter.notifyDataSetChanged();
-            //通知RefreshListView 我们已经更新完成
-            hotList.onRefreshComplete();
-
-            super.onPostExecute(result);
-        }
-    }
-
-    /**
-     * 模拟网络加载数据的   异步请求类
-     * 上拉加载
-     */
-    private class GetUpDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = false;
-
-            if (page * 10 >= total) {
-
-            } else {
-                page = page + 1;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                GetHotData(page + "", "10");
-            }
-
-
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-//            hotAdapter.notifyDataSetChanged();
-            hotList.onRefreshComplete();
-            if (page * 10 >= total) {
-                Utils.showToast(getActivity(), "没有更多数据了");
-            }
-            super.onPostExecute(result);
-        }
-    }
-
 
     private void GetHotData(String page, String r) {
-        state = hotList.getRefreshableView().onSaveInstanceState();
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.FollowedSearch);
         requestParams.addHeader("token", Utils.GetToken(getActivity()));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -236,7 +178,6 @@ public class AttentionFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=======GetHotData=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -280,10 +221,8 @@ public class AttentionFragment extends Fragment {
                             if (!Utils.UtilsSharedPreferences(getActivity()).getString("followList", "").equals("")) {
                                 followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(getActivity()).getString("followList", ""));
                             }
-                            System.out.println("=============followList=========" + followList.size());
                             dynamicEntity.setIsFollow("0");
                             for (int i = 0; i < followList.size(); i++) {
-                                System.out.println("=============userId=========" + dynamicEntity.getUserId() + "===" + followList.get(i).get("followUserId"));
                                 if (dynamicEntity.getUserId().equals(followList.get(i).get("followUserId"))) {
                                     dynamicEntity.setIsFollow("1");
                                 }
@@ -308,7 +247,8 @@ public class AttentionFragment extends Fragment {
                         }
 
                         hotAdapter.notifyDataSetChanged();
-                        hotList.getRefreshableView().onRestoreInstanceState(state);
+                        hotList.onRefreshComplete();
+//                        hotList.getRefreshableView().onRestoreInstanceState(state);
                     } else if (code.equals("100000")) {
                         if (isDown) {
                             dynamicEntityList.clear();
@@ -340,6 +280,9 @@ public class AttentionFragment extends Fragment {
                 hotList.onRefreshComplete();
             }
         });
+
+//        state = hotList.getRefreshableView().onSaveInstanceState();
+
     }
 
     @Override
@@ -351,7 +294,9 @@ public class AttentionFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Code.SupportAim) {
-
+            int number = Integer.valueOf(dynamicEntityList.get(currentPosition).getSupports()) + 1;
+            dynamicEntityList.get(currentPosition).setSupports(number + "");
+            text_zhuli.setText("" + number);
             PutRedWindow();
         } else if (resultCode == Code.FailCode) {
             System.out.println("==========支付失败============");
@@ -411,12 +356,6 @@ public class AttentionFragment extends Fragment {
         });
 
 
-//        windowView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                popupWindow.dismiss();
-//            }
-//        });
         popupWindow.setAnimationStyle(R.style.MyDialogStyle);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
@@ -495,9 +434,10 @@ public class AttentionFragment extends Fragment {
                 viewHolder.contentText.setVisibility(View.VISIBLE);
                 viewHolder.contentText.setText(dynamicEntityList.get(position).getContent());
             }
-            viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
+            if (!dynamicEntityList.get(position).getUpdateTime().equals("")) {
+                viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
+            }
 
-//        x.image().bind(viewHolder.head_image, Utils.GetPhotoPath(dataList.get(position).getAvatar()), imageOptions);
 
             if (!dynamicEntityList.get(position).getAvatar().equals("")) {
                 Picasso.with(context).load(Utils.GetPhotoPath(dynamicEntityList.get(position).getAvatar())).into(viewHolder.headImage);
@@ -522,7 +462,6 @@ public class AttentionFragment extends Fragment {
                 viewHolder.attentionText.setVisibility(View.VISIBLE);
                 viewHolder.moreLayout.setVisibility(View.VISIBLE);
             }
-            System.out.println("=============dynamicEntityList.get(position).getIsFollow()=========" + dynamicEntityList.get(position).getIsFollow());
             if (dynamicEntityList.get(position).getIsFollow().equals("0")) {
                 viewHolder.attentionText.setBackgroundDrawable(getActivity().getResources().getDrawable(R.drawable.background_white_yellow_corner));
                 viewHolder.attentionText.setTextColor(getActivity().getResources().getColor(R.color.yellow_light));
@@ -571,7 +510,7 @@ public class AttentionFragment extends Fragment {
 
                                     }
                                     isDown = true;
-                                    GetHotData("1", page * 10 + "");
+                                    GetHotData("1", intPage * 10 + "");
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -617,7 +556,6 @@ public class AttentionFragment extends Fragment {
             viewHolder.voteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("==============dynamicEntityList.get(position).getId()=======" + dynamicEntityList.get(position).getId());
                     RequestParams requestParams = new RequestParams(Url.Url + Url.Vote);
                     requestParams.addHeader("token", Utils.GetToken(getActivity()));
                     requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -626,7 +564,6 @@ public class AttentionFragment extends Fragment {
                     XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("================点赞===========" + result);
                             try {
                                 String code = new JSONObject(result).getString("code");
                                 if (code.equals("0")) {
@@ -722,7 +659,6 @@ public class AttentionFragment extends Fragment {
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
-                                            System.out.println("======================" + ex.getMessage());
                                             Utils.showToast(getActivity(), ex.getMessage());
                                         }
 
@@ -756,6 +692,7 @@ public class AttentionFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     currentPosition = position;
+                    text_zhuli = viewHolder.supportNumberText;
                     Intent intent = new Intent(getActivity(), SupportMoneyActivity.class);
                     intent.putExtra("dynamicId", dynamicEntityList.get(position).getId());
                     intent.putExtra("aimId", dynamicEntityList.get(position).getAimId());

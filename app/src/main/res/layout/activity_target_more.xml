@@ -110,8 +110,7 @@
         <com.pi.small.goal.weight.PinchImageView
             android:id="@+id/pimg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/image2" />
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 

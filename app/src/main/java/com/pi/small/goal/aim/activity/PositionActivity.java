@@ -127,7 +127,7 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 //      new GetDownDataTask().execute();
                 Refresh();
-                position_list.onRefreshComplete();
+//                position_list.onRefreshComplete();
             }
 
 
@@ -141,7 +141,7 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
                     query.setPageNum(page);
                     poiSearch.searchPOIAsyn();
                 }
-                position_list.onRefreshComplete();
+//                position_list.onRefreshComplete();
             }
         });
 
@@ -181,66 +181,6 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
         poiSearch.searchPOIAsyn();
     }
 
-    /**
-     * 下拉刷新
-     */
-    private class GetDownDataTask extends AsyncTask<Void, Void, List<Map<String, String>>> {
-
-        //子线程请求数据
-        @Override
-        protected List<Map<String, String>> doInBackground(Void... params) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            Refresh();
-            return dataList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<Map<String, String>> result) {
-
-            //通知RefreshListView 我们已经更新完成
-            position_list.onRefreshComplete();
-
-            super.onPostExecute(result);
-        }
-    }
-
-    private class GetUpEvaluateDataTask extends AsyncTask<Void, Void, List<Map<String, String>>> {
-
-        //子线程请求数据
-        @Override
-        protected List<Map<String, String>> doInBackground(Void... params) {
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if (MaxPage == -1) {
-                page = page + 1;
-
-                query.setPageNum(page);
-                poiSearch.searchPOIAsyn();
-            }
-            return dataList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<Map<String, String>> result) {
-
-            if (MaxPage != -1) {
-                Utils.showToast(PositionActivity.this, "无更多数据");
-            }
-            //通知RefreshListView 我们已经更新完成
-            position_list.onRefreshComplete();
-            super.onPostExecute(result);
-        }
-    }
 
     private void SearchData(String content) {
         if (TextUtils.isEmpty(content)) {
@@ -287,6 +227,7 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
 
             }
         }
+        position_list.onRefreshComplete();
 
 
         positionAdapter.notifyDataSetChanged();

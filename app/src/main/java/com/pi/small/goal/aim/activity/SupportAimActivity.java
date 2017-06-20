@@ -510,7 +510,7 @@ public class SupportAimActivity extends BaseActivity {
                     popupWindow.dismiss();
                 } else {
                     if (Float.valueOf(money_edit.getText().toString().trim()) < (Float.valueOf(10))) {
-                        Utils.showToast(SupportAimActivity.this, "存入金額不得小于10元");
+                        Utils.showToast(SupportAimActivity.this, "存入金额不得小于10元");
                     } else {
                         payMoney = money_edit.getText().toString().trim();
                         money_text.setText(payMoney);

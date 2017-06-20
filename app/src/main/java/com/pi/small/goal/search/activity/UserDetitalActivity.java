@@ -98,6 +98,7 @@ public class UserDetitalActivity extends BaseActivity {
     @InjectView(R.id.attention_text)
     TextView attentionText;
 
+
     private String userId;
 
     private String id;
@@ -174,13 +175,28 @@ public class UserDetitalActivity extends BaseActivity {
                 isDown = false;
 
                 if (page * 10 >= total) {
-
+                    scrollView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(UserDetitalActivity.this, "没有更多数据了");
+                            scrollView.onRefreshComplete();
+                        }
+                    }, 1000);
                 } else {
                     page = page + 1;
                     GetHotData(page + "", "10");
                 }
             }
         });
+        view = scrollView.getRefreshableView();
+
+        view.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });
+
         if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
             followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(this).getString("followList", ""));
         }
@@ -211,75 +227,6 @@ public class UserDetitalActivity extends BaseActivity {
         GetUserData();
     }
 
-    /**
-     * 下拉刷新
-     */
-    private class GetDownDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = true;
-            page = 1;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            GetHotData(page + "", "10");
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-
-//            hotAdapter.notifyDataSetChanged();
-            //通知RefreshListView 我们已经更新完成
-            scrollView.onRefreshComplete();
-
-            super.onPostExecute(result);
-        }
-    }
-
-    /**
-     * 模拟网络加载数据的   异步请求类
-     * 上拉加载
-     */
-    private class GetUpDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = false;
-
-            if (page * 10 >= total) {
-
-            } else {
-                page = page + 1;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                GetHotData(page + "", "10");
-            }
-
-
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-//            hotAdapter.notifyDataSetChanged();
-            scrollView.onRefreshComplete();
-            if (page * 10 >= total) {
-                Utils.showToast(UserDetitalActivity.this, "没有更多数据了");
-            }
-            super.onPostExecute(result);
-        }
-    }
 
     @OnClick({R.id.left_image, R.id.more_image, R.id.chat_image, R.id.attention_text})
     public void onViewClicked(View view) {

@@ -76,11 +76,12 @@ public class RedPacketAdapter extends BaseAdapter {
 
         viewHolder.name_text.setText(dataList.get(position).get("nick"));
 
-        if (!Utils.GetPhotoPath(dataList.get(position).get("avatar")).equals("")) {
+
+        if (!dataList.get(position).get("avatar").equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).get("avatar"))).into(viewHolder.head_image);
+        } else {
+            viewHolder.head_image.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
         }
-//                redPacketRecordId": 121, "userId": 33, "money": 1.06, "
-//                packetId": 11, "createTime": 1496382687000, "type": 1, "nick": "Doris%F0%9F%90%BF", "avatar": "jpg"
         viewHolder.time_text.setText(simpleDateFormat.format(new Date(Long.valueOf(dataList.get(position).get("createTime")))));
         viewHolder.right_text.setText(dataList.get(position).get("money") + "元");
         return convertView;

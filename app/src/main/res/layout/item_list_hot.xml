@@ -36,7 +36,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="xxx"
                 android:textColor="@color/text_aim"
                 android:textSize="14dp" />
 
@@ -46,8 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="3dp"
-                android:text="xxx" />
+                android:layout_marginTop="3dp" />
 
         </LinearLayout>
 
