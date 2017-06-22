@@ -39,8 +39,6 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
 
         sharedPreferences = Utils.UserSharedPreferences(this);
         editor = sharedPreferences.edit();
-//        myApplication = new MyApplication();
-//        myApplication.addActivity(this);
 
         RY_userId = getIntent().getData().getQueryParameter("targetId");//单聊   userId
         name = getIntent().getData().getQueryParameter("title");// 昵称

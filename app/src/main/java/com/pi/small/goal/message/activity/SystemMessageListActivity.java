@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
@@ -33,7 +35,9 @@ public class SystemMessageListActivity extends BaseActivity  {
 
     private ImageView left_image;
     private ListView system_list;
-
+    private RelativeLayout nullLayout;
+    private ImageView imgEmpty;
+    private TextView tvEmpty;
     private SystemMessageListAdapter systemListAdapter;
 
     private List<Map<String, String>> dataList;
@@ -62,10 +66,13 @@ public class SystemMessageListActivity extends BaseActivity  {
     private void init() {
         left_image = (ImageView) findViewById(R.id.left_image);
         system_list = (ListView) findViewById(R.id.system_list);
-
+        nullLayout = (RelativeLayout) findViewById(R.id.null_layout);
+        imgEmpty = (ImageView) findViewById(R.id.img_empty);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
         system_list.setAdapter(systemListAdapter);
 
         left_image.setOnClickListener(this);
+        nullLayout.setOnClickListener(this);
 
         system_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -75,14 +82,21 @@ public class SystemMessageListActivity extends BaseActivity  {
                     intent.setClass(SystemMessageListActivity.this, SystemMessageDataWebActivity.class);
                     intent.putExtra("url", dataList.get(position).get("url"));
                     startActivity(intent);
-                } else {
-
                 }
             }
         });
 
+        if (Utils.isNetworkConnected(SystemMessageListActivity.this)) {
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.GONE);
+            GetSystemListData();
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+        }
 
-        GetSystemListData();
     }
 
     @Override
@@ -91,6 +105,19 @@ public class SystemMessageListActivity extends BaseActivity  {
         switch (v.getId()) {
             case R.id.left_image:
                 finish();
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(SystemMessageListActivity.this)) {
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    GetSystemListData();
+                } else {
+                    Utils.showToast(SystemMessageListActivity.this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
                 break;
         }
 
@@ -125,10 +152,30 @@ public class SystemMessageListActivity extends BaseActivity  {
 
                             dataList.add(map);
                         }
+                        if (dataList.size() > 0) {
+                            nullLayout.setVisibility(View.GONE);
+                        } else {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_info);
+                            tvEmpty.setText("暂 无 任 何 消 息 通 知 ~");
+                        }
                         systemListAdapter.notifyDataSetChanged();
 
+                    } else if (code.equals("100000")) {
+                        if (dataList.size() < 1) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_info);
+                            tvEmpty.setText("暂 无 任 何 消 息 通 知 ~");
+                        }
+
                     } else {
-                        Utils.showToast(SystemMessageListActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -139,7 +186,10 @@ public class SystemMessageListActivity extends BaseActivity  {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
             }
 
             @Override

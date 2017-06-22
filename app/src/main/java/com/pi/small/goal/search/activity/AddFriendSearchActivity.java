@@ -103,7 +103,8 @@ public class AddFriendSearchActivity extends BaseActivity {
     }
 
     private void init() {
-        GetUserRecommend();
+        if (Utils.isNetworkConnected(this))
+            GetUserRecommend();
 
     }
 
@@ -117,7 +118,7 @@ public class AddFriendSearchActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=====GetUserRecommend=======" + result);
+
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -164,16 +165,11 @@ public class AddFriendSearchActivity extends BaseActivity {
                                 aimEntityList.add(aimEntity);
                             }
 
-                            System.out.println("=============aimEntityList=============" + aimEntityList.size() + "====" + i);
                             userSearchEntity.setAimEntityList(aimEntityList);
                             userSearchEntityList.add(userSearchEntity);
 
                         }
 
-                        for (int i = 0; i < userSearchEntityList.size(); i++) {
-                            System.out.println("=============userSearchEntityList=============" + userSearchEntityList.get(i).getAimEntityList().size() + "====" + i);
-                        }
-//                        addFriendSearchAdapter.notifyDataSetChanged();
                         addFriendSearchAdapter = new AddFriendSearchAdapter(AddFriendSearchActivity.this);
                         userList.setAdapter(addFriendSearchAdapter);
                     } else {
@@ -187,7 +183,6 @@ public class AddFriendSearchActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=====ex=======" + ex.getMessage());
                 Utils.showToast(AddFriendSearchActivity.this, ex.getMessage());
             }
 

@@ -93,13 +93,17 @@
                 android:imeOptions="actionSearch"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:textColorHint="@color/gray_heavy"
                 android:textColor="@color/gray_heavy"
+                android:textColorHint="@color/gray_heavy"
                 android:textSize="14dp" />
         </LinearLayout>
 
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <ListView
         android:id="@+id/friends_list"
@@ -113,4 +117,13 @@
         android:headerDividersEnabled="false"
         android:smoothScrollbar="true" />
 
+        <RelativeLayout
+            android:id="@+id/null_layout"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="match_parent">
+
+            <include layout="@layout/view_empty_search" />
+        </RelativeLayout>
+    </RelativeLayout>
 </LinearLayout>

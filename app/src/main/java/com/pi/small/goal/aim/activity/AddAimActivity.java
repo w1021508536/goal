@@ -3,6 +3,7 @@ package com.pi.small.goal.aim.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +25,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.pi.small.goal.MainActivity;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
@@ -82,26 +89,34 @@ public class AddAimActivity extends BaseActivity {
 
     private ArrayList<AimEntity> aimList;
 
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    //声明定位回调监听器
+    public AMapLocationListener mLocationListener;
+
+    public AMapLocationClientOption mLocationOption;
+
+    private SharedPreferences userSharedPreferences;
+    private SharedPreferences.Editor userEditor;
+
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
-
-
-    String cutPath;
-    String newPath;
+    final public static int REQUEST_CODE_ASK_CALL_POSITION = 125;
 
     private int photoFrom = 0;
-    private ImageOptions imageOptions = new ImageOptions.Builder()
-            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-            .setLoadingDrawableId(R.drawable.image1)
-            .setFailureDrawableId(R.drawable.image1)
-            .build();
+    private ImageOptions imageOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_add_aim);
         super.onCreate(savedInstanceState);
-
-
+        userSharedPreferences = Utils.UserSharedPreferences(this);
+        userEditor = userSharedPreferences.edit();
+        imageOptions = new ImageOptions.Builder()
+                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                .setLoadingDrawableId(R.drawable.image2)
+                .setFailureDrawableId(R.drawable.image1)
+                .build();
         aimList = new ArrayList<AimEntity>();
 
         cycle_window = "6";
@@ -110,13 +125,64 @@ public class AddAimActivity extends BaseActivity {
             cycleList.add(String.valueOf(i));
         }
 
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        mLocationClient = new AMapLocationClient(this);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setOnceLocation(true);
+        //设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+//        //启动定位
+//        mLocationClient.startLocation();
+
+        mLocationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+
+
+                if (aMapLocation != null) {
+                    //解析定位结果
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //定位成功回调信息，设置相关消息
+                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                        aMapLocation.getLatitude();//获取纬度
+                        aMapLocation.getLongitude();//获取经度
+                        aMapLocation.getAccuracy();//获取精度信息
+
+                        userEditor.putString("latitude", String.valueOf(aMapLocation.getLatitude()));
+                        userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
+                        if (aMapLocation.getCity().substring(aMapLocation.getCity().length() - 1, aMapLocation.getCity().length()).equals("市")) {
+                            userEditor.putString("city", aMapLocation.getCity().substring(0, aMapLocation.getCity().length() - 1));
+                        } else {
+                            userEditor.putString("city", aMapLocation.getCity());
+                        }
+                        userEditor.commit();
+                        Intent intent = new Intent();
+                        intent.setClass(AddAimActivity.this, PositionActivity.class);
+                        startActivityForResult(intent, Code.PositionCode);
+
+                    } else {
+                        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+//                        Log.e("AmapError", "location Error, ErrCode:"
+//                                + aMapLocation.getErrorCode() + ", errInfo:"
+//                                + aMapLocation.getErrorInfo());
+
+                        Utils.showToast(AddAimActivity.this, "定位失败");
+
+                    }
+                }
+                position_layout.setClickable(true);
+            }
+        };
+
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+
         init();
     }
 
-    @Override
-    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(parent, name, context, attrs);
-    }
 
     private void init() {
         left_image = (ImageView) findViewById(R.id.left_image);
@@ -179,9 +245,25 @@ public class AddAimActivity extends BaseActivity {
 
                 break;
             case R.id.position_layout:
+                position_layout.setClickable(false);
+                if (Utils.UserSharedPreferences(this).getString("longitude", "").equals("")) {
+                    if (Build.VERSION.SDK_INT >= 23) {
 
-                intent.setClass(this, PositionActivity.class);
-                startActivityForResult(intent, Code.PositionCode);
+                        int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                        if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_CALL_POSITION);
+                            return;
+                        } else {
+                            mLocationClient.startLocation();
+                        }
+                    } else {
+                        mLocationClient.startLocation();
+                    }
+                } else {
+                    intent.setClass(this, PositionActivity.class);
+                    startActivityForResult(intent, Code.PositionCode);
+                }
+
 
                 break;
             case R.id.photo_image:
@@ -234,8 +316,7 @@ public class AddAimActivity extends BaseActivity {
                     }
                 } else {
                     // Permission Denied
-                    Toast.makeText(AddAimActivity.this, "您禁止了相机权限", Toast.LENGTH_SHORT)
-                            .show();
+                    Utils.showToast(AddAimActivity.this, "您禁止了相机权限");
                 }
                 break;
             case REQUEST_CODE_ASK_CALL_STORGE:
@@ -245,9 +326,15 @@ public class AddAimActivity extends BaseActivity {
                     intent.setClass(this, ChoosePhotoActivity.class);
                     startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
                 } else {
-                    // Permission Denied
-                    Toast.makeText(AddAimActivity.this, "您禁止了写入权限", Toast.LENGTH_SHORT)
-                            .show();
+                    Utils.showToast(AddAimActivity.this, "您禁止了写入权限");
+                }
+                break;
+            case REQUEST_CODE_ASK_CALL_POSITION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationClient.startLocation();
+                } else {
+                    position_layout.setClickable(true);
+                    Utils.showToast(AddAimActivity.this, "您禁止了定位权限");
                 }
                 break;
             default:
@@ -269,6 +356,9 @@ public class AddAimActivity extends BaseActivity {
                     position = data.getStringExtra("position");
                     province = data.getStringExtra("province");
                     city = data.getStringExtra("city");
+                    if (city.substring(city.length() - 1, city.length()).equals("市")) {
+                        city = city.substring(0, city.length() - 1);
+                    }
                     position_text.setText(position);
                 }
             } else if (resultCode == Code.SupportAim) {

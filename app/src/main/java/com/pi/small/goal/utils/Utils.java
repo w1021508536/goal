@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +92,7 @@ public class Utils {
         if (path.equals("")) {
             return "";
         } else if (path.indexOf("http") == -1) {
-            photoPath = Url.PhotoUrl + "/" + path+"?x-oss-process=image/resize,m_lfit,h_400,w_400";
+            photoPath = Url.PhotoUrl + "/" + path;
         } else {
             photoPath = path;
         }
@@ -489,5 +491,11 @@ public class Utils {
         matrix.postRotate(readPictureDegree(path)); /*翻转90度*/
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix,
                 true);
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isConnectedOrConnecting();
     }
 }

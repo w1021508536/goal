@@ -15,7 +15,6 @@ public class MemberEntity {
     private String volume;
     private String nick;
     private String avatar;
-    private List<MemberEntity> memberEntityList;
 
     public String getId() {
         return id;
@@ -79,14 +78,6 @@ public class MemberEntity {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public List<MemberEntity> getMemberEntityList() {
-        return memberEntityList;
-    }
-
-    public void setMemberEntityList(List<MemberEntity> memberEntityList) {
-        this.memberEntityList = memberEntityList;
     }
 
 

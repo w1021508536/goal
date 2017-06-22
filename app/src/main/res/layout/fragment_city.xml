@@ -4,36 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_system_list">
 
-    <RelativeLayout
-        android:id="@+id/null_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/background_system_list"
-        android:visibility="gone">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/bg_null_data" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="暂时没有任何数据"
-                android:textColor="@color/gray_heavy"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-
-    </RelativeLayout>
 
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/hot_list"
@@ -47,7 +18,16 @@
         android:headerDividersEnabled="false"
         android:scrollbars="none"
         android:smoothScrollbar="true" />
+    <RelativeLayout
+        android:id="@+id/null_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
+        <include
+            layout="@layout/view_empty_nodata"/>
+
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/image_layout"
         android:layout_width="match_parent"

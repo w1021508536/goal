@@ -5,30 +5,13 @@
     android:layout_height="match_parent"
     android:background="@mipmap/background_radar">
 
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="110sp"
-
-        android:src="@mipmap/scan_circle" />
-
-    <ImageView
-        android:id="@+id/img_rotat"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="110dp"
-        android:src="@mipmap/scan_part_circle"
-        android:visibility="visible" />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/view"
         android:orientation="horizontal"
         android:paddingBottom="5dp"
         android:paddingLeft="12dp"
+
         android:paddingRight="12dp"
         android:paddingTop="5dp">
 
@@ -60,289 +43,312 @@
 
     </RelativeLayout>
 
-
     <RelativeLayout
-        android:id="@+id/four_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="170dp"
-        android:layout_marginTop="100dp"
-        android:visibility="gone">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/four_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
 
         <ImageView
-            android:id="@+id/four_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="110sp"
 
-        <TextView
-            android:id="@+id/four_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/three_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="170dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/three_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
+            android:src="@mipmap/scan_circle" />
 
         <ImageView
-            android:id="@+id/three_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
+            android:id="@+id/img_rotat"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="110dp"
+            android:src="@mipmap/scan_part_circle"
+            android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/three_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/six_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="240dp"
-        android:layout_marginTop="290dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/six_head_image"
-            android:layout_width="60dp"
+        <RelativeLayout
+            android:id="@+id/four_layout"
+            android:layout_width="70dp"
             android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
+            android:layout_marginLeft="170dp"
+            android:layout_marginTop="100dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/four_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/four_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/four_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/three_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="170dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/three_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/three_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/three_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/six_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="240dp"
+            android:layout_marginTop="290dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/six_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/six_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/six_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/seven_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="260dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/seven_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/seven_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/seven_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/two_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="320dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/two_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/two_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/two_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/one_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="180dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/one_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/one_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/one_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/five_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="180dp"
+            android:layout_marginTop="195dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/five_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/five_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/five_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/eight_layout"
+            android:layout_width="70dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="190dp"
+            android:layout_marginTop="370dp"
+            android:visibility="gone">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/eight_head_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@mipmap/icon_head" />
+
+            <ImageView
+                android:id="@+id/eight_red_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_money_radar_on" />
+
+            <TextView
+                android:id="@+id/eight_text"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_transparent_gray_corner"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:textColor="@color/white"
+                android:textSize="12dp" />
+        </RelativeLayout>
 
         <ImageView
-            android:id="@+id/six_red_image"
+            android:id="@+id/change_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
-
-        <TextView
-            android:id="@+id/six_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/seven_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="260dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/seven_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
-
-        <ImageView
-            android:id="@+id/seven_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
-
-        <TextView
-            android:id="@+id/seven_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
+            android:src="@mipmap/icon_radar_change_off" />
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/two_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="320dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/two_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
-
-        <ImageView
-            android:id="@+id/two_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
-
-        <TextView
-            android:id="@+id/two_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/one_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginTop="180dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/one_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
-
-        <ImageView
-            android:id="@+id/one_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
-
-        <TextView
-            android:id="@+id/one_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:id="@+id/five_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="180dp"
-        android:layout_marginTop="195dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/five_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
-
-        <ImageView
-            android:id="@+id/five_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
-
-        <TextView
-            android:id="@+id/five_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/eight_layout"
-        android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="190dp"
-        android:layout_marginTop="370dp"
-        android:visibility="gone">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/eight_head_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/icon_head" />
-
-        <ImageView
-            android:id="@+id/eight_red_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_money_radar_on" />
-
-        <TextView
-            android:id="@+id/eight_text"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/background_transparent_gray_corner"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="12dp" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/change_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:src="@mipmap/icon_radar_change_off" />
 
 </RelativeLayout>

@@ -106,7 +106,7 @@ public class XUtil {
             public void onError(Throwable ex, boolean isOnCallback) {
                 loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
-                Log.v("TAg", ex.getMessage());
+//                Log.v("TAg", ex.getMessage());
             }
 
             @Override

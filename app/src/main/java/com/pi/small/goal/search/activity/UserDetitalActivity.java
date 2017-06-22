@@ -3,8 +3,8 @@ package com.pi.small.goal.search.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,17 +16,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.activity.AimMoreActivity;
@@ -65,45 +66,32 @@ import io.rong.imlib.model.UserInfo;
 
 public class UserDetitalActivity extends BaseActivity {
 
+    private ImageView leftImage;
+    private ImageView moreImage;
+    private ImageView chatImage;
+    private RelativeLayout topLayout;
+    private PinchImageView pinchImage;
+    private RelativeLayout imageLayout;
+    private PullToRefreshListView pullToRefreshListView;
+    private RelativeLayout nullLayout;
+    private ImageView imgEmpty;
+    private TextView tvEmpty;
 
-    @InjectView(R.id.left_image)
-    ImageView leftImage;
-    @InjectView(R.id.more_image)
-    ImageView moreImage;
-    @InjectView(R.id.chat_image)
-    ImageView chatImage;
-    @InjectView(R.id.top_layout)
-    RelativeLayout topLayout;
-    @InjectView(R.id.head_image)
-    CircleImageView headImage;
-    @InjectView(R.id.nick_text)
-    TextView nickText;
-    @InjectView(R.id.brief_text)
-    TextView briefText;
-    @InjectView(R.id.attention_text)
-    TextView attentionText;
-    @InjectView(R.id.aims_text)
-    TextView aimsText;
-    @InjectView(R.id.be_follows_text)
-    TextView beFollowsText;
-    @InjectView(R.id.follows_text)
-    TextView followsText;
-    @InjectView(R.id.head_layout)
-    LinearLayout headLayout;
-    @InjectView(R.id.data_list)
-    MyListView dataList;
-    @InjectView(R.id.scrollView)
-    PullToRefreshScrollView scrollView;
-    @InjectView(R.id.pinch_image)
-    PinchImageView pinchImage;
-    @InjectView(R.id.image_layout)
-    RelativeLayout imageLayout;
-    @InjectView(R.id.attention_text)
-    TextView attentionText;
+    private ListView listView;
+
+    private CircleImageView head_image;
+    private TextView nick_text;
+    private TextView brief_text;
+    private TextView attention_text;
+    private TextView aims_text;
+    private TextView be_follows_text;
+    private TextView follows_text;
+    private RelativeLayout no_data_layout;
+    private ImageView img_data_empty;
+    private TextView tv_data_empty;
 
 
     private String userId;
-
     private String id;
     private String nick;
     private String avatar;
@@ -123,8 +111,6 @@ public class UserDetitalActivity extends BaseActivity {
 
     private HotAdapter hotAdapter;
 
-    private View currentView;
-
     private int width;
     private List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
     private Parcelable state;
@@ -140,15 +126,13 @@ public class UserDetitalActivity extends BaseActivity {
 
     private int isFollow = 0;
 
+    private View head_view;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detital);
-        ButterKnife.inject(this);
+        super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            setTranslucentStatus(true);
-        }
         utilsSharedPreferences = Utils.UtilsSharedPreferences(this);
         utilsEditor = utilsSharedPreferences.edit();
 
@@ -158,32 +142,66 @@ public class UserDetitalActivity extends BaseActivity {
 
         dynamicEntityList = new ArrayList<DynamicEntity>();
 
+        init();
+
+
+    }
+
+    private void init() {
+        leftImage = (ImageView) findViewById(R.id.left_image);
+        moreImage = (ImageView) findViewById(R.id.more_image);
+        chatImage = (ImageView) findViewById(R.id.chat_image);
+        topLayout = (RelativeLayout) findViewById(R.id.top_layout);
+        pinchImage = (PinchImageView) findViewById(R.id.pinch_image);
+        imageLayout = (RelativeLayout) findViewById(R.id.image_layout);
+        pullToRefreshListView = (PullToRefreshListView) findViewById(R.id.data_list);
+        nullLayout = (RelativeLayout) findViewById(R.id.null_layout);
+        imgEmpty = (ImageView) findViewById(R.id.img_empty);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
+
+        head_view = LayoutInflater.from(this).inflate(R.layout.head_user_view, null);
+        listView = pullToRefreshListView.getRefreshableView();
+
+
+        head_image = (CircleImageView) head_view.findViewById(R.id.head_image);
+        nick_text = (TextView) head_view.findViewById(R.id.nick_text);
+        brief_text = (TextView) head_view.findViewById(R.id.brief_text);
+        attention_text = (TextView) head_view.findViewById(R.id.attention_text);
+        aims_text = (TextView) head_view.findViewById(R.id.aims_text);
+        be_follows_text = (TextView) head_view.findViewById(R.id.be_follows_text);
+        follows_text = (TextView) head_view.findViewById(R.id.follows_text);
+        no_data_layout = (RelativeLayout) head_view.findViewById(R.id.no_data_layout);
+        img_data_empty = (ImageView) findViewById(R.id.img_data_empty);
+        tv_data_empty = (TextView) findViewById(R.id.tv_data_empty);
+
+
         hotAdapter = new HotAdapter(this);
-//        dataList.setMode(PullToRefreshBase.Mode.BOTH);
-        dataList.setAdapter(hotAdapter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            setTranslucentStatus(true);
+        }
 
 
-        scrollView.setMode(PullToRefreshBase.Mode.BOTH);
-        scrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
+        pullToRefreshListView.setAdapter(hotAdapter);
+        pullToRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
+        pullToRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onPullDownToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                //        new GetDownDataTask().execute();
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 isDown = true;
                 page = 1;
                 GetHotData(page + "", "10");
             }
 
             @Override
-            public void onPullUpToRefresh(PullToRefreshBase<ScrollView> pullToRefreshBase) {
-                //  new GetUpDataTask().execute();
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 isDown = false;
 
                 if (page * 10 >= total) {
-                    scrollView.postDelayed(new Runnable() {
+                    pullToRefreshListView.postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             Utils.showToast(UserDetitalActivity.this, "没有更多数据了");
-                            scrollView.onRefreshComplete();
+                            pullToRefreshListView.onRefreshComplete();
                         }
                     }, 1000);
                 } else {
@@ -192,14 +210,41 @@ public class UserDetitalActivity extends BaseActivity {
                 }
             }
         });
-        view = scrollView.getRefreshableView();
 
-        view.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
             }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //顶部渐变色
+                if (hotAdapter == null)
+                    return;
+                int heigh = topLayout.getHeight();
+                if (heigh < getScrollY()) {
+
+                    //Color.argb(255,0,178,238)
+                    topLayout.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                } else {
+                    float a = 255.0f / (float) heigh;
+                    a = a * (float) getScrollY();
+                    if (a > 255)
+                        a = 255;
+                    else if (a < 0)
+                        a = 0;
+
+                    topLayout.setBackgroundColor(Color.argb((int) a, 255, 255, 255));
+                    if (a >= 250) {
+                        leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
+                        moreImage.setImageResource(R.mipmap.more_btn_white);
+//                        chatImage.setImageResource(R.mipmap);
+                    }
+                }
+            }
         });
+
 
         if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
             followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(this).getString("followList", ""));
@@ -207,17 +252,16 @@ public class UserDetitalActivity extends BaseActivity {
 
         for (int i = 0; i < followList.size(); i++) {
             if (userId.equals(followList.get(i).get("followUserId"))) {
-                System.out.print("==========haha===========" + userId + "=============" + followList.get(i).get("followUserId"));
                 isFollow = 1;
             }
         }
 
         if (isFollow == 1) {
-            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
-            attentionText.setText("已关注");
+            attention_text.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
+            attention_text.setText("已关注");
         } else {
-            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
-            attentionText.setText("关注");
+            attention_text.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
+            attention_text.setText("关注");
         }
 
         if (userId.equals(Utils.UserSharedPreferences(this).getString("id", ""))) {
@@ -228,141 +272,45 @@ public class UserDetitalActivity extends BaseActivity {
             moreImage.setVisibility(View.VISIBLE);
         }
 
-        GetUserData();
-    }
 
-    @Override
-    public void initWeight() {
-        super.initWeight();
+        leftImage.setOnClickListener(this);
+        moreImage.setOnClickListener(this);
+        chatImage.setOnClickListener(this);
+        attention_text.setOnClickListener(this);
+        nullLayout.setOnClickListener(this);
+        no_data_layout.setOnClickListener(this);
+        if (Utils.isNetworkConnected(this)) {
+            GetUserData();
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
 
-//        dataList.setOnScrollListener(new AbsListView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//            }
-//
-//            @Override
-//            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-//                //顶部渐变色
-//                if (hotAdapter == null)
-//                    return;
-//                int heigh = headLayout.getHeight();
-//                if (heigh < getScrollY()) {
-//
-//                    //Color.argb(255,0,178,238)
-//                    llTop.setBackgroundColor(Color.argb(255, 255, 255, 255));
-//                } else {
-//                    Log.i("scl", getScrollY() + "");
-//                    float a = 255.0f / (float) heigh;
-//                    a = a * (float) getScrollY();
-//                    if (a > 255)
-//                        a = 255;
-//                    else if (a < 0)
-//                        a = 0;
-//
-//                    llTop.setBackgroundColor(Color.argb((int) a, 255, 255, 255));
-//                    if(a>=250){
-//                        leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
-// moreImage.setImageBitmap(R.mipmap.more_btn_white);
-//                        chatImage.setImageResource(R.mipmap);
-//                    }
-//                }
-//            }
-//        });
+        }
 
     }
+
 
     public int getScrollY() {
-        View c = headLayout.getChildAt(0);
+        View c = listView.getChildAt(0);
         if (c == null) {
             return 0;
         }
-        int firstVisiblePosition = dataList.getFirstVisiblePosition();
+        int firstVisiblePosition = listView.getFirstVisiblePosition();
         int top = c.getTop();
         return -top + firstVisiblePosition * c.getHeight();
     }
 
-    /**
-     * 下拉刷新
-     */
-    private class GetDownDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
+    @Override
+    public void onClick(View v) {
 
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = true;
-            page = 1;
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            GetHotData(page + "", "10");
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-
-//            hotAdapter.notifyDataSetChanged();
-            //通知RefreshListView 我们已经更新完成
-            scrollView.onRefreshComplete();
-
-            super.onPostExecute(result);
-        }
-    }
-
-    /**
-     * 模拟网络加载数据的   异步请求类
-     * 上拉加载
-     */
-    private class GetUpDataTask extends AsyncTask<Void, Void, List<DynamicEntity>> {
-
-        //子线程请求数据
-        @Override
-        protected List<DynamicEntity> doInBackground(Void... params) {
-            isDown = false;
-
-            if (page * 10 >= total) {
-
-            } else {
-                page = page + 1;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                GetHotData(page + "", "10");
-            }
-
-
-            return dynamicEntityList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<DynamicEntity> result) {
-//            hotAdapter.notifyDataSetChanged();
-            scrollView.onRefreshComplete();
-            if (page * 10 >= total) {
-                Utils.showToast(UserDetitalActivity.this, "没有更多数据了");
-            }
-            super.onPostExecute(result);
-        }
-    }
-
-    @OnClick({R.id.left_image, R.id.more_image, R.id.chat_image, R.id.attention_text})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
+        switch (v.getId()) {
             case R.id.left_image:
                 finish();
                 break;
             case R.id.more_image:
-                GetMore(view);
-                break;
-            case R.id.attention_text:
-                Attention();
+                GetMore(v);
                 break;
             case R.id.chat_image:
                 RongIM.getInstance().setCurrentUserInfo(new UserInfo("xmb_user_" + userId, nick, Uri.parse(Utils.GetPhotoPath(avatar))));
@@ -378,8 +326,36 @@ public class UserDetitalActivity extends BaseActivity {
                 RongIM.getInstance().startPrivateChat(this, "xmb_user_" + userId, nick);
 
                 break;
+            case R.id.attention_text:
+                Attention();
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(this)) {
+                    GetUserData();
+                } else {
+                    Utils.showToast(UserDetitalActivity.this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+
+                }
+                break;
+            case R.id.no_data_layout:
+                if (Utils.isNetworkConnected(this)) {
+                    GetHotData(page + "", "10");
+                } else {
+                    Utils.showToast(UserDetitalActivity.this, "请检查网络是否连接");
+                    no_data_layout.setClickable(true);
+                    no_data_layout.setVisibility(View.VISIBLE);
+                    img_data_empty.setImageResource(R.mipmap.bg_net_wrong);
+                    tv_data_empty.setText("网 络 异 常! 请 点 击 刷 新");
+
+                }
+                break;
         }
     }
+
 
     private void Attention() {
         RequestParams requestParams = new RequestParams(Url.Url + Url.Follow);
@@ -396,10 +372,10 @@ public class UserDetitalActivity extends BaseActivity {
                         if (isFollow == 1) {
                             isFollow = 0;
                             beFollowed = String.valueOf(Integer.valueOf(beFollowed) - 1);
-                            beFollowsText.setText(beFollowed);
+                            be_follows_text.setText(beFollowed);
 
-                            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
-                            attentionText.setText("关注");
+                            attention_text.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_yellow_corner));
+                            attention_text.setText("关注");
                             for (int i = 0; i < followList.size(); i++) {
                                 if (userId.equals(followList.get(i).get("followUserId"))) {
                                     followList.remove(i);
@@ -412,9 +388,9 @@ public class UserDetitalActivity extends BaseActivity {
                         } else {
                             isFollow = 1;
                             beFollowed = String.valueOf(Integer.valueOf(beFollowed) + 1);
-                            beFollowsText.setText(beFollowed);
-                            attentionText.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
-                            attentionText.setText("已关注");
+                            be_follows_text.setText(beFollowed);
+                            attention_text.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
+                            attention_text.setText("已关注");
                             Map<String, String> map = new HashMap<String, String>();
                             map.put("followId", new JSONObject(result).getJSONObject("result").optString("followId"));
                             map.put("userId", new JSONObject(result).getJSONObject("result").optString("userId"));
@@ -427,8 +403,6 @@ public class UserDetitalActivity extends BaseActivity {
                             utilsEditor.commit();
 
                         }
-//                        isDown = true;
-//                        GetHotData("1", page * 10 + "");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -461,7 +435,8 @@ public class UserDetitalActivity extends BaseActivity {
             public void onSuccess(String result) {
                 System.out.println("========GetUserData========" + result);
                 try {
-                    if (new JSONObject(result).getString("code").equals("0")) {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
 
                         id = new JSONObject(result).getJSONObject("result").getString("id");
                         nick = new JSONObject(result).getJSONObject("result").getString("nick");
@@ -476,19 +451,23 @@ public class UserDetitalActivity extends BaseActivity {
                         beFollowed = new JSONObject(result).getJSONObject("result").getString("beFollowed");
 
                         if (!avatar.equals("")) {
-                            Picasso.with(UserDetitalActivity.this).load(Utils.GetPhotoPath(avatar)).into(headImage);
+                            Picasso.with(UserDetitalActivity.this).load(Utils.GetPhotoPath(avatar)).into(head_image);
                         } else {
-                            headImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
+                            head_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_head));
                         }
-                        beFollowsText.setText(beFollowed);
-                        followsText.setText(follow);
-                        aimsText.setText(aim);
-                        nickText.setText(nick);
-                        briefText.setText(brief);
+                        be_follows_text.setText(beFollowed);
+                        follows_text.setText(follow);
+                        aims_text.setText(aim);
+                        nick_text.setText(nick);
+                        brief_text.setText(brief);
 
+                        listView.addHeaderView(head_view);
                         GetHotData(page + "", "10");
                     } else {
-                        Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -498,7 +477,10 @@ public class UserDetitalActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.print("========ex========" + ex.getMessage());
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
             }
 
             @Override
@@ -582,15 +564,40 @@ public class UserDetitalActivity extends BaseActivity {
                             dynamicEntity.setCommentList(commentEntityList);
                             dynamicEntityList.add(dynamicEntity);
                         }
+                        if (dynamicEntityList.size() < 1) {
+                            no_data_layout.setVisibility(View.VISIBLE);
+                            no_data_layout.setClickable(false);
+                            img_data_empty.setImageResource(R.mipmap.icon_dynamic_null);
+                            tv_data_empty.setText("没 有 任 何 用 户 动 态 ~");
+                        } else {
+                            no_data_layout.setClickable(false);
+                            no_data_layout.setVisibility(View.GONE);
 
+                        }
                         hotAdapter.notifyDataSetChanged();
                     } else if (code.equals("100000")) {
                         if (isDown) {
                             dynamicEntityList.clear();
                         }
+                        if (dynamicEntityList.size() < 1) {
+                            no_data_layout.setVisibility(View.VISIBLE);
+                            no_data_layout.setClickable(false);
+                            img_data_empty.setImageResource(R.mipmap.icon_dynamic_null);
+                            tv_data_empty.setText("没 有 任 何 用 户 动 态 ~");
+                        } else {
+                            no_data_layout.setClickable(false);
+                            no_data_layout.setVisibility(View.GONE);
+
+                        }
                     } else {
-                        Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
+                        no_data_layout.setClickable(true);
+                        no_data_layout.setVisibility(View.VISIBLE);
+                        img_data_empty.setImageResource(R.mipmap.bg_wrong);
+                        tv_data_empty.setText("出 错! 点 击 重 新 尝 试");
+//                        Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
                     }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -600,16 +607,20 @@ public class UserDetitalActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=============ex.getMessage()==============" + ex.getMessage());
-                if (!ex.getMessage().equals("")) {
-                    Utils.showToast(UserDetitalActivity.this, ex.getMessage());
-                }
-                scrollView.onRefreshComplete();
+//                System.out.println("=============ex.getMessage()==============" + ex.getMessage());
+//                if (!ex.getMessage().equals("")) {
+//                    Utils.showToast(UserDetitalActivity.this, ex.getMessage());
+//                }
+                no_data_layout.setClickable(true);
+                no_data_layout.setVisibility(View.VISIBLE);
+                img_data_empty.setImageResource(R.mipmap.bg_wrong);
+                tv_data_empty.setText("出 错! 点 击 重 新 尝 试");
+                pullToRefreshListView.onRefreshComplete();
             }
 
             @Override
             public void onFinished() {
-                scrollView.onRefreshComplete();
+                pullToRefreshListView.onRefreshComplete();
             }
         });
     }
@@ -624,7 +635,8 @@ public class UserDetitalActivity extends BaseActivity {
             winParams.flags &= ~bits;
         }
         win.setAttributes(winParams);
-        headLayout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
+        topLayout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
+        head_view.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
         System.out.println("============Utils.getStatusBarHeight(this)==================" + Utils.getStatusBarHeight(this));
 //        topLayout.setLayoutParams();;
     }
@@ -682,7 +694,9 @@ public class UserDetitalActivity extends BaseActivity {
                 viewHolder.contentText.setVisibility(View.VISIBLE);
                 viewHolder.contentText.setText(dynamicEntityList.get(position).getContent());
             }
-            viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
+            if (!dynamicEntityList.get(position).getUpdateTime().equals("")) {
+                viewHolder.timeText.setText(Utils.GetTime(Long.valueOf(dynamicEntityList.get(position).getUpdateTime())));
+            }
 
             if (!avatar.equals("")) {
                 Picasso.with(context).load(Utils.GetPhotoPath(avatar)).into(viewHolder.headImage);
@@ -893,7 +907,7 @@ public class UserDetitalActivity extends BaseActivity {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)) + Url.SMALL_PHOTO_URL2, imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 2;
                     layoutParams1.width = width;
@@ -1094,7 +1108,7 @@ public class UserDetitalActivity extends BaseActivity {
                 requestParams.addHeader("token", Utils.GetToken(UserDetitalActivity.this));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("uid", userId);
-                x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
+                XUtil.put(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         try {
@@ -1122,16 +1136,10 @@ public class UserDetitalActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onCancelled(CancelledException cex) {
-
-                    }
-
-                    @Override
                     public void onFinished() {
 
                     }
                 });
-
             }
         });
         popupWindow.setAnimationStyle(R.style.MyDialogStyle);

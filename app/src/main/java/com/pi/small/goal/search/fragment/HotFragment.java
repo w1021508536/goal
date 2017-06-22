@@ -4,7 +4,6 @@ package com.pi.small.goal.search.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -32,6 +31,7 @@ import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.search.activity.RedHaveActivity;
+import com.pi.small.goal.search.activity.SearchKeyActivity;
 import com.pi.small.goal.search.activity.SupportMoneyActivity;
 import com.pi.small.goal.search.activity.UserDetitalActivity;
 import com.pi.small.goal.search.adapter.CommentAdapter;
@@ -78,6 +78,10 @@ public class HotFragment extends Fragment {
     RelativeLayout imageLayout;
     @InjectView(R.id.null_layout)
     RelativeLayout nullLayout;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
 
     private ListView listView;
 
@@ -137,9 +141,6 @@ public class HotFragment extends Fragment {
 
     private void init() {
 
-//        itemView = LayoutInflater.from(getActivity()).inflate(
-//                R.layout.view_viewpager_hot, null);
-
         hotList.setMode(PullToRefreshBase.Mode.BOTH);
         hotList.setAdapter(hotAdapter);
 
@@ -175,8 +176,9 @@ public class HotFragment extends Fragment {
             }
         });
 
-        GetHotData(page + "", "10");
-        AddHeadView();
+//        GetHotData(page + "", "10");
+
+
     }
 
 
@@ -267,6 +269,7 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+                System.out.println("=========hotFragment============");
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -338,18 +341,25 @@ public class HotFragment extends Fragment {
                         }
 
                         hotAdapter.notifyDataSetChanged();
-                        hotList.onRefreshComplete();
 //                        hotList.getRefreshableView().onRestoreInstanceState(state);
                     } else if (code.equals("100000")) {
                         if (isDown) {
                             dynamicEntityList.clear();
                         }
                         if (dynamicEntityList.size() == 0) {
+                            nullLayout.setClickable(false);
                             nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_data);
+                            tvEmpty.setText("暂 时 没 有 任 何 数 据 ~");
                         }
                     } else {
-                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+//                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
+                    hotList.onRefreshComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -359,9 +369,13 @@ public class HotFragment extends Fragment {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                if (!ex.getMessage().equals("")) {
-                    Utils.showToast(getActivity(), ex.getMessage());
-                }
+//                if (!ex.getMessage().equals("")) {
+//                    Utils.showToast(getActivity(), ex.getMessage());
+//                }
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                 hotList.onRefreshComplete();
             }
 
@@ -459,7 +473,7 @@ public class HotFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.pinch_image, R.id.image_layout})
+    @OnClick({R.id.pinch_image, R.id.image_layout,R.id.null_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.pinch_image:
@@ -467,6 +481,23 @@ public class HotFragment extends Fragment {
                 break;
             case R.id.image_layout:
                 imageLayout.setVisibility(View.GONE);
+                break;
+            case R.id.null_layout:
+                    if (Utils.isNetworkConnected(getActivity())) {
+                        if (listView == null) {
+                            AddHeadView();
+                        }
+                        nullLayout.setClickable(false);
+                        nullLayout.setVisibility(View.GONE);
+                        GetHotData(page + "", "10");
+                    } else {
+                        Utils.showToast(getActivity(), "请检查网络是否连接");
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                        tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                    }
+
                 break;
         }
     }
@@ -819,7 +850,7 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)+Url.SMALL_PHOTO_URL2), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0) + Url.SMALL_PHOTO_URL2), imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 2;
                     layoutParams1.width = width;
@@ -829,8 +860,8 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)+Url.SMALL_PHOTO_URL), imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1)+Url.SMALL_PHOTO_URL), imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0) + Url.SMALL_PHOTO_URL), imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1) + Url.SMALL_PHOTO_URL), imageOptions);
 
 
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
@@ -847,9 +878,9 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1())+Url.SMALL_PHOTO_URL, imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2())+Url.SMALL_PHOTO_URL, imageOptions);
-                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3())+Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()) + Url.SMALL_PHOTO_URL, imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 3;
                     layoutParams1.width = width / 3;
@@ -1065,4 +1096,25 @@ public class HotFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+
+        if (Utils.isNetworkConnected(getActivity())) {
+            if (listView == null) {
+                AddHeadView();
+            }
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.GONE);
+            isDown = true;
+            GetHotData("1", page * 10 + "");
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+        }
+
+
+        super.onResume();
+    }
 }

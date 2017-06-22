@@ -79,30 +79,30 @@
 
 
     <!--<style name="MyDialogStyle" parent="android:Theme.Dialog">-->
-        <!--&lt;!&ndash; 边框 &ndash;&gt;-->
-        <!--<item name="android:windowFrame">@null</item>-->
-        <!--&lt;!&ndash; 是否浮现在activity之上 &ndash;&gt;-->
-        <!--<item name="android:windowIsFloating">false</item>-->
-        <!--&lt;!&ndash; 半透明 &ndash;&gt;-->
-        <!--<item name="android:windowIsTranslucent">false</item>-->
-        <!--&lt;!&ndash; 无标题 &ndash;&gt;-->
-        <!--<item name="android:windowNoTitle">true</item>-->
-        <!--<item name="android:background">#00000000</item> &lt;!&ndash; 设置自定义布局的背景透明 &ndash;&gt;-->
-        <!--&lt;!&ndash; 背景透明 &ndash;&gt;-->
-        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+    <!--&lt;!&ndash; 边框 &ndash;&gt;-->
+    <!--<item name="android:windowFrame">@null</item>-->
+    <!--&lt;!&ndash; 是否浮现在activity之上 &ndash;&gt;-->
+    <!--<item name="android:windowIsFloating">false</item>-->
+    <!--&lt;!&ndash; 半透明 &ndash;&gt;-->
+    <!--<item name="android:windowIsTranslucent">false</item>-->
+    <!--&lt;!&ndash; 无标题 &ndash;&gt;-->
+    <!--<item name="android:windowNoTitle">true</item>-->
+    <!--<item name="android:background">#00000000</item> &lt;!&ndash; 设置自定义布局的背景透明 &ndash;&gt;-->
+    <!--&lt;!&ndash; 背景透明 &ndash;&gt;-->
+    <!--<item name="android:windowBackground">@android:color/transparent</item>-->
     <!--</style>-->
-    <style parent="android:Theme.Dialog" name="MyDialogStyle">
-    <!-- 边框 -->
-    <item name="android:windowFrame">@null</item>
-    <!-- 是否浮现在activity之上 -->
-    <item name="android:windowIsFloating">false</item>
-    <!-- 半透明 -->
-    <item name="android:windowIsTranslucent">true</item>
-    <!-- 无标题 -->
-    <item name="android:windowNoTitle">true</item>
-    <!-- 背景透明 -->
-    <item name="android:windowBackground">@android:color/transparent</item>
-</style>
+    <style name="MyDialogStyle" parent="android:Theme.Dialog">
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">false</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
     <style name="CustomDialog" parent="android:style/Theme.Dialog">
         <!--背景颜色及透明程度-->

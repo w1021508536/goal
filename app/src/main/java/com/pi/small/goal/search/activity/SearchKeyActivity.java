@@ -59,6 +59,12 @@ public class SearchKeyActivity extends BaseActivity {
     RelativeLayout searchLayout;
     @InjectView(R.id.search_list)
     PullToRefreshListView searchList;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
 
     private String key;
 
@@ -99,10 +105,14 @@ public class SearchKeyActivity extends BaseActivity {
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
-                //         new GetUpDataTask().execute();
                 if (page * 10 >= total) {
-                    searchList.onRefreshComplete();
-                    Utils.showToast(SearchKeyActivity.this, "没有更多数据了");
+                    searchList.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(SearchKeyActivity.this, "没有更多数据了");
+                            searchList.onRefreshComplete();
+                        }
+                    }, 1000);
                 } else {
                     page = page + 1;
                     GetData();
@@ -124,11 +134,21 @@ public class SearchKeyActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     if (!searchEdit.getText().toString().trim().equals("")) {
-                        dataList.clear();
-                        searchKeyAdapter.notifyDataSetChanged();
-                        page = 1;
-                        total = -1;
-                        GetData();
+                        if (Utils.isNetworkConnected(SearchKeyActivity.this)) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.GONE);
+                            dataList.clear();
+                            searchKeyAdapter.notifyDataSetChanged();
+                            page = 1;
+                            total = -1;
+                            GetData();
+                        } else {
+                            nullLayout.setClickable(true);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                        }
+
                     }
 
 
@@ -160,50 +180,32 @@ public class SearchKeyActivity extends BaseActivity {
         });
     }
 
-    /**
-     * 模拟网络加载数据的   异步请求类
-     * 上拉加载
-     */
-    private class GetUpDataTask extends AsyncTask<Void, Void, List<AimEntity>> {
 
-        //子线程请求数据
-        @Override
-        protected List<AimEntity> doInBackground(Void... params) {
-//            isDown = false;
-
-            if (page * 10 >= total) {
-
-            } else {
-                page = page + 1;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                GetData();
-            }
-
-
-            return dataList;
-        }
-
-        //主线程更新UI
-        @Override
-        protected void onPostExecute(List<AimEntity> result) {
-//            hotAdapter.notifyDataSetChanged();
-            searchList.onRefreshComplete();
-            if (page * 10 >= total) {
-                Utils.showToast(SearchKeyActivity.this, "没有更多数据了");
-            }
-            super.onPostExecute(result);
-        }
-    }
-
-    @OnClick(R.id.cancel_text)
+    @OnClick({R.id.null_layout, R.id.cancel_text})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.cancel_text:
                 finish();
+                break;
+            case R.id.null_layout:
+                if (!searchEdit.getText().toString().trim().equals("")) {
+                    if (Utils.isNetworkConnected(SearchKeyActivity.this)) {
+                        nullLayout.setClickable(false);
+                        nullLayout.setVisibility(View.GONE);
+                        dataList.clear();
+                        searchKeyAdapter.notifyDataSetChanged();
+                        page = 1;
+                        total = -1;
+                        GetData();
+                    } else {
+                        Utils.showToast(SearchKeyActivity.this, "请检查网络是否连接");
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                        tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                    }
+
+                }
                 break;
         }
     }
@@ -248,8 +250,17 @@ public class SearchKeyActivity extends BaseActivity {
                         }
                         searchKeyAdapter.notifyDataSetChanged();
 
+                    } else if (code.equals("100000")) {
+                        nullLayout.setClickable(false);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_null_search);
+                        tvEmpty.setText("没 有 搜 索 到 相 关 内 容");
                     } else {
-                        Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                     searchList.onRefreshComplete();
                 } catch (JSONException e) {
@@ -260,8 +271,11 @@ public class SearchKeyActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=====getaim=======" + ex.getMessage());
-                Utils.showToast(SearchKeyActivity.this, ex.getMessage());
+//                Utils.showToast(SearchKeyActivity.this, ex.getMessage());
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                 searchList.onRefreshComplete();
             }
 

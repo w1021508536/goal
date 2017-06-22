@@ -161,6 +161,7 @@ public class MessageFragment extends ConversationListFragment implements View.On
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -185,8 +186,10 @@ public class MessageFragment extends ConversationListFragment implements View.On
                             String content = jsonObject_system.getString("content");
                             JSONObject jsonObject = new JSONObject(content);
 
-                            system_context_text.setText(jsonObject.optString("brief"));
-                            system_time_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(jsonObject_system.optString("createTime")))));
+                            if ((System.currentTimeMillis() - Long.valueOf(jsonObject_system.optString("createTime"))) < 2592000000L) {
+                                system_context_text.setText(jsonObject.optString("brief"));
+                                system_time_text.setText(simpleDateFormat1.format(new Date(Long.valueOf(jsonObject_system.optString("createTime")))));
+                            }
                         } else {
                             system_context_text.setText("");
                             system_time_text.setText("");

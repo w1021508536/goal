@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
@@ -22,6 +24,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.adapter.PositionAdapter;
+import com.pi.small.goal.message.activity.SystemMessageListActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Code;
 import com.pi.small.goal.utils.Utils;
@@ -35,6 +38,9 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
 
     private ImageView left_image;
     private ImageView right_image;
+    private RelativeLayout nullLayout;
+    private ImageView imgEmpty;
+    private TextView tvEmpty;
     private PullToRefreshListView position_list;
 
     private EditText search_edit;
@@ -94,13 +100,15 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
         right_image = (ImageView) findViewById(R.id.right_image);
         position_list = (PullToRefreshListView) findViewById(R.id.position_list);
         search_edit = (EditText) findViewById(R.id.search_edit);
-
+        nullLayout = (RelativeLayout) findViewById(R.id.null_layout);
+        imgEmpty = (ImageView) findViewById(R.id.img_empty);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
         position_list.setAdapter(positionAdapter);
         position_list.setMode(PullToRefreshBase.Mode.BOTH);
 
         left_image.setOnClickListener(this);
         right_image.setOnClickListener(this);
-
+        nullLayout.setOnClickListener(this);
         search_edit.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -141,7 +149,6 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
                     query.setPageNum(page);
                     poiSearch.searchPOIAsyn();
                 }
-//                position_list.onRefreshComplete();
             }
         });
 
@@ -173,12 +180,25 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
             }
         });
 
-        map = new HashMap<String, String>();
-        map.put("title", "不显示");
-        map.put("snippet", "");
-        dataList.add(map);
-        dataList2.add(map);
-        poiSearch.searchPOIAsyn();
+        if (Utils.isNetworkConnected(PositionActivity.this)) {
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.GONE);
+            dataList.clear();
+            dataList2.clear();
+            map = new HashMap<String, String>();
+            map.put("title", "不显示");
+            map.put("snippet", "");
+            dataList.add(map);
+            dataList2.add(map);
+            poiSearch.searchPOIAsyn();
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+        }
+
+
     }
 
 
@@ -200,6 +220,14 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
             positionAdapter.notifyDataSetChanged();
         }
 
+        if (dataList.size() > 0) {
+            nullLayout.setVisibility(View.GONE);
+        } else {
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_null_search);
+            tvEmpty.setText("没 有 搜 索 到 地 址");
+        }
 
     }
 
@@ -228,8 +256,6 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
             }
         }
         position_list.onRefreshComplete();
-
-
         positionAdapter.notifyDataSetChanged();
 
     }
@@ -248,6 +274,26 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
                 break;
             case R.id.right_image:
                 Refresh();
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(PositionActivity.this)) {
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    dataList.clear();
+                    dataList2.clear();
+                    map = new HashMap<String, String>();
+                    map.put("title", "不显示");
+                    map.put("snippet", "");
+                    dataList.add(map);
+                    dataList2.add(map);
+                    poiSearch.searchPOIAsyn();
+                } else {
+                    Utils.showToast(PositionActivity.this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
                 break;
         }
     }

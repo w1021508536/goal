@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
@@ -53,8 +55,11 @@ public class FriendsListActivity extends BaseActivity {
 
     private ImageView left_image;
     private ImageView right_image;
-
+    private RelativeLayout nullLayout;
+    private ImageView imgEmpty;
+    private TextView tvEmpty;
     private ListView friends_list;
+
 
     private EditText search_edit;
     private LinearLayout search_layout;
@@ -97,7 +102,9 @@ public class FriendsListActivity extends BaseActivity {
     private void init() {
         left_image = (ImageView) findViewById(R.id.left_image);
         right_image = (ImageView) findViewById(R.id.right_image);
-
+        nullLayout = (RelativeLayout) findViewById(R.id.null_layout);
+        imgEmpty = (ImageView) findViewById(R.id.img_empty);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
         search_layout = (LinearLayout) findViewById(R.id.search_layout);
         friends_list = (ListView) findViewById(R.id.friends_list);
         search_edit = (EditText) findViewById(R.id.search_edit);
@@ -108,6 +115,7 @@ public class FriendsListActivity extends BaseActivity {
 
         left_image.setOnClickListener(this);
         right_image.setOnClickListener(this);
+        nullLayout.setOnClickListener(this);
 
         search_edit.addTextChangedListener(new TextWatcher() {
 
@@ -152,7 +160,17 @@ public class FriendsListActivity extends BaseActivity {
             }
         });
 
-        GetFriendsListData();
+
+        if (Utils.isNetworkConnected(FriendsListActivity.this)) {
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.GONE);
+            GetFriendsListData();
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+        }
 
     }
 
@@ -167,6 +185,19 @@ public class FriendsListActivity extends BaseActivity {
                 Intent intent = new Intent();
                 intent.setClass(this, AddFriendActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(FriendsListActivity.this)) {
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    GetFriendsListData();
+                } else {
+                    Utils.showToast(FriendsListActivity.this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
                 break;
         }
 
@@ -192,8 +223,17 @@ public class FriendsListActivity extends BaseActivity {
 
                         List(result);
 
+                    } else if (code.equals("100000")) {
+                        nullLayout.setClickable(false);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_null_data);
+                        tvEmpty.setText("暂 时 没 有 好 友");
                     } else {
-                        Utils.showToast(FriendsListActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -203,7 +243,10 @@ public class FriendsListActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
             }
 
             @Override
@@ -241,6 +284,12 @@ public class FriendsListActivity extends BaseActivity {
                 contactBean.setSortLetters(SortString(contactBean.getDesplayName()));
 
                 friendList.add(contactBean);
+            }
+
+            if (friendList.size() > 0) {
+                nullLayout.setVisibility(View.GONE);
+            } else {
+                nullLayout.setVisibility(View.VISIBLE);
             }
 
         } catch (JSONException e) {

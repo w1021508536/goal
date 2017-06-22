@@ -61,8 +61,8 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
                 finish();
                 break;
             case R.id.right_text:
-                GetMember();
-
+                Intent intent = new Intent(DistributionActivity.this, DistributionMemberActivity.class);
+                startActivity(intent);
                 break;
             case R.id.time_image:
                 dialog.show();
@@ -70,44 +70,7 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         }
     }
 
-    private void GetMember() {
-        RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
-        requestParams.addHeader("token", Utils.GetToken(this));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-//        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id", ""));
-        requestParams.addBodyParameter("uid", "26");
-        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
-            @Override
-            public void onSuccess(String result) {
-                try {
-                    if (new JSONObject(result).getString("code").equals("0")) {
-                        Intent intent = new Intent(DistributionActivity.this, DistributionMemberActivity.class);
-                        intent.putExtra("json", result);
-                        startActivity(intent);
 
-                    } else if (new JSONObject(result).getString("code").equals("100000")) {
-                        Intent intent = new Intent(DistributionActivity.this, DistributionMemberActivity.class);
-                        intent.putExtra("json", result);
-                        startActivity(intent);
-                    } else {
-                        Utils.showToast(DistributionActivity.this, new JSONObject(result).getString("msg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
 
 
     private void initCurve() {

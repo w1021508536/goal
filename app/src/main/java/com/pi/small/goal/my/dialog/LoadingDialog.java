@@ -24,6 +24,7 @@ public class LoadingDialog extends ProgressDialog {
     String content;
     Context context;
 
+
     public LoadingDialog(Context context, String content) {
         super(context, R.style.MyDialogStyle);
         this.content = content;

@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
@@ -17,10 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.image.ImageOptions;
-import org.xutils.x;
 
 import java.util.List;
 import java.util.Map;
@@ -34,12 +30,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class AddFriendAdapter extends BaseAdapter {
     private Context context;
     private List<Map<String, String>> dataList;
-
-    private ImageOptions imageOptions = new ImageOptions.Builder()
-            .setImageScaleType(ImageView.ScaleType.FIT_XY)
-            .setLoadingDrawableId(R.mipmap.ic_launcher)
-            .setFailureDrawableId(R.mipmap.icon_message_system)
-            .build();
+    ;
 
     public AddFriendAdapter(Context context, List<Map<String, String>> dataList) {
         this.context = context;
@@ -79,7 +70,7 @@ public class AddFriendAdapter extends BaseAdapter {
         if (!dataList.get(position).get("avatar").equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).get("avatar"))).into(viewHolder.head_image);
         } else {
-            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
+            viewHolder.head_image.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
         }
         viewHolder.name_text.setText(dataList.get(position).get("nick"));
 

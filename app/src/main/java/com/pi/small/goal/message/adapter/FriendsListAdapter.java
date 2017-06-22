@@ -131,7 +131,7 @@ public class FriendsListAdapter extends BaseAdapter {
         if (!contact.getAvatar().equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(contact.getAvatar())).into(viewHolder.head_image);
         } else {
-            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
+            viewHolder.head_image.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
         }
 
         if (dataList.size() == 0) {

@@ -127,8 +127,8 @@ public class RedHaveActivity extends BaseActivity {
     private List<Integer> isPointList;
     private int page = 1;
 
-    private int total;
-    private int pageTotal;
+    private int total = 0;
+    private int pageTotal = 0;
     private boolean isChange = false;
     private RotateAnimation animation;
 
@@ -191,13 +191,14 @@ public class RedHaveActivity extends BaseActivity {
     }
 
     private void init() {
-        GetRedList();
+        if (Utils.isNetworkConnected(this))
+            GetRedList();
 
     }
 
     @OnClick({R.id.left_image, R.id.right_image, R.id.change_image, R.id.four_layout, R.id.three_layout, R.id.six_layout, R.id.seven_layout, R.id.two_layout, R.id.one_layout, R.id.five_layout, R.id.eight_layout})
     public void onViewClicked(View view) {
-        Intent intent;
+
         switch (view.getId()) {
             case R.id.left_image:
                 finish();
@@ -298,10 +299,6 @@ public class RedHaveActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                //    id":12,"aimId":18,"dynamicId":64,"money":10.00,"size":10,"
-//    remainMoney":10.00,"remainSize":10,"toUserId":27,"fromUserId":26,"
-//    createTime":1496885913000,"status":1,"type":1,"fromUserNick":"44","fromUserAvatar":""}
-
 //                System.out.println("=========GetRedList=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
@@ -343,7 +340,6 @@ public class RedHaveActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-//                System.out.println("=========getMessage=============" + ex.getMessage());
                 if (ex.getMessage() != null) {
                     Utils.showToast(RedHaveActivity.this, ex.getMessage());
                 }

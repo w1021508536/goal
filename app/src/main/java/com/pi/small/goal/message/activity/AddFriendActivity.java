@@ -10,11 +10,13 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.message.adapter.AddFriendAdapter;
+import com.pi.small.goal.search.activity.SearchKeyActivity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -32,13 +34,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.InjectView;
+import me.nereo.multi_image_selector.bean.Image;
+
 public class AddFriendActivity extends BaseActivity {
 
     private ImageView left_image;
     private ImageView delete_image;
     private EditText search_edit;
-
     private ListView friends_list;
+
+    private ImageView imgEmpty;
+    private TextView tvEmpty;
+    private RelativeLayout nullLayout;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -67,12 +75,15 @@ public class AddFriendActivity extends BaseActivity {
         search_edit = (EditText) findViewById(R.id.search_edit);
         delete_image = (ImageView) findViewById(R.id.delete_image);
         friends_list = (ListView) findViewById(R.id.friends_list);
+        imgEmpty = (ImageView) findViewById(R.id.img_empty);
+        tvEmpty = (TextView) findViewById(R.id.tv_empty);
+        nullLayout = (RelativeLayout) findViewById(R.id.null_layout);
 
         friends_list.setAdapter(addFriendAdapter);
 
         left_image.setOnClickListener(this);
         delete_image.setOnClickListener(this);
-
+        nullLayout.setOnClickListener(this);
         search_edit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -100,8 +111,21 @@ public class AddFriendActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    SearchUser();
+                    if (!search_edit.getText().toString().trim().equals("")) {
+                        if (Utils.isNetworkConnected(AddFriendActivity.this)) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.GONE);
+                            SearchUser();
+                        } else {
+                            nullLayout.setClickable(true);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                        }
+
+                    }
                 }
+
                 return false;
             }
         });
@@ -116,6 +140,21 @@ public class AddFriendActivity extends BaseActivity {
                 break;
             case R.id.delete_image:
                 search_edit.setText("");
+                break;
+            case R.id.null_layout:
+                if (!search_edit.getText().toString().trim().equals("")) {
+                    if (Utils.isNetworkConnected(AddFriendActivity.this)) {
+                        nullLayout.setClickable(false);
+                        nullLayout.setVisibility(View.GONE);
+                        SearchUser();
+                    } else {
+                        Utils.showToast(AddFriendActivity.this, "请检查网络是否连接");
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                        tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                    }
+                }
                 break;
         }
 
@@ -150,8 +189,17 @@ public class AddFriendActivity extends BaseActivity {
                             dataList.add(map);
                         }
                         addFriendAdapter.notifyDataSetChanged();
+                    } else if (code.equals("100000")) {
+                        nullLayout.setClickable(false);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_null_search);
+                        tvEmpty.setText("没 有 搜 索 到 用 户");
                     } else {
-                        Utils.showToast(AddFriendActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -160,7 +208,10 @@ public class AddFriendActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
             }
 
             @Override
@@ -173,6 +224,10 @@ public class AddFriendActivity extends BaseActivity {
 
     //0  是好友 1 不是好友
     private String IsFriend(String name) {
-        return "1";
+        if (name.equals(Utils.UserSharedPreferences(this).getString("nick",""))){
+            return "0";
+        }else {
+            return "1";
+        }
     }
 }

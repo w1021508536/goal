@@ -2,6 +2,7 @@ package com.pi.small.goal.aim.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -20,6 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
@@ -73,6 +78,7 @@ public class SupportAimActivity extends BaseActivity {
 
     final public static int REQUEST_CODE_ASK_CALL_PHONE = 123;
     final public static int REQUEST_CODE_ASK_CALL_STORGE = 124;
+    final public static int REQUEST_CODE_ASK_CALL_POSITION = 125;
     private ImageView photo2_image;
     private ImageView photo3_image;
 
@@ -84,10 +90,24 @@ public class SupportAimActivity extends BaseActivity {
 
     private String payMoney = "";
 
+    //声明AMapLocationClient类对象
+    public AMapLocationClient mLocationClient = null;
+    //声明定位回调监听器
+    public AMapLocationListener mLocationListener;
+
+    public AMapLocationClientOption mLocationOption;
+
+    private SharedPreferences userSharedPreferences;
+    private SharedPreferences.Editor userEditor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_support_aim);
         super.onCreate(savedInstanceState);
+
+        userSharedPreferences = Utils.UserSharedPreferences(this);
+        userEditor = userSharedPreferences.edit();
+
         aimId = getIntent().getStringExtra("aimId");
         budget = getIntent().getStringExtra("budget");
         money = getIntent().getStringExtra("money");
@@ -116,6 +136,62 @@ public class SupportAimActivity extends BaseActivity {
         photo2_image.setOnClickListener(this);
         photo3_image.setOnClickListener(this);
         money_layout.setOnClickListener(this);
+
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        mLocationClient = new AMapLocationClient(this);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setOnceLocation(true);
+        //设置定位参数
+        mLocationClient.setLocationOption(mLocationOption);
+//        //启动定位
+//        mLocationClient.startLocation();
+
+        mLocationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+
+
+                if (aMapLocation != null) {
+                    //解析定位结果
+                    if (aMapLocation.getErrorCode() == 0) {
+                        //定位成功回调信息，设置相关消息
+                        aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                        aMapLocation.getLatitude();//获取纬度
+                        aMapLocation.getLongitude();//获取经度
+                        aMapLocation.getAccuracy();//获取精度信息
+
+                        userEditor.putString("latitude", String.valueOf(aMapLocation.getLatitude()));
+                        userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
+                        if (aMapLocation.getCity().substring(aMapLocation.getCity().length() - 1, aMapLocation.getCity().length()).equals("市")) {
+                            userEditor.putString("city", aMapLocation.getCity().substring(0, aMapLocation.getCity().length() - 1));
+                        } else {
+                            userEditor.putString("city", aMapLocation.getCity());
+                        }
+                        userEditor.commit();
+                        Intent intent = new Intent();
+                        intent.setClass(SupportAimActivity.this, PositionActivity.class);
+                        startActivityForResult(intent, Code.PositionCode);
+
+                    } else {
+                        //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+//                        Log.e("AmapError", "location Error, ErrCode:"
+//                                + aMapLocation.getErrorCode() + ", errInfo:"
+//                                + aMapLocation.getErrorInfo());
+
+                        Utils.showToast(SupportAimActivity.this, "定位失败");
+
+                    }
+                }
+                position_layout.setClickable(true);
+            }
+        };
+
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+
         initImageView();
 
     }
@@ -167,9 +243,25 @@ public class SupportAimActivity extends BaseActivity {
 
                 break;
             case R.id.position_layout:
+                position_layout.setClickable(false);
+                if (Utils.UserSharedPreferences(this).getString("longitude", "").equals("")) {
+                    if (Build.VERSION.SDK_INT >= 23) {
 
-                intent.setClass(this, PositionActivity.class);
-                startActivityForResult(intent, Code.PositionCode);
+                        int checkCallPhonePermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+                        if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_ASK_CALL_POSITION);
+                            return;
+                        } else {
+                            mLocationClient.startLocation();
+                        }
+                    } else {
+                        mLocationClient.startLocation();
+                    }
+                } else {
+                    intent.setClass(this, PositionActivity.class);
+                    startActivityForResult(intent, Code.PositionCode);
+                }
+
 
                 break;
             case R.id.money_layout:
@@ -233,9 +325,7 @@ public class SupportAimActivity extends BaseActivity {
                         startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
                     }
                 } else {
-                    // Permission Denied
-                    Toast.makeText(SupportAimActivity.this, "您禁止了相机权限", Toast.LENGTH_SHORT)
-                            .show();
+                    Utils.showToast(SupportAimActivity.this, "您禁止了相机权限");
                 }
                 break;
             case REQUEST_CODE_ASK_CALL_STORGE:
@@ -247,9 +337,15 @@ public class SupportAimActivity extends BaseActivity {
                     intent.setClass(this, ChoosePhotoActivity.class);
                     startActivityForResult(intent, Code.REQUEST_HEAD_CODE);
                 } else {
-                    // Permission Denied
-                    Toast.makeText(SupportAimActivity.this, "您禁止了写入权限", Toast.LENGTH_SHORT)
-                            .show();
+                    Utils.showToast(SupportAimActivity.this, "您禁止了写入权限");
+                }
+                break;
+            case REQUEST_CODE_ASK_CALL_POSITION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    mLocationClient.startLocation();
+                } else {
+                    position_layout.setClickable(true);
+                    Utils.showToast(SupportAimActivity.this, "您禁止了定位权限");
                 }
                 break;
             default:
@@ -298,6 +394,9 @@ public class SupportAimActivity extends BaseActivity {
                 position = data.getStringExtra("position");
                 province = data.getStringExtra("province");
                 city = data.getStringExtra("city");
+                if (city.substring(city.length() - 1, city.length()).equals("市")) {
+                    city = city.substring(0, city.length() - 1);
+                }
                 position_text.setText(position);
             }
         }

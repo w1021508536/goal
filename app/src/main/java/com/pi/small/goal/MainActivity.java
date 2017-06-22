@@ -29,6 +29,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pi.small.goal.aim.AimFragment;
+import com.pi.small.goal.aim.activity.AddAimActivity;
 import com.pi.small.goal.message.MessageFragment;
 import com.pi.small.goal.my.MyFragment;
 import com.pi.small.goal.my.activity.RenameActivity;
@@ -145,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getData();
 
 
-   //     VMRuntime.getRuntime().setMinimumHeapSize(CWJ_HEAP_SIZE);
+        //     VMRuntime.getRuntime().setMinimumHeapSize(CWJ_HEAP_SIZE);
 
     }
 
@@ -221,8 +222,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLocationClient = new AMapLocationClient(this);
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
-        //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(500000);
+
+        mLocationOption.setOnceLocation(true);
         //设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
@@ -248,29 +249,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         userEditor.putString("latitude", String.valueOf(aMapLocation.getLatitude()));
                         userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
-                        userEditor.putString("city", aMapLocation.getCity());
-                        userEditor.commit();
-                        mLocationClient.stopLocation();
 
-                    } else {
-                        userEditor.putString("city", "青岛");
+                        if (aMapLocation.getCity().substring(aMapLocation.getCity().length() - 1, aMapLocation.getCity().length()).equals("市")) {
+                            userEditor.putString("city", aMapLocation.getCity().substring(0, aMapLocation.getCity().length() - 1));
+                        } else {
+                            userEditor.putString("city", aMapLocation.getCity());
+                        }
                         userEditor.commit();
+                    } else {
+//                        userEditor.putString("city", "青岛");
+//                        userEditor.commit();
                         //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
                         Log.e("AmapError", "location Error, ErrCode:"
                                 + aMapLocation.getErrorCode() + ", errInfo:"
                                 + aMapLocation.getErrorInfo());
-                        mLocationClient.stopLocation();
+//                        mLocationClient.stopLocation();
                     }
                 }
             }
         };
-//        //初始化定位
-//        mLocationClient = new AMapLocationClient(getApplicationContext());
+
         //设置定位回调监听
         mLocationClient.setLocationListener(mLocationListener);
 
-//        //启动定位
-//        mLocationClient.startLocation();
 
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -650,13 +651,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (requestCode) {
             case REQUEST_CODE_ASK_CALL_PHONE:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    System.out.println("=============6666=================");
                     mLocationClient.startLocation();
                 } else {
-                    // Permission Denied
-                    Toast.makeText(MainActivity.this, "您禁止了定位权限", Toast.LENGTH_SHORT)
-                            .show();
+                    Utils.showToast(MainActivity.this, "您禁止了定位权限");
                 }
                 break;
         }

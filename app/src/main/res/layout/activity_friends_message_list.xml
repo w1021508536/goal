@@ -57,16 +57,31 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <com.pi.small.goal.utils.SwipeListView
-        android:id="@+id/friends_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/background_system_list"
-        android:divider="@color/background_system_list"
-        android:dividerHeight="0.5dp"
-        android:fadingEdge="none"
-        android:fastScrollEnabled="false"
-        android:footerDividersEnabled="false"
-        android:headerDividersEnabled="false"
-        android:smoothScrollbar="true" />
+        android:layout_height="match_parent">
+
+        <com.pi.small.goal.utils.SwipeListView
+            android:id="@+id/friends_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_system_list"
+            android:divider="@color/background_system_list"
+            android:dividerHeight="0.5dp"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="false"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:smoothScrollbar="true" />
+
+        <RelativeLayout
+            android:id="@+id/null_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <include layout="@layout/view_empty_info" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 </LinearLayout>

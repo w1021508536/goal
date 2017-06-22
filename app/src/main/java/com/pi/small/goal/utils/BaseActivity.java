@@ -89,8 +89,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 img_empty.setImageResource(R.mipmap.bg_net_wrong);
             if (tv_empty != null)
                 tv_empty.setText("没 有 网 络 连 接 ~");
+        }else {
+            getData();
         }
-        getData();
     }
 
     /**

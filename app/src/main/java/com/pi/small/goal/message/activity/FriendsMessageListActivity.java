@@ -1,10 +1,9 @@
 package com.pi.small.goal.message.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
@@ -19,22 +18,32 @@ import com.pi.small.goal.utils.XUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
-import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 public class FriendsMessageListActivity extends BaseActivity {
 
 
-    private ImageView left_image;
-    private TextView right_text;
-
-    private SwipeListView friends_list;
+    @InjectView(R.id.left_image)
+    ImageView left_image;
+    @InjectView(R.id.right_text)
+    TextView right_text;
+    @InjectView(R.id.friends_list)
+    SwipeListView friends_list;
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
 
 
     private List<Map<String, String>> dataList;
@@ -45,23 +54,18 @@ public class FriendsMessageListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_friends_message_list);
+        ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
-
-        dataList = new ArrayList<Map<String, String>>();
 
 
         init();
     }
 
+
     private void init() {
-        left_image = (ImageView) findViewById(R.id.left_image);
-        right_text = (TextView) findViewById(R.id.right_text);
-        friends_list = (SwipeListView) findViewById(R.id.friends_list);
+        dataList = new ArrayList<Map<String, String>>();
         friendsMessageListAdapter = new FriendsMessageListAdapter(this, dataList, friends_list.getRightViewWidth());
         friends_list.setAdapter(friendsMessageListAdapter);
-
-        left_image.setOnClickListener(this);
-        right_text.setOnClickListener(this);
 
         friendsMessageListAdapter.setOnRightItemClickListener(new FriendsMessageListAdapter.onRightItemClickListener() {
 
@@ -108,11 +112,13 @@ public class FriendsMessageListActivity extends BaseActivity {
                 RequestParams requestParams = new RequestParams(Url.Url + Url.FriendAgree);
                 requestParams.addHeader("token", Utils.GetToken(FriendsMessageListActivity.this));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
+                requestParams.addBodyParameter("msgId", dataList.get(position).get("id"));
                 requestParams.addBodyParameter("uid", dataList.get(position).get("sendUserId"));
                 XUtil.get(requestParams, FriendsMessageListActivity.this, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
                         try {
+                            System.out.println("========同意==============" + result);
                             String code = new JSONObject(result).getString("code");
                             if (code.equals("0")) {
                                 dataList.get(position).put("status", "1");
@@ -146,6 +152,7 @@ public class FriendsMessageListActivity extends BaseActivity {
                 requestParams.addHeader("token", Utils.GetToken(FriendsMessageListActivity.this));
                 requestParams.addHeader("deviceId", MyApplication.deviceId);
                 requestParams.addBodyParameter("uid", dataList.get(position).get("sendUserId"));
+                requestParams.addBodyParameter("msgId", dataList.get(position).get("id"));
                 XUtil.get(requestParams, FriendsMessageListActivity.this, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
@@ -164,7 +171,7 @@ public class FriendsMessageListActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-                        Utils.showToast(FriendsMessageListActivity.this, ex.getMessage());
+
                     }
 
                     @Override
@@ -175,18 +182,42 @@ public class FriendsMessageListActivity extends BaseActivity {
 
             }
         });
-
-        GetFriendsMessageList();
+        if (Utils.isNetworkConnected(FriendsMessageListActivity.this)) {
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.GONE);
+            GetFriendsMessageList();
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+        }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+
+    @OnClick({R.id.left_image, R.id.right_text})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
             case R.id.right_text:
-                ClearFriendsList();
+                if (dataList.size() > 0) {
+                    ClearFriendsList();
+                }
                 break;
             case R.id.left_image:
                 finish();
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(FriendsMessageListActivity.this)) {
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    GetFriendsMessageList();
+                } else {
+                    Utils.showToast(FriendsMessageListActivity.this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
                 break;
         }
     }
@@ -227,10 +258,31 @@ public class FriendsMessageListActivity extends BaseActivity {
                             dataList.add(map);
                         }
 
+                        if (dataList.size() > 0) {
+                            nullLayout.setVisibility(View.GONE);
+
+                        } else {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_info);
+                            tvEmpty.setText("暂 无 任 何 消 息 通 知 ~");
+                        }
                         friendsMessageListAdapter.notifyDataSetChanged();
 
+                    } else if (code.equals("100000")) {
+                        if (dataList.size() < 1) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_info);
+                            tvEmpty.setText("暂 无 任 何 消 息 通 知 ~");
+                        }
+
                     } else {
-                        Utils.showToast(FriendsMessageListActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(SearchKeyActivity.this, new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -240,7 +292,10 @@ public class FriendsMessageListActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=======FriendsMessageList=====ex===" + ex.getMessage());
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
             }
 
             @Override
@@ -286,5 +341,6 @@ public class FriendsMessageListActivity extends BaseActivity {
         });
 
     }
+
 
 }
