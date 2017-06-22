@@ -76,15 +76,15 @@
         <LinearLayout
             android:id="@+id/ll_imgs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:layout_below="@+id/tv_title_item"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/img_item"
                 android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:scaleType="centerCrop"
@@ -93,8 +93,7 @@
             <ImageView
                 android:id="@+id/img2_item"
                 android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
@@ -104,8 +103,7 @@
             <ImageView
                 android:id="@+id/img3_item"
                 android:layout_width="0dp"
-                android:layout_height="90dp"
-                android:layout_marginBottom="10dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"

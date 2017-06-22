@@ -132,6 +132,8 @@ public class AimMoreActivity extends BaseActivity {
     private int page = 1;
     private boolean addFlag;
 
+    public static final int REQUEST_AIM_MORE = 10111;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -437,7 +439,7 @@ public class AimMoreActivity extends BaseActivity {
                 intent.putExtra("aimId", aimId);
                 intent.putExtra("nick", nick);
                 intent.putExtra("avatar", avatar);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_AIM_MORE);
 
             }
 
@@ -590,6 +592,12 @@ public class AimMoreActivity extends BaseActivity {
                 break;
         }
     }
+
+
+    /**
+     * 显示设置的popuwindow
+     * create  wjz
+     **/
 
     private void showSetPop(View v) {
 
@@ -765,10 +773,7 @@ public class AimMoreActivity extends BaseActivity {
                 Uri uri = data.getData();
 
                 Bitmap bitmap = ImageUtils.getBitmapFormUri(this, uri);
-//                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-//                iconUser.setImageBitmap(bitmap);
-//                uploadFile(file);
-                afterUploadVitmap(bitmap);
+                beforeUploadVitmap(bitmap);
 
             } else if (requestCode == Code.RESULT_CAMERA_CODE) {   //获取拍照的
                 Uri uri = data.getData();
@@ -777,16 +782,7 @@ public class AimMoreActivity extends BaseActivity {
                     Bundle bundle = data.getExtras();
                     if (bundle != null) {
                         Bitmap photo = (Bitmap) bundle.get("data"); //get bitmap
-
-//                        String xmb = ImageUtils.saveMyBitmap("xmb", photo);
-//                        Uri imageUri = Uri.fromFile(new File(xmb));
-//                        if (Integer.parseInt(Build.VERSION.SDK) >= 24) {
-//                            imageUri = FileProvider.getUriForFile(this, "com.pi.small.goal.FileProvider", new File(xmb));
-//                        }
-                        afterUploadVitmap(photo);
-//                        File file = ImageUtils.getSmallImageFile(this, photo, 1080, 1080, true);
-//                        iconUser.setImageBitmap(photo);
-//                        uploadFile(file);
+                        beforeUploadVitmap(photo);
                     } else {
                         Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
                         return;
@@ -794,25 +790,85 @@ public class AimMoreActivity extends BaseActivity {
                 } else {
                     //to do find the path of pic by uri
                     Bitmap bitmap = ImageUtils.getBitmapFormUri(this, uri);
-//                    File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-//                    iconUser.setImageBitmap(bitmap);
-//                    uploadFile(file);
-                    //    doCrop(uri);
-                    afterUploadVitmap(bitmap);
+                    beforeUploadVitmap(bitmap);
                 }
 
+            } else if (requestCode == REQUEST_AIM_MORE) {
+                PutRedWindow();
             }
-            //       else if (requestCode == REQUESTCODE_DROP_IMAGE) {
-//                Bitmap bitmap = data.getParcelableExtra("data");
-//                //    File smallImageFile = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-//                File file = ImageUtils.getSmallImageFile(this, bitmap, 1080, 1080, true);
-//                uploadFile(file);
-//                img_bg_head.setImageBitmap(bitmap);
-//            }
         }
     }
 
-    private void afterUploadVitmap(Bitmap bitmap) {
+
+    //弹出框
+    private void PutRedWindow() {
+        final View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_thanks_red, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        ImageView imageView = (ImageView) windowView.findViewById(R.id.image);
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestParams requestParams = new RequestParams(Url.Url + Url.RedpacketThanksDraw);
+                requestParams.addHeader("token", Utils.GetToken(AimMoreActivity.this));
+                requestParams.addHeader("deviceId", MyApplication.deviceId);
+                XUtil.post(requestParams, AimMoreActivity.this, new XUtil.XCallBackLinstener() {
+                    @Override
+                    public void onSuccess(String result) {
+                        //    Utils.showToast(this, result);
+                        System.out.println("=======感谢红包=========" + result);
+                        try {
+                            String code = new JSONObject(result).getString("code");
+                            if (Utils.callOk(result)) {
+                                String money = new JSONObject(result).getJSONObject("result").optString("money");
+                                if (money.equals("")) {
+                                    Utils.showToast(AimMoreActivity.this, "恭喜您获取红包");
+                                } else {
+                                    Utils.showToast(AimMoreActivity.this, "恭喜您获取红包" + money + "元");
+                                }
+                            } else {
+                                Utils.showToast(AimMoreActivity.this, Utils.getMsg(result));
+                            }
+                            popupWindow.dismiss();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        popupWindow.dismiss();
+                        System.out.println("========ex.getMessage()========" + ex.getMessage());
+                        Utils.showToast(AimMoreActivity.this, ex.getMessage());
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(collectImageInclude, Gravity.CENTER, 0, 0);
+    }
+
+    /**
+     * 上传图片之前的压缩图片
+     * create  wjz
+     **/
+    private void beforeUploadVitmap(Bitmap bitmap) {
         if (bitmap == null) return;
         int scW = (int) (bitmap.getWidth() / (bitmap.getHeight() / 640f));
 

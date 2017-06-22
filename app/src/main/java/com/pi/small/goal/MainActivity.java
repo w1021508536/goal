@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getData();
 
 
-   //     VMRuntime.getRuntime().setMinimumHeapSize(CWJ_HEAP_SIZE);
+        //     VMRuntime.getRuntime().setMinimumHeapSize(CWJ_HEAP_SIZE);
 
     }
 
@@ -248,7 +248,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         userEditor.putString("latitude", String.valueOf(aMapLocation.getLatitude()));
                         userEditor.putString("longitude", String.valueOf(aMapLocation.getLongitude()));
-                        userEditor.putString("city", aMapLocation.getCity());
+                        String city = aMapLocation.getCity().replace("市", "");
+                        userEditor.putString("city", city);
                         userEditor.commit();
                         mLocationClient.stopLocation();
 

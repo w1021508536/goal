@@ -9,12 +9,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gongwen.marqueen.MarqueeFactory;
+import com.gongwen.marqueen.MarqueeView;
+import com.google.gson.Gson;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.dialog.ExtensionDialog;
+import com.pi.small.goal.my.entry.LastAgentEntity;
 import com.pi.small.goal.utils.BaseActivity;
+import com.pi.small.goal.utils.KeyCode;
+import com.pi.small.goal.utils.Url;
+import com.pi.small.goal.utils.Utils;
+import com.pi.small.goal.utils.XUtil;
+import com.pi.small.goal.weight.NoticeMF;
+import com.squareup.picasso.Picasso;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.xutils.http.RequestParams;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,6 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  **/
 public class ExtensionActivity extends BaseActivity {
 
+
     @InjectView(R.id.view)
     View view;
     @InjectView(R.id.left_image_include)
@@ -39,6 +55,8 @@ public class ExtensionActivity extends BaseActivity {
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
+    @InjectView(R.id.marqueeView)
+    MarqueeView marqueeView;
     @InjectView(R.id.img_icon)
     CircleImageView imgIcon;
     @InjectView(R.id.tv_userName)
@@ -47,7 +65,16 @@ public class ExtensionActivity extends BaseActivity {
     TextView tvAgent;
     @InjectView(R.id.tv_extension)
     TextView tvExtension;
+    @InjectView(R.id.tv_moneyHint1)
+    TextView tvMoneyHint1;
+    @InjectView(R.id.tvMoney)
+    TextView tvMoney;
+    @InjectView(R.id.tv_moneyHint2)
+    TextView tvMoneyHint2;
     private ExtensionDialog dialog;
+    private final List<notice> datas = new ArrayList<>();
+    private MarqueeFactory<TextView, notice> marqueeFactory;
+    private LastAgentEntity.ResultBean agent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +87,12 @@ public class ExtensionActivity extends BaseActivity {
     public void initData() {
         super.initData();
         dialog = new ExtensionDialog(this);
+
+
+        marqueeFactory = new NoticeMF(this);
+        marqueeView.setMarqueeFactory(marqueeFactory);
+        marqueeView.startFlipping();
+
     }
 
     @Override
@@ -74,6 +107,101 @@ public class ExtensionActivity extends BaseActivity {
                 intent.putExtra("money", "698");
                 startActivity(intent);
                 dialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public void getData() {
+
+        super.getData();
+
+        getLast();
+
+    }
+
+    /**
+     * 获取最后一个的代理
+     * create  wjz
+     **/
+    private void getLast() {
+        RequestParams requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/agent/latest");
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (Utils.callOk(result)) {
+                    Gson gson = new Gson();
+                    LastAgentEntity lastAgentEntity = gson.fromJson(result, LastAgentEntity.class);
+                    agent = lastAgentEntity.getResult();
+
+                    datas.add(new notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理", agent.getNick().length()));
+                    marqueeFactory.setData(datas);
+
+                }
+                getAgent();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+
+    /**
+     * 获取代理身份
+     * create  wjz
+     **/
+    private void getAgent() {
+        RequestParams requestParams = Utils.getRequestParams(this);
+
+        requestParams.setUri(Url.Url + "/agent");
+        requestParams.addBodyParameter("uid", sp.getString(KeyCode.USER_ID, ""));
+
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                if (Utils.callOk(result)) {
+
+                    String id = Utils.GetOneStringForJson("id", result);
+
+                    Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, "")));
+                    tvUserName.setText(sp.getString(KeyCode.USER_NICK, ""));
+                    tvMoney.setText(id);
+                } else {
+                    tvUserName.setText("分销商推广码");
+                    imgIcon.setVisibility(View.GONE);
+                    tvMoneyHint1.setText("已有");
+
+                    int id = agent.getId();
+                    if (id < 10000) {
+                        tvMoneyHint2.setText("名用户加入我们");
+                        tvMoney.setText(agent.getId() + "");
+                    } else {
+                        double v = id / 10000.0;
+                        tvMoney.setText(v + "");
+                        tvMoneyHint2.setText("万用户加入我们");
+                    }
+
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
             }
         });
     }
@@ -112,7 +240,7 @@ public class ExtensionActivity extends BaseActivity {
     private void share() {
 
         new ShareAction(this).withText("hello")
-                .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+                .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .setCallback(umShareListener).open();
     }
 
@@ -143,4 +271,31 @@ public class ExtensionActivity extends BaseActivity {
             Toast.makeText(ExtensionActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
+
+    public class notice {
+
+        String noticeStr = "";
+        int nameLength;
+
+        public notice(String noticeStr, int nameLength) {
+            this.noticeStr = noticeStr;
+            this.nameLength = nameLength;
+        }
+
+        public String getNoticeStr() {
+            return noticeStr;
+        }
+
+        public void setNoticeStr(String noticeStr) {
+            this.noticeStr = noticeStr;
+        }
+
+        public int getNameLength() {
+            return nameLength;
+        }
+
+        public void setNameLength(int nameLength) {
+            this.nameLength = nameLength;
+        }
+    }
 }

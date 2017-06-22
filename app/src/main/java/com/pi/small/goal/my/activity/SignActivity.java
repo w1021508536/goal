@@ -84,8 +84,6 @@ public class SignActivity extends BaseActivity {
     ImageView imageView7;
     @InjectView(R.id.tv_sing_sign)
     Button tvSingSign;
-    @InjectView(R.id.tv_hint_sign)
-    TextView tvHintSign;
     private long signTime;
     private int days;
     private View[] tvViews;
@@ -134,6 +132,7 @@ public class SignActivity extends BaseActivity {
                     tvSignDaysSign.setVisibility(View.GONE);
                     tvSignHintDaySign.setVisibility(View.GONE);
                     tvViews[0].setBackgroundResource(R.drawable.background_yuan_orange);
+                    thiDayImageView = (TextView) tvViews[0];
                     return;
                 }
 
@@ -221,6 +220,7 @@ public class SignActivity extends BaseActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
         Date nowDate = new Date();
         if (formatter.format(date).equals(formatter.format(nowDate))) {
+       //     startActivity(new Intent(SignActivity.this, FlopActivity.class));
             return;
         }
         requestParams.setUri(Url.Url + "/signin");
@@ -240,7 +240,7 @@ public class SignActivity extends BaseActivity {
                     tvSingSign.setText("今日已签到");
                     tvSingSign.setBackgroundResource(R.mipmap.btn_signed);
                     CacheUtil.getInstance().setSignFlag(true);
-                    CacheUtil.getInstance().getMap().put(KeyCode.AIM_SIGN,true);
+                    CacheUtil.getInstance().getMap().put(KeyCode.AIM_SIGN, true);
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setFinishTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount() + 1);
                 } catch (JSONException e) {
                 }

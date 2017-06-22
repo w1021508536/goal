@@ -98,7 +98,7 @@
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_above="@+id/tv_hint_flop"
+        android:layout_above="@+id/ll_hint_flop"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp"
         android:background="@mipmap/icon_draw_card_bg2x"
@@ -143,8 +143,8 @@
                     android:id="@+id/imageView1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="visible"
-                    android:background="@mipmap/card_back2x" />
+                    android:background="@mipmap/card_back2x"
+                    android:visibility="visible" />
             </FrameLayout>
 
             <FrameLayout
@@ -345,14 +345,34 @@
         </LinearLayout>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_hint_flop"
-        style="@style/text_white_10"
+
+    <LinearLayout
+        android:id="@+id/ll_hint_flop"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
-        android:text="本活动最终解释归小目标所有" />
+        android:orientation="horizontal">
 
+        <TextView
+            style="@style/text_white_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本项服务最终解释权归" />
+
+        <TextView
+            style="@style/text_white_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aim_u" />
+
+        <TextView
+            style="@style/text_white_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所有" />
+
+    </LinearLayout>
 </RelativeLayout>

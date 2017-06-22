@@ -163,7 +163,7 @@ public class PositionActivity extends BaseActivity implements PoiSearch.OnPoiSea
                     check_image.setVisibility(View.VISIBLE);
                     Intent intent = new Intent();
                     intent.putExtra("position", dataList.get(position - 1).get("title"));
-                    intent.putExtra("city", dataList.get(position - 1).get("city"));
+                    intent.putExtra("city", dataList.get(position - 1).get("city").replace("市", ""));
                     intent.putExtra("province", dataList.get(position - 1).get("province"));
                     setResult(Code.PositionCode, intent);
                     finish();

@@ -68,7 +68,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
     private Map<String, String> map;
     private AimEntity aimEntity;
 
-//    private List<View> viewList;
+    //    private List<View> viewList;
     private View itemView;
     private ImageView[] imageViews;
 
@@ -834,7 +834,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 itemView.setTag(viewHolder);
             } else {
                 itemView = mViewList.remove(0);
-                viewHolder= (ViewHolder) itemView.getTag();
+                viewHolder = (ViewHolder) itemView.getTag();
             }
             if (!dataList.get(position).getImg().equals("")) {
                 x.image().bind(viewHolder.aim_image, Utils.GetPhotoPath(dataList.get(position).getImg()), imageOptions);
@@ -907,12 +907,12 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 viewHolder.process_text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                    Intent intent = new Intent();
-//                    intent.setClass(context, SupportAimActivity.class);
-//                    intent.putExtra("aimId", dataList.get(position).getId());
-//                    intent.putExtra("budget", dataList.get(position).getBudget());
-//                    intent.putExtra("money", dataList.get(position).getMoney());
-//                    startActivityForResult(intent, Code.SupportAim);
+                        Intent intent = new Intent();
+                        intent.setClass(context, SupportAimActivity.class);
+                        intent.putExtra("aimId", dataList.get(position).getId());
+                        intent.putExtra("budget", dataList.get(position).getBudget());
+                        intent.putExtra("money", dataList.get(position).getMoney());
+                        startActivityForResult(intent, Code.SupportAim);
                     }
                 });
             } else {
