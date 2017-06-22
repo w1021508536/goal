@@ -87,6 +87,23 @@ public class Utils {
         return str;
     }
 
+    /**
+     * 获取json中摸个特定字段的值
+     * create  wjz
+     **/
+
+    public static String GetOneStringForJson(String key, String json) {
+
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            String s = (String) jsonObject.get(key);
+            return (String) jsonObject.getString(key);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static String GetPhotoPath(String path) {
         String photoPath = "";
         if (path.equals("")) {
@@ -206,6 +223,7 @@ public class Utils {
 
 
     public static String GetTime(Long time) {
+
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
         String time_string = "";
         long minute = 60000;
@@ -232,6 +250,9 @@ public class Utils {
     }
 
     public static String GetTime2(Long time) {
+        if (time == 0) {
+            return "0分钟前";
+        }
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
         String time_string = "";
         long minute = 60000;

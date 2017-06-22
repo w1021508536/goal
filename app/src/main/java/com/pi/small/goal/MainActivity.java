@@ -29,7 +29,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pi.small.goal.aim.AimFragment;
-import com.pi.small.goal.aim.activity.AddAimActivity;
+
 import com.pi.small.goal.message.MessageFragment;
 import com.pi.small.goal.my.MyFragment;
 import com.pi.small.goal.my.activity.RenameActivity;

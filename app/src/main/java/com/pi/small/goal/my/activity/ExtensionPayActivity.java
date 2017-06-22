@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.PayDetailActivity;
 import com.pi.small.goal.utils.BalancePayActivity;
@@ -189,8 +188,8 @@ public class ExtensionPayActivity extends BaseActivity {
                         }
 
                     } else {
-                           DynamicAim();
-                      //  Utils.showToast(this, "准备支付了");
+                        DynamicAim();
+                        //  Utils.showToast(this, "准备支付了");
                     }
                 } else {
                     Utils.showToast(this, "请仔细阅读相关协议");
@@ -251,10 +250,10 @@ public class ExtensionPayActivity extends BaseActivity {
                 }
 
             }
-        }  else if (requestCode == Code.BalancePay) {
+        } else if (requestCode == Code.BalancePay) {
             if (data.getStringExtra("password").length() == 6) {
                 password = data.getStringExtra("password");
-                     DynamicAim();
+                DynamicAim();
             } else {
                 Utils.showToast(this, "取消输入支付密码");
             }
@@ -276,7 +275,12 @@ public class ExtensionPayActivity extends BaseActivity {
                 try {
                     if (Utils.callOk(result)) {
                         if (channel.equals("balance")) {
-                          //  BalancePay();
+
+                            JSONObject jsonObject = new JSONObject(result);
+                            JSONObject orderInfo = (JSONObject) ((JSONObject) jsonObject.get("result")).get("orderInfo");
+                            int orderId = orderInfo.getInt("orderId");
+
+                            BalancePay(orderId);
                         } else {
                             String json = new JSONObject(result).getJSONObject("result").getString("charge");
                             System.out.println("==============AimDynamic=====json====" + json);
@@ -307,44 +311,25 @@ public class ExtensionPayActivity extends BaseActivity {
 
     }
 
-    private void BalancePay() {
+    private void BalancePay(int orderId) {
 
-        RequestParams requestParams = new RequestParams(Url.Url + Url.PayBalance);
-        requestParams.addHeader("token", Utils.GetToken(this));
-        requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("linkId", linkId);
+
+        RequestParams requestParams = Utils.getRequestParams(this);
+        requestParams.setUri(Url.Url + "/pay/balance");
         requestParams.addBodyParameter("amount", money);
         requestParams.addBodyParameter("password", password);
-        requestParams.addBodyParameter("type", "2");
+        requestParams.addBodyParameter("linkId", orderId + "");
+        requestParams.addBodyParameter("type", "3");
 
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("==============AimDynamic=========" + result);
-                try {
-                    String code = new JSONObject(result).getString("code");
-                    if (code.equals("0")) {
-                        Intent intent = new Intent();
-                        intent.setClass(ExtensionPayActivity.this, PayDetailActivity.class);
-                        intent.putExtra("money", money);
-                        intent.putExtra("card", "");
-                        intent.putExtra("channel", channel);
-                        startActivityForResult(intent, Code.Pay);
-
-                    } else {
-                        Utils.showToast(ExtensionPayActivity.this, new JSONObject(result).getString("msg"));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Utils.showToast(ExtensionPayActivity.this, Utils.getMsg(result));
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                if (ex.getMessage() != null) {
-                    Utils.showToast(ExtensionPayActivity.this, ex.getMessage());
-                }
+
             }
 
             @Override
@@ -367,4 +352,6 @@ public class ExtensionPayActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
 
     }
+
+
 }

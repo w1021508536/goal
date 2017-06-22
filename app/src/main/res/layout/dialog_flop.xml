@@ -51,6 +51,7 @@
                 android:text="赢得额外" />
 
             <TextView
+                android:id="@+id/tv_exp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5"
@@ -84,9 +85,9 @@
         android:id="@+id/img_title_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:src="@mipmap/icon_ex_title_bg2x"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/icon_ex_title_bg2x" />
 </RelativeLayout>

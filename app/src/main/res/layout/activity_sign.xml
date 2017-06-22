@@ -325,24 +325,43 @@
         android:id="@+id/tv_sing_sign"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_above="@+id/tv_hint_sign"
+        android:layout_above="@+id/ll_hint_sign"
         android:layout_alignLeft="@+id/relativeLayout"
         android:layout_alignStart="@+id/relativeLayout"
+        android:layout_marginRight="@dimen/top_left"
         android:background="@mipmap/btn_sign"
         android:text="签 到"
         android:textColor="#C04109"
-        android:layout_marginRight="@dimen/top_left"
         android:textSize="20dp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_hint_sign"
-        style="@style/text_white_10"
+    <LinearLayout
+        android:id="@+id/ll_hint_sign"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
+        android:orientation="horizontal">
 
-        android:text="本活动最终解释权归小目标所有" />
+        <TextView
+            style="@style/text_white_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本项服务最终解释权归" />
+
+        <TextView
+            style="@style/text_white_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aim_u" />
+
+        <TextView
+            style="@style/text_white_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所有" />
+
+    </LinearLayout>
 </RelativeLayout>

@@ -459,13 +459,13 @@ public class UserInfoActivity extends BaseActivity {
         String wechatId = CacheUtil.getInstance().getUserInfo().getUser().getWechatId();
         Log.v("TAG", wechatId + "");
         if (mobile == null || "".equals(mobile)) {
-            tvPhoneBindUser.setText("未绑定");
+            tvPhoneBindUser.setText("去绑定");
         } else {
             tvPhoneBindUser.setText("已绑定");
             //     rlPhoneUser.setClickable(false);
         }
         if (wechatId == null || "".equals(wechatId)) {
-            tvWxBindUser.setText("未绑定");
+            tvWxBindUser.setText("去绑定");
         } else {
             tvWxBindUser.setText("已绑定");
             //  rlWxUser.setClickable(false);

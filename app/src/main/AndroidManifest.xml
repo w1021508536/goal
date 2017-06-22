@@ -253,7 +253,6 @@
         <activity
             android:name=".my.activity.AimMoreActivity"
             android:label="目标详情"
-            android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity

@@ -17,6 +17,8 @@ import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
 import butterknife.ButterKnife;
@@ -77,8 +79,6 @@ public class FlopActivity extends BaseActivity {
     TextView tv6CardItem;
     @InjectView(R.id.imageView6)
     ImageView imageView6;
-    @InjectView(R.id.tv_hint_flop)
-    TextView tvHintFlop;
     @InjectView(R.id.rl1_card_flop)
     RelativeLayout rl1CardFlop;
     @InjectView(R.id.rl2_card_flop)
@@ -93,6 +93,8 @@ public class FlopActivity extends BaseActivity {
     RelativeLayout rl6CardFlop;
     @InjectView(R.id.tv_flowNums_flow)
     TextView tvFlowNumsFlow;
+    private int exp = 0;
+    private TextView[] textViews;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +111,8 @@ public class FlopActivity extends BaseActivity {
         rightImageInclude.setVisibility(View.GONE);
         tvOkInclude.setText("规则");
         tvOkInclude.setVisibility(View.VISIBLE);
+
+        textViews = new TextView[]{tv1CardItem, tv2CardItem, tv3CardItem, tv4CardItem, tv5CardItem, tv6CardItem};
     }
 
     @Override
@@ -133,6 +137,15 @@ public class FlopActivity extends BaseActivity {
 
                 if (!RenameActivity.callOk(result)) return;
 
+                try {
+                    JSONObject jsob = new JSONObject(result);
+                    exp = jsob.getInt("result");
+                    for (int i = 0; i < textViews.length; i++) {
+                        textViews[i].setText(exp + "点经验");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -217,6 +230,8 @@ public class FlopActivity extends BaseActivity {
 
 
         TextView tv_ok = (TextView) window.findViewById(R.id.tv_flowOK);
+        TextView tv_exp = (TextView) window.findViewById(R.id.tv_exp);
+        tv_exp.setText(exp + "");
         tv_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
