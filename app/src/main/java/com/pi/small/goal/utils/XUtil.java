@@ -3,7 +3,9 @@ package com.pi.small.goal.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
+import com.pi.small.goal.R;
 import com.pi.small.goal.my.dialog.LoadingDialog;
 
 import org.xutils.common.Callback;
@@ -16,12 +18,9 @@ import org.xutils.x;
  * 创建者： 王金壮
  * 时间： 2017/6/3 11:24
  * 修改：
- * 描述：
+ * 描述：对x.http 的二次封装，方便显示加载框和出错页
  **/
 public class XUtil {
-
-
-    public static LoadingDialog loadingDialog;
 
     public interface XCallBackLinstener {
         void onSuccess(String result);
@@ -38,7 +37,7 @@ public class XUtil {
 
     public static void post(final RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
 
-        loadingDialog = new LoadingDialog(context, "");
+        final LoadingDialog loadingDialog = new LoadingDialog(context, "");
 
         if (((Activity) context).isDestroyed()) {
 
@@ -60,8 +59,31 @@ public class XUtil {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                loadingDialog.dismiss();
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
+                Log.v("TAg", ex.getMessage());
+
+                if (context instanceof BaseActivity) {                          //访问出错展示的出错图
+
+                    final BaseActivity activity = (BaseActivity) context;
+                    if (activity.tv_empty != null) {
+                        activity.tv_empty.setText("出 错！点 击 重 新 尝 试 ~");
+                    }
+                    if (activity.plv != null) {
+                        activity.plv.setVisibility(View.GONE);
+                    }
+
+                    if (activity.img_empty != null) {
+                        activity.img_empty.setImageResource(R.mipmap.bg_wrong);
+                        activity.img_empty.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                activity.getData();
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
@@ -96,7 +118,8 @@ public class XUtil {
             @Override
             public void onSuccess(String result) {
                 //        Utils.showToast(context, Utils.getMsg(result));
-                loadingDialog.dismiss();
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
                 xCallBackLinstener.onSuccess(result);
                 Log.v("TAg", Utils.getMsg(result));
             }
@@ -104,15 +127,39 @@ public class XUtil {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                loadingDialog.dismiss();
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
                 Log.v("TAg", ex.getMessage());
+
+                if (context instanceof BaseActivity) {                          //访问出错展示的出错图
+
+                    final BaseActivity activity = (BaseActivity) context;
+                    if (activity.tv_empty != null) {
+                        activity.tv_empty.setText("出 错！点 击 重 新 尝 试 ~");
+                    }
+
+                    if (activity.plv != null) {
+                        activity.plv.setVisibility(View.GONE);
+                    }
+
+                    if (activity.img_empty != null) {
+                        activity.img_empty.setImageResource(R.mipmap.bg_wrong);
+                        activity.img_empty.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                activity.getData();
+                            }
+                        });
+                    }
+                }
             }
 
             @Override
             public void onCancelled(CancelledException cex) {
                 System.out.println("========not===null===get==cancelled====");
-                loadingDialog.dismiss();
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
             }
 
             @Override

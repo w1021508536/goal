@@ -17,10 +17,15 @@ import com.pi.small.goal.my.entry.TransferMoreEntity;
 import com.pi.small.goal.my.entry.TransferMoreGsonEntity;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.KeyCode;
+import com.pi.small.goal.utils.TimeUtils;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
 
+import org.xutils.http.RequestParams;
+
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,7 +89,7 @@ public class TransferMoreActivity extends BaseActivity implements MonthDialog.On
     @Override
     public void getData() {
         super.getData();
-        requestParams = Utils.getRequestParams(this);
+        RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/option/transfer/log");
         requestParams.addBodyParameter("startTime", startTime);
         requestParams.addBodyParameter("endTime", endTime);
@@ -175,7 +180,19 @@ public class TransferMoreActivity extends BaseActivity implements MonthDialog.On
 
     @Override
     public void getSelectTime(String time) {
-        startTime = time;
-        getData();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+        Date date = null;
+        try {
+            date = df.parse(time);
+            Timestamp monthStartTime = TimeUtils.getMonthStartTime(date);
+            Timestamp monthEndTime = TimeUtils.getMonthEndTime(date);
+
+            startTime = df.format(monthStartTime);
+            endTime = df.format(monthEndTime);
+            // startTime = time;
+            getData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

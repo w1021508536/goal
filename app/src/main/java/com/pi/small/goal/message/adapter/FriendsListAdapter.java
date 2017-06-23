@@ -5,17 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.entity.ContactBean;
-import com.pi.small.goal.utils.Url;
 import com.squareup.picasso.Picasso;
-
-import org.xutils.image.ImageOptions;
-import org.xutils.x;
 
 import java.util.List;
 
@@ -131,7 +126,7 @@ public class FriendsListAdapter extends BaseAdapter {
         if (!contact.getAvatar().equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(contact.getAvatar())).into(viewHolder.head_image);
         } else {
-            viewHolder.head_image.setImageDrawable(context.getDrawable(R.mipmap.icon_head));
+            viewHolder.head_image.setImageResource(R.mipmap.icon_head);
         }
 
         if (dataList.size() == 0) {

@@ -98,8 +98,6 @@ public class UserDetitalActivity extends BaseActivity {
     PinchImageView pinchImage;
     @InjectView(R.id.image_layout)
     RelativeLayout imageLayout;
-    @InjectView(R.id.attention_text)
-    TextView attentionText;
 
 
     private String userId;
@@ -139,6 +137,7 @@ public class UserDetitalActivity extends BaseActivity {
     private SharedPreferences.Editor utilsEditor;
 
     private int isFollow = 0;
+    public static final String KEY_USERID = "userId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +153,7 @@ public class UserDetitalActivity extends BaseActivity {
 
         width = (getWindowManager().getDefaultDisplay().getWidth() - 130);
 
-        userId = getIntent().getStringExtra("userId");
+        userId = getIntent().getStringExtra(KEY_USERID);
 
         dynamicEntityList = new ArrayList<DynamicEntity>();
 
@@ -192,14 +191,14 @@ public class UserDetitalActivity extends BaseActivity {
                 }
             }
         });
-        view = scrollView.getRefreshableView();
-
-        view.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-            }
-        });
+//        view = scrollView.getRefreshableView();
+//
+//        view.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//
+//            }
+//        });
 
         if (!Utils.UtilsSharedPreferences(this).getString("followList", "").equals("")) {
             followList = Utils.GetFollowList(Utils.UtilsSharedPreferences(this).getString("followList", ""));

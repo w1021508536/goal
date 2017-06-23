@@ -67,7 +67,6 @@ public class FollowActivity extends BaseActivity {
         plv.setAdapter(adapter);
         nameTextInclude.setText("我的关注");
         rightImageInclude.setVisibility(View.GONE);
-        getData();
 //        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_nofollow, null);
 //        plvCollect.setEmptyView(emptyView);
     }
@@ -84,6 +83,7 @@ public class FollowActivity extends BaseActivity {
 // {"followId":3,"userId":26,"followUserId":9,"nick":"ff","avatar":"jpg"}],"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
     @Override
     public void getData() {
+        super.getData();
         RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/user/followed");
         requestParams.addHeader("token", sp.getString("token", ""));

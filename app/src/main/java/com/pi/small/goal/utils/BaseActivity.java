@@ -89,8 +89,8 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
                 img_empty.setImageResource(R.mipmap.bg_net_wrong);
             if (tv_empty != null)
                 tv_empty.setText("没 有 网 络 连 接 ~");
-        }
-        getData();
+        } else
+            getData();
     }
 
     /**
@@ -127,9 +127,9 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (XUtil.loadingDialog != null) {
-            System.out.println("========not===null=====destroy====");
-            XUtil.loadingDialog.dismiss();
-        }
+//        if (XUtil.loadingDialog != null) {
+//            System.out.println("========not===null=====destroy====");
+//            XUtil.loadingDialog.dismiss();
+//        }
     }
 }

@@ -1,6 +1,7 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.entry.TargetHeadEntity;
+import com.pi.small.goal.search.activity.UserDetitalActivity;
 import com.pi.small.goal.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -70,13 +72,22 @@ public class SupportAdapter extends BaseAdapter {
         } else {
             vh = (ViewHolder) convertView.getTag();
         }
-        TargetHeadEntity.SupportsBean supportEntity = data.get(position);
+        final TargetHeadEntity.SupportsBean supportEntity = data.get(position);
         if (!"".equals(supportEntity.getAvatar()) && !"jpg".equals(supportEntity.getAvatar())) {
             Picasso.with(context).load(Utils.GetPhotoPath(supportEntity.getAvatar())).into(vh.iconItem);
         }
         vh.tvNameItem.setText(supportEntity.getNick());
         vh.tvMoneyItem.setText(supportEntity.getMoney() + "");
         vh.tvTimeItem.setText(Utils.GetTime(supportEntity.getCreateTime()));
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserDetitalActivity.class);
+                intent.putExtra(UserDetitalActivity.KEY_USERID, supportEntity.getFromUserId()+"");
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

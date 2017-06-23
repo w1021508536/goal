@@ -11,9 +11,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.R;
-import com.pi.small.goal.my.activity.RenameActivity;
 import com.pi.small.goal.my.activity.AimMoreActivity;
+import com.pi.small.goal.my.activity.RenameActivity;
 import com.pi.small.goal.my.entry.CollectEntity;
+import com.pi.small.goal.search.activity.UserDetitalActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -95,7 +96,7 @@ public class CollectAdapter extends BaseAdapter {
         }
         vh.tvNameItem.setText(collectEntity.getNick());
         if (Utils.photoEmpty(collectEntity.getImg())) {
-            Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgCityItem);
+            Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg()) + Url.SMALL_PHOTO_URL).into(vh.imgCityItem);
         }
 
         //      vh.tvDayNumItem.setText(collectEntity.getCycle() + "");
@@ -149,6 +150,14 @@ public class CollectAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 collectAim(collectEntity.getId(), "0", position);
+            }
+        });
+        vh.iconItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserDetitalActivity.class);
+                intent.putExtra(UserDetitalActivity.KEY_USERID, collectEntity.getUserId() + "");
+                context.startActivity(intent);
             }
         });
         return convertView;
