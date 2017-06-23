@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.aim.activity.AddAimActivity;
+import com.pi.small.goal.aim.activity.SaveMoneyActivity;
 import com.pi.small.goal.aim.activity.SupportAimActivity;
 import com.pi.small.goal.my.activity.AimMoreActivity;
 import com.pi.small.goal.my.activity.RedActivity;
@@ -68,8 +70,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
     private Map<String, String> map;
     private AimEntity aimEntity;
 
-    //    private List<View> viewList;
-    private View itemView;
     private ImageView[] imageViews;
 
     private ViewPagerAdapter viewPagerAdapter;
@@ -111,8 +111,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         dataList = new ArrayList<AimEntity>();
 //        viewList = new ArrayList<View>();
         customTransformer = new CustomTransformer();
-        itemView = LayoutInflater.from(getActivity()).inflate(
-                R.layout.item_viewpager_aim, null);
         right_image = (ImageView) currentView.findViewById(R.id.right_image);
         viewPager = (ViewPager) currentView.findViewById(R.id.view_pager);
         viewGroup = (ViewGroup) currentView.findViewById(R.id.viewGroup);
@@ -257,12 +255,15 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             Float totalMoney = Float.valueOf(dataList.get(position_now).getMoney());
             totalMoney = totalMoney + Float.valueOf(money);
             dataList.get(position_now).setMoney(totalMoney + "");
+            if (viewPager.getChildAt(position_now) == null) {
+                System.out.println("================null==============");
+            }
+            View currentView = viewPagerAdapter.getPrimaryItem();
 
-            System.out.println("=======================");
-            TextView tv_money = (TextView) viewPager.getChildAt(position_now).findViewById(R.id.money_text);
-            ImageView line_right_image = (ImageView) viewPager.getChildAt(position_now).findViewById(R.id.line_right_image);
-            TextView weight_text = (TextView) viewPager.getChildAt(position_now).findViewById(R.id.weight_text);
-            ImageView line_left_image = (ImageView) itemView.findViewById(R.id.line_left_image);
+            TextView tv_money = (TextView) currentView.findViewById(R.id.money_text);
+            ImageView line_right_image = (ImageView) currentView.findViewById(R.id.line_right_image);
+            TextView weight_text = (TextView) currentView.findViewById(R.id.weight_text);
+            ImageView line_left_image = (ImageView) currentView.findViewById(R.id.line_left_image);
 
             tv_money.setText(dataList.get(position_now).getMoney());
             if ((Float.valueOf(dataList.get(position_now).getMoney()) / Float.valueOf(dataList.get(position_now).getBudget())) > 0.98) {
@@ -341,9 +342,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-                        System.out.println("===========图=============" + position_now);
                         dataList.get(position_now).setImg(img);
-                        x.image().bind((ImageView) viewPager.getChildAt(position_now).findViewById(R.id.aim_image), Utils.GetPhotoPath(img), imageOptions, new Callback.CommonCallback<Drawable>() {
+                        x.image().bind((ImageView) viewPagerAdapter.getPrimaryItem().findViewById(R.id.aim_image), Utils.GetPhotoPath(img), imageOptions, new Callback.CommonCallback<Drawable>() {
                             @Override
                             public void onSuccess(Drawable result) {
                                 result.setCallback(null);
@@ -400,7 +400,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("============GetAim==========" + result);
+
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -431,7 +431,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
                             dataList.add(aimEntity);
                         }
-                        System.out.println("=====================" + dataList.size());
                         if (dataList.size() == 0) {
                             null_layout.setVisibility(View.VISIBLE);
                         } else {
@@ -524,6 +523,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         public void onPageSelected(int position) {
             // TODO Auto-generated method stub
             position_now = position;
+            System.out.println("==========position_now========" + position_now);
             for (int i = 0; i < imageViews.length; i++) {
                 imageViews[position].setBackgroundResource(R.mipmap.icon_dian_yellow);
                 //不是当前选中的page，其小圆点设置为未选中的状态
@@ -600,6 +600,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         private Context context;
 
         List<View> mViewList = new ArrayList<View>();
+        private View mCurrentView;
 
         public ViewPagerAdapter(Context context, List<AimEntity> dataList) {
             this.context = context;
@@ -615,6 +616,15 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         public void addData(AimEntity aimEntity) {
             this.dataList.add(aimEntity);
             notifyDataSetChanged();
+        }
+
+        @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            mCurrentView = (View) object;
+        }
+
+        public View getPrimaryItem() {
+            return mCurrentView;
         }
 
         @Override
@@ -660,29 +670,24 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 viewHolder = (ViewHolder) itemView.getTag();
             }
             if (!dataList.get(position).getImg().equals("")) {
-                System.out.println("========aim图片===" + Utils.GetPhotoPath(dataList.get(position).getImg()) + Url.SMALL_PHOTO_URL2);
-
-                x.image().bind(viewHolder.aim_image, Utils.GetPhotoPath(dataList.get(position).getImg()) + Url.SMALL_PHOTO_URL, imageOptions, new Callback.CommonCallback<Drawable>() {
+                x.image().bind(viewHolder.aim_image, Utils.GetPhotoPath(dataList.get(position).getImg()) + "?x-oss-process=image/resize,m_lfit,h_400,w_400", imageOptions, new Callback.CommonCallback<Drawable>() {
                     @Override
                     public void onSuccess(Drawable result) {
                         result.setCallback(null);
-
-                        System.out.println("============加载成功===========");
                     }
 
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-                        System.out.println("============加载成功====11======="+ex.getMessage());
                     }
 
                     @Override
                     public void onCancelled(CancelledException cex) {
-                        System.out.println("============加载成功======22=====");
+
                     }
 
                     @Override
                     public void onFinished() {
-                        System.out.println("============加载成功====33=======");
+
                     }
                 });
             } else {
@@ -692,6 +697,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             viewHolder.aim_image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    position_now = position;
                     Intent intent = new Intent(context, AimMoreActivity.class);
                     intent.putExtra(AimMoreActivity.KEY_AIMID, dataList.get(position).getId());
                     context.startActivity(intent);
@@ -744,25 +750,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 viewHolder.process_text.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, SupportAimActivity.class);
-                        intent.putExtra("aimId", dataList.get(position).getId());
-                        intent.putExtra("budget", dataList.get(position).getBudget());
-                        intent.putExtra("money", dataList.get(position).getMoney());
-                        startActivityForResult(intent, Code.SupportAim);
-                    }
-                });
-            } else {
-                viewHolder.process_text.setText("目标达成 可提现");
-                Drawable drawable = getActivity().getResources().getDrawable(R.mipmap.icon_aim_finish);
-                drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
-                viewHolder.process_text.setCompoundDrawables(drawable, null, null, null);
-            }
-            if (!dataList.get(position).getMoney().equals(dataList.get(position).getBudget())) {
-                viewHolder.process_text.setText("向小目标更进一步");
-                viewHolder.process_text.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                        position_now = position;
                         Intent intent = new Intent();
                         intent.setClass(context, SupportAimActivity.class);
                         intent.putExtra("aimId", dataList.get(position).getId());
@@ -782,6 +770,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             viewHolder.set_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    position_now = position;
                     View windowView = LayoutInflater.from(getActivity()).inflate(
                             R.layout.window_aim_set, null);
                     final PopupWindow popupWindow = new PopupWindow(windowView,
@@ -792,9 +781,52 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                     TextView cancel_text = (TextView) windowView.findViewById(R.id.cancel_text);
                     withdrawals_text.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View view) {
 
-//                            popupWindow.dismiss();
+                            if (Float.valueOf(dataList.get(position).getMoney()) < Float.valueOf(dataList.get(position).getBudget())) {
+                                popupWindow.dismiss();
+                                View windowView2 = LayoutInflater.from(getActivity()).inflate(
+                                        R.layout.window_withdrawals_aim, null);
+                                final PopupWindow popupWindow2 = new PopupWindow(windowView2,
+                                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+                                TextView cancel_text = (TextView) windowView2.findViewById(R.id.cancel_text);
+                                TextView ok_text = (TextView) windowView2.findViewById(R.id.ok_text);
+                                ImageView delete_image = (ImageView) windowView2.findViewById(R.id.delete_image);
+
+                                delete_image.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        popupWindow2.dismiss();
+                                    }
+                                });
+                                cancel_text.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        //仍要取出  扣除3%手续费
+                                    }
+                                });
+                                ok_text.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        popupWindow2.dismiss();
+                                    }
+                                });
+
+                                popupWindow2.setAnimationStyle(R.style.MyDialogStyle);
+                                popupWindow2.setTouchable(true);
+                                popupWindow2.setOutsideTouchable(true);
+                                popupWindow2.setFocusable(false);
+
+                                // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+                                // 我觉得这里是API的一个bug
+                                popupWindow2.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+                                // 设置好参数之后再show
+                                popupWindow2.showAtLocation(view, Gravity.CENTER, 0, 0);
+                            } else {
+                                popupWindow.dismiss();
+                                Withdrawals();
+                            }
                         }
                     });
 
@@ -850,6 +882,11 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             return itemView;
         }
 
+        //提现
+        private void Withdrawals() {
+            Utils.showToast(getActivity(), "提现");
+        }
+
         private class ViewHolder {
             ImageView line_left_image;
             ImageView line_right_image;
@@ -862,7 +899,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             TextView process_text;
             TextView set_text;
             ImageView aim_image;
-
         }
     }
 }

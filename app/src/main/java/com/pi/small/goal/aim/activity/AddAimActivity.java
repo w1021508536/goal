@@ -596,8 +596,6 @@ public class AddAimActivity extends BaseActivity {
         });
         cycle_picker.setData(cycleList);
         cycle_picker.setDefault(5);
-        right_text.setOnClickListener(this);
-        left_image.setOnClickListener(this);
 
         cycle_picker.setOnSelectListener(new ScrollerNumberPicker.OnSelectListener() {
 
@@ -640,7 +638,7 @@ public class AddAimActivity extends BaseActivity {
         final PopupWindow popupWindow = new PopupWindow(windowView,
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
 
-        Button cancel_text = (Button) windowView.findViewById(R.id.cancel_text);
+        TextView cancel_text = (TextView) windowView.findViewById(R.id.cancel_text);
         TextView ok_text = (TextView) windowView.findViewById(R.id.ok_text);
         ImageView delete_image = (ImageView) windowView.findViewById(R.id.delete_image);
         cancel_text.setOnClickListener(new View.OnClickListener() {
@@ -683,9 +681,6 @@ public class AddAimActivity extends BaseActivity {
 
             }
         });
-        right_text.setOnClickListener(this);
-        left_image.setOnClickListener(this);
-
 
 //        windowView.setOnClickListener(new View.OnClickListener() {
 //            @Override

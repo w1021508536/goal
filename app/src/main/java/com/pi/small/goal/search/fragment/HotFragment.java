@@ -89,6 +89,8 @@ public class HotFragment extends Fragment {
     private List<CommentEntity> commentEntityList;
     private CommentEntity commentEntity;
     private DynamicEntity dynamicEntity;
+    private List<Map<String, String>> adList;
+    private Map<String, String> map;
 
     private HotAdapter hotAdapter;
 
@@ -109,7 +111,7 @@ public class HotFragment extends Fragment {
 
     private int position_dian = 0;
     private int currentPosition;
-    private List<View> viewList;
+    //    private List<View> viewList;
     private View itemView;
     private ImageView[] imageViews;
 
@@ -132,8 +134,9 @@ public class HotFragment extends Fragment {
         utilsSharedPreferences = Utils.UtilsSharedPreferences(getActivity());
         utilsEditor = utilsSharedPreferences.edit();
         dynamicEntityList = new ArrayList<DynamicEntity>();
+        adList = new ArrayList<>();
         hotAdapter = new HotAdapter(getActivity());
-        viewList = new ArrayList<View>();
+//        viewList = new ArrayList<View>();
         hotList.setAdapter(hotAdapter);
         init();
     }
@@ -186,20 +189,11 @@ public class HotFragment extends Fragment {
 
         View view = LayoutInflater.from(getActivity()).inflate(
                 R.layout.view_viewpager_hot, null);
-        for (int i = 0; i < 3; i++) {
-            itemView = LayoutInflater.from(getActivity()).inflate(
-                    R.layout.item_view_pager_hot, null);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100);
-            itemView.setLayoutParams(params);
-            ImageView banner_image = (ImageView) itemView.findViewById(R.id.banner_image);
-            banner_image.setImageDrawable(getActivity().getResources().getDrawable(R.mipmap.banner));
-            viewList.add(itemView);
-        }
         WrapContentHeightViewPager viewPager = (WrapContentHeightViewPager) view.findViewById(R.id.view_pager);
 
         LinearLayout viewGroup = (LinearLayout) view.findViewById(R.id.viewGroup);
         setPoint(viewGroup);
-        ViewPagerSearchAdapter viewPagerSearchAdapter = new ViewPagerSearchAdapter(getActivity(), viewList);
+        ViewPagerSearchAdapter viewPagerSearchAdapter = new ViewPagerSearchAdapter(getActivity(), adList);
         viewPager.setAdapter(viewPagerSearchAdapter);
         listView = hotList.getRefreshableView();
         listView.addHeaderView(view);
@@ -207,8 +201,8 @@ public class HotFragment extends Fragment {
     }
 
     private void setPoint(LinearLayout viewGroup) {
-        imageViews = new ImageView[viewList.size()];
-        for (int i = 0; i < viewList.size(); i++) {
+        imageViews = new ImageView[adList.size()];
+        for (int i = 0; i < adList.size(); i++) {
             ImageView imageView = new ImageView(getActivity());
             //设置小圆点imageview的参数
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10, 10);
@@ -258,6 +252,52 @@ public class HotFragment extends Fragment {
         }
     }
 
+    //获取广告
+    private void GetAd() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.AdList);
+        requestParams.addHeader("token", Utils.GetToken(getActivity()));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========GetAd===========" + result);
+
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            map = new HashMap<String, String>();
+                            map.put("id", jsonArray.getJSONObject(i).getString("id"));
+                            map.put("title", jsonArray.getJSONObject(i).getString("title"));
+                            map.put("brief", jsonArray.getJSONObject(i).getString("brief"));
+                            map.put("url", jsonArray.getJSONObject(i).getString("url"));
+                            map.put("createTime", jsonArray.getJSONObject(i).getString("createTime"));
+                            map.put("status", jsonArray.getJSONObject(i).getString("status"));
+                            map.put("type", jsonArray.getJSONObject(i).getString("type"));
+                            map.put("img", jsonArray.getJSONObject(i).getString("img"));
+
+                            adList.add(map);
+                        }
+                        AddHeadView();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
 
     private void GetHotData(String page, String r) {
 //        state = hotList.getRefreshableView().onSaveInstanceState();
@@ -269,7 +309,6 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========hotFragment============");
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -386,10 +425,34 @@ public class HotFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
+
+    @OnClick({R.id.pinch_image, R.id.image_layout, R.id.null_layout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.pinch_image:
+                imageLayout.setVisibility(View.GONE);
+                break;
+            case R.id.image_layout:
+                imageLayout.setVisibility(View.GONE);
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(getActivity())) {
+                    if (listView == null) {
+                        GetAd();
+                    }
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    GetHotData(page + "", "10");
+                } else {
+                    Utils.showToast(getActivity(), "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
+
+                break;
+        }
     }
 
     @Override
@@ -473,34 +536,13 @@ public class HotFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.pinch_image, R.id.image_layout,R.id.null_layout})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.pinch_image:
-                imageLayout.setVisibility(View.GONE);
-                break;
-            case R.id.image_layout:
-                imageLayout.setVisibility(View.GONE);
-                break;
-            case R.id.null_layout:
-                    if (Utils.isNetworkConnected(getActivity())) {
-                        if (listView == null) {
-                            AddHeadView();
-                        }
-                        nullLayout.setClickable(false);
-                        nullLayout.setVisibility(View.GONE);
-                        GetHotData(page + "", "10");
-                    } else {
-                        Utils.showToast(getActivity(), "请检查网络是否连接");
-                        nullLayout.setClickable(true);
-                        nullLayout.setVisibility(View.VISIBLE);
-                        imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
-                        tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
-                    }
 
-                break;
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
     }
+
 
     public class HotAdapter extends BaseAdapter {
 
@@ -1101,7 +1143,8 @@ public class HotFragment extends Fragment {
 
         if (Utils.isNetworkConnected(getActivity())) {
             if (listView == null) {
-                AddHeadView();
+                GetAd();
+
             }
             nullLayout.setClickable(false);
             nullLayout.setVisibility(View.GONE);

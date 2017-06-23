@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="30dp"
-                android:text="存入启动资金"
+                android:text="目标尚未完成"
                 android:textColor="@color/yellow_heavy_text"
                 android:textSize="30dp" />
 
@@ -53,9 +53,35 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:text="使您的目标获得好友的助力和点赞"
+                android:text="现在进行资金取出，将被扣除"
                 android:textColor="@color/text_small_light"
                 android:textSize="12dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="3%"
+                    android:textColor="@color/yellow_heavy_text"
+                    android:textSize="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="的手续费"
+                    android:textColor="@color/text_small_light"
+                    android:textSize="12dp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -78,7 +104,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
-                    android:text="暂不考虑"
+                    android:text="仍要取出"
                     android:textColor="@color/text_small_light"
                     android:textSize="16dp" />
 
@@ -94,7 +120,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
-                    android:text="立刻存入"
+                    android:text="暂不取出"
                     android:textColor="@color/white"
                     android:textSize="16dp" />
 
@@ -108,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/icon_pig" />
+            android:src="@mipmap/icon_not_finish" />
 
     </FrameLayout>
 

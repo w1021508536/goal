@@ -1,39 +1,45 @@
-package com.pi.small.goal.message.activity;
+package com.pi.small.goal.search.activity;
 
 import android.net.http.SslError;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.pi.small.goal.R;
 import com.pi.small.goal.utils.BaseActivity;
 
-public class SystemMessageDataWebActivity extends BaseActivity  {
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
+public class AdDetailsActivity extends BaseActivity {
 
-    private ImageView left_image;
-
-    private WebView webView;
+    @InjectView(R.id.left_image)
+    ImageView left_image;
+    @InjectView(R.id.title_text)
+    TextView title_text;
+    @InjectView(R.id.web)
+    WebView webView;
 
     private String Url;
-
+    private String title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_system_message_data_web);
+        setContentView(R.layout.activity_ad_details);
+        ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
 
         Url = getIntent().getStringExtra("url");
-
+        title= getIntent().getExtras().getString("title","");
         init();
     }
 
+
     private void init() {
-        left_image = (ImageView) findViewById(R.id.left_image);
-        webView = (WebView) findViewById(R.id.web);
+        title_text.setText(title);
 
 
         //设置可自由缩放网页
@@ -41,7 +47,6 @@ public class SystemMessageDataWebActivity extends BaseActivity  {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBlockNetworkImage(false);
-
 
 
         // 如果页面中链接，如果希望点击链接继续在当前browser中响应，
@@ -52,23 +57,19 @@ public class SystemMessageDataWebActivity extends BaseActivity  {
                 view.loadUrl(url);
                 return true;
             }
+
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed(); // 接受所有网站的证书
+                handler.proceed();// 接受所有网站的证书
 
             }
         });
         webView.loadUrl(Url);
-        left_image.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.left_image:
-                finish();
-                break;
-        }
+    @OnClick(R.id.left_image)
+    public void onViewClicked() {
+        finish();
     }
 
     @Override
@@ -82,4 +83,5 @@ public class SystemMessageDataWebActivity extends BaseActivity  {
         super.onPause();
         webView.pauseTimers();
     }
+
 }

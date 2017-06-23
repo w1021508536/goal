@@ -90,5 +90,6 @@ public class Url {
 
     public static String Agent="/agent";//下级代理
 
+    public static String AdList="/ad/list";//广告列表
 
 }

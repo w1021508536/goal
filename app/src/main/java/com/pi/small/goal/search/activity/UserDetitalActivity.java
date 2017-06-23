@@ -120,6 +120,7 @@ public class UserDetitalActivity extends BaseActivity {
     private int page = 1;
 
     private int total;
+    public static String KEY_USERID = "userId";
 
     private SharedPreferences utilsSharedPreferences;
     private SharedPreferences.Editor utilsEditor;
