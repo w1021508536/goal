@@ -150,18 +150,15 @@ public class AimMoreActivity extends BaseActivity {
         adapter = new TrajectoryAdapter(this);
         lvTargetMore.setAdapter(adapter);
         aimId = getIntent().getStringExtra(KEY_AIMID);
-
-//        plvTargetMore.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-//        AbsListView.LayoutParams layoutParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, AbsListView.LayoutParams.WRAP_CONTENT);
-//        View header = getLayoutInflater().inflate(R.layout.view_head_target, plvTargetMore, false);
-//        header.setLayoutParams(layoutParams);
-//        ListView lv = plvTargetMore.getRefreshableView();
-//        lv.addHeaderView(header);
-
         setHeadView();
 
         super.initData();
     }
+
+    /**
+     * 设置头部视图
+     * create  wjz
+     **/
 
     private void setHeadView() {
         header = getLayoutInflater().inflate(R.layout.view_head_target, null);
@@ -216,6 +213,11 @@ public class AimMoreActivity extends BaseActivity {
         getTargetDynamic();
 
     }
+
+    /**
+     * 获取目标动态
+     * create  wjz
+     **/
 
     private void getTargetDynamic() {
 
@@ -282,6 +284,11 @@ public class AimMoreActivity extends BaseActivity {
             .setFailureDrawableId(R.drawable.image1)
             .build();
 
+    /**
+     * 设置头部视图数据
+     * create  wjz
+     **/
+
     private void setHeadViewData(TargetHeadEntity targetHeadEntity) {
 
         try {
@@ -295,18 +302,12 @@ public class AimMoreActivity extends BaseActivity {
             RelativeLayout rl_supports = (RelativeLayout) header.findViewById(R.id.rl_goodPeople_targetMore);
             img_bg_head = (ImageView) header.findViewById(R.id.img_bg_head);
 
-//            if (Utils.photoEmpty(targetHeadEntity.getAim().getImg())) {
-//                Picasso.with(this).load(Utils.GetPhotoPath(targetHeadEntity.getAim().getImg())).into(img_bg_head);
-//            }
             if (Utils.photoEmpty(targetHeadEntity.getAim().getImg()))
                 x.image().bind(img_bg_head, Utils.GetPhotoPath(targetHeadEntity.getAim().getImg()), imageOptions);
             if (targetHeadEntity.getSupports().size() == 0) {
                 rl_supports.setVisibility(View.GONE);
             }
 
-//            JSONObject aimJsonObj = (JSONObject) jsonObj.get("aim");
-//            JSONObject userJsonObj = (JSONObject) jsonObj.get("user");
-//            int userId = (int) userJsonObj.get("id");
             if ((targetHeadEntity.getUser().getId() + "").equals(sp.getString(KeyCode.USER_ID, ""))) {
                 myAim = true;
                 collectImageInclude.setImageResource(R.mipmap.goals_setting_btn);
@@ -429,6 +430,13 @@ public class AimMoreActivity extends BaseActivity {
                 rlTop.setVisibility(View.VISIBLE);
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                etvTargetMore.setEnabled(true);
+                etvTargetMore.setFocusable(true);
+                etvTargetMore.setFocusableInTouchMode(true);
+                etvTargetMore.requestFocus();
+                etvTargetMore.requestFocusFromTouch();
+                etvTargetMore.selectAll();
+
             }
 
             @Override
@@ -462,10 +470,12 @@ public class AimMoreActivity extends BaseActivity {
                         List<DynamicEntity.CommentsBean> comments = adapter.getData().get(position).getComments();
                         if (comments.size() > 0) {
                             comments.add(0, new DynamicEntity.CommentsBean(etvTargetMore.getText().toString(), sp.getString(KeyCode.USER_NICK, "")));
-                            adapter.getData().get(position).setComments(comments);
-                            adapter.notifyDataSetChanged();
-                        }
 
+                        }else {
+                            comments.add( new DynamicEntity.CommentsBean(etvTargetMore.getText().toString(), sp.getString(KeyCode.USER_NICK, "")));
+                        }
+                        adapter.getData().get(position).setComments(comments);
+                        adapter.notifyDataSetChanged();
                         break;
                 }
 
@@ -584,8 +594,9 @@ public class AimMoreActivity extends BaseActivity {
             case R.id.rl_top:
                 rlTop.setVisibility(View.GONE);
                 etvTargetMore.setVisibility(View.GONE);
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+                hideInput(this, etvTargetMore);
                 break;
             case R.id.right_image_include:
                 share();
@@ -593,6 +604,14 @@ public class AimMoreActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 强制隐藏输入法键盘
+     */
+    private void hideInput(Context context, View view) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
     /**
      * 显示设置的popuwindow
@@ -800,7 +819,10 @@ public class AimMoreActivity extends BaseActivity {
     }
 
 
-    //弹出框
+    /**
+     * 领取感谢红包
+     * create  wjz
+     **/
     private void PutRedWindow() {
         final View windowView = LayoutInflater.from(this).inflate(
                 R.layout.window_thanks_red, null);
@@ -945,7 +967,10 @@ public class AimMoreActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 收藏小目标
+     * create  wjz
+     **/
     private void collectAim(String aimId, String status) {
         RequestParams requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/aim/collect");

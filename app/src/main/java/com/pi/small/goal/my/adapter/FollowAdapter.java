@@ -1,6 +1,7 @@
 package com.pi.small.goal.my.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
 import com.pi.small.goal.my.activity.RenameActivity;
 import com.pi.small.goal.my.entry.FollowEntry;
+import com.pi.small.goal.search.activity.UserDetitalActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
@@ -99,6 +101,14 @@ public class FollowAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 follow(followEntry.getFollowUserId(), position);
+            }
+        });
+        vh.iconItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserDetitalActivity.class);
+                intent.putExtra(UserDetitalActivity.KEY_USERID, followEntry.getFollowUserId()+"");
+                context.startActivity(intent);
             }
         });
 

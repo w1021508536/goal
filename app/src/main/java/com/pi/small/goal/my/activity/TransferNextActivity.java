@@ -121,6 +121,7 @@ public class TransferNextActivity extends BaseActivity {
     /**
      * 验证密码
      * create  wjz
+     *
      **/
     private void verifyPass(final String strPassword) {
 
@@ -158,7 +159,7 @@ public class TransferNextActivity extends BaseActivity {
     private void transfer(String strPassword) {
         requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/account/option/transfer");
-        requestParams.addBodyParameter("toUserId", contactBean.getId());
+        requestParams.addBodyParameter("toUserId", contactBean.getFriendId());
         requestParams.addBodyParameter("amount", etvMoney.getText().toString());
         requestParams.addBodyParameter("password", strPassword);
 

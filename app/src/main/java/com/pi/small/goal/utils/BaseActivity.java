@@ -128,9 +128,6 @@ public class BaseActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (XUtil.loadingDialog != null) {
-            System.out.println("========not===null=====destroy====");
-            XUtil.loadingDialog.dismiss();
-        }
+
     }
 }

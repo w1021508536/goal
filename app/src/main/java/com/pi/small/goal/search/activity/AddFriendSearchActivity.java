@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
@@ -30,6 +31,11 @@ import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.utils.entity.AimEntity;
 import com.pi.small.goal.utils.entity.UserSearchEntity;
 import com.squareup.picasso.Picasso;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.utils.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -233,13 +239,54 @@ public class AddFriendSearchActivity extends BaseActivity {
 
                 break;
             case R.id.wx_layout:
+                share(SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.qq_layout:
+                share(SHARE_MEDIA.QQ);
                 break;
             case R.id.wb_layout:
                 break;
         }
     }
+
+    private void share(SHARE_MEDIA platform) {
+
+        UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
+        new ShareAction(AddFriendSearchActivity.this).setPlatform(platform)
+                .withText("小目标哦")
+                .withMedia(image)
+                .setCallback(umShareListener)
+                .share();
+    }
+
+
+    private UMShareListener umShareListener = new UMShareListener() {
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+            //分享开始的回调
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+            //  Log.d("plat","platform"+platform);
+
+            Toast.makeText(AddFriendSearchActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            Toast.makeText(AddFriendSearchActivity.this, platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
+            if (t != null) {
+                Log.d("throw", "throw:" + t.getMessage());
+            }
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            Toast.makeText(AddFriendSearchActivity.this, platform + " 分享取消了", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

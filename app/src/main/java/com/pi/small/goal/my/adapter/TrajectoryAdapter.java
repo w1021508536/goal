@@ -191,7 +191,6 @@ public class TrajectoryAdapter extends BaseAdapter {
         if ("".equals(dynamicEntity.getDynamic().getImg2())) {
             addSmallPhoto = Url.SMALL_PHOTO_URL2;
         }
-
         x.image().bind(vh.imgItem, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg1()) + addSmallPhoto, imageOptions);
         x.image().bind(vh.img2Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg2()) + addSmallPhoto, imageOptions);
         x.image().bind(vh.img3Item, Utils.GetPhotoPath(dynamicEntity.getDynamic().getImg3()) + addSmallPhoto, imageOptions);

@@ -615,7 +615,7 @@ public class UserDetitalActivity extends BaseActivity {
                 no_data_layout.setVisibility(View.VISIBLE);
                 img_data_empty.setImageResource(R.mipmap.bg_wrong);
                 tv_data_empty.setText("出 错! 点 击 重 新 尝 试");
-                pullToRefreshListView.onRefreshComplete();
+
             }
 
             @Override
