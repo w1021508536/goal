@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pi.small.goal.MyApplication;
@@ -14,8 +15,10 @@ import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
+import com.pi.small.goal.utils.entity.MemberEntity;
 import com.pi.small.goal.weight.CurveMuchChartView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
@@ -40,6 +43,12 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
     ImageView timeImage;
 
     MonthDialog dialog;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
 
     private String chooseTime;
 
@@ -54,23 +63,76 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         initCurve();
     }
 
-    @OnClick({R.id.left_image, R.id.right_text, R.id.time_image})
+    @OnClick({R.id.left_image, R.id.right_text, R.id.time_image, R.id.null_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_image:
                 finish();
                 break;
             case R.id.right_text:
-                Intent intent = new Intent(DistributionActivity.this, DistributionMemberActivity.class);
-                startActivity(intent);
+
+                GetCode();
                 break;
             case R.id.time_image:
                 dialog.show();
                 break;
+            case R.id.null_layout:
+
+                break;
         }
     }
 
+    //判断是否为代理商
+    private void GetCode() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+//        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
+        requestParams.addBodyParameter("uid", "26");
+        requestParams.addBodyParameter("p", "1");
+        requestParams.addBodyParameter("r", "20");
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========GetCode============="+result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        Intent intent = new Intent(DistributionActivity.this, DistributionMemberActivity.class);
+                        intent.putExtra("result", result);
+                        startActivity(intent);
+                    } else if (code.equals("1500001")) {
+                        Utils.showToast(DistributionActivity.this, new JSONObject(result).getString("msg"));
+                        startActivity(new Intent(DistributionActivity.this, ExtensionActivity.class));
+                        finish();
+                    } else if (code.equals("100000")) {
+                        Intent intent = new Intent(DistributionActivity.this, DistributionMemberActivity.class);
+                        intent.putExtra("result", result);
+                        startActivity(intent);
+                    } else {
+                        Utils.showToast(DistributionActivity.this, new JSONObject(result).getString("msg"));
+                    }
 
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("") && ex.getMessage() != null) {
+                    Utils.showToast(DistributionActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+                return;
+
+            }
+        });
+    }
 
 
     private void initCurve() {
@@ -131,5 +193,6 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
     public void getSelectTime(String time) {
         chooseTime = time;
     }
+
 
 }

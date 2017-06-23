@@ -1,6 +1,6 @@
 package com.pi.small.goal.my.activity;
 
-import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +13,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.pi.small.goal.MyApplication;
 import com.pi.small.goal.R;
-import com.pi.small.goal.message.activity.FriendsListActivity;
 import com.pi.small.goal.my.adapter.DistributionMemberAdapter;
 import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
@@ -33,8 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class DistributionMemberActivity extends BaseActivity {
-
+public class DistributionMemberNextActivity extends BaseActivity {
     @InjectView(R.id.left_image)
     ImageView leftImage;
     @InjectView(R.id.member_list)
@@ -54,15 +52,15 @@ public class DistributionMemberActivity extends BaseActivity {
     private int size = 20;
     private int total;
 
-    private String result;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentView(R.layout.activity_distribution_member);
+        setContentView(R.layout.activity_distribution_member_next);
         ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
 
-        result = getIntent().getExtras().getString("result", "");
+        uid = getIntent().getExtras().getString("uid", "26");
 
         memberEntityList = new ArrayList<>();
         distributionMemberAdapter = new DistributionMemberAdapter(this, memberEntityList);
@@ -94,7 +92,7 @@ public class DistributionMemberActivity extends BaseActivity {
                     memberList.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Utils.showToast(DistributionMemberActivity.this, "没有更多数据了");
+                            Utils.showToast(DistributionMemberNextActivity.this, "没有更多数据了");
                             memberList.onRefreshComplete();
                         }
                     }, 1000);
@@ -110,23 +108,17 @@ public class DistributionMemberActivity extends BaseActivity {
             }
         });
 
-        memberList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (memberEntityList.get(position - 1).getLevel().equals("1") || memberEntityList.get(position - 1).getLevel().equals("2") || memberEntityList.get(position - 1).getLevel().equals("3")) {
-                    Intent intent = new Intent();
-                    intent.setClass(DistributionMemberActivity.this, DistributionMemberNextActivity.class);
-                    intent.putExtra("uid", memberEntityList.get(position-1).getUserId());
-                    startActivity(intent);
-                } else {
-                    Utils.showToast(DistributionMemberActivity.this, "此人不是代理");
-                }
-
-            }
-        });
-
-        getResult(result);
+        if (Utils.isNetworkConnected(DistributionMemberNextActivity.this)) {
+            nullLayout.setClickable(false);
+            nullLayout.setVisibility(View.GONE);
+            GetMember();
+        } else {
+            nullLayout.setClickable(true);
+            nullLayout.setVisibility(View.VISIBLE);
+            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+        }
     }
 
     @OnClick({R.id.left_image, R.id.null_layout})
@@ -136,12 +128,12 @@ public class DistributionMemberActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.null_layout:
-                if (Utils.isNetworkConnected(DistributionMemberActivity.this)) {
+                if (Utils.isNetworkConnected(DistributionMemberNextActivity.this)) {
                     nullLayout.setClickable(false);
                     nullLayout.setVisibility(View.GONE);
                     GetMember();
                 } else {
-                    Utils.showToast(DistributionMemberActivity.this, "请检查网络是否连接");
+                    Utils.showToast(DistributionMemberNextActivity.this, "请检查网络是否连接");
                     nullLayout.setClickable(true);
                     nullLayout.setVisibility(View.VISIBLE);
                     imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
@@ -156,8 +148,7 @@ public class DistributionMemberActivity extends BaseActivity {
         RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-//        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
-        requestParams.addBodyParameter("uid", "26");
+        requestParams.addBodyParameter("uid", uid);
         requestParams.addBodyParameter("p", intPage + "");
         requestParams.addBodyParameter("r", size + "");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
