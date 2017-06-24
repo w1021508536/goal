@@ -471,8 +471,8 @@ public class AimMoreActivity extends BaseActivity {
                         if (comments.size() > 0) {
                             comments.add(0, new DynamicEntity.CommentsBean(etvTargetMore.getText().toString(), sp.getString(KeyCode.USER_NICK, "")));
 
-                        }else {
-                            comments.add( new DynamicEntity.CommentsBean(etvTargetMore.getText().toString(), sp.getString(KeyCode.USER_NICK, "")));
+                        } else {
+                            comments.add(new DynamicEntity.CommentsBean(etvTargetMore.getText().toString(), sp.getString(KeyCode.USER_NICK, "")));
                         }
                         adapter.getData().get(position).setComments(comments);
                         adapter.notifyDataSetChanged();
@@ -547,13 +547,17 @@ public class AimMoreActivity extends BaseActivity {
     }
 
     public int getScrollY() {
-        View c = lvTargetMore.getChildAt(0);
-        if (c == null) {
-            return 0;
+        try {
+            View c = lvTargetMore.getChildAt(0);
+            if (c == null) {
+                return 0;
+            }
+            int firstVisiblePosition = lvTargetMore.getFirstVisiblePosition();
+            int top = c.getTop();
+            return -top + firstVisiblePosition * c.getHeight();
+        } catch (Exception e) {
         }
-        int firstVisiblePosition = lvTargetMore.getFirstVisiblePosition();
-        int top = c.getTop();
-        return -top + firstVisiblePosition * c.getHeight();
+        return 0;
     }
 
     private int listViewScorllY(ListView lv) {

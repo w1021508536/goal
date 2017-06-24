@@ -715,7 +715,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (!Utils.callOk(result)) return;
                 Gson gson = new Gson();
-                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
+                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<EveryTaskGsonEntity>>() {
                 }.getType());
                 Map<String, Boolean> map = new HashMap<String, Boolean>();
 

@@ -100,7 +100,7 @@ public class TransferMoreActivity extends BaseActivity implements MonthDialog.On
                 if (!Utils.callOk(result)) return;
 
                 Gson gson = new Gson();
-                List<TransferMoreGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<TransferMoreGsonEntity>>() {
+                List<TransferMoreGsonEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<TransferMoreGsonEntity>>() {
                 }.getType());
 
                 List<TransferMoreEntity> transferMoreEntities = setTimeData(data);
@@ -160,7 +160,8 @@ public class TransferMoreActivity extends BaseActivity implements MonthDialog.On
             float deleteMoney = 0;
             for (TransferMoreGsonEntity one : redMoreEntities) {
                 //  (int redPacketRecordId, int userId, int money, int packetId, long createTime, int type, int fromUserId, int titleType)
-                adapterData.add(new TransferMoreEntity(one.getId(), one.getAmount(), one.getFromUserId(), one.getToUserId(), one.getCreateTime(), RedAdapter.TYPE_CONTENT));
+                //      adapterData.add(new TransferMoreEntity(one.getId(), one.getAmount(), one.getFromUserId(), one.getToUserId(), one.getCreateTime(), RedAdapter.TYPE_CONTENT));
+                adapterData.add(new TransferMoreEntity(one.getId(), one.getAmount(), one.getFromUserId(), one.getToUserId(), one.getCreateTime(), one.getFromUserNick(), one.getFromUserAvatar(), one.getToUserNick(), one.getToUserAvatar(), RedAdapter.TYPE_CONTENT));
                 if (one.getToUserId() == Integer.valueOf(sp.getString(KeyCode.USER_ID, "0"))) {
                     addMoney += one.getAmount();
                 } else {

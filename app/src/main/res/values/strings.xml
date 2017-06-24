@@ -68,6 +68,9 @@
     <string name="title_updata_content">更改签名</string>
     <string name="updata_ok">修改成功</string>
 
+
+    <string name="transfer_u"><u>期权相关政策</u></string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

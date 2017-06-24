@@ -87,22 +87,6 @@ public class Utils {
         return str;
     }
 
-    /**
-     * 获取json中摸个特定字段的值
-     * create  wjz
-     **/
-
-    public static String GetOneStringForJson(String key, String json) {
-
-        try {
-            JSONObject jsonObject = new JSONObject(json);
-            String s = (String) jsonObject.get(key);
-            return (String) jsonObject.getString(key);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
 
     public static String GetPhotoPath(String path) {
         String photoPath = "";
@@ -136,10 +120,10 @@ public class Utils {
     }
 
     /**
-     * 返回的json是否是成功的
+     * 获取json里面result下的数据
      * create  wjz
      **/
-    public static String getResult(String jsonString) {
+    public static String getResultStr(String jsonString) {
         String result = "";
         try {
             result = new JSONObject(jsonString).getString("result");
@@ -153,7 +137,24 @@ public class Utils {
     }
 
     /**
-     * 返回的json是否是成功的
+     * 获取json中摸个特定字段的值
+     * create  wjz
+     **/
+
+    public static String GetOneStringForJson(String key, String json) {
+        String one = "";
+        try {
+            JSONObject jsonObject = new JSONObject(json);
+            one = jsonObject.getString(key);
+            return one;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return one;
+    }
+
+    /**
+     * 判断返回的图片路径是否可用
      * create  wjz
      **/
     public static boolean photoEmpty(String photo) {

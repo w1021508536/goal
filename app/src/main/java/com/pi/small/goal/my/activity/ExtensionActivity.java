@@ -25,7 +25,11 @@ import com.squareup.picasso.Picasso;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
 import java.util.ArrayList;
@@ -164,18 +168,26 @@ public class ExtensionActivity extends BaseActivity {
         RequestParams requestParams = Utils.getRequestParams(this);
 
         requestParams.setUri(Url.Url + "/agent");
-        requestParams.addBodyParameter("uid", sp.getString(KeyCode.USER_ID, ""));
+        String string = sp.getString(KeyCode.USER_ID, "");
+        //  requestParams.addBodyParameter("uid", sp.getString(KeyCode.USER_ID, ""));
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+                //{"msg":"success","code":0,"result":{"id":4,"userId":48,"level":3,"subCompanyId":0,"volume":0},"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
                 if (Utils.callOk(result)) {
 
-                    String id = Utils.GetOneStringForJson("id", result);
-
-                    Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, "")));
+                    Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(imgIcon);
                     tvUserName.setText(sp.getString(KeyCode.USER_NICK, ""));
-                    tvMoney.setText(id);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(result);
+                        String id = Utils.GetOneStringForJson("id", Utils.getResultStr(result));
+                        tvMoney.setText(id);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
                     tvUserName.setText("分销商推广码");
                     imgIcon.setVisibility(View.GONE);
@@ -239,7 +251,13 @@ public class ExtensionActivity extends BaseActivity {
      **/
     private void share() {
 
-        new ShareAction(this).withText("hello")
+
+        UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
+        UMWeb web = new UMWeb("http://m.test.smallaim.cn/agent/11");
+        web.setTitle("小目标");//标题
+        web.setThumb(image);  //缩略图
+        web.setDescription("哈哈哈哈哈");//描述
+        new ShareAction(this).withText("hello").withMedia(web)
                 .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .setCallback(umShareListener).open();
     }

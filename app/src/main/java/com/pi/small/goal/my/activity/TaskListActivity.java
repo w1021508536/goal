@@ -192,7 +192,7 @@ public class TaskListActivity extends BaseActivity {
 
                 if (!Utils.callOk(result)) return;
                 Gson gson = new Gson();
-                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
+                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<EveryTaskGsonEntity>>() {
                 }.getType());
 
                 List<EveryTaskAdapterEntity> newTaskData = new ArrayList<EveryTaskAdapterEntity>();

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -46,8 +47,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xutils.common.Callback;
-import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -59,7 +58,6 @@ import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.model.UserInfo;
@@ -223,11 +221,13 @@ public class UserDetitalActivity extends BaseActivity {
                 //顶部渐变色
                 if (hotAdapter == null)
                     return;
-                int heigh = topLayout.getHeight();
-                if (heigh < getScrollY()) {
+                int heigh = head_view.getHeight();
+                int scrollY = getScrollY();
+                Log.v("TAG", "scrollY------" + scrollY);
+                if (heigh < scrollY) {
 
                     //Color.argb(255,0,178,238)
-                    topLayout.setBackgroundColor(Color.argb(255, 255, 255, 255));
+                    topLayout.setBackgroundColor(Color.argb(255, 239, 120, 52));
                 } else {
                     float a = 255.0f / (float) heigh;
                     a = a * (float) getScrollY();
@@ -236,12 +236,17 @@ public class UserDetitalActivity extends BaseActivity {
                     else if (a < 0)
                         a = 0;
 
-                    topLayout.setBackgroundColor(Color.argb((int) a, 255, 255, 255));
-                    if (a >= 250) {
+                    topLayout.setBackgroundColor(Color.argb((int) a, 239, 120, 52));
+                    if (a >= 200) {
                         leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
                         moreImage.setImageResource(R.mipmap.more_btn_white);
-//                        chatImage.setImageResource(R.mipmap);
+                        chatImage.setImageResource(R.mipmap.chat_btn_white);
+                    } else {
+                        leftImage.setImageResource(R.mipmap.icon_arrow_yellow_left);
+                        moreImage.setImageResource(R.mipmap.more_btn);
+                        chatImage.setImageResource(R.mipmap.chat_btn);
                     }
+
                 }
             }
         });
@@ -294,13 +299,31 @@ public class UserDetitalActivity extends BaseActivity {
 
 
     public int getScrollY() {
-        View c = listView.getChildAt(0);
-        if (c == null) {
-            return 0;
+        try {
+            View c = listView.getChildAt(0);
+            View c1 = listView.getChildAt(1);
+            Log.v("TAG", "c------- " + c.getHeight() + "         c1------- " + c1.getHeight());
+            if (c == null) {
+                return 0;
+            }
+            int firstVisiblePosition = listView.getFirstVisiblePosition();
+            int top = c.getTop();
+            if (c.getHeight() - c1.getHeight() >= 10) {
+                top = c.getTop() - (c.getHeight() - c1.getHeight());
+            } else {
+                top-=head_view.getHeight();
+            }
+
+//            if (top > head_image.getHeight()) {
+//                top -= head_image.getHeight();
+//            }
+            int height = c.getHeight();
+            Log.v("TAG", "top-------  " + top);
+            Log.v("TAG", "height-------  " + height + "         position-------" + firstVisiblePosition);
+            return -top + (firstVisiblePosition - 1) * c1.getHeight();
+        } catch (Exception e) {
         }
-        int firstVisiblePosition = listView.getFirstVisiblePosition();
-        int top = c.getTop();
-        return -top + firstVisiblePosition * c.getHeight();
+        return 0;
     }
 
     @Override

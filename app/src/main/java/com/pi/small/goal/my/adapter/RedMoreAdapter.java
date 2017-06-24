@@ -25,7 +25,7 @@ import butterknife.InjectView;
  * 创建者： 王金壮
  * 时间： 2017/6/1 13:19
  * 描述：
- * 修改：
+ * 修改：红包明细的适配器
  **/
 public class RedMoreAdapter extends BaseAdapter {
 
@@ -127,6 +127,7 @@ public class RedMoreAdapter extends BaseAdapter {
                     break;
                 case 3:  //
                     contentViewHolder.tvNameItem.setText("收益红包");
+                    contentViewHolder.tvUserName.setText("");
                     break;
 
             }

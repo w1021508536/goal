@@ -81,7 +81,7 @@ public class TransferMoreAdapter extends BaseAdapter {
             }
             TransferMoreEntity entity = data.get(position);
             titleViewHolder.tvTimeItem.setText(entity.getTitle());
-            titleViewHolder.tvMoneyItem.setText("支出 ¥" + entity.getDeleteMoney() + "  收入 ¥" + entity.getAddMoney());
+            titleViewHolder.tvMoneyItem.setText("支出 ¥" + Utils.getPercentTwoStr((float) entity.getDeleteMoney()) + "  收入 ¥" + Utils.getPercentTwoStr((float) entity.getAddMoney()));
             //   titleViewHolder.tvMoneyItem.setText("收入 ¥" + redMoreAdapterEntry.getAddMoney());
             if (position == 0 && titleViewHolder != null) {
                 titleViewHolder.imgMonthItem.setVisibility(View.VISIBLE);
@@ -103,6 +103,7 @@ public class TransferMoreAdapter extends BaseAdapter {
                 convertView.setTag(contentViewHolder);
 
                 sp = Utils.UserSharedPreferences(context);
+                contentViewHolder.tvUserName.setTextColor(context.getResources().getColor(R.color.black));
             } else {
                 contentViewHolder = (ContentViewHolder) convertView.getTag();
             }
@@ -110,12 +111,17 @@ public class TransferMoreAdapter extends BaseAdapter {
 
 
             if (redMoreAdapterEntry.getToUserId() == Integer.valueOf(sp.getString(KeyCode.USER_ID, "0"))) {
-                contentViewHolder.tvNameItem.setText("收到");
-                contentViewHolder.tvMoneyItem.setText("+" + redMoreAdapterEntry.getAmount() + "");
+                contentViewHolder.tvNameItem.setText("转入-来自");
+                contentViewHolder.tvMoneyItem.setText("+" + Utils.getPercentTwoStr((float) redMoreAdapterEntry.getAmount()));
+                contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
+                contentViewHolder.tvMoneyItem.setTextColor(context.getResources().getColor(R.color.red));
             } else {
-                contentViewHolder.tvNameItem.setText("转出");
-                contentViewHolder.tvMoneyItem.setText("-" + redMoreAdapterEntry.getAmount());
+                contentViewHolder.tvNameItem.setText("转出-转给");
+                contentViewHolder.tvMoneyItem.setText("-" + Utils.getPercentTwoStr((float) redMoreAdapterEntry.getAmount()));
+                contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getToUserNick());
+                contentViewHolder.tvMoneyItem.setTextColor(context.getResources().getColor(android.R.color.black));
             }
+
             //   contentViewHolder.tvMoneyItem.setText("+" + redMoreAdapterEntry.getAmount());
 
             String timeDate = getTimeDate(redMoreAdapterEntry.getCreateTime());

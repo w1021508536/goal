@@ -9,13 +9,16 @@ package com.pi.small.goal.my.entry;
  **/
 public class TransferMoreEntity {
 
-
     /**
      * id : 4
      * amount : 1
      * fromUserId : 48
      * toUserId : 30
      * createTime : 1497601633000
+     * fromUserNick : 花重锦官城
+     * fromUserAvatar : http://img.smallaim.cn/1497442967343.jpeg
+     * toUserNick : 13206427314
+     * toUserAvatar :
      */
 
     private int id;
@@ -23,6 +26,10 @@ public class TransferMoreEntity {
     private int fromUserId;
     private int toUserId;
     private long createTime;
+    private String fromUserNick;
+    private String fromUserAvatar;
+    private String toUserNick;
+    private String toUserAvatar;
 
     private int titleType;
     private String title;
@@ -101,12 +108,49 @@ public class TransferMoreEntity {
         this.deleteMoney = deleteMoney;
     }
 
-    public TransferMoreEntity(int id, double amount, int fromUserId, int toUserId, long createTime, int titleType) {
+
+    public String getFromUserNick() {
+        return fromUserNick;
+    }
+
+    public void setFromUserNick(String fromUserNick) {
+        this.fromUserNick = fromUserNick;
+    }
+
+    public String getFromUserAvatar() {
+        return fromUserAvatar;
+    }
+
+    public void setFromUserAvatar(String fromUserAvatar) {
+        this.fromUserAvatar = fromUserAvatar;
+    }
+
+    public String getToUserNick() {
+        return toUserNick;
+    }
+
+    public void setToUserNick(String toUserNick) {
+        this.toUserNick = toUserNick;
+    }
+
+    public String getToUserAvatar() {
+        return toUserAvatar;
+    }
+
+    public void setToUserAvatar(String toUserAvatar) {
+        this.toUserAvatar = toUserAvatar;
+    }
+
+    public TransferMoreEntity(int id, double amount, int fromUserId, int toUserId, long createTime, String fromUserNick, String fromUserAvatar, String toUserNick, String toUserAvatar, int titleType) {
         this.id = id;
         this.amount = amount;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.createTime = createTime;
+        this.fromUserNick = fromUserNick;
+        this.fromUserAvatar = fromUserAvatar;
+        this.toUserNick = toUserNick;
+        this.toUserAvatar = toUserAvatar;
         this.titleType = titleType;
     }
 

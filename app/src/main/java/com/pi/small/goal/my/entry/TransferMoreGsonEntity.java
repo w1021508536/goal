@@ -16,6 +16,10 @@ public class TransferMoreGsonEntity {
      * fromUserId : 48
      * toUserId : 30
      * createTime : 1497601633000
+     * fromUserNick : 花重锦官城
+     * fromUserAvatar : http://img.smallaim.cn/1497442967343.jpeg
+     * toUserNick : 13206427314
+     * toUserAvatar :
      */
 
     private int id;
@@ -23,6 +27,10 @@ public class TransferMoreGsonEntity {
     private int fromUserId;
     private int toUserId;
     private long createTime;
+    private String fromUserNick;
+    private String fromUserAvatar;
+    private String toUserNick;
+    private String toUserAvatar;
 
     public int getId() {
         return id;
@@ -36,7 +44,7 @@ public class TransferMoreGsonEntity {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
@@ -62,5 +70,37 @@ public class TransferMoreGsonEntity {
 
     public void setCreateTime(long createTime) {
         this.createTime = createTime;
+    }
+
+    public String getFromUserNick() {
+        return fromUserNick;
+    }
+
+    public void setFromUserNick(String fromUserNick) {
+        this.fromUserNick = fromUserNick;
+    }
+
+    public String getFromUserAvatar() {
+        return fromUserAvatar;
+    }
+
+    public void setFromUserAvatar(String fromUserAvatar) {
+        this.fromUserAvatar = fromUserAvatar;
+    }
+
+    public String getToUserNick() {
+        return toUserNick;
+    }
+
+    public void setToUserNick(String toUserNick) {
+        this.toUserNick = toUserNick;
+    }
+
+    public String getToUserAvatar() {
+        return toUserAvatar;
+    }
+
+    public void setToUserAvatar(String toUserAvatar) {
+        this.toUserAvatar = toUserAvatar;
     }
 }
