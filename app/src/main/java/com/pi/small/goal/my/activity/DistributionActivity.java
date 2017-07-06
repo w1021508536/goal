@@ -87,8 +87,8 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-//        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
-        requestParams.addBodyParameter("uid", "26");
+        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
+//        requestParams.addBodyParameter("uid", "26");
         requestParams.addBodyParameter("p", "1");
         requestParams.addBodyParameter("r", "20");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
