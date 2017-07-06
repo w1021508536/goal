@@ -8,10 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.pi.small.goal.R;
-import com.pi.small.goal.aim.AimFragment;
 import com.pi.small.goal.search.activity.AdDetailsActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
@@ -82,7 +80,7 @@ public class ViewPagerSearchAdapter extends PagerAdapter {
 //        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 100);
 //        itemView.setLayoutParams(params);
         if (!adList.get(position).get("img").equals("")) {
-            x.image().bind(viewHolder.banner_image, Utils.GetPhotoPath(adList.get(position).get("img")) + Url.SMALL_PHOTO_URL, imageOptions, new Callback.CommonCallback<Drawable>() {
+            x.image().bind(viewHolder.banner_image, Utils.GetPhotoPath(adList.get(position).get("img")) + Url.SMALL_PHOTO_URL2, imageOptions, new Callback.CommonCallback<Drawable>() {
                 @Override
                 public void onSuccess(Drawable result) {
                     result.setCallback(null);

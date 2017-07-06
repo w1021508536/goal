@@ -11,6 +11,7 @@ public class Url {
     public static String PhotoUrl = "http://img.smallaim.cn";
     public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_200,w_200";
     public static final String SMALL_PHOTO_URL2 = "?x-oss-process=image/resize,m_lfit,h_400,w_400";
+    public static final String SMALL_PHOTO_URL_600 = "?x-oss-process=image/resize,m_lfit,h_600,w_600";
 
     public static String GetCode = "/sms/verifycode/send";
     public static String Register = "/user/register";
