@@ -87,7 +87,7 @@
                         android:layout_marginBottom="12dp"
                         android:layout_marginRight="12dp"
                         android:layout_marginTop="15dp"
-                        android:src="@mipmap/btn_filter" />
+                        android:src="@mipmap/icon_sale_date" />
 
                     <TextView
                         android:layout_width="wrap_content"

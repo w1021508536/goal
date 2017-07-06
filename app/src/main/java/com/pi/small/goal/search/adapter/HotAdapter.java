@@ -80,8 +80,6 @@ public class HotAdapter extends BaseAdapter {
         viewHolder.content_text.setText(dataList.get(position).getContent());
         viewHolder.time_text.setText(Utils.GetTime(Long.valueOf(dataList.get(position).getUpdateTime())));
 
-//        x.image().bind(viewHolder.head_image, Utils.GetPhotoPath(dataList.get(position).getAvatar()), imageOptions);
-
         if (!Utils.GetPhotoPath(dataList.get(position).getAvatar()).equals("")) {
             Picasso.with(context).load(Utils.GetPhotoPath(dataList.get(position).getAvatar())).into(viewHolder.head_image);
         }
