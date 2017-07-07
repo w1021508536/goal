@@ -8,17 +8,26 @@ package com.pi.small.goal.my.entry;
  * 描述：个人的实体
  **/
 public class UerEntity {
+
     /**
-     * user : {"id":48,"nick":"花重锦官城","avatar":"1496478918741.jpeg","brief":"加油","wechatId":"","qqId":"9238*****59EC","mobile":"","city":"","sex":0,"createTime":1496284728000,"updateTime":1496478942000}
-     * account : {"accountId":4,"userId":48,"exp":16,"balance":0,"aim":0,"option":0,"score":0}
+     * user : {"id":96,"nick":"央金wechat","avatar":"1497858658890.jpg","brief":"乖哦，毕竟已经是个100多斤的大人了！","wechatId":"oYvM*****-l3I","qqId":"","mobile":"156****2161","city":"","sex":0,"password":"","createTime":1497858605000,"updateTime":1497941452000,"status":1,"lastLoginTime":1498210118000,"aim":1,"login":10,"follow":0,"beFollowed":4,"companyId":0,"registerIp":"","lastLoginIp":"119.167.117.194"}
+     * account : {"accountId":45,"userId":96,"exp":2893,"balance":169.21,"aim":1514.8,"option":6.5,"score":0}
+     * token :
      * taskInfo : {"totalTaskCount":4,"finishTaskCount":0}
-     * grade : v0
+     * grade : v3
+     * payPassword :
+     * lastSignInTime : 1497955231000
+     * imtoken :
      */
 
     private UserBean user;
     private AccountBean account;
+    private String token;
     private TaskInfoBean taskInfo;
-    private String grade= "";
+    private String grade;
+    private String payPassword;
+    private long lastSignInTime;
+    private String imtoken;
 
     public UserBean getUser() {
         return user;
@@ -34,6 +43,14 @@ public class UerEntity {
 
     public void setAccount(AccountBean account) {
         this.account = account;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public TaskInfoBean getTaskInfo() {
@@ -52,32 +69,76 @@ public class UerEntity {
         this.grade = grade;
     }
 
+    public String getPayPassword() {
+        return payPassword;
+    }
+
+    public void setPayPassword(String payPassword) {
+        this.payPassword = payPassword;
+    }
+
+    public long getLastSignInTime() {
+        return lastSignInTime;
+    }
+
+    public void setLastSignInTime(long lastSignInTime) {
+        this.lastSignInTime = lastSignInTime;
+    }
+
+    public String getImtoken() {
+        return imtoken;
+    }
+
+    public void setImtoken(String imtoken) {
+        this.imtoken = imtoken;
+    }
+
     public static class UserBean {
         /**
-         * id : 48
-         * nick : 花重锦官城
-         * avatar : 1496478918741.jpeg
-         * brief : 加油
-         * wechatId :
-         * qqId : 9238*****59EC
-         * mobile :
+         * id : 96
+         * nick : 央金wechat
+         * avatar : 1497858658890.jpg
+         * brief : 乖哦，毕竟已经是个100多斤的大人了！
+         * wechatId : oYvM*****-l3I
+         * qqId :
+         * mobile : 156****2161
          * city :
          * sex : 0
-         * createTime : 1496284728000
-         * updateTime : 1496478942000
+         * password :
+         * createTime : 1497858605000
+         * updateTime : 1497941452000
+         * status : 1
+         * lastLoginTime : 1498210118000
+         * aim : 1
+         * login : 10
+         * follow : 0
+         * beFollowed : 4
+         * companyId : 0
+         * registerIp :
+         * lastLoginIp : 119.167.117.194
          */
 
         private int id;
-        private String nick= "";
-        private String avatar= "";
-        private String brief= "";
-        private String wechatId= "";
-        private String qqId= "";
-        private String mobile= "";
-        private String city= "";
+        private String nick;
+        private String avatar;
+        private String brief;
+        private String wechatId;
+        private String qqId;
+        private String mobile;
+        private String city;
         private int sex;
+        private String password;
         private long createTime;
         private long updateTime;
+        private double status;
+        private long lastLoginTime;
+        private double aim;
+        private double login;
+        private double follow;
+        private double beFollowed;
+        private double companyId;
+        private String registerIp;
+        private String lastLoginIp;
 
         public int getId() {
             return id;
@@ -151,6 +212,14 @@ public class UerEntity {
             this.sex = sex;
         }
 
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
+
         public long getCreateTime() {
             return createTime;
         }
@@ -166,26 +235,98 @@ public class UerEntity {
         public void setUpdateTime(long updateTime) {
             this.updateTime = updateTime;
         }
+
+        public double getStatus() {
+            return status;
+        }
+
+        public void setStatus(double status) {
+            this.status = status;
+        }
+
+        public long getLastLoginTime() {
+            return lastLoginTime;
+        }
+
+        public void setLastLoginTime(long lastLoginTime) {
+            this.lastLoginTime = lastLoginTime;
+        }
+
+        public double getAim() {
+            return aim;
+        }
+
+        public void setAim(double aim) {
+            this.aim = aim;
+        }
+
+        public double getLogin() {
+            return login;
+        }
+
+        public void setLogin(double login) {
+            this.login = login;
+        }
+
+        public double getFollow() {
+            return follow;
+        }
+
+        public void setFollow(double follow) {
+            this.follow = follow;
+        }
+
+        public double getBeFollowed() {
+            return beFollowed;
+        }
+
+        public void setBeFollowed(double beFollowed) {
+            this.beFollowed = beFollowed;
+        }
+
+        public double getCompanyId() {
+            return companyId;
+        }
+
+        public void setCompanyId(double companyId) {
+            this.companyId = companyId;
+        }
+
+        public String getRegisterIp() {
+            return registerIp;
+        }
+
+        public void setRegisterIp(String registerIp) {
+            this.registerIp = registerIp;
+        }
+
+        public String getLastLoginIp() {
+            return lastLoginIp;
+        }
+
+        public void setLastLoginIp(String lastLoginIp) {
+            this.lastLoginIp = lastLoginIp;
+        }
     }
 
     public static class AccountBean {
         /**
-         * accountId : 4
-         * userId : 48
-         * exp : 16
-         * balance : 0
-         * aim : 0
-         * option : 0
+         * accountId : 45
+         * userId : 96
+         * exp : 2893
+         * balance : 169.21
+         * aim : 1514.8
+         * option : 6.5
          * score : 0
          */
 
         private int accountId;
         private int userId;
         private int exp;
-        private float balance;
-        private int aim;
+        private double balance;
+        private double aim;
         private double option;
-        private int score;
+        private double score;
 
         public int getAccountId() {
             return accountId;
@@ -211,19 +352,19 @@ public class UerEntity {
             this.exp = exp;
         }
 
-        public float getBalance() {
+        public double getBalance() {
             return balance;
         }
 
-        public void setBalance(float balance) {
+        public void setBalance(double balance) {
             this.balance = balance;
         }
 
-        public int getAim() {
+        public double getAim() {
             return aim;
         }
 
-        public void setAim(int aim) {
+        public void setAim(double aim) {
             this.aim = aim;
         }
 
@@ -235,11 +376,11 @@ public class UerEntity {
             this.option = option;
         }
 
-        public int getScore() {
+        public double getScore() {
             return score;
         }
 
-        public void setScore(int score) {
+        public void setScore(double score) {
             this.score = score;
         }
     }
@@ -250,26 +391,23 @@ public class UerEntity {
          * finishTaskCount : 0
          */
 
-        private int totalTaskCount;
-        private int finishTaskCount;
+        private double totalTaskCount;
+        private double finishTaskCount;
 
-        public int getTotalTaskCount() {
+        public double getTotalTaskCount() {
             return totalTaskCount;
         }
 
-        public void setTotalTaskCount(int totalTaskCount) {
+        public void setTotalTaskCount(double totalTaskCount) {
             this.totalTaskCount = totalTaskCount;
         }
 
-        public int getFinishTaskCount() {
+        public double getFinishTaskCount() {
             return finishTaskCount;
         }
 
-        public void setFinishTaskCount(int finishTaskCount) {
+        public void setFinishTaskCount(double finishTaskCount) {
             this.finishTaskCount = finishTaskCount;
         }
     }
-
-    //   {"msg":"success","code":0,"result":{"user":{"id":48,"nick":"花重锦官城","avatar":"1496478918741.jpeg","brief":"加油","wechatId":"","qqId":"9238*****59EC","mobile":"","city":"","sex":0,"createTime":1496284728000,"updateTime":1496478942000},"account":{"accountId":4,"userId":48,"exp":16,"balance":0.00,"aim":0,"option":0,"score":0},"taskInfo":{"totalTaskCount":4,"finishTaskCount":0},"grade":"v0"},"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
-
 }

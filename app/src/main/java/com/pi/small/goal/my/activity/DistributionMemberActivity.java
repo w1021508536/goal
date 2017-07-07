@@ -156,8 +156,8 @@ public class DistributionMemberActivity extends BaseActivity {
         RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-//        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
-        requestParams.addBodyParameter("uid", "26");
+        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
+//        requestParams.addBodyParameter("uid", "26");
         requestParams.addBodyParameter("p", intPage + "");
         requestParams.addBodyParameter("r", size + "");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {

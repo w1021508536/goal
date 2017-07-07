@@ -102,7 +102,7 @@ public class RedActivity extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     String jsonData = jsonObject.get("result").toString();
                     Gson gson = new Gson();
-                    Utils.showToast(RedActivity.this, (String) jsonObject.get("msg"));
+             //       Utils.showToast(RedActivity.this, (String) jsonObject.get("msg"));
                     List<RedGsonEntity> data = gson.fromJson(jsonData, new TypeToken<List<RedGsonEntity>>() {
                     }.getType());
 

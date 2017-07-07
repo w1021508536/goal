@@ -267,7 +267,7 @@ public class ExtensionPayActivity extends BaseActivity {
         requestParams.setUri(Url.Url + "/agent/buy");
         requestParams.addBodyParameter("code", "");
         requestParams.addBodyParameter("channel", channel);
-        XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 
@@ -324,7 +324,7 @@ public class ExtensionPayActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                Utils.showToast(ExtensionPayActivity.this, Utils.getMsg(result));
+            //    Utils.showToast(ExtensionPayActivity.this, Utils.getMsg(result));
             }
 
             @Override
