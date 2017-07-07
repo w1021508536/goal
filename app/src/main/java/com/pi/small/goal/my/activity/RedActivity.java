@@ -119,6 +119,7 @@ public class RedActivity extends BaseActivity {
                         adapter.setData(newData);
                     if (newData.size() >= 9) {
                         addFlag = true;
+
                     }
 
                 } catch (JSONException e) {
