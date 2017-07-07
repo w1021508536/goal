@@ -22,6 +22,7 @@ import com.pi.small.goal.login.LoginActivity;
 import com.pi.small.goal.my.activity.AimActivity;
 import com.pi.small.goal.my.activity.CollectActivity;
 import com.pi.small.goal.my.activity.DistributionActivity;
+import com.pi.small.goal.my.activity.DistributionMemberActivity;
 import com.pi.small.goal.my.activity.ExtensionActivity;
 import com.pi.small.goal.my.activity.FollowActivity;
 import com.pi.small.goal.my.activity.LevelActivity;
@@ -319,11 +320,59 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), ExtensionActivity.class));
                 break;
             case R.id.distribution_layout:
-                startActivity(new Intent(getContext(), DistributionActivity.class));
+                GetCode();
                 break;
             default:
                 break;
         }
+    }
+
+    //判断是否为代理商
+    private void GetCode() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
+        requestParams.addHeader("token", Utils.GetToken(getActivity()));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(getActivity()).getString("id", ""));
+        requestParams.addBodyParameter("p", "1");
+        requestParams.addBodyParameter("r", "20");
+        XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========GetCode=============" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        Intent intent = new Intent(getActivity(), DistributionActivity.class);
+                        startActivity(intent);
+                    } else if (code.equals("1500001")) {
+                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        startActivity(new Intent(getActivity(), ExtensionActivity.class));
+                    } else if (code.equals("100000")) {
+                        Intent intent = new Intent(getActivity(), DistributionActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("") && ex.getMessage() != null) {
+                    Utils.showToast(getActivity(), ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+                return;
+
+            }
+        });
     }
 
     @Override
