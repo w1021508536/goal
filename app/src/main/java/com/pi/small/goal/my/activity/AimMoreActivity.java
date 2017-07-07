@@ -994,7 +994,7 @@ public class AimMoreActivity extends BaseActivity {
                 if (!RenameActivity.callOk(result)) return;
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-                    Utils.showToast(AimMoreActivity.this, (String) jsonObject.get("msg"));
+          //          Utils.showToast(AimMoreActivity.this, (String) jsonObject.get("msg"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

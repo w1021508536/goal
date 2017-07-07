@@ -104,7 +104,7 @@ public class WalletActivity extends BaseActivity {
 
     private void setData() {
         UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
-        tvMoneyWallet.setText(Utils.getPercentTwoStr(userInfo.getAccount().getBalance() + userInfo.getAccount().getAim()) + "");
+        tvMoneyWallet.setText(Utils.getPercentTwoStr((float) (userInfo.getAccount().getBalance() + userInfo.getAccount().getAim())) + "");
         tvWalletMoneyWalllet.setText(userInfo.getAccount().getBalance() + "元");
     }
 

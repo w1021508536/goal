@@ -13,7 +13,7 @@ public class LastAgentEntity {
     /**
      * msg : success
      * code : 0
-     * result : {"id":2,"userId":11,"pid":26,"level":2,"subCompanyId":0,"volume":0,"nick":"hh","avatar":"1496802195021.jpg"}
+     * result : {"id":6,"userId":66,"pid":0,"level":3,"subCompanyId":0,"volume":0,"nick":"15628960522","avatar":"http://img.smallaim.cn/1497839039781.jpeg"}
      * pageNum : 0
      * pageSize : 0
      * pageTotal : 0
@@ -86,14 +86,14 @@ public class LastAgentEntity {
 
     public static class ResultBean {
         /**
-         * id : 2
-         * userId : 11
-         * pid : 26
-         * level : 2
+         * id : 6
+         * userId : 66
+         * pid : 0
+         * level : 3
          * subCompanyId : 0
          * volume : 0
-         * nick : hh
-         * avatar : 1496802195021.jpg
+         * nick : 15628960522
+         * avatar : http://img.smallaim.cn/1497839039781.jpeg
          */
 
         private int id;
