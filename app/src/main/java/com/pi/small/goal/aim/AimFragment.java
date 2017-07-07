@@ -229,7 +229,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 } else {
                     AimEntity aimEntity = list.get(0);
                     dataList.add(aimEntity);
-                    addViewPager(dataList.size() - 1);
+                    addViewPager();
                     viewPagerAdapter.setViewList(dataList);
                 }
 
@@ -469,14 +469,14 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
     private void SetViewPager() {
         //添加小圆点的图片
-        setPoint();
+        addViewPager();
         viewPagerAdapter = new ViewPagerAdapter(getActivity(), dataList);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOnPageChangeListener(new GuidePageChangeListener());
 
     }
 
-    private void addViewPager(int i) {
+    private void addViewPager() {
         viewGroup.removeAllViews();
         setPoint();
     }
@@ -744,8 +744,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 viewHolder.line_right_image.setVisibility(View.VISIBLE);
             }
 
-
-            if (!dataList.get(position).getMoney().equals(dataList.get(position).getBudget())) {
+            if (Float.valueOf(dataList.get(position).getMoney()) < Float.valueOf(dataList.get(position).getBudget())) {
                 viewHolder.process_text.setText("向小目标更进一步");
                 viewHolder.process_text.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -760,10 +759,18 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                     }
                 });
             } else {
+
                 viewHolder.process_text.setText("目标达成 可提现");
                 Drawable drawable = getActivity().getResources().getDrawable(R.mipmap.icon_aim_finish);
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());//必须设置图片大小，否则不显示
                 viewHolder.process_text.setCompoundDrawables(drawable, null, null, null);
+                viewHolder.process_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        position_now = position;
+                        TransferAim();
+                    }
+                });
             }
 
 
@@ -804,6 +811,8 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                                     @Override
                                     public void onClick(View v) {
                                         //仍要取出  扣除3%手续费
+                                        TransferAim();
+                                        popupWindow2.dismiss();
                                     }
                                 });
                                 ok_text.setOnClickListener(new View.OnClickListener() {
@@ -825,7 +834,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                                 popupWindow2.showAtLocation(view, Gravity.CENTER, 0, 0);
                             } else {
                                 popupWindow.dismiss();
-                                Withdrawals();
+                                TransferAim();
                             }
                         }
                     });
@@ -886,6 +895,51 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         private void Withdrawals() {
             Utils.showToast(getActivity(), "提现");
         }
+
+        private void TransferAim() {
+            RequestParams requestParams = new RequestParams(Url.Url + Url.AimTransfer);
+            requestParams.addHeader("token", Utils.GetToken(getActivity()));
+            requestParams.addHeader("deviceId", MyApplication.deviceId);
+            requestParams.addBodyParameter("aimId", dataList.get(position_now).getId());
+            XUtil.post(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
+                @Override
+                public void onSuccess(String result) {
+                    try {
+                        if (new JSONObject(result).getString("code").equals("0")) {
+                            Utils.showToast(getActivity(), "目标成功提现至余额");
+                            dataList.remove(position_now);
+//                            addViewPager(dataList.size() - 1);
+//                            viewPagerAdapter.setViewList(dataList);
+
+
+
+                            if (dataList.size() == 0) {
+                                null_layout.setVisibility(View.VISIBLE);
+                            } else {
+                                null_layout.setVisibility(View.GONE);
+                                SetViewPager();
+                            }
+
+                        } else {
+                            Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+            });
+        }
+
 
         private class ViewHolder {
             ImageView line_left_image;

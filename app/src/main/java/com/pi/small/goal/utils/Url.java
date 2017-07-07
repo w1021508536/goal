@@ -27,6 +27,7 @@ public class Url {
     //aim
     public static String Aim = "/aim";// put 访问  新建目标   get 访问  aimId参数为详情  userId参数为列表
     public static String AimDynamic = "/aim/dynamic";//新建动态或创建目标
+    public static String AimTransfer="/aim/transfer";
 
     public static String AimDynamicComment = "/aim/dynamic/comment";//评论动态
 
