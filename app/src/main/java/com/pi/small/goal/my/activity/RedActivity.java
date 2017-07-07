@@ -102,7 +102,7 @@ public class RedActivity extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     String jsonData = jsonObject.get("result").toString();
                     Gson gson = new Gson();
-             //       Utils.showToast(RedActivity.this, (String) jsonObject.get("msg"));
+                    //       Utils.showToast(RedActivity.this, (String) jsonObject.get("msg"));
                     List<RedGsonEntity> data = gson.fromJson(jsonData, new TypeToken<List<RedGsonEntity>>() {
                     }.getType());
 
@@ -118,11 +118,7 @@ public class RedActivity extends BaseActivity {
                     } else
                         adapter.setData(newData);
                     if (newData.size() >= 9) {
-
-
-
                         addFlag = true;
-
                     }
 
                 } catch (JSONException e) {
@@ -160,7 +156,7 @@ public class RedActivity extends BaseActivity {
                 if (addFlag) {
                     page++;
                     getData();
-                    addFlag=false;
+                    addFlag = false;
                 }
             }
         });

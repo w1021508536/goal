@@ -324,7 +324,7 @@ public class ExtensionPayActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-            //    Utils.showToast(ExtensionPayActivity.this, Utils.getMsg(result));
+                Utils.showToast(ExtensionPayActivity.this, Utils.getMsg(result));
             }
 
             @Override
