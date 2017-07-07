@@ -99,11 +99,11 @@
 
 
                     <TextView
+                        android:id="@+id/commission_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
                         android:layout_marginLeft="17dp"
-                        android:text="800.0"
                         android:textColor="@color/white"
                         android:textSize="60dp" />
 
@@ -132,11 +132,10 @@
                             android:textSize="14dp" />
 
                         <TextView
+                            android:id="@+id/deposit_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-
-                            android:text="800.0"
                             android:textColor="#00D6BE"
                             android:textSize="40dp" />
 
@@ -149,10 +148,10 @@
                             android:textSize="14dp" />
 
                         <TextView
+                            android:id="@+id/yesterday_deposit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:text="10.0"
                             android:textColor="#FFB82D"
                             android:textSize="14dp" />
 
@@ -179,11 +178,10 @@
                             android:textSize="14dp" />
 
                         <TextView
+                            android:id="@+id/option_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-
-                            android:text="8.0"
                             android:textColor="#FFB82D"
                             android:textSize="40dp" />
 
@@ -196,10 +194,10 @@
                             android:textSize="14dp" />
 
                         <TextView
+                            android:id="@+id/yesterday_option_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
-                            android:text="10.0"
                             android:textColor="#FFB82D"
                             android:textSize="14dp" />
 
@@ -218,7 +216,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/up_layout">
+                android:layout_below="@id/up_layout"
+                android:visibility="gone">
 
                 <com.pi.small.goal.weight.CurveMuchChartView
                     android:id="@+id/curve_view"

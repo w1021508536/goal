@@ -15,10 +15,8 @@ import com.pi.small.goal.utils.BaseActivity;
 import com.pi.small.goal.utils.Url;
 import com.pi.small.goal.utils.Utils;
 import com.pi.small.goal.utils.XUtil;
-import com.pi.small.goal.utils.entity.MemberEntity;
 import com.pi.small.goal.weight.CurveMuchChartView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
@@ -42,15 +40,27 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
     @InjectView(R.id.time_image)
     ImageView timeImage;
 
-    MonthDialog dialog;
     @InjectView(R.id.img_empty)
     ImageView imgEmpty;
     @InjectView(R.id.tv_empty)
     TextView tvEmpty;
     @InjectView(R.id.null_layout)
     RelativeLayout nullLayout;
+    @InjectView(R.id.commission_text)
+    TextView commissionText;
+    @InjectView(R.id.deposit_text)
+    TextView depositText;
+    @InjectView(R.id.yesterday_deposit)
+    TextView yesterdayDeposit;
+    @InjectView(R.id.option_text)
+    TextView optionText;
+    @InjectView(R.id.yesterday_option_text)
+    TextView yesterdayOptionText;
 
-    private String chooseTime;
+    MonthDialog dialog;
+
+    private String startTime = "";
+    private String endTime = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +70,8 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
 
         dialog = new MonthDialog(this, this);
 
-        initCurve();
+        GetData();
+//        initCurve();
     }
 
     @OnClick({R.id.left_image, R.id.right_text, R.id.time_image, R.id.null_layout})
@@ -87,14 +98,15 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
-        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id",""));
-//        requestParams.addBodyParameter("uid", "26");
+        requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id", ""));
+
+        System.out.println("=========id=============" + Utils.UserSharedPreferences(this).getString("id", ""));
         requestParams.addBodyParameter("p", "1");
         requestParams.addBodyParameter("r", "20");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========GetCode============="+result);
+                System.out.println("=========GetCode=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -134,6 +146,49 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         });
     }
 
+
+    private void GetData() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.AgentDistribution);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("startTime", startTime);
+        requestParams.addBodyParameter("endTime", endTime);
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("=========GetData=============" + result);
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if (code.equals("0")) {
+                        commissionText.setText(new JSONObject(result).getJSONObject("result").getString("commission"));
+                        depositText.setText(new JSONObject(result).getJSONObject("result").getString("deposit"));
+                        yesterdayDeposit.setText(new JSONObject(result).getJSONObject("result").getString("yesterdayDeposit"));
+                        optionText.setText(new JSONObject(result).getJSONObject("result").getString("option"));
+                        yesterdayOptionText.setText(new JSONObject(result).getJSONObject("result").getString("yesterdayOption"));
+                    } else {
+                        Utils.showToast(DistributionActivity.this, new JSONObject(result).getString("msg"));
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                if (!ex.getMessage().equals("") && ex.getMessage() != null) {
+                    Utils.showToast(DistributionActivity.this, ex.getMessage());
+                }
+            }
+
+            @Override
+            public void onFinished() {
+                return;
+
+            }
+        });
+    }
 
     private void initCurve() {
 
@@ -191,7 +246,11 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
 
     @Override
     public void getSelectTime(String time) {
-        chooseTime = time;
+
+        startTime = time.substring(0, time.length() - 9) + " 00:00:01";
+        endTime = time.substring(0, time.length() - 9) + " 23:59:59";
+
+        GetData();
     }
 
 

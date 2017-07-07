@@ -89,8 +89,9 @@ public class Url {
     public static String AimDynamicUser = "/aim/dynamic/user";//用户的动态
     public static String UserBase = "/user/base";//用户基础信息
 
-    public static String Agent="/agent";//下级代理
+    public static String AgentDistribution = "/agent/distribution";//分销收益
+    public static String Agent = "/agent";//下级代理
 
-    public static String AdList="/ad/list";//广告列表
+    public static String AdList = "/ad/list";//广告列表
 
 }
