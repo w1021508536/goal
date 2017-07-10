@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -29,7 +28,6 @@ import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pi.small.goal.aim.AimFragment;
-
 import com.pi.small.goal.message.MessageFragment;
 import com.pi.small.goal.my.MyFragment;
 import com.pi.small.goal.my.activity.RenameActivity;
@@ -693,7 +691,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override

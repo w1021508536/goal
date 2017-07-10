@@ -26,7 +26,6 @@ public class UerEntity {
     private TaskInfoBean taskInfo;
     private String grade;
     private String payPassword;
-    private long lastSignInTime;
     private String imtoken;
 
     public UserBean getUser() {
@@ -77,13 +76,6 @@ public class UerEntity {
         this.payPassword = payPassword;
     }
 
-    public long getLastSignInTime() {
-        return lastSignInTime;
-    }
-
-    public void setLastSignInTime(long lastSignInTime) {
-        this.lastSignInTime = lastSignInTime;
-    }
 
     public String getImtoken() {
         return imtoken;
@@ -327,6 +319,7 @@ public class UerEntity {
         private double aim;
         private double option;
         private double score;
+        private String lastExecuteTime = "";
 
         public int getAccountId() {
             return accountId;
@@ -382,6 +375,14 @@ public class UerEntity {
 
         public void setScore(double score) {
             this.score = score;
+        }
+
+        public String getLastExecuteTime() {
+            return lastExecuteTime;
+        }
+
+        public void setLastExecuteTime(String lastExecuteTime) {
+            this.lastExecuteTime = lastExecuteTime;
         }
     }
 

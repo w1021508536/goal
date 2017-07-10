@@ -23,6 +23,7 @@ import com.pi.small.goal.utils.XUtil;
 import com.pi.small.goal.weight.NoticeMF;
 import com.squareup.picasso.Picasso;
 import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -38,6 +39,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.pi.small.goal.R.id.tv_extension;
 
 /**
  * 公司：小目标
@@ -67,7 +70,7 @@ public class ExtensionActivity extends BaseActivity {
     TextView tvUserName;
     @InjectView(R.id.tv_agent)
     TextView tvAgent;
-    @InjectView(R.id.tv_extension)
+    @InjectView(tv_extension)
     TextView tvExtension;
     @InjectView(R.id.tv_moneyHint1)
     TextView tvMoneyHint1;
@@ -104,6 +107,7 @@ public class ExtensionActivity extends BaseActivity {
         super.initWeight();
         tvAgent.setOnClickListener(this);
         tvExtension.setOnClickListener(this);
+        tvExtension.setClickable(false);
         dialog.setOnClickGoListener(new ExtensionDialog.onClickGoListener() {
             @Override
             public void onclick() {
@@ -183,6 +187,14 @@ public class ExtensionActivity extends BaseActivity {
                     try {
                         JSONObject jsonObject = new JSONObject(result);
                         String id = Utils.GetOneStringForJson("id", Utils.getResultStr(result));
+                        String level = Utils.GetOneStringForJson("level", Utils.getResultStr(result));
+                        if (level.equals("1") || level.equals("2") || level.equals("3")) {
+                            tvExtension.setClickable(true);
+                            tvAgent.setBackgroundResource(R.drawable.bg_gray_extension);
+                            tvAgent.setClickable(false);
+                        } else {
+                            tvExtension.setBackgroundResource(R.drawable.bg_gray_extension);
+                        }
                         tvMoney.setText(id);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -239,10 +251,16 @@ public class ExtensionActivity extends BaseActivity {
 //                        }).show();
                 dialog.show();
                 break;
-            case R.id.tv_extension:
+            case tv_extension:
                 share();
                 break;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);//完成回调
     }
 
     /**
@@ -253,7 +271,7 @@ public class ExtensionActivity extends BaseActivity {
 
 
         UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
-        UMWeb web = new UMWeb("http://m.test.smallaim.cn/agent/11");
+        UMWeb web = new UMWeb("http://m.test.smallaim.cn/agent/" + sp.getString(KeyCode.USER_ID, ""));
         web.setTitle("小目标");//标题
         web.setThumb(image);  //缩略图
         web.setDescription("哈哈哈哈哈");//描述
