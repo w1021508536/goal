@@ -187,6 +187,7 @@
             <RelativeLayout
                 android:id="@+id/alipay_layout"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
 
@@ -220,6 +221,7 @@
             <RelativeLayout
                 android:id="@+id/union_layout"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
 

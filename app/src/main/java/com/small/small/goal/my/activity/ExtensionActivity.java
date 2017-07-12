@@ -196,6 +196,7 @@ public class ExtensionActivity extends BaseActivity {
                             tvExtension.setBackgroundResource(R.drawable.bg_gray_extension);
                         }
                         tvMoney.setText(id);
+                        tvExtension.setBackgroundResource(R.drawable.selector_blue_extension);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

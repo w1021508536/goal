@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
-                    android:text="1"
+                    android:text="0"
                     android:textColor="@color/white"
                     android:textSize="50dp" />
 
@@ -185,7 +185,7 @@
             android:layout_marginLeft="@dimen/top_left"
             android:layout_marginRight="@dimen/top_left"
             android:layout_marginTop="20dp"
-            android:background="@drawable/selector_blue_extension"
+            android:background="@drawable/bg_gray_extension"
             android:gravity="center"
             android:text="我 要 推 广" />
     </LinearLayout>
