@@ -141,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="50dp"
-                    android:text="助力他人" />
+                    android:text="支持他人" />
 
                 <TextView
                     style="@style/text_yellow_10"

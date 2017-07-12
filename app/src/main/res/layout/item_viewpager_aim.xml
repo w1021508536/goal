@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="助力(次)"
+                    android:text="支持(次)"
                     android:textColor="@color/gray_heavy"
                     android:textSize="12dp" />
             </LinearLayout>

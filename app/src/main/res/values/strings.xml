@@ -42,7 +42,7 @@
     <string name="attention">关注</string>
     <string name="city">同城</string>
     <string name="hot">热门</string>
-    <string name="transfer_mine_fragment">期权转让</string>
+    <string name="transfer_mine_fragment">声望值</string>
     <string name="shop_mine_fragment">积分商城</string>
     <string name="task_mine_fragment">任务中心</string>
     <string name="follow_mine_fragment">我的关注</string>

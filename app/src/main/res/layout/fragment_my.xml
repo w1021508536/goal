@@ -406,7 +406,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/selector_wallet_white_gray"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="10dp"
+                android:visibility="invisible">
 
                 <ImageView
                     android:layout_width="26dp"

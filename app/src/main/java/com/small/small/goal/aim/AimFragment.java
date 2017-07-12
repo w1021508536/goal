@@ -889,10 +889,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             return itemView;
         }
 
-        //提现
-        private void Withdrawals() {
-            Utils.showToast(getActivity(), "提现");
-        }
 
         private void TransferAim() {
             RequestParams requestParams = new RequestParams(Url.Url + Url.AimTransfer);
@@ -913,6 +909,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
                             if (dataList.size() == 0) {
                                 null_layout.setVisibility(View.VISIBLE);
+                                SetViewPager();
                             } else {
                                 null_layout.setVisibility(View.GONE);
                                 SetViewPager();

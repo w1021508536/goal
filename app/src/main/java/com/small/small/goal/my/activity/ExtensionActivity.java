@@ -201,7 +201,7 @@ public class ExtensionActivity extends BaseActivity {
                     }
 
                 } else {
-                    tvUserName.setText("分销商推广码");
+                    tvUserName.setText("代理商推广码");
                     imgIcon.setVisibility(View.GONE);
                     tvMoneyHint1.setText("已有");
 
