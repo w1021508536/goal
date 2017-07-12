@@ -1,77 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_system_list"
     android:orientation="vertical">
 
-    <include layout="@layout/view_include" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:src="@mipmap/about_us_logo" />
+        <include layout="@layout/view_include" />
 
-    <TextView
-        style="@style/text_gray_big_14"
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:src="@mipmap/about_us_logo" />
+
+        <TextView
+            style="@style/text_gray_big_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:text="小目标是一款以实现用户“小目标”为主要目的的社交、互助产品。通过APP自身的社交圈、项目以及互联网第三方SNS平台为用户的交友，互助予以便利。" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/rl_height"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/background_selector_white_gray"
+            android:paddingLeft="@dimen/top_left"
+            android:paddingRight="@dimen/top_left">
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="当前版本" />
+
+            <TextView
+                android:id="@+id/version_text"
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_phone_aboutUs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/rl_height"
+            android:layout_marginTop="0.5dp"
+            android:background="@drawable/background_selector_white_gray"
+            android:paddingLeft="@dimen/top_left"
+            android:paddingRight="@dimen/top_left"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="小目标 客服电话" />
+
+            <TextView
+                style="@style/text_gray_big_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:text="0000-0000" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/top_left"
-        android:layout_marginRight="@dimen/top_left"
-        android:text="小目标是一款以实现用户“小目标”为主要目的的社交、互助产品。通过APP自身的社交圈、项目以及互联网第三方SNS平台为用户的交友，互助予以便利。" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/rl_height"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/background_selector_white_gray"
-        android:paddingLeft="@dimen/top_left"
-        android:paddingRight="@dimen/top_left">
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
 
         <TextView
-            style="@style/text_gray_big_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="当前版本" />
+            android:layout_gravity="center_horizontal"
+            android:text="青岛开拓者公司  版权所有"
+            android:textSize="10dp" />
 
         <TextView
-            style="@style/text_gray_big_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="5.0" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_phone_aboutUs"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/rl_height"
-        android:layout_marginTop="0.5dp"
-        android:background="@drawable/background_selector_white_gray"
-        android:paddingLeft="@dimen/top_left"
-        android:paddingRight="@dimen/top_left">
+            android:layout_gravity="center_horizontal"
+            android:text="Copyright © 2017-2017 KTZgame"
+            android:textSize="10dp" />
 
         <TextView
-            style="@style/text_gray_big_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="小目标 客服电话" />
+            android:layout_gravity="center_horizontal"
+            android:text="Technology  Co. ,  Ltd  All Rights Reserved"
+            android:textSize="10dp" />
 
-        <TextView
-            style="@style/text_gray_big_14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:text="0000-0000" />
+    </LinearLayout>
 
-    </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

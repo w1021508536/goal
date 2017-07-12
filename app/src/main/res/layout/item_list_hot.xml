@@ -321,7 +321,7 @@
         android:orientation="vertical">
 
 
-        <com.pi.small.goal.utils.MyListView
+        <com.small.small.goal.utils.MyListView
             android:id="@+id/comment_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

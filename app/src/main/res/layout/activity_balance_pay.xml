@@ -285,11 +285,11 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.pi.small.goal.weight.VirtualKeyboardView
+    <com.small.small.goal.weight.VirtualKeyboardView
         android:id="@+id/vkb_updataPass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"></com.pi.small.goal.weight.VirtualKeyboardView>
+        android:layout_alignParentBottom="true"></com.small.small.goal.weight.VirtualKeyboardView>
 
 
 </RelativeLayout>

@@ -239,7 +239,7 @@
 
             </LinearLayout>
 
-            <com.pi.small.goal.utils.MyListView
+            <com.small.small.goal.utils.MyListView
                 android:id="@+id/user_list"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

@@ -3,16 +3,16 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         release {
-            keyAlias 'small'
-            keyPassword 'sg2017'
+            keyAlias 'xmbsmall'
+            keyPassword 'xmbsmall'
             storeFile file('C:/Users/wang1/Desktop/small.jks')
-            storePassword 'sg2017'
+            storePassword 'xmbsmall'
         }
     }
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.pi.small.goal"
+        applicationId "com.small.small.goal"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
@@ -31,6 +31,10 @@ android {
         }
     }
     productFlavors {
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
 }
 

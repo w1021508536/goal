@@ -43,7 +43,7 @@
 
     </RelativeLayout>
 
-    <com.pi.small.goal.utils.ScrollerNumberPicker
+    <com.small.small.goal.utils.ScrollerNumberPicker
         android:id="@+id/cycle_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
