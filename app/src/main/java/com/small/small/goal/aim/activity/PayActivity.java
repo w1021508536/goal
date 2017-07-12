@@ -278,7 +278,7 @@ public class PayActivity extends BaseActivity {
         balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
 
         long currentTime = System.currentTimeMillis();
-        profit_text.setText("预计" + simpleDateFormat.format(new Date(currentTime + 86400000)) + "产生收益," + simpleDateFormat.format(new Date(currentTime + 172800000)) + "收益到账");
+//        profit_text.setText("预计" + simpleDateFormat.format(new Date(currentTime + 86400000)) + "产生收益," + simpleDateFormat.format(new Date(currentTime + 172800000)) + "收益到账");
 
     }
 
