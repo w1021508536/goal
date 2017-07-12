@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.pi.small.goal.utils.SwipeListView
+        <com.small.small.goal.utils.SwipeListView
             android:id="@+id/friends_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

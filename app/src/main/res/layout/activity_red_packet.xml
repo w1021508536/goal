@@ -106,7 +106,7 @@
                 </LinearLayout>
 
 
-                <com.pi.small.goal.utils.MyListView
+                <com.small.small.goal.utils.MyListView
                     android:id="@+id/red_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

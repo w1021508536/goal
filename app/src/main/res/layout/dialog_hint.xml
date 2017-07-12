@@ -54,19 +54,65 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="代理商享受的收益"
+            android:text="代理商享受的权益"
             android:textColor="@color/text_aim"
             android:textSize="20dp" />
 
-        <TextView
-            android:id="@+id/tv_good"
-            style="@style/text_black_16"
-            android:layout_width="wrap_content"
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/top_left"
-            android:layout_marginRight="@dimen/top_left"
-            android:layout_marginTop="10dp"
-            android:text="成为代理商的" />
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_good"
+                    style="@style/text_black_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/top_left"
+                    android:layout_marginRight="@dimen/top_left"
+                    android:layout_marginTop="10dp"
+                    android:text="1、推荐用户：享受推荐用户在小目标平台上完成目标金额的年化3.6%奖励。" />
+
+                <TextView
+                    style="@style/text_black_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/top_left"
+                    android:layout_marginRight="@dimen/top_left"
+                    android:text="2、推荐代理商：享受推荐代理商奖励100元/人 ，推荐10个以上代理商额外奖励培训费100元/人。" />
+
+                <TextView
+                    style="@style/text_black_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/top_left"
+                    android:layout_marginRight="@dimen/top_left"
+                    android:text="3、推荐分公司：享受推荐分公司加盟诚意金10%奖励。" />
+
+                <TextView
+                    style="@style/text_black_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/top_left"
+                    android:layout_marginRight="@dimen/top_left"
+                    android:text="4、加权分红：享受全国代理共享公司年业绩1%的分红。" />
+
+                <TextView
+                    style="@style/text_black_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/top_left"
+                    android:layout_marginRight="@dimen/top_left"
+                    android:text="5、市场补贴：享受连续3个月完成日均余额20万，奖励3万期权。" />
+            </LinearLayout>
+
+        </ScrollView>
+
 
         <View
             android:layout_width="match_parent"

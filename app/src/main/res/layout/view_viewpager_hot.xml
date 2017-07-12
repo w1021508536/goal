@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.pi.small.goal.utils.WrapContentHeightViewPager
+        <com.small.small.goal.utils.WrapContentHeightViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

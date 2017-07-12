@@ -138,7 +138,7 @@
             android:text="期权曲线图"
             android:textSize="20dp" />
 
-        <com.pi.small.goal.weight.BaseFundChartView
+        <com.small.small.goal.weight.BaseFundChartView
             android:id="@+id/bfcv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
