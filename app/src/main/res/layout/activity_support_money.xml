@@ -105,10 +105,12 @@
                 android:layout_toLeftOf="@+id/save_text"
                 android:background="@null"
                 android:gravity="center_vertical"
+                android:hint="请输入要支持的金额"
                 android:numeric="integer"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:textColor="@color/text_small_light" />
+                android:textColor="@color/text_small_light"
+                android:textSize="14dp" />
 
 
         </RelativeLayout>

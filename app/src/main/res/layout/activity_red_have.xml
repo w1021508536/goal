@@ -39,7 +39,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="5dp"
-            android:src="@mipmap/icon_help_aim" />
+            android:src="@mipmap/icon_help_aim"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
@@ -53,7 +54,6 @@
             android:layout_height="300dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="110sp"
-
             android:src="@mipmap/scan_circle" />
 
         <ImageView

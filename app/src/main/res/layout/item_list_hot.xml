@@ -270,7 +270,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="3dp"
             android:layout_toRightOf="@id/support_number_text"
-            android:text="助力"
+            android:text="支持"
             android:textColor="@color/blue_text"
             android:textSize="12dp" />
 
