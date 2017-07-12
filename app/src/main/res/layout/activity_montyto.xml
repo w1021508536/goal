@@ -97,7 +97,8 @@
             android:id="@+id/alipay_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp">
+            android:padding="15dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/alipay_image"
@@ -130,7 +131,8 @@
             android:id="@+id/union_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp">
+            android:padding="15dp"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/union_image"
