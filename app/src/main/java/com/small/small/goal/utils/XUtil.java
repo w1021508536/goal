@@ -62,7 +62,7 @@ public class XUtil {
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
-                Log.v("TAg", ex.getMessage());
+             //   Log.v("TAg", ex.getMessage());
 
                 if (context instanceof BaseActivity) {                          //访问出错展示的出错图
 

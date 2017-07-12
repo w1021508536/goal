@@ -124,7 +124,6 @@ public class TransferActivity extends BaseActivity {
         super.getData();
 
         getDiagram();
-        getNotice();
     }
 
 
@@ -208,6 +207,7 @@ public class TransferActivity extends BaseActivity {
                     entity.setCreateTime(df.format(new Date(time)));
                 }
                 setBfcv(data);
+                getNotice();
             }
 
             @Override
@@ -223,6 +223,7 @@ public class TransferActivity extends BaseActivity {
     }
 
     private void setBfcv(List<TransferShapeEntity> data) {
+        if (data.size() == 0) return;
         List<List<Float>> lineData = new ArrayList<>();
         List<Float> oneLineData = new ArrayList<>();
         List<String> dataX = new ArrayList<>();
@@ -242,8 +243,8 @@ public class TransferActivity extends BaseActivity {
         if (maxPrice % 10 > 0) {
             double v = maxPrice - maxPrice % 10 + 10;
         }
-        int v = (int) (maxPrice / 10);
-        for (int i = 0; i <= maxPrice; i += v) {
+        double v =  (maxPrice / 10.0);
+        for (double i = 0; i <= maxPrice; i += v) {
             dataY.add((float) i);
         }
 
