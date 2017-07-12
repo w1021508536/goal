@@ -107,7 +107,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         }
 
         dataList = new ArrayList<AimEntity>();
-//        viewList = new ArrayList<View>();
         customTransformer = new CustomTransformer();
         right_image = (ImageView) currentView.findViewById(R.id.right_image);
         viewPager = (ViewPager) currentView.findViewById(R.id.view_pager);
