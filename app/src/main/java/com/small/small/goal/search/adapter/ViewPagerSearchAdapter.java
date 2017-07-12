@@ -103,15 +103,15 @@ public class ViewPagerSearchAdapter extends PagerAdapter {
         } else {
             viewHolder.banner_image.setImageDrawable(context.getResources().getDrawable(R.mipmap.banner));
         }
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent= new Intent(context, AdDetailsActivity.class);
-                intent.putExtra("url",adList.get(position).get("url"));
-                intent.putExtra("title",adList.get(position).get("title"));
-                context.startActivity(intent);
-            }
-        });
+//        itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent= new Intent(context, AdDetailsActivity.class);
+//                intent.putExtra("url",adList.get(position).get("url"));
+//                intent.putExtra("title",adList.get(position).get("title"));
+//                context.startActivity(intent);
+//            }
+//        });
         container.addView(itemView);
 
         return itemView;
