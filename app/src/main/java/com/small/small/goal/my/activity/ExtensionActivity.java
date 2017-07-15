@@ -144,7 +144,7 @@ public class ExtensionActivity extends BaseActivity {
                     LastAgentEntity lastAgentEntity = gson.fromJson(result, LastAgentEntity.class);
                     agent = lastAgentEntity.getResult();
 
-                    datas.add(new notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理", agent.getNick().length()));
+                    datas.add(new notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理商", agent.getNick().length()));
                     marqueeFactory.setData(datas);
 
                 }

@@ -241,7 +241,7 @@ public class SupportPayActivity extends BaseActivity {
 
     private void init() {
         union_layout.setVisibility(View.GONE);
-        alipay_layout.setVisibility(View.GONE);
+//        alipay_layout.setVisibility(View.GONE);
         money_text.setText(money + ".00");
         balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
     }

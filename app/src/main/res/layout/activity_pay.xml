@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="15dp"
                 android:paddingTop="15dp"
-                android:text="加油！离目标更近一步！" />
+                android:text="加油！离目标更近一步了！" />
 
 
         </LinearLayout>
@@ -197,7 +197,6 @@
             <RelativeLayout
                 android:id="@+id/alipay_layout"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
 
@@ -231,9 +230,9 @@
             <RelativeLayout
                 android:id="@+id/union_layout"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
-                android:padding="15dp">
+                android:padding="15dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/union_image"

@@ -76,7 +76,7 @@
                     android:layout_marginLeft="@dimen/top_left"
                     android:layout_marginRight="@dimen/top_left"
                     android:layout_marginTop="10dp"
-                    android:text="1、推荐用户：享受推荐用户在小目标平台上完成目标金额的年化3.6%奖励。" />
+                    android:text="1、推荐用户：享受推荐用户在小目标平台上完成目标的额外奖励。" />
 
                 <TextView
                     style="@style/text_black_16"

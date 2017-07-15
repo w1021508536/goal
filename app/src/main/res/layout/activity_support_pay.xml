@@ -53,10 +53,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:visibility="gone"
                     android:layout_centerVertical="true"
                     android:padding="5dp"
-                    android:src="@mipmap/icon_help_aim" />
+                    android:src="@mipmap/icon_help_aim"
+                    android:visibility="gone" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -188,7 +188,6 @@
             <RelativeLayout
                 android:id="@+id/alipay_layout"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:padding="15dp">
 
@@ -222,9 +221,9 @@
             <RelativeLayout
                 android:id="@+id/union_layout"
                 android:layout_width="match_parent"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
-                android:padding="15dp">
+                android:padding="15dp"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/union_image"
