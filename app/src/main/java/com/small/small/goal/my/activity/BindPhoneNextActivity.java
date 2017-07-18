@@ -128,6 +128,7 @@ public class BindPhoneNextActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         super.onClick(v);
+
         switch (v.getId()) {
             case R.id.next:
 
@@ -161,6 +162,7 @@ public class BindPhoneNextActivity extends BaseActivity {
                     //       startActivity(new Intent(BindPhoneNextActivity.this, BindPhoneActivity.class));
                     dialog.show();
                     CacheUtil.getInstance().getUserInfo().getUser().setMobile("");
+                    Utils.UserSharedPreferences(BindPhoneNextActivity.this).edit().putString(KeyCode.USER_MOBILE, "").commit();
                 }
             }
 
@@ -295,6 +297,7 @@ public class BindPhoneNextActivity extends BaseActivity {
 //                UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
 //                userInfo.getUser().setWechatId(code);
                 CacheUtil.getInstance().getUserInfo().getUser().setMobile(phone);
+                Utils.UserSharedPreferences(BindPhoneNextActivity.this).edit().putString(KeyCode.USER_MOBILE, phone).commit();
                 dialog.show();
             }
 

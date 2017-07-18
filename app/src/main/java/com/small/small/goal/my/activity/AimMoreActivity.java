@@ -817,7 +817,9 @@ public class AimMoreActivity extends BaseActivity {
                 }
 
             } else if (requestCode == REQUEST_AIM_MORE) {
-                PutRedWindow();
+                String money = data.getStringExtra("money");
+                if (money != null && !"0".equals(money))
+                    PutRedWindow();
             }
         }
     }
@@ -994,7 +996,7 @@ public class AimMoreActivity extends BaseActivity {
                 if (!RenameActivity.callOk(result)) return;
                 try {
                     JSONObject jsonObject = new JSONObject(result);
-          //          Utils.showToast(AimMoreActivity.this, (String) jsonObject.get("msg"));
+                    //          Utils.showToast(AimMoreActivity.this, (String) jsonObject.get("msg"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
