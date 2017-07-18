@@ -7,8 +7,8 @@ package com.small.small.goal.utils;
 public class Url {
 
 
-    public static String Url = "http://47.92.79.222:8081";
-    //    public static String Url = "http://api1.smallaim.cn";
+    //    public static String Url = "http://47.92.79.222:8081";
+    public static String Url = "http://api1.smallaim.cn";
     public static String PhotoUrl = "http://img.smallaim.cn";
     public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_200,w_200";
     public static final String SMALL_PHOTO_URL2 = "?x-oss-process=image/resize,m_lfit,h_400,w_400";
