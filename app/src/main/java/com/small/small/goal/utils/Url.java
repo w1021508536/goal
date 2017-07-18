@@ -7,7 +7,7 @@ package com.small.small.goal.utils;
 public class Url {
 
 
-//    public static String Url = "http://47.92.79.222:8081";
+    //    public static String Url = "http://47.92.79.222:8081";
     public static String Url = "http://api1.smallaim.cn";
     public static String PhotoUrl = "http://img.smallaim.cn";
     public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_200,w_200";
@@ -28,7 +28,7 @@ public class Url {
     //aim
     public static String Aim = "/aim";// put 访问  新建目标   get 访问  aimId参数为详情  userId参数为列表
     public static String AimDynamic = "/aim/dynamic";//新建动态或创建目标
-    public static String AimTransfer="/aim/transfer";
+    public static String AimTransfer = "/aim/transfer";
 
     public static String AimDynamicComment = "/aim/dynamic/comment";//评论动态
 
@@ -94,6 +94,8 @@ public class Url {
     public static String AgentDistribution = "/agent/distribution";//分销收益
     public static String Agent = "/agent";//下级代理
 
-    public static String AdList = "/ad/list";//广告列表
+    public static String AdList = "/ad";//广告列表
+
+    public static String AccountCash = "/account/cash";//提现
 
 }

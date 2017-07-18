@@ -231,7 +231,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 }
                 try {
                     long signTime = (long) ((JSONObject) new JSONObject(result).get("result")).get("lastSignInTime");
-                    tvTaskNumsFragment.setText((taskInfo.getFinishTaskCount()) + "/" + (taskInfo.getTotalTaskCount() + 1));
+                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/" + (int) (taskInfo.getTotalTaskCount() + 1));
                     Date date = new Date(signTime);
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
                     Date nowDate = new Date();
@@ -246,7 +246,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                     } else {
                     }
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setTotalTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getTotalTaskCount() + 1);
-                    tvTaskNumsFragment.setText((taskInfo.getFinishTaskCount()) + "/" + (taskInfo.getTotalTaskCount()));
+                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/" + ((int) taskInfo.getTotalTaskCount()));
 
                 } catch (JSONException e) {
                     e.printStackTrace();

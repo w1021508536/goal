@@ -54,6 +54,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:padding="5dp"
+                android:visibility="gone"
                 android:src="@mipmap/icon_spread_question" />
 
             <TextView
@@ -160,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="名代理" />
+                    android:text="名代理商" />
             </LinearLayout>
 
 
@@ -175,7 +176,7 @@
             android:layout_marginRight="@dimen/top_left"
             android:background="@drawable/selector_blue_extension"
             android:gravity="center"
-            android:text="我 要 成 为 代 理" />
+            android:text="我 要 成 为 代 理 商" />
 
         <TextView
             android:id="@+id/tv_extension"

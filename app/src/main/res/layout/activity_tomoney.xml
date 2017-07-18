@@ -8,95 +8,98 @@
 
     <include layout="@layout/view_include" />
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/rl_height"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@color/white"
-        android:padding="@dimen/top_left">
+        android:orientation="vertical">
 
         <TextView
-            style="@style/text_gray_big_14"
+            style="@style/black_light_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/icon_wechat"
-            android:drawablePadding="5dp"
-            android:text="微信零钱" />
+            android:paddingBottom="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingTop="15dp"
+            android:text="提现方式" />
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/background_system_list" />
+
+
+        <RelativeLayout
+            android:id="@+id/wechat_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/wechat_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_wechat" />
+
+            <TextView
+                style="@style/black_light_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/wechat_image"
+                android:text="@string/wechat_pay" />
+
+            <ImageView
+                android:id="@+id/wechat_right_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_hook_off" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/background_system_list" />
+
+        <RelativeLayout
+            android:id="@+id/alipay_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/alipay_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/icon_alipay" />
+
+            <TextView
+                style="@style/black_light_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/alipay_image"
+                android:text="@string/alipay_pay" />
+
+            <ImageView
+                android:id="@+id/alipay_right_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/icon_hook_off" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:src="@color/background_system_list" />
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/rl_height"
-        android:layout_marginTop="20dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/top_left"
-        android:paddingRight="@dimen/top_left">
-
-        <TextView
-            style="@style/text_black_16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="金额" />
-
-        <EditText
-            android:id="@+id/etv_money_money"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="50dp"
-            android:background="@null"
-            android:gravity="center_vertical"
-            android:layout_marginRight="50dp"
-            android:inputType="number" />
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/delete_image"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0.5dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/top_left"
-        android:paddingRight="@dimen/top_left">
-
-        <TextView
-            android:id="@+id/tv_moneyHint_toMoney"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="可提现金额" />
-
-        <TextView
-            android:id="@+id/tv_money_toMOney"
-            style="@style/text_gray_big_14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_moneyHint_toMoney"
-            android:text="" />
-
-        <TextView
-            android:id="@+id/tv_toMoney_toMoney"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:text="全部提现"
-            android:textColor="@color/chat_top" />
-    </RelativeLayout>
 
     <TextView
         android:id="@+id/pay_text"

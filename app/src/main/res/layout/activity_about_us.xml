@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/top_left"
             android:layout_marginRight="@dimen/top_left"
-            android:text="小目标是一款以实现用户“小目标”为主要目的的社交、互助产品。通过APP自身的社交圈、项目以及互联网第三方SNS平台为用户的交友，互助予以便利。" />
+            android:text="小目标是一款以实现用户“小目标”为主要目的的社交产品。" />
 
 
         <RelativeLayout
