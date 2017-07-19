@@ -457,6 +457,9 @@
             android:label="发现轮播详情"
             android:screenOrientation="portrait" />
         <activity android:name="com.small.small.goal.my.activity.DistributionMemberNextActivity"></activity>
+        <activity android:name="com.small.small.goal.my.activity.ToMoneyWeChatActivity"
+            android:label="微信的提现"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

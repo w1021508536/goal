@@ -44,18 +44,22 @@
             android:text="金额" />
 
         <EditText
-            android:id="@+id/etv_money_money"
+            android:id="@+id/etv_money"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
             android:background="@null"
             android:gravity="center_vertical"
-            android:layout_marginRight="50dp"
             android:inputType="number" />
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/delete_image"/>
+            android:id="@+id/img_delete"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/delete_image" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -69,7 +73,7 @@
         android:paddingRight="@dimen/top_left">
 
         <TextView
-            android:id="@+id/tv_moneyHint_toMoney"
+            android:id="@+id/tv_moneyHint"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,25 +81,26 @@
             android:text="可提现金额" />
 
         <TextView
-            android:id="@+id/tv_money_toMOney"
+            android:id="@+id/tv_money"
             style="@style/text_gray_big_14"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/tv_moneyHint_toMoney"
+            android:layout_toRightOf="@+id/tv_moneyHint"
             android:text="" />
 
         <TextView
-            android:id="@+id/tv_toMoney_toMoney"
+            android:id="@+id/tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
             android:background="@null"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
             android:text="全部提现"
-            android:textColor="@color/chat_top" />
+            android:textColor="@color/chat_top"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <TextView
@@ -114,4 +119,17 @@
         android:text="下一步"
         android:textColor="@color/white"
         android:textSize="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/top_left"
+        android:text="温馨提示：" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/top_left"
+        android:layout_marginRight="@dimen/top_left"
+        android:text="提现到微信钱包，需要进入“设置-微信绑定”处进行微信账号绑定，方可将小目标中的资金提现至微信钱包。" />
 </LinearLayout>
