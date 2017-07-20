@@ -22,6 +22,7 @@ import com.small.small.goal.utils.Utils;
 import com.pingplusplus.android.Pingpp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -245,7 +246,6 @@ public class MontyToActivity extends BaseActivity {
         }
         requestParams = Utils.getRequestParams(this);
         requestParams.setUri(Url.Url + "/charge");
-
 
         requestParams.addBodyParameter("channel", channel);
         requestParams.addBodyParameter("amount", money);

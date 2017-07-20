@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_system_list"
@@ -8,10 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <View
             android:id="@+id/view"
@@ -54,8 +55,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:padding="5dp"
-                android:visibility="gone"
-                android:src="@mipmap/icon_spread_question" />
+                android:src="@mipmap/icon_spread_question"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_ok_include"
@@ -117,7 +118,7 @@
                     android:id="@+id/img_icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@mipmap/icon_user" />
+                    tools:src="@mipmap/icon_user" />
 
                 <TextView
                     android:id="@+id/tv_userName"
@@ -127,7 +128,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:layout_toRightOf="@+id/img_icon"
-                    android:text="Baird" />
+                    tools:text="Baird" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="第" />
+                    tools:text="第" />
 
                 <TextView
                     android:id="@+id/tvMoney"
@@ -151,9 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
-                    android:text="0"
                     android:textColor="@color/white"
-                    android:textSize="50dp" />
+                    android:textSize="50dp"
+                    tools:text="0" />
 
                 <TextView
                     android:id="@+id/tv_moneyHint2"
@@ -161,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="名代理商" />
+                    android:text="已有0名用户加入我们" />
             </LinearLayout>
 
 
