@@ -135,12 +135,13 @@
     </RelativeLayout>
 
     <RelativeLayout
+
         android:id="@+id/rl_toMoney_wallet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0.5dp"
         android:background="@drawable/background_selector_white_gray"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/img_toMoney_wallet"

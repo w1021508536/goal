@@ -1,5 +1,6 @@
 package com.small.small.goal.my.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
-import com.small.small.goal.aim.activity.AddAimActivity;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Url;
@@ -67,7 +67,7 @@ public class ToMoneyActivity extends BaseActivity {
     @InjectView(R.id.pay_text)
     TextView payText;
 
-    private String accountType = "0";
+    private String accountType = "2";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,7 +116,7 @@ public class ToMoneyActivity extends BaseActivity {
                 } else if (accountType.equals("1")) {
                     GetBudget(view);
                 } else if (accountType.equals("2")) {
-
+                    startActivity(new Intent(this, ToMoneyWeChatActivity.class));
                 }
                 break;
         }

@@ -451,6 +451,10 @@
             android:name="com.small.small.goal.my.activity.DistributionMemberNextActivity"
             android:label="分销下级成员"
             android:screenOrientation="portrait" />
+        <activity android:name="com.small.small.goal.my.activity.DistributionMemberNextActivity"></activity>
+        <activity android:name="com.small.small.goal.my.activity.ToMoneyWeChatActivity"
+            android:label="微信的提现"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
