@@ -276,6 +276,7 @@ public class ExtensionPayActivity extends BaseActivity {
                     if (Utils.callOk(result)) {
                         if (channel.equals("balance")) {
 
+
                             JSONObject jsonObject = new JSONObject(result);
                             JSONObject orderInfo = (JSONObject) ((JSONObject) jsonObject.get("result")).get("orderInfo");
                             int orderId = orderInfo.getInt("orderId");
