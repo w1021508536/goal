@@ -405,7 +405,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                         JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
-
                             aimEntity = new AimEntity();
                             aimEntity.setId(jsonArray.getJSONObject(i).getString("id"));
                             aimEntity.setName(jsonArray.getJSONObject(i).getString("name"));
