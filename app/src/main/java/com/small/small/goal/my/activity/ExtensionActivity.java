@@ -81,7 +81,7 @@ public class ExtensionActivity extends BaseActivity {
     private ExtensionDialog dialog;
     private final List<notice> datas = new ArrayList<>();
     private MarqueeFactory<TextView, notice> marqueeFactory;
-    private LastAgentEntity.ResultBean agent;
+    private LastAgentEntity agent;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,8 +141,8 @@ public class ExtensionActivity extends BaseActivity {
             public void onSuccess(String result) {
                 if (Utils.callOk(result)) {
                     Gson gson = new Gson();
-                    LastAgentEntity lastAgentEntity = gson.fromJson(result, LastAgentEntity.class);
-                    agent = lastAgentEntity.getResult();
+                    agent = gson.fromJson(Utils.getResultStr(result), LastAgentEntity.class);
+
 
                     datas.add(new notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理商", agent.getNick().length()));
                     marqueeFactory.setData(datas);

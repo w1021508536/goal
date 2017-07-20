@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -28,7 +29,7 @@
                 style="@style/text_white_16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="周目去和下午茶" />
+                tools:text="周目去和下午茶" />
 
             <TextView
                 android:id="@+id/tv_money_item"
@@ -36,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="已结束:30/300元" />
+                tools:text="已结束:30/300元" />
         </LinearLayout>
 
         <ImageView

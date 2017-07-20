@@ -84,7 +84,7 @@ public class TargetAdapter extends BaseAdapter {
         final CollectEntity collectEntity = data.get(position);
         vh.tvNameItem.setText(collectEntity.getName());
         vh.tvMoneyItem.setText("已转入 " + collectEntity.getMoney() + "/" + ((int) collectEntity.getBudget()) + "元");
-        vh.progressItem.setProgress((float) (collectEntity.getMoney() * 10 / collectEntity.getBudget()));
+        vh.progressItem.setProgress((float) (collectEntity.getMoney() * 100 / collectEntity.getBudget()));
         vh.imgBgItem.setImageResource(R.drawable.image4);
 
         if (!"".equals(collectEntity.getImg())) {

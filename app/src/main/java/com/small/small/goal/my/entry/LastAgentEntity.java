@@ -9,82 +9,6 @@ package com.small.small.goal.my.entry;
  **/
 public class LastAgentEntity {
 
-
-    /**
-     * msg : success
-     * code : 0
-     * result : {"id":6,"userId":66,"pid":0,"level":3,"subCompanyId":0,"volume":0,"nick":"15628960522","avatar":"http://img.smallaim.cn/1497839039781.jpeg"}
-     * pageNum : 0
-     * pageSize : 0
-     * pageTotal : 0
-     * total : 0
-     */
-
-    private String msg;
-    private int code;
-    private ResultBean result;
-    private int pageNum;
-    private int pageSize;
-    private int pageTotal;
-    private int total;
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public ResultBean getResult() {
-        return result;
-    }
-
-    public void setResult(ResultBean result) {
-        this.result = result;
-    }
-
-    public int getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(int pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getPageTotal() {
-        return pageTotal;
-    }
-
-    public void setPageTotal(int pageTotal) {
-        this.pageTotal = pageTotal;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public static class ResultBean {
         /**
          * id : 6
          * userId : 66
@@ -168,5 +92,5 @@ public class LastAgentEntity {
         public void setAvatar(String avatar) {
             this.avatar = avatar;
         }
-    }
+
 }
