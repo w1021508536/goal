@@ -53,7 +53,7 @@ public class GetPhotosActivity extends BaseActivity {
     private void init() {
 //        http://img.smallaim.cn/aim/aim_1.jpg
         for (int i = 1; i < 35; i++) {
-            dataList.add("aim/aim_" + i + ".jpg?x-oss-process=image/resize,m_lfit,h_300,w_300");
+            dataList.add("aim/aim_" + i + ".jpg");
         }
         gridView.setAdapter(photosAdapter);
 
@@ -124,7 +124,7 @@ public class GetPhotosActivity extends BaseActivity {
             layoutParams1.width = width / 3;
             viewHolder.image.setLayoutParams(layoutParams1);
 
-            x.image().bind(viewHolder.image, Url.PhotoUrl + "/" + dataList.get(position), imageOptions);
+            x.image().bind(viewHolder.image, Utils.GetPhotoPath(dataList.get(position)) + "?x-oss-process=image/resize,m_lfit,h_300,w_300", imageOptions);
 
             return convertView;
         }

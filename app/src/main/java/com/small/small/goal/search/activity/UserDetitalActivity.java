@@ -222,11 +222,15 @@ public class UserDetitalActivity extends BaseActivity {
                 if (hotAdapter == null)
                     return;
                 int heigh = head_view.getHeight();
-                int scrollY = getScrollY();
-                Log.v("TAG", "scrollY------" + scrollY);
-                if (heigh < scrollY) {
+                Log.v("TAG", "scrollY------" + getScrollY());
+                System.out.println("========scrollY==========" + getScrollY());
+                System.out.println("========heigh==========" + heigh);
+                if (heigh < getScrollY()) {
 
                     //Color.argb(255,0,178,238)
+                    leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
+                    moreImage.setImageResource(R.mipmap.more_btn_white);
+                    chatImage.setImageResource(R.mipmap.chat_btn_white);
                     topLayout.setBackgroundColor(Color.argb(255, 239, 120, 52));
                 } else {
                     float a = 255.0f / (float) heigh;
@@ -236,7 +240,6 @@ public class UserDetitalActivity extends BaseActivity {
                     else if (a < 0)
                         a = 0;
 
-                    topLayout.setBackgroundColor(Color.argb((int) a, 239, 120, 52));
                     if (a >= 200) {
                         leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
                         moreImage.setImageResource(R.mipmap.more_btn_white);
@@ -246,8 +249,9 @@ public class UserDetitalActivity extends BaseActivity {
                         moreImage.setImageResource(R.mipmap.more_btn);
                         chatImage.setImageResource(R.mipmap.chat_btn);
                     }
-
+                    topLayout.setBackgroundColor(Color.argb((int) a, 239, 120, 52));
                 }
+
             }
         });
 
@@ -297,30 +301,15 @@ public class UserDetitalActivity extends BaseActivity {
 
     }
 
-
     public int getScrollY() {
         try {
             View c = listView.getChildAt(0);
-            View c1 = listView.getChildAt(1);
-            Log.v("TAG", "c------- " + c.getHeight() + "         c1------- " + c1.getHeight());
             if (c == null) {
                 return 0;
             }
-            int firstVisiblePosition = listView.getFirstVisiblePosition();
+            int firstVisiblePosition = listView.getFirstVisiblePosition() - 1;
             int top = c.getTop();
-            if (c.getHeight() - c1.getHeight() >= 10) {
-                top = c.getTop() - (c.getHeight() - c1.getHeight());
-            } else {
-                top-=head_view.getHeight();
-            }
-
-//            if (top > head_image.getHeight()) {
-//                top -= head_image.getHeight();
-//            }
-            int height = c.getHeight();
-            Log.v("TAG", "top-------  " + top);
-            Log.v("TAG", "height-------  " + height + "         position-------" + firstVisiblePosition);
-            return -top + (firstVisiblePosition - 1) * c1.getHeight();
+            return -top + firstVisiblePosition * c.getHeight();
         } catch (Exception e) {
         }
         return 0;

@@ -4,6 +4,7 @@ package com.small.small.goal.search;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -61,6 +62,22 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+        ButterKnife.inject(this, view);
+
+
+        //   setTabsValue();
+
+
+//        for (int i=0;i<tabs.getChildCount();i++){
+//            tabs.getTabAt(i).
+//        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         View topView = view.findViewById(R.id.view);
 
         int sysVersion = Integer.parseInt(Build.VERSION.SDK);
@@ -71,22 +88,12 @@ public class SearchFragment extends Fragment {
             topView.setVisibility(View.GONE);
         }
 
-        ButterKnife.inject(this, view);
-
-
-     //   setTabsValue();
-
         dataList = new ArrayList<Fragment>();
 
         searchViewPagerAdapter = new SearchViewPagerAdapter(getChildFragmentManager());
         view_pager.setAdapter(searchViewPagerAdapter);
-//        view_pager.set
         view_pager.setOffscreenPageLimit(2);
         tabs.setupWithViewPager(view_pager);
-//        for (int i=0;i<tabs.getChildCount();i++){
-//            tabs.getTabAt(i).
-//        }
-        return view;
     }
 
     @Override

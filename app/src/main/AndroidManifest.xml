@@ -351,18 +351,7 @@
             android:name="com.pingplusplus.android.PaymentActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-
-            <!-- 不使用QQ钱包,可删除以下代码 -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:scheme="qwalletXXXXXXXX" />
-            </intent-filter>
-        </activity>
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- 微信支付 -->
         <activity-alias
@@ -381,9 +370,7 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:screenOrientation="behind" />
-        <activity
-            android:name="com.small.small.goal.aim.activity.SupportAimActivity"
-            android:screenOrientation="portrait" />
+
 
         <!-- 银联支付 -->
         <activity
@@ -396,6 +383,10 @@
             android:name="UMENG_APPKEY"
             android:value="593f80146e27a41956000bd3" />
 
+        <activity
+            android:name="com.small.small.goal.aim.activity.SupportAimActivity"
+            android:label="助力自己的目标"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.small.small.goal.search.activity.RedHaveActivity"
             android:label="雷达红包列表"
@@ -456,7 +447,10 @@
             android:name="com.small.small.goal.search.activity.AdDetailsActivity"
             android:label="发现轮播详情"
             android:screenOrientation="portrait" />
-        <activity android:name="com.small.small.goal.my.activity.DistributionMemberNextActivity"></activity>
+        <activity
+            android:name="com.small.small.goal.my.activity.DistributionMemberNextActivity"
+            android:label="分销下级成员"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

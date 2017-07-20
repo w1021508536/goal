@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/wechat_image"
-                android:text="@string/wechat_pay" />
+                android:text="微信" />
 
             <ImageView
                 android:id="@+id/wechat_right_image"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_toRightOf="@+id/alipay_image"
-                android:text="@string/alipay_pay" />
+                android:text="支付宝" />
 
             <ImageView
                 android:id="@+id/alipay_right_image"
