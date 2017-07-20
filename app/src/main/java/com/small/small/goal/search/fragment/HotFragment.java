@@ -178,8 +178,19 @@ public class HotFragment extends Fragment {
             }
         });
 
-//        GetHotData(page + "", "10");
-
+        if (getActivity() != null) {
+            if (Utils.isNetworkConnected(getActivity())) {
+                nullLayout.setClickable(false);
+                nullLayout.setVisibility(View.GONE);
+                isDown = true;
+                GetHotData("1", page * 10 + "");
+            } else {
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+            }
+        }
 
     }
 
@@ -1138,6 +1149,32 @@ public class HotFragment extends Fragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //需要放在onResume的方法放在该处执行
+            if (getActivity() != null) {
+                if (Utils.isNetworkConnected(getActivity())) {
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    isDown = true;
+                    GetHotData("1", page * 10 + "");
+                } else {
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
+            }
+
+
+        } else {
+            //界面不可见的时候执行的方法
+
+        }
+    }
+
+    @Override
     public void onResume() {
 
         if (Utils.isNetworkConnected(getActivity())) {
@@ -1159,4 +1196,6 @@ public class HotFragment extends Fragment {
 
         super.onResume();
     }
+
+
 }

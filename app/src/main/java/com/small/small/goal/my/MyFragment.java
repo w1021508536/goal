@@ -311,7 +311,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.ll_transfer_fragment:
                 startActivity(new Intent(getContext(), TransferActivity.class));
-           //     Utils.showToast(getActivity(), "敬请期待");
                 break;
             case R.id.ll_shopping_fragment:
                 Utils.showToast(getActivity(), "敬请期待");

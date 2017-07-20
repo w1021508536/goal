@@ -155,7 +155,6 @@ public class ToMoneyActivity extends BaseActivity {
                     XUtil.post(requestParams, ToMoneyActivity.this, new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("=========== 提现=========" + result);
                             try {
                                 if (new JSONObject(result).getString("code").equals("0")) {
                                     Utils.showToast(ToMoneyActivity.this, "提现成功");

@@ -401,11 +401,10 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-
+                        System.out.println("========getaim============" + result);
                         JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
-
                             aimEntity = new AimEntity();
                             aimEntity.setId(jsonArray.getJSONObject(i).getString("id"));
                             aimEntity.setName(jsonArray.getJSONObject(i).getString("name"));
@@ -903,7 +902,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                             dataList.remove(position_now);
 //                            addViewPager(dataList.size() - 1);
 //                            viewPagerAdapter.setViewList(dataList);
-
 
 
                             if (dataList.size() == 0) {

@@ -381,7 +381,7 @@ public class AttentionFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.pinch_image, R.id.image_layout,R.id.null_layout})
+    @OnClick({R.id.pinch_image, R.id.image_layout, R.id.null_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.pinch_image:
@@ -756,7 +756,7 @@ public class AttentionFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0))+Url.SMALL_PHOTO_URL2, imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)) + Url.SMALL_PHOTO_URL2, imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 2;
                     layoutParams1.width = width;
@@ -766,8 +766,8 @@ public class AttentionFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0))+Url.SMALL_PHOTO_URL, imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1))+Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(imageList.get(0)) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(imageList.get(1)) + Url.SMALL_PHOTO_URL, imageOptions);
 
 
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
@@ -784,9 +784,9 @@ public class AttentionFragment extends Fragment {
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);
-                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1())+Url.SMALL_PHOTO_URL, imageOptions);
-                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2())+Url.SMALL_PHOTO_URL, imageOptions);
-                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3())+Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image1, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg1()) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image2, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg2()) + Url.SMALL_PHOTO_URL, imageOptions);
+                    x.image().bind(viewHolder.image3, Utils.GetPhotoPath(dynamicEntityList.get(position).getImg3()) + Url.SMALL_PHOTO_URL, imageOptions);
                     ViewGroup.LayoutParams layoutParams1 = viewHolder.image1.getLayoutParams();
                     layoutParams1.height = width / 3;
                     layoutParams1.width = width / 3;
@@ -1001,7 +1001,8 @@ public class AttentionFragment extends Fragment {
 
 
     }
-    @Override
+
+        @Override
     public void onResume() {
         if (Utils.isNetworkConnected(getActivity())) {
             nullLayout.setClickable(false);
@@ -1015,5 +1016,28 @@ public class AttentionFragment extends Fragment {
             tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
         }
         super.onResume();
+    }
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            //需要放在onResume的方法放在该处执行
+            if (getActivity() != null) {
+                if (Utils.isNetworkConnected(getActivity())) {
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    isDown = true;
+                    GetHotData("1", page * 10 + "");
+                } else {
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
+            }
+        } else {
+            //界面不可见的时候执行的方法
+
+        }
     }
 }

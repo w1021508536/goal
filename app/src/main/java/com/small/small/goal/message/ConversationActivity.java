@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.message.activity.FriendSetActivity;
+import com.small.small.goal.utils.AndroidBug5497Workaround;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.Utils;
 
@@ -33,7 +34,7 @@ public class ConversationActivity extends BaseActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversation);
-
+        AndroidBug5497Workaround.assistActivity(findViewById(android.R.id.content));
 
 
         sharedPreferences = Utils.UserSharedPreferences(this);

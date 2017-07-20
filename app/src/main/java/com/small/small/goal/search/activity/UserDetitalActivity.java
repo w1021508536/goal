@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -84,9 +83,6 @@ public class UserDetitalActivity extends BaseActivity {
     private TextView aims_text;
     private TextView be_follows_text;
     private TextView follows_text;
-    private RelativeLayout no_data_layout;
-    private ImageView img_data_empty;
-    private TextView tv_data_empty;
 
 
     private String userId;
@@ -169,9 +165,6 @@ public class UserDetitalActivity extends BaseActivity {
         aims_text = (TextView) head_view.findViewById(R.id.aims_text);
         be_follows_text = (TextView) head_view.findViewById(R.id.be_follows_text);
         follows_text = (TextView) head_view.findViewById(R.id.follows_text);
-        no_data_layout = (RelativeLayout) head_view.findViewById(R.id.no_data_layout);
-        img_data_empty = (ImageView) findViewById(R.id.img_data_empty);
-        tv_data_empty = (TextView) findViewById(R.id.tv_data_empty);
 
 
         hotAdapter = new HotAdapter(this);
@@ -222,11 +215,12 @@ public class UserDetitalActivity extends BaseActivity {
                 if (hotAdapter == null)
                     return;
                 int heigh = head_view.getHeight();
-                int scrollY = getScrollY();
-                Log.v("TAG", "scrollY------" + scrollY);
-                if (heigh < scrollY) {
+                if (heigh < getScrollY()) {
 
                     //Color.argb(255,0,178,238)
+                    leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
+                    moreImage.setImageResource(R.mipmap.more_btn_white);
+                    chatImage.setImageResource(R.mipmap.chat_btn_white);
                     topLayout.setBackgroundColor(Color.argb(255, 239, 120, 52));
                 } else {
                     float a = 255.0f / (float) heigh;
@@ -236,7 +230,6 @@ public class UserDetitalActivity extends BaseActivity {
                     else if (a < 0)
                         a = 0;
 
-                    topLayout.setBackgroundColor(Color.argb((int) a, 239, 120, 52));
                     if (a >= 200) {
                         leftImage.setImageResource(R.mipmap.icon_arrow_white_left);
                         moreImage.setImageResource(R.mipmap.more_btn_white);
@@ -246,8 +239,9 @@ public class UserDetitalActivity extends BaseActivity {
                         moreImage.setImageResource(R.mipmap.more_btn);
                         chatImage.setImageResource(R.mipmap.chat_btn);
                     }
-
+                    topLayout.setBackgroundColor(Color.argb((int) a, 239, 120, 52));
                 }
+
             }
         });
 
@@ -284,7 +278,6 @@ public class UserDetitalActivity extends BaseActivity {
         chatImage.setOnClickListener(this);
         attention_text.setOnClickListener(this);
         nullLayout.setOnClickListener(this);
-        no_data_layout.setOnClickListener(this);
         if (Utils.isNetworkConnected(this)) {
             GetUserData();
         } else {
@@ -297,30 +290,15 @@ public class UserDetitalActivity extends BaseActivity {
 
     }
 
-
     public int getScrollY() {
         try {
             View c = listView.getChildAt(0);
-            View c1 = listView.getChildAt(1);
-            Log.v("TAG", "c------- " + c.getHeight() + "         c1------- " + c1.getHeight());
             if (c == null) {
                 return 0;
             }
-            int firstVisiblePosition = listView.getFirstVisiblePosition();
+            int firstVisiblePosition = listView.getFirstVisiblePosition() - 1;
             int top = c.getTop();
-            if (c.getHeight() - c1.getHeight() >= 10) {
-                top = c.getTop() - (c.getHeight() - c1.getHeight());
-            } else {
-                top-=head_view.getHeight();
-            }
-
-//            if (top > head_image.getHeight()) {
-//                top -= head_image.getHeight();
-//            }
-            int height = c.getHeight();
-            Log.v("TAG", "top-------  " + top);
-            Log.v("TAG", "height-------  " + height + "         position-------" + firstVisiblePosition);
-            return -top + (firstVisiblePosition - 1) * c1.getHeight();
+            return -top + firstVisiblePosition * c.getHeight();
         } catch (Exception e) {
         }
         return 0;
@@ -365,18 +343,7 @@ public class UserDetitalActivity extends BaseActivity {
 
                 }
                 break;
-            case R.id.no_data_layout:
-                if (Utils.isNetworkConnected(this)) {
-                    GetHotData(page + "", "10");
-                } else {
-                    Utils.showToast(UserDetitalActivity.this, "请检查网络是否连接");
-                    no_data_layout.setClickable(true);
-                    no_data_layout.setVisibility(View.VISIBLE);
-                    img_data_empty.setImageResource(R.mipmap.bg_net_wrong);
-                    tv_data_empty.setText("网 络 异 常! 请 点 击 刷 新");
 
-                }
-                break;
         }
     }
 
@@ -389,7 +356,6 @@ public class UserDetitalActivity extends BaseActivity {
         XUtil.post(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========Attention============" + result);
                 try {
                     if (new JSONObject(result).getString("code").equals("0")) {
                         //1 是已关注 0 是未关注
@@ -452,12 +418,10 @@ public class UserDetitalActivity extends BaseActivity {
         requestParams.addBodyParameter("token", Utils.GetToken(this));
         requestParams.addBodyParameter("deviceId", MyApplication.deviceId);
 
-        System.out.println("=============uid==========" + userId);
         requestParams.addBodyParameter("uid", userId);
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("========GetUserData========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -525,7 +489,6 @@ public class UserDetitalActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=======GetHotData=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -589,13 +552,14 @@ public class UserDetitalActivity extends BaseActivity {
                             dynamicEntityList.add(dynamicEntity);
                         }
                         if (dynamicEntityList.size() < 1) {
-                            no_data_layout.setVisibility(View.VISIBLE);
-                            no_data_layout.setClickable(false);
-                            img_data_empty.setImageResource(R.mipmap.icon_dynamic_null);
-                            tv_data_empty.setText("没 有 任 何 用 户 动 态 ~");
+                            nullLayout.setVisibility(View.VISIBLE);
+                            nullLayout.setClickable(false);
+                            imgEmpty.setImageResource(R.mipmap.icon_dynamic_null);
+                            tvEmpty.setText("没 有 任 何 用 户 动 态 ~");
+
                         } else {
-                            no_data_layout.setClickable(false);
-                            no_data_layout.setVisibility(View.GONE);
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.GONE);
 
                         }
                         hotAdapter.notifyDataSetChanged();
@@ -604,20 +568,21 @@ public class UserDetitalActivity extends BaseActivity {
                             dynamicEntityList.clear();
                         }
                         if (dynamicEntityList.size() < 1) {
-                            no_data_layout.setVisibility(View.VISIBLE);
-                            no_data_layout.setClickable(false);
-                            img_data_empty.setImageResource(R.mipmap.icon_dynamic_null);
-                            tv_data_empty.setText("没 有 任 何 用 户 动 态 ~");
+                            nullLayout.setVisibility(View.VISIBLE);
+                            nullLayout.setClickable(false);
+                            imgEmpty.setImageResource(R.mipmap.icon_dynamic_null);
+                            tvEmpty.setText("没 有 任 何 用 户 动 态 ~");
                         } else {
-                            no_data_layout.setClickable(false);
-                            no_data_layout.setVisibility(View.GONE);
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.GONE);
 
                         }
+
                     } else {
-                        no_data_layout.setClickable(true);
-                        no_data_layout.setVisibility(View.VISIBLE);
-                        img_data_empty.setImageResource(R.mipmap.bg_wrong);
-                        tv_data_empty.setText("出 错! 点 击 重 新 尝 试");
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
 //                        Utils.showToast(UserDetitalActivity.this, new JSONObject(result).getString("msg"));
                     }
 
@@ -631,15 +596,13 @@ public class UserDetitalActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-//                System.out.println("=============ex.getMessage()==============" + ex.getMessage());
 //                if (!ex.getMessage().equals("")) {
 //                    Utils.showToast(UserDetitalActivity.this, ex.getMessage());
 //                }
-                no_data_layout.setClickable(true);
-                no_data_layout.setVisibility(View.VISIBLE);
-                img_data_empty.setImageResource(R.mipmap.bg_wrong);
-                tv_data_empty.setText("出 错! 点 击 重 新 尝 试");
-
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
             }
 
             @Override
@@ -661,7 +624,6 @@ public class UserDetitalActivity extends BaseActivity {
         win.setAttributes(winParams);
         topLayout.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
         head_view.setPadding(0, Utils.getStatusBarHeight(this), 0, 0);
-        System.out.println("============Utils.getStatusBarHeight(this)==================" + Utils.getStatusBarHeight(this));
 //        topLayout.setLayoutParams();;
     }
 
@@ -762,7 +724,6 @@ public class UserDetitalActivity extends BaseActivity {
             viewHolder.voteImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    System.out.println("==============dynamicEntityList.get(position).getId()=======" + dynamicEntityList.get(position).getId());
                     RequestParams requestParams = new RequestParams(Url.Url + Url.Vote);
                     requestParams.addHeader("token", Utils.GetToken(UserDetitalActivity.this));
                     requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -771,7 +732,6 @@ public class UserDetitalActivity extends BaseActivity {
                     XUtil.post(requestParams, UserDetitalActivity.this, new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("================点赞===========" + result);
                             try {
                                 String code = new JSONObject(result).getString("code");
                                 if (code.equals("0")) {
@@ -867,7 +827,6 @@ public class UserDetitalActivity extends BaseActivity {
 
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
-                                            System.out.println("======================" + ex.getMessage());
                                             Utils.showToast(UserDetitalActivity.this, ex.getMessage());
                                         }
 
