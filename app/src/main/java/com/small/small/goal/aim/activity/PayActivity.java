@@ -117,6 +117,12 @@ public class PayActivity extends BaseActivity {
         init();
     }
 
+    private void init() {
+        union_layout.setVisibility(View.GONE);
+        money_text.setText(money + ".00");
+        balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
+
+    }
 
     @OnClick({R.id.left_image, R.id.right_image, R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, R.id.union_layout, R.id.hook_layout, R.id.pay_text})
     public void onViewClicked(View view) {
@@ -268,18 +274,6 @@ public class PayActivity extends BaseActivity {
                 Utils.showToast(PayActivity.this, "取消输入支付密码");
             }
         }
-    }
-
-
-    private void init() {
-        union_layout.setVisibility(View.GONE);
-        alipay_layout.setVisibility(View.GONE);
-        money_text.setText(money + ".00");
-        balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
-
-        long currentTime = System.currentTimeMillis();
-//        profit_text.setText("预计" + simpleDateFormat.format(new Date(currentTime + 86400000)) + "产生收益," + simpleDateFormat.format(new Date(currentTime + 172800000)) + "收益到账");
-
     }
 
 

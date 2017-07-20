@@ -16,6 +16,8 @@ import com.small.small.goal.utils.Url;
 import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
 import butterknife.ButterKnife;
@@ -129,17 +131,21 @@ public class ToMoneyWeChatActivity extends BaseActivity {
         requestParams.addBodyParameter("amount", etvMoney.getText().toString());
         requestParams.addBodyParameter("account", "");
 
-        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+        XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+                System.out.print("============="+result);
                 if (Utils.callOk(result)) {
                     Utils.showToast(ToMoneyWeChatActivity.this, "提交成功");
+                } else {
+                    Utils.showToast(ToMoneyWeChatActivity.this, Utils.getMsg(result));
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
+                System.out.print("============="+ex.getMessage());
             }
 
             @Override
