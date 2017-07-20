@@ -273,7 +273,7 @@ public class ExtensionPayActivity extends BaseActivity {
 
                 System.out.println("==============AimDynamic=========" + result);
                 try {
-                    if (Utils.callOk(result)) {
+                    if (Utils.callOk(result,ExtensionPayActivity.this)) {
                         if (channel.equals("balance")) {
 
 
@@ -288,8 +288,6 @@ public class ExtensionPayActivity extends BaseActivity {
                             Pingpp.createPayment(ExtensionPayActivity.this, json);
                         }
 
-                    } else {
-                        Utils.showToast(ExtensionPayActivity.this, new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

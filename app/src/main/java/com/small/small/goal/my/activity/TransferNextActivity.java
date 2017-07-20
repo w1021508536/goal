@@ -132,7 +132,7 @@ public class TransferNextActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,TransferNextActivity.this)) {
                     transfer(strPassword);
                 } else {
                     Utils.showToast(TransferNextActivity.this, Utils.getMsg(result));
@@ -166,7 +166,7 @@ public class TransferNextActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,TransferNextActivity.this)) return;
                 option -= Double.valueOf(etvMoney.getText().toString());
                 tvMyTransfer.setText("剩余可以转让 " + option + "个");
                 CacheUtil.getInstance().getUserInfo().getAccount().setOption(option);

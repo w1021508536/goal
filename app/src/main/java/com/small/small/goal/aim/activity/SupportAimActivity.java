@@ -234,6 +234,8 @@ public class SupportAimActivity extends BaseActivity {
                         intent.putExtra("img1", img1);
                         intent.putExtra("img2", img2);
                         intent.putExtra("img3", img3);
+                        intent.putExtra("province",province);
+                        intent.putExtra("city",city);
                         intent.putExtra("content", content_edit.getText().toString().trim());
                         startActivityForResult(intent, Code.SupportAim);
                     }
@@ -357,13 +359,11 @@ public class SupportAimActivity extends BaseActivity {
 
         if (resultCode == Code.RESULT_CAMERA_CODE) {
             imgLoad = data.getStringExtra("path");
-            System.out.println("===============CAMERA======imgLoad======" + imgLoad);
             photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
             selectPhotoPaths.add(imgLoad);
             setPhoto(selectPhotoPaths);
         } else if (resultCode == Code.RESULT_GALLERY_CODE) {
             imgLoad = data.getStringExtra("path");
-            System.out.println("===============imgLoad============" + imgLoad);
             if ("".equals(imgLoad)) {
                 ArrayList<String> morePhotoDatas = data.getStringArrayListExtra(EXTRA_RESULT);
                 selectPhotoPaths.addAll(morePhotoDatas);
@@ -430,7 +430,6 @@ public class SupportAimActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=========UpPicture1=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -446,6 +445,8 @@ public class SupportAimActivity extends BaseActivity {
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
+                            intent.putExtra("province",province);
+                            intent.putExtra("city",city);
                             intent.putExtra("content", content_edit.getText().toString().trim());
                             startActivityForResult(intent, Code.SupportAim);
                         }
@@ -487,7 +488,6 @@ public class SupportAimActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=========photo=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -503,6 +503,8 @@ public class SupportAimActivity extends BaseActivity {
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
+                            intent.putExtra("province",province);
+                            intent.putExtra("city",city);
                             intent.putExtra("content", content_edit.getText().toString().trim());
                             startActivityForResult(intent, Code.SupportAim);
                         }
@@ -542,7 +544,6 @@ public class SupportAimActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=========photo=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -555,6 +556,8 @@ public class SupportAimActivity extends BaseActivity {
                         intent.putExtra("img1", img1);
                         intent.putExtra("img2", img2);
                         intent.putExtra("img3", img3);
+                        intent.putExtra("province",province);
+                        intent.putExtra("city",city);
                         intent.putExtra("content", content_edit.getText().toString().trim());
                         startActivityForResult(intent, Code.SupportAim);
                     } else {

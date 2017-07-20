@@ -223,7 +223,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 Log.v("TAG", result);
 
 
-                if (!Utils.callOk(result)) {
+                if (!Utils.callOk(result,getActivity())) {
                     tvTaskNumsFragment.setText(0 + "/" + 5);
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setFinishTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount());
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setTotalTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getTotalTaskCount() + 1);
@@ -337,7 +337,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========GetCode=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

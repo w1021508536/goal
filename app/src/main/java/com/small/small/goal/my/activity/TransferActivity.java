@@ -154,7 +154,7 @@ public class TransferActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,TransferActivity.this)) return;
                 Gson gson = new Gson();
                 List<NoticeEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<NoticeEntity>>() {
                 }.getType());
@@ -192,7 +192,7 @@ public class TransferActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,TransferActivity.this)) return;
                 //{"msg":"success","code":0,"result":[{"id":1,"createTime":1496302252000,"price":10.00},{"id":2,"createTime":1496388657000,"price":11.00},{"id":3,"createTime":1496475064000,"price":16.00},{"id":4,"createTime":1496561476000,"price":100.00},{"id":5,"createTime":1496647880000,"price":60.00},{"id":6,"createTime":1496734284000,"price":1.00},{"id":7,"createTime":1496820688000,"price":50.00}],"pageNum":1,"pageSize":9,"pageTotal":1,"total":7}
 
                 Gson gson = new Gson();

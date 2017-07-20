@@ -85,6 +85,8 @@ public class PayActivity extends BaseActivity {
     private String img1;
     private String img2;
     private String img3;
+    private String province;
+    private String city;
     private String channel;//支付方式  0: 余额  1：微信 wx   2:alipay
 
     private Boolean isHook = true;
@@ -109,6 +111,8 @@ public class PayActivity extends BaseActivity {
         img1 = getIntent().getStringExtra("img1");
         img2 = getIntent().getStringExtra("img2");
         img3 = getIntent().getStringExtra("img3");
+        province = getIntent().getStringExtra("province");
+        city = getIntent().getStringExtra("city");
         channel = "balance";
 
         wx_api = WXAPIFactory.createWXAPI(this, ThirdUtils.WX_APP_ID, true);
@@ -289,6 +293,8 @@ public class PayActivity extends BaseActivity {
         requestParams.addBodyParameter("img3", img3);
         requestParams.addBodyParameter("video", "");
         requestParams.addBodyParameter("channel", channel);
+        requestParams.addBodyParameter("province", province);
+        requestParams.addBodyParameter("city", city);
         XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {

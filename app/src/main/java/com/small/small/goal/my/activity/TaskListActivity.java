@@ -87,7 +87,7 @@ public class TaskListActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,TaskListActivity.this)) return;
                 try {
                     int status = (int) ((JSONObject) new JSONObject(result).get("result")).get("status");
                     if (status == 1) {
@@ -190,7 +190,7 @@ public class TaskListActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,TaskListActivity.this)) return;
                 Gson gson = new Gson();
                 List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<EveryTaskGsonEntity>>() {
                 }.getType());

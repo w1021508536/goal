@@ -266,7 +266,7 @@ public class UserInfoActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,UserInfoActivity.this)) {
                     dialog.show();
                     tvWxBindUser.setText("解绑");
                     CacheUtil.getInstance().getUserInfo().getUser().setWechatId("");

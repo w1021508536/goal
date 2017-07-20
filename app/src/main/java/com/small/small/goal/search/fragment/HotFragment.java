@@ -319,6 +319,7 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+                System.out.println("========result====hot======" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -474,7 +475,6 @@ public class HotFragment extends Fragment {
             text_zhuli.setText("" + number);
             PutRedWindow();
         } else if (resultCode == Code.FailCode) {
-            System.out.println("==========支付失败============");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }

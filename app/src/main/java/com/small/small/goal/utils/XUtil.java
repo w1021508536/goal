@@ -54,14 +54,13 @@ public class XUtil {
                 if (requestParams.getUri().equals(Url.Url + "/vote/vote")) {
                     CacheUtil.getInstance().getMap().put(KeyCode.AIM_VOTE, true);
                 }
-
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
-                    xCallBackLinstener.onError(ex, isOnCallback);
+                xCallBackLinstener.onError(ex, isOnCallback);
                 //   Log.v("TAg", ex.getMessage());
 
                 if (context instanceof BaseActivity) {                          //访问出错展示的出错图
@@ -129,7 +128,7 @@ public class XUtil {
             public void onError(Throwable ex, boolean isOnCallback) {
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
-                    xCallBackLinstener.onError(ex, isOnCallback);
+                xCallBackLinstener.onError(ex, isOnCallback);
                 //      Log.v("TAg", ex.getMessage());
 
                 if (context instanceof BaseActivity) {                          //访问出错展示的出错图
@@ -202,7 +201,7 @@ public class XUtil {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 loadingDialog.dismiss();
-                    xCallBackLinstener.onError(ex, isOnCallback);
+                xCallBackLinstener.onError(ex, isOnCallback);
             }
 
             @Override

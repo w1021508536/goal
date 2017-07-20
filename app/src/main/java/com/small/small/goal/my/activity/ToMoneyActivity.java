@@ -161,7 +161,7 @@ public class ToMoneyActivity extends BaseActivity {
                                     popupWindow.dismiss();
 
                                 } else {
-                                    Utils.showToast(ToMoneyActivity.this, "提现失败" + new JSONObject(result).getString("msg"));
+                                    Utils.showToast(ToMoneyActivity.this, new JSONObject(result).getString("msg"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -170,7 +170,6 @@ public class ToMoneyActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable ex, boolean isOnCallback) {
-                            System.out.println("=========== 提现========ex=" + ex.getMessage());
                         }
 
                         @Override

@@ -256,6 +256,11 @@ public class UserDetitalActivity extends BaseActivity {
             }
         }
 
+        if (userId.equals(Utils.UserSharedPreferences(this).getString("id", ""))) {
+            attention_text.setVisibility(View.INVISIBLE);
+        } else {
+            attention_text.setVisibility(View.VISIBLE);
+        }
         if (isFollow == 1) {
             attention_text.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_gray_corner_45));
             attention_text.setText("已关注");

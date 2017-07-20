@@ -45,6 +45,8 @@ public class SaveMoneyActivity extends BaseActivity {
     private String img1;
     private String img2;
     private String img3;
+    private String province;
+    private String city;
 
     private String video = "";
 
@@ -70,6 +72,8 @@ public class SaveMoneyActivity extends BaseActivity {
         img1 = getIntent().getStringExtra("img1");
         img2 = getIntent().getStringExtra("img2");
         img3 = getIntent().getStringExtra("img3");
+        province = getIntent().getStringExtra("province");
+        city = getIntent().getStringExtra("city");
 
         budget = Integer.valueOf(getIntent().getStringExtra("budget"));
         haveMoney = Double.valueOf(getIntent().getStringExtra("money"));
@@ -95,7 +99,7 @@ public class SaveMoneyActivity extends BaseActivity {
                     Utils.showToast(this, "金额不能为空");
                 } else {
                     if (Integer.valueOf(money_edit.getText().toString().trim()) < 10) {
-                        Utils.showToast(this, "输入金额不得小于10元" );
+                        Utils.showToast(this, "输入金额不得小于10元");
                     } else {
                         if (!isRead) {
                             Utils.showToast(this, "请仔细阅读相关协议");
@@ -108,6 +112,8 @@ public class SaveMoneyActivity extends BaseActivity {
                             intent.putExtra("img1", img1);
                             intent.putExtra("img2", img2);
                             intent.putExtra("img3", img3);
+                            intent.putExtra("province", province);
+                            intent.putExtra("city", city);
                             intent.putExtra("content", content);
                             startActivityForResult(intent, Code.SupportAim);
 

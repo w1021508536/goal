@@ -276,7 +276,7 @@ public class TaskActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,TaskActivity.this)) return;
                 try {
                     long signTime = (long) ((JSONObject) new JSONObject(result).get("result")).get("lastSignInTime");
                     Date date = new Date(signTime);

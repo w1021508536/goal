@@ -105,14 +105,21 @@ public class Utils {
      * 返回的json是否是成功的
      * create  wjz
      **/
-    public static boolean callOk(String jsonString) {
+    public static boolean callOk(String jsonString, Context context) {
         String code = "";
         try {
             code = new JSONObject(jsonString).getString("code");
 
-            if (code.equals("0"))
+            if (code.equals("0") || code.equals("100000"))
                 return true;
-            else return false;
+            else {
+                try {
+                    Utils.showToast(context, Utils.getMsg(jsonString));
+                } catch (NullPointerException e) {
+                }
+
+                return false;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
             return false;

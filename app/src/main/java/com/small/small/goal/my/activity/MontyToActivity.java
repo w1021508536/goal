@@ -143,7 +143,6 @@ public class MontyToActivity extends BaseActivity {
 
                 break;
             case R.id.alipay_layout:
-                System.out.println("==========AlipayGphone==========" + Utils.isAppInstalled(this, "com.eg.android.AlipayGphone"));
                 if (Utils.isAppInstalled(this, "com.eg.android.AlipayGphone")) {
                     wechatRightImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
                     alipayRightImage.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
@@ -206,7 +205,6 @@ public class MontyToActivity extends BaseActivity {
                     Utils.showToast(MontyToActivity.this, "支付失败");
                     Intent intent = new Intent();
                     setResult(Code.FailCode, intent);
-                    System.out.println("===============" + errorMsg + "========" + extraMsg);
                     finish();
                 } else if (result.equals("cancel")) {
                     Utils.showToast(MontyToActivity.this, "取消支付");
@@ -238,8 +236,6 @@ public class MontyToActivity extends BaseActivity {
     private void DynamicAim() {
 
 
-        System.out.println("====================" + aimId + "===" + content + "-==" + money + "==" + channel);
-
         money = etvMoneyMoney.getText().toString();
         if (money.equals("0") || money.equals("")) {
             return;
@@ -249,13 +245,6 @@ public class MontyToActivity extends BaseActivity {
 
         requestParams.addBodyParameter("channel", channel);
         requestParams.addBodyParameter("amount", money);
-//        requestParams.addBodyParameter("aimId", aimId);
-//        requestParams.addBodyParameter("money", money);
-//        requestParams.addBodyParameter("img1", img1);
-//        requestParams.addBodyParameter("img2", img2);
-//        requestParams.addBodyParameter("img3", img3);
-//        requestParams.addBodyParameter("video", "");
-//        requestParams.addBodyParameter("channel", channel);
 
         x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -265,10 +254,7 @@ public class MontyToActivity extends BaseActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-
                         String json = new JSONObject(result).getJSONObject("result").getString("charge");
-
-                        System.out.println("==============AimDynamic=====json====" + json);
                         Pingpp.createPayment(MontyToActivity.this, json);
                     } else {
                         Utils.showToast(MontyToActivity.this, new JSONObject(result).getString("msg"));
