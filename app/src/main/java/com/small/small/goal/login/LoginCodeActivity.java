@@ -39,6 +39,7 @@ public class LoginCodeActivity extends BaseActivity implements View.OnClickListe
     private String deviceId;
     private TimeCount time;
 
+
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
