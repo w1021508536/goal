@@ -109,6 +109,12 @@ public class WalletActivity extends BaseActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        getData();
+    }
+
+    @Override
     public void getData() {
         RequestParams requestParams = new RequestParams();
         SharedPreferences sp = Utils.UserSharedPreferences(this);

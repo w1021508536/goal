@@ -304,7 +304,7 @@ public class UpdataPassActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,UpdataPassActivity.this)) {
                     dialog.show();
                 }
             }
@@ -337,14 +337,12 @@ public class UpdataPassActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,UpdataPassActivity.this)) {
                     Intent intent = new Intent(UpdataPassActivity.this, UpdataPassActivity.class);
                     intent.putExtra(KEY_FLAG, FLAG_NEW);
                     startActivity(intent);
                     CacheUtil.getInstance().setOldPass(strPassword);
                     finish();
-                } else {
-                    Utils.showToast(UpdataPassActivity.this, Utils.getMsg(result));
                 }
             }
 
@@ -370,7 +368,7 @@ public class UpdataPassActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,UpdataPassActivity.this)) {
                     dialog.show();
                     sp.edit().putInt(KeyCode.USER_PAY_PASS, 1).commit();
 

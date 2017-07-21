@@ -529,7 +529,7 @@ public class AimMoreActivity extends BaseActivity {
         XUtil.put(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result, AimMoreActivity.this)) return;
 
             }
 
@@ -751,7 +751,7 @@ public class AimMoreActivity extends BaseActivity {
                 @Override
                 public void onSuccess(String result) {
 
-                    if (Utils.callOk(result)) {
+                    if (Utils.callOk(result, AimMoreActivity.this)) {
                         CacheUtil.getInstance().getMap().put(KeyCode.AIM_SHARE, true);
                     }
 
@@ -850,15 +850,13 @@ public class AimMoreActivity extends BaseActivity {
                         System.out.println("=======感谢红包=========" + result);
                         try {
                             String code = new JSONObject(result).getString("code");
-                            if (Utils.callOk(result)) {
+                            if (Utils.callOk(result, AimMoreActivity.this)) {
                                 String money = new JSONObject(result).getJSONObject("result").optString("money");
                                 if (money.equals("")) {
                                     Utils.showToast(AimMoreActivity.this, "恭喜您获取红包");
                                 } else {
                                     Utils.showToast(AimMoreActivity.this, "恭喜您获取红包" + money + "元");
                                 }
-                            } else {
-                                Utils.showToast(AimMoreActivity.this, Utils.getMsg(result));
                             }
                             popupWindow.dismiss();
                         } catch (JSONException e) {
@@ -869,7 +867,6 @@ public class AimMoreActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
                         popupWindow.dismiss();
-                        System.out.println("========ex.getMessage()========" + ex.getMessage());
                         Utils.showToast(AimMoreActivity.this, ex.getMessage());
                     }
 
@@ -958,7 +955,7 @@ public class AimMoreActivity extends BaseActivity {
             public void onSuccess(String result) {
                 System.out.println("=========photo=========" + result);
 
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result, AimMoreActivity.this)) return;
 
             }
 

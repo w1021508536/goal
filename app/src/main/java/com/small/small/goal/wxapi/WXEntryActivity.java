@@ -148,7 +148,7 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
         XUtil.post(params, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result)) {
+                if (!Utils.callOk(result,WXEntryActivity.this)) {
 
                     Utils.showToast(WXEntryActivity.this, Utils.getMsg(result));
                     finish();

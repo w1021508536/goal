@@ -158,7 +158,7 @@ public class BindPhoneNextActivity extends BaseActivity {
         XUtil.post(params, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,BindPhoneNextActivity.this)) {
                     //       startActivity(new Intent(BindPhoneNextActivity.this, BindPhoneActivity.class));
                     dialog.show();
                     CacheUtil.getInstance().getUserInfo().getUser().setMobile("");
@@ -191,7 +191,7 @@ public class BindPhoneNextActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,BindPhoneNextActivity.this)) {
                     if (type == TYPE_SETPASS) {
 
                         Intent intent = new Intent(BindPhoneNextActivity.this, UpdataPassActivity.class);
@@ -205,7 +205,6 @@ public class BindPhoneNextActivity extends BaseActivity {
                         startActivity(intent);
                         Utils.showToast(BindPhoneNextActivity.this, Utils.getMsg(result));
                     }
-
                 }
             }
 
@@ -235,7 +234,7 @@ public class BindPhoneNextActivity extends BaseActivity {
             public void onSuccess(String result) {
 
                 System.out.println("==========getCode=========" + result);
-                if (!Utils.callOk(result))
+                if (!Utils.callOk(result,BindPhoneNextActivity.this))
                     Utils.showToast(BindPhoneNextActivity.this, Utils.getMsg(result));
                 return;
 
@@ -292,7 +291,7 @@ public class BindPhoneNextActivity extends BaseActivity {
         XUtil.post(params, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,BindPhoneNextActivity.this)) return;
 
 //                UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
 //                userInfo.getUser().setWechatId(code);

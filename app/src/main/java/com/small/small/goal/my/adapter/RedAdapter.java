@@ -135,7 +135,7 @@ public class RedAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String result) {
 
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,context)) return;
                 data.clear();
                 notifyDataSetChanged();
 
@@ -178,7 +178,7 @@ public class RedAdapter extends BaseAdapter {
             @Override
             public void onSuccess(String result) {
 
-                if (!Utils.callOk(result)) return;
+                if (!Utils.callOk(result,context)) return;
 
 
             }

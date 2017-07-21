@@ -667,6 +667,8 @@ public class AddAimActivity extends BaseActivity {
                 intent.putExtra("budget", aimList.get(0).getBudget());
                 intent.putExtra("img1", aimList.get(0).getImg());
                 intent.putExtra("img2", "");
+                intent.putExtra("province",province);
+                intent.putExtra("city",city);
                 intent.putExtra("img3", "");
                 startActivityForResult(intent, Code.SupportAim);
 

@@ -139,7 +139,7 @@ public class ExtensionActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,ExtensionActivity.this)) {
                     Gson gson = new Gson();
                     agent = gson.fromJson(Utils.getResultStr(result), LastAgentEntity.class);
 
@@ -179,7 +179,7 @@ public class ExtensionActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 //{"msg":"success","code":0,"result":{"id":4,"userId":48,"level":3,"subCompanyId":0,"volume":0},"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,ExtensionActivity.this)) {
 
                     Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(imgIcon);
                     tvUserName.setText(sp.getString(KeyCode.USER_NICK, ""));

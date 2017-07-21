@@ -134,8 +134,7 @@ public class ToMoneyWeChatActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.print("============="+result);
-                if (Utils.callOk(result)) {
+                if (Utils.callOk(result,ToMoneyWeChatActivity.this)) {
                     Utils.showToast(ToMoneyWeChatActivity.this, "提交成功");
                 } else {
                     Utils.showToast(ToMoneyWeChatActivity.this, Utils.getMsg(result));
@@ -145,7 +144,6 @@ public class ToMoneyWeChatActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
-                System.out.print("============="+ex.getMessage());
             }
 
             @Override
