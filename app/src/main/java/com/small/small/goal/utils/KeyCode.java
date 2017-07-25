@@ -33,4 +33,6 @@ public class KeyCode {
     public static final String AIM_SHARE = "aim_share";
     public static final String AIM_SUPPORT = "aim_support";
     public static final String AIM_SIGN = "aim_sign";
+
+    public static final String INTENT_MIN = "min";
 }

@@ -4,495 +4,621 @@
     android:layout_height="match_parent"
     android:background="@color/background_system_list">
 
-    <RelativeLayout
-        android:id="@+id/top_rl"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@mipmap/personal_bg"
-        android:paddingTop="23dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/icon_fragment"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="50dp"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/icon_user"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="2dp" />
-
-        <TextView
-            android:id="@+id/tv_level_fragment"
-            style="@style/text_white_12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/background_yellow_jingyan"
-            android:drawableLeft="@mipmap/exp_icon"
-            android:drawablePadding="5dp"
-            android:gravity="center_vertical"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="5dp"
-            android:text="经验值---" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_grade_fragment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignBottom="@+id/icon_fragment"
-            android:layout_alignRight="@+id/icon_fragment"
-            android:layout_marginRight="5dp"
-            android:scaleType="centerCrop" />
-
-        <TextView
-            android:id="@+id/content_tv_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_fragment"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/background_oval_white"
-            android:paddingBottom="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="2dp"
-            android:singleLine="true"
-            android:text="请登录"
-            android:textColor="#c8ffffff"
-            android:textSize="12dp" />
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:paddingTop="5dp">
-
-            <LinearLayout
-                android:id="@+id/ll_transfer_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_option_fragment"
-                    style="@style/text_white_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="--" />
-
-                <TextView
-                    style="@style/text_white_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/transfer_mine_fragment" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_shopping_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_score_fragment"
-                    style="@style/text_white_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="---" />
-
-                <TextView
-
-                    style="@style/text_white_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/shop_mine_fragment" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_task_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_taskNums_fragment"
-                    style="@style/text_white_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="-/-" />
-
-                <TextView
-                    style="@style/text_white_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/task_mine_fragment" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/center_ll_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_below="@+id/top_rl"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <RelativeLayout
-            android:id="@+id/ll_follow_fragment"
-            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:background="@drawable/selector_wallet_white_gray"
             android:orientation="vertical">
 
+
+            <RelativeLayout
+                android:id="@+id/top_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@mipmap/personal_bg"
+                    android:paddingTop="23dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/icon_fragment"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="50dp"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/icon_user"
+                        app:civ_border_color="@color/white"
+                        app:civ_border_width="2dp" />
+
+                    <TextView
+                        android:id="@+id/tv_level_fragment"
+                        style="@style/text_white_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/background_yellow_jingyan"
+                        android:drawableLeft="@mipmap/exp_icon"
+                        android:drawablePadding="5dp"
+                        android:gravity="center_vertical"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:text="经验值---" />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/img_grade_fragment"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignBottom="@+id/icon_fragment"
+                        android:layout_alignRight="@+id/icon_fragment"
+                        android:layout_marginRight="5dp"
+                        android:scaleType="centerCrop" />
+
+                    <TextView
+                        android:id="@+id/content_tv_fragment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/icon_fragment"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/background_oval_white"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="2dp"
+                        android:singleLine="true"
+                        android:text="请登录"
+                        android:textColor="#c8ffffff"
+                        android:textSize="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_alignParentBottom="true"
+                        android:orientation="horizontal"
+                        android:paddingTop="5dp">
+
+                        <LinearLayout
+                            android:id="@+id/ll_transfer_fragment"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_option_fragment"
+                                style="@style/text_white_12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="--" />
+
+                            <TextView
+                                style="@style/text_white_12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/transfer_mine_fragment" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_shopping_fragment"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_score_fragment"
+                                style="@style/text_white_12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="---" />
+
+                            <TextView
+
+                                style="@style/text_white_12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/shop_mine_fragment" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_task_fragment"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_taskNums_fragment"
+                                style="@style/text_white_12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="-/-" />
+
+                            <TextView
+                                style="@style/text_white_12"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/task_mine_fragment" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="25dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp">
+
+                    <ImageView
+                        android:id="@+id/left_image_include"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentLeft="true"
+                        android:padding="5dp"
+                        android:src="@mipmap/sign_btn" />
+
+                    <TextView
+                        android:id="@+id/name_text_include"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="16dp" />
+
+                    <ImageView
+                        android:id="@+id/right_image_include"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:padding="5dp"
+                        android:src="@mipmap/settings_btn" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/center_ll_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:layout_below="@+id/top_rl"
+                android:background="@color/white"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/ll_follow_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_wallet_white_gray"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/follow_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/follow_mine_fragment" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ll_collect_framgent"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_wallet_white_gray"
+                    android:orientation="vertical"
+                    android:paddingTop="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/collection_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/collect_mine_fragment" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/ll_target_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_wallet_white_gray"
+                    android:orientation="vertical"
+                    android:paddingTop="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/goal_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:text="@string/target_mine_fragment" />
+                    </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_below="@+id/center_ll_fragment"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/follow_icon" />
-
                 <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/follow_mine_fragment" />
-            </LinearLayout>
-        </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/ll_collect_framgent"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_wallet_white_gray"
-            android:orientation="vertical"
-            android:paddingTop="0dp">
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:padding="15dp"
+                    android:text="@string/changyong_mine_fragment" />
+
+                <View
+                    android:id="@+id/line_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/background_system_list" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line_view"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_wallect_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/wallet_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/wallet_mine_fragment" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bean_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/icon_bean_list" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/bean_mine_fragment" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_red_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/money_bag_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/red_mine_fragment" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/background_system_list" />
+
+                <LinearLayout
+                    android:id="@+id/ll_distribution_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/line_view"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/distribution_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/sale_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/distribution_mine_fragment" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_extension_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/code_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/extension_mine_fragment" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_illness_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:visibility="invisible">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/help_icon" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/illness_mine_fragment" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_below="@+id/center_ll_fragment"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/collection_icon" />
-
                 <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/collect_mine_fragment" />
-            </LinearLayout>
-        </RelativeLayout>
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:padding="15dp"
+                    android:text="趣味竞猜" />
 
-        <RelativeLayout
-            android:id="@+id/ll_target_fragment"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_wallet_white_gray"
-            android:orientation="vertical"
-            android:paddingTop="0dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/background_system_list" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/goal_icon" />
-
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/target_mine_fragment" />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
+                    android:layout_below="@+id/line_view"
+                    android:background="@color/white"
+                    android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/football_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-        android:layout_below="@+id/center_ll_fragment"
-        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/icon_football" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="趣味足球" />
 
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:padding="15dp"
-            android:text="@string/changyong_mine_fragment" />
-
-        <View
-            android:id="@+id/line_view"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/background_system_list" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/line_view"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll_wallect_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/selector_wallet_white_gray"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/wallet_icon" />
-
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/wallet_mine_fragment" />
-
-            </LinearLayout>
+                    </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/ll_red_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/selector_wallet_white_gray"
-                android:orientation="vertical"
-                android:padding="10dp">
+                    <LinearLayout
+                        android:id="@+id/xuan5_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/money_bag_icon" />
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/icon_11xuan5" />
 
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/red_mine_fragment" />
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="11选5" />
 
-            </LinearLayout>
+                    </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/distribution_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/selector_wallet_white_gray"
-                android:orientation="vertical"
-                android:padding="10dp">
+                    <LinearLayout
+                        android:id="@+id/kuai3_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/sale_icon" />
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/icon_kuai3" />
 
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/distribution_mine_fragment" />
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="新快三" />
+
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/background_system_list" />
-
-        <LinearLayout
-            android:id="@+id/ll_distribution_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/line_view"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-
-            <LinearLayout
-                android:id="@+id/ll_extension_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/selector_wallet_white_gray"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/code_icon" />
-
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/extension_mine_fragment" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_illness_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/selector_wallet_white_gray"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
-                    android:layout_gravity="center"
-                    android:src="@mipmap/help_icon" />
-
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/illness_mine_fragment" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:padding="8dp"
-                    android:src="@mipmap/ic_launcher" />
-
-                <TextView
-                    style="@style/text_gray_12"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/illness_mine_fragment" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="25dp"
-        android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="5dp">
-
-        <ImageView
-            android:id="@+id/left_image_include"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:padding="5dp"
-            android:src="@mipmap/sign_btn" />
-
-        <TextView
-            android:id="@+id/name_text_include"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:singleLine="true"
-            android:text=""
-            android:textColor="@color/white"
-            android:textSize="16dp" />
-
-        <ImageView
-            android:id="@+id/right_image_include"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:padding="5dp"
-            android:src="@mipmap/settings_btn" />
-
-    </RelativeLayout>
-
+    </ScrollView>
 
 </RelativeLayout>

@@ -527,4 +527,77 @@ public class Utils {
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
     }
+
+    /**
+     * 计算组合数，即C(m, n) = n!/((n-m)! * m!)
+     *
+     * @param n
+     * @param m
+     * @return
+     */
+    public static long combination(int m, int n) {
+        return (n >= m) ? factorial(n) / factorial(n - m) / factorial(m) : 0;
+    }
+    /**
+     * 计算阶乘数，即n! = n * (n-1) * ... * 2 * 1
+     *
+     * @param n
+     * @return
+     */
+    private static long factorial(int n) {
+        return (n > 1) ? n * factorial(n - 1) : 1;
+    }
+
+
+    //获取多个随机数
+    public static int[] randomCommon(int min, int max, int n) {
+        if (n > (max - min + 1) || max < min) {
+            return null;
+        }
+        int[] result = new int[n];
+        int count = 0;
+        while (count < n) {
+            int num = (int) (Math.random() * (max - min)) + min;
+            boolean flag = true;
+            for (int j = 0; j < n; j++) {
+                if (num == result[j]) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                result[count] = num;
+                count++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 生成随机数
+     * create  wjz
+     **/
+    public static int[] randomJ(int min, int max, int nums) {
+
+        int[] intRet = new int[nums];
+        int intRd = 0; //存放随机数
+        int count = 0; //记录生成的随机数个数
+        int flag = 0; //是否已经生成过标志
+        while (count < intRet.length) {
+            intRd = min + (int) (Math.random() * max);
+            for (int i = 0; i < count; i++) {
+                if (intRet[i] == intRd) {
+                    flag = 1;
+                    break;
+                } else {
+                    flag = 0;
+                }
+            }
+            if (flag == 0) {
+                intRet[count] = intRd;
+                count++;
+            }
+        }
+        return intRet;
+    }
 }

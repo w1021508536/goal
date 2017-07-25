@@ -4,6 +4,7 @@ package com.small.small.goal.utils;
 import com.small.small.goal.my.entry.DynamicEntity;
 import com.small.small.goal.my.entry.TargetHeadEntity;
 import com.small.small.goal.my.entry.UerEntity;
+import com.small.small.goal.my.guess.elevenchoosefive.entity.ChooseOvalEntity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -150,5 +151,20 @@ public class CacheUtil {
 
     public void setMap(Map<String, Boolean> map) {
         this.map = map;
+    }
+
+
+    public List<Map<Integer, List<ChooseOvalEntity>>> elevenChooseFive = new ArrayList<>();  //选择的11选5数据  //Integer 对应:前一，任二，任三，任四。。。。 list 是具体号码
+
+    public List<Map<Integer, List<ChooseOvalEntity>>> getElevenChooseFive() {
+        return elevenChooseFive;
+    }
+
+    public void addElevenChooseFive(Map<Integer, List<ChooseOvalEntity>> one) {
+        elevenChooseFive.add(one);
+    }
+
+    public void closeElevenChooseFive() {
+        elevenChooseFive.clear();
     }
 }

@@ -49,22 +49,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     finish();
                 } else {
 
-//                    long token_time = Long.valueOf(createTime) * 1000;
-//                    long currentTime = System.currentTimeMillis();
-//                    if (token_time - currentTime > 0) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(WelcomeActivity.this, MainActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    } else {
-//                        Utils.showToast(WelcomeActivity.this, "登录已过期，请重新登录");
-//                        Intent intent = new Intent();
-//                        intent.setClass(WelcomeActivity.this, LoginActivity.class);
-//                        startActivity(intent);
-//                        finish();
-//                    }
-
-
                     Intent intent = new Intent();
                     intent.setClass(WelcomeActivity.this, MainActivity.class);
                     startActivity(intent);

@@ -34,6 +34,10 @@ import com.small.small.goal.my.activity.TransferActivity;
 import com.small.small.goal.my.activity.UserInfoActivity;
 import com.small.small.goal.my.activity.WalletActivity;
 import com.small.small.goal.my.entry.UerEntity;
+import com.small.small.goal.my.gold.GoldListActivity;
+import com.small.small.goal.my.guess.elevenchoosefive.activity.ChooseMainActivity;
+import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
+import com.small.small.goal.my.guess.football.FootBallActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
@@ -117,6 +121,14 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 
     @InjectView(R.id.distribution_layout)
     LinearLayout distributionLayout;
+    @InjectView(R.id.football_layout)
+    LinearLayout footballLayout;
+    @InjectView(R.id.kuai3_layout)
+    LinearLayout kuai3Layout;
+    @InjectView(R.id.xuan5_layout)
+    LinearLayout xuan5Layout;
+    @InjectView(R.id.bean_layout)
+    LinearLayout beanLayout;
 
     private UerEntity userInfo;
     private SharedPreferences sp;
@@ -149,6 +161,11 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         llShoppingFragment.setOnClickListener(this);
         llExtensionFragment.setOnClickListener(this);
         distributionLayout.setOnClickListener(this);
+
+        beanLayout.setOnClickListener(this);
+        kuai3Layout.setOnClickListener(this);
+        footballLayout.setOnClickListener(this);
+        xuan5Layout.setOnClickListener(this);
     }
 
     private void initData() {
@@ -223,7 +240,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 Log.v("TAG", result);
 
 
-                if (!Utils.callOk(result,getActivity())) {
+                if (!Utils.callOk(result, getActivity())) {
                     tvTaskNumsFragment.setText(0 + "/" + 5);
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setFinishTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount());
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setTotalTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getTotalTaskCount() + 1);
@@ -320,6 +337,20 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.distribution_layout:
                 GetCode();
+                break;
+            case R.id.football_layout:
+                startActivity(new Intent(getContext(), FootBallActivity.class));
+                break;
+            case R.id.kuai3_layout:
+                Intent intent = new Intent(getContext(), FastThreeActivity.class);
+                intent.putExtra("status", "");
+                startActivity(intent);
+                break;
+            case R.id.xuan5_layout:
+                startActivity(new Intent(getContext(), ChooseMainActivity.class));
+                break;
+            case R.id.bean_layout:
+                startActivity(new Intent(getContext(), GoldListActivity.class));
                 break;
             default:
                 break;

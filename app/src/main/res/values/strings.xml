@@ -51,6 +51,7 @@
     <string name="changyong_mine_fragment">常用工具</string>
     <string name="wallet_mine_fragment">钱包</string>
     <string name="target_mine_fragment">我的目标</string>
+    <string name="bean_mine_fragment">金豆</string>
     <string name="red_mine_fragment">红包</string>
     <string name="distribution_mine_fragment">合作伙伴</string>
     <string name="extension_mine_fragment">推广码</string>

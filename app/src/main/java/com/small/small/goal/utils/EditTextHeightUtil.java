@@ -16,18 +16,20 @@ import android.widget.FrameLayout;
 
 public class EditTextHeightUtil {
 
-
     private final Activity activity;
+    private int height;
+    private int status = 0;
 
     public static void assistActivity(Activity activity) {
         new EditTextHeightUtil(activity);
     }
 
+
     private View mChildOfContent;
     private int usableHeightPrevious;
     private FrameLayout.LayoutParams frameLayoutParams;
 
-    private EditTextHeightUtil(Activity activity) {
+    public EditTextHeightUtil(Activity activity) {
         this.activity = activity;
         FrameLayout content = (FrameLayout) activity.findViewById(android.R.id.content);
         mChildOfContent = content.getChildAt(0);
@@ -37,6 +39,21 @@ public class EditTextHeightUtil {
             }
         });
         frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
+    }
+
+
+    public EditTextHeightUtil(Activity activity, int status) {
+        this.status = status;
+        this.activity = activity;
+        FrameLayout content = (FrameLayout) activity.findViewById(android.R.id.content);
+        mChildOfContent = content.getChildAt(0);
+        mChildOfContent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            public void onGlobalLayout() {
+                possiblyResizeChildOfContent();
+            }
+        });
+        frameLayoutParams = (FrameLayout.LayoutParams) mChildOfContent.getLayoutParams();
+        height = frameLayoutParams.height;
     }
 
     private void possiblyResizeChildOfContent() {
@@ -49,7 +66,11 @@ public class EditTextHeightUtil {
                 frameLayoutParams.height = usableHeightSansKeyboard - heightDifference + Utils.dip2px(activity, 23);
             } else {
                 // keyboard probably just became hidden
-                frameLayoutParams.height = usableHeightSansKeyboard;
+                if (status == 1) {
+                    frameLayoutParams.height = height;
+                } else {
+                    frameLayoutParams.height = usableHeightSansKeyboard;
+                }
             }
             mChildOfContent.requestLayout();
             usableHeightPrevious = usableHeightNow;

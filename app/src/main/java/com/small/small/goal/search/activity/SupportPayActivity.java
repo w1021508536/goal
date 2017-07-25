@@ -70,8 +70,6 @@ public class SupportPayActivity extends BaseActivity {
     RelativeLayout union_layout;
     @InjectView(R.id.pay_text)
     TextView pay_text;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
 
     private String dynamicId;
     private String aimId;
@@ -100,9 +98,11 @@ public class SupportPayActivity extends BaseActivity {
         wx_api = WXAPIFactory.createWXAPI(this, ThirdUtils.WX_APP_ID, true);
         wx_api.registerApp(ThirdUtils.WX_APP_ID);
 
-        init();
+        union_layout.setVisibility(View.GONE);
+//        alipay_layout.setVisibility(View.GONE);
+        money_text.setText(money + ".00");
+        balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
     }
-
 
     @OnClick({R.id.left_image, R.id.right_image, R.id.balance_layout, R.id.wechat_layout, R.id.alipay_layout, R.id.union_layout, R.id.pay_text})
     public void onViewClicked(View view) {
@@ -236,14 +236,6 @@ public class SupportPayActivity extends BaseActivity {
                 Utils.showToast(SupportPayActivity.this, "取消输入支付密码");
             }
         }
-    }
-
-
-    private void init() {
-        union_layout.setVisibility(View.GONE);
-//        alipay_layout.setVisibility(View.GONE);
-        money_text.setText(money + ".00");
-        balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
     }
 
 

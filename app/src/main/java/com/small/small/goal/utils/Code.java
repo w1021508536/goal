@@ -20,4 +20,8 @@ public class Code {
     public static int RESULT_GALLERY_CODE = 2102;//相册
     public static int RESULT_OWM_CODE = 2013;//精美配图
 
+    public static int THIRD_D_CODE = 30001;
+
+    public static double BONUS_MONEY_BASE = 100;
+
 }

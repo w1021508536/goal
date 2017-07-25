@@ -44,14 +44,14 @@
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
     <application
-        android:name="com.small.small.goal.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon_logo_desktop"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_logo_desktop"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name="com.small.small.goal.welcome.WelcomeActivity">
+        <activity android:name=".welcome.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -82,7 +82,7 @@
 
         <!-- 微信登录 -->
         <activity
-            android:name="com.small.small.goal.wxapi.WXEntryActivity"
+            android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
@@ -107,7 +107,7 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity
-            android:name="com.small.small.goal.MainActivity"
+            android:name=".MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -123,23 +123,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.small.small.goal.register.RegisterActivity"
+            android:name=".register.RegisterActivity"
             android:label="注册"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:label="登录方式"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.login.LoginPasswordActivity"
+            android:name=".login.LoginPasswordActivity"
             android:label="密码登陆"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.login.LoginCodeActivity"
+            android:name=".login.LoginCodeActivity"
             android:label="验证码登陆"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.message.ConversationActivity"
+            android:name=".message.ConversationActivity"
             android:label="融云会话界面"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize">
@@ -155,145 +155,145 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.small.small.goal.message.activity.FriendsListActivity"
+            android:name=".message.activity.FriendsListActivity"
             android:label="好友列表"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.small.small.goal.message.activity.SystemMessageListActivity"
+            android:name=".message.activity.SystemMessageListActivity"
             android:label="系统通知列表"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.message.activity.FriendsMessageListActivity"
+            android:name=".message.activity.FriendsMessageListActivity"
             android:label="好友通知列表"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.message.activity.SystemMessageDataWebActivity"
+            android:name=".message.activity.SystemMessageDataWebActivity"
             android:label="系统通知详情"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.message.activity.AddFriendActivity"
+            android:name=".message.activity.AddFriendActivity"
             android:label="添加好友"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.message.activity.FriendSetActivity"
+            android:name=".message.activity.FriendSetActivity"
             android:label="好友设置"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.message.activity.RemarkFriendActivity"
+            android:name=".message.activity.RemarkFriendActivity"
             android:label="修改好友备注"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.UserInfoActivity"
+            android:name=".my.activity.UserInfoActivity"
             android:label="个人中心"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.FollowActivity"
+            android:name=".my.activity.FollowActivity"
             android:label="我的关注"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.TaskListActivity"
+            android:name=".my.activity.TaskListActivity"
             android:label="任务中心"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.aim.activity.AddAimActivity"
+            android:name=".aim.activity.AddAimActivity"
             android:label="新建目标"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.RedActivity"
+            android:name=".my.activity.RedActivity"
             android:label="红包"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.RedMoreActivity"
+            android:name=".my.activity.RedMoreActivity"
             android:label="红包明细"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.RenameActivity"
+            android:name=".my.activity.RenameActivity"
             android:label="修改个人信息复用页"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.AimActivity"
+            android:name=".my.activity.AimActivity"
             android:label="我的目标"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.AimOldActivity"
+            android:name=".my.activity.AimOldActivity"
             android:label="历史目标"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.CollectActivity"
+            android:name=".my.activity.CollectActivity"
             android:label="我的收藏"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.WalletActivity"
+            android:name=".my.activity.WalletActivity"
             android:label="我的钱包"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.SettingActivity"
+            android:name=".my.activity.SettingActivity"
             android:label="设置"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.PayPassActivity"
+            android:name=".my.activity.PayPassActivity"
             android:label="支付密码"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.UpdataPassActivity"
+            android:name=".my.activity.UpdataPassActivity"
             android:label="设置、修改支付密码的复用页面"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.ForgetActivity"
+            android:name=".my.activity.ForgetActivity"
             android:label="忘记密码"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.ForgetNextActivity"
+            android:name=".my.activity.ForgetNextActivity"
             android:label="忘记密码的下一页界面"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.IdeaBackActivity"
+            android:name=".my.activity.IdeaBackActivity"
             android:label="意见反馈"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.AboutUsActivity"
+            android:name=".my.activity.AboutUsActivity"
             android:label="关于我们"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.SignActivity"
+            android:name=".my.activity.SignActivity"
             android:label="签到"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.FlopActivity"
+            android:name=".my.activity.FlopActivity"
             android:label="翻牌"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.AimMoreActivity"
+            android:name=".my.activity.AimMoreActivity"
             android:label="目标详情"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.small.small.goal.my.activity.MontyToActivity"
+            android:name=".my.activity.MontyToActivity"
             android:label="充值"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.ToMoneyActivity"
+            android:name=".my.activity.ToMoneyActivity"
             android:label="提现"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.LevelActivity"
+            android:name=".my.activity.LevelActivity"
             android:label="等级"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.SupportActivity"
+            android:name=".my.activity.SupportActivity"
             android:label="助力的人的"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.BindPhoneActivity"
+            android:name=".my.activity.BindPhoneActivity"
             android:label="绑定电话"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.BindPhoneNextActivity"
+            android:name=".my.activity.BindPhoneNextActivity"
             android:label="绑定电话获取验证码"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.UpdataPhoneActivity"
+            android:name=".my.activity.UpdataPhoneActivity"
             android:label="更换手机号"
             android:screenOrientation="portrait" />
         <activity
@@ -301,48 +301,48 @@
             android:label="多图选择的界面"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.TransferActivity"
+            android:name=".my.activity.TransferActivity"
             android:label="期权转让"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.TransferNextActivity"
+            android:name=".my.activity.TransferNextActivity"
             android:label="转让"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.TaskActivity"
+            android:name=".my.activity.TaskActivity"
             android:label="任务中心"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.ExtensionActivity"
+            android:name=".my.activity.ExtensionActivity"
             android:label="推广码"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.TransferMoreActivity"
+            android:name=".my.activity.TransferMoreActivity"
             android:label="期权转让明细"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.ExtensionPayActivity"
+            android:name=".my.activity.ExtensionPayActivity"
             android:label="成为代理的支付页面"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.aim.activity.PositionActivity"
+            android:name=".aim.activity.PositionActivity"
             android:label="IPO地址选择"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.utils.ChoosePhotoActivity"
+            android:name=".utils.ChoosePhotoActivity"
             android:label="图片选择"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogStyle" />
         <activity
-            android:name="com.small.small.goal.aim.activity.SaveMoneyActivity"
+            android:name=".aim.activity.SaveMoneyActivity"
             android:label="创建目标，存钱"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.aim.activity.PayActivity"
+            android:name=".aim.activity.PayActivity"
             android:label="支付"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.aim.activity.PayDetailActivity"
+            android:name=".aim.activity.PayDetailActivity"
             android:label="支付成功，详情"
             android:screenOrientation="portrait" />
 
@@ -371,7 +371,6 @@
             android:exported="false"
             android:screenOrientation="behind" />
 
-
         <!-- 银联支付 -->
         <activity
             android:name="com.unionpay.uppay.PayActivity"
@@ -384,77 +383,123 @@
             android:value="593f80146e27a41956000bd3" />
 
         <activity
-            android:name="com.small.small.goal.aim.activity.SupportAimActivity"
+            android:name=".aim.activity.SupportAimActivity"
             android:label="助力自己的目标"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.RedHaveActivity"
+            android:name=".search.activity.RedHaveActivity"
             android:label="雷达红包列表"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.SupportMoneyActivity"
+            android:name=".search.activity.SupportMoneyActivity"
             android:label="支持填写钱数"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.SupportPayActivity"
+            android:name=".search.activity.SupportPayActivity"
             android:label="支持支付"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.SearchKeyActivity"
+            android:name=".search.activity.SearchKeyActivity"
             android:label="发现右侧搜索"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.AddFriendSearchActivity"
+            android:name=".search.activity.AddFriendSearchActivity"
             android:label="发现左侧搜索"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.login.ForgetPasswordActivity"
+            android:name=".login.ForgetPasswordActivity"
             android:label="登录时忘记密码"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.RedPacketActivity"
+            android:name=".search.activity.RedPacketActivity"
             android:label="领取红包详情"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.UserDetitalActivity"
+            android:name=".search.activity.UserDetitalActivity"
             android:label="用户详情"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.InviteActivity"
+            android:name=".search.activity.InviteActivity"
             android:label="通讯录邀请列表"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.utils.GetPhotosActivity"
+            android:name=".utils.GetPhotosActivity"
             android:label="系统图片列表"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.utils.BalancePayActivity"
+            android:name=".utils.BalancePayActivity"
             android:label="支持支付"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.BlackListActivity"
+            android:name=".my.activity.BlackListActivity"
             android:label="黑名单"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.DistributionActivity"
+            android:name=".my.activity.DistributionActivity"
             android:label="分销"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.DistributionMemberActivity"
+            android:name=".my.activity.DistributionMemberActivity"
             android:label="分销成员"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.search.activity.AdDetailsActivity"
+            android:name=".search.activity.AdDetailsActivity"
             android:label="发现轮播详情"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.DistributionMemberNextActivity"
+            android:name=".my.activity.DistributionMemberNextActivity"
             android:label="分销下级成员"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.small.small.goal.my.activity.ToMoneyWeChatActivity"
+            android:name=".my.activity.ToMoneyWeChatActivity"
             android:label="微信的提现"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.gold.GoldListActivity"
+            android:label="金豆列表"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.fastthree.FastThreeActivity"
+            android:label="快3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.fastthree.FastThreePayActivity"
+            android:label="快3支付"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.elevenchoosefive.activity.ChooseMainActivity"
+            android:label="11选5"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.elevenchoosefive.activity.ChooseAddMoneyActivity"
+            android:label="11选5支付"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.football.FootBallActivity"
+            android:label="足球列表"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.football.activity.FootBallDetailsActivity"
+            android:label="足球详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.note.activity.LotteryNoteActivity"
+            android:label="彩票投注记录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.note.activity.SportNoteActivity"
+            android:label="比赛投注记录"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.note.activity.LotteryDetailsActivity"
+            android:label="彩票投注详情"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".my.guess.note.activity.SportDetailsActivity"
+            android:label="比赛投注详情"
+            android:screenOrientation="portrait" />
+        <activity android:name=".my.gold.GoldPayActivity"></activity>
     </application>
 
 </manifest>

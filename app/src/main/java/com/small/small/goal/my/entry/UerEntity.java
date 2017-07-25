@@ -321,6 +321,16 @@ public class UerEntity {
         private double score;
         private String lastExecuteTime = "";
 
+        public String getBean() {
+            return bean;
+        }
+
+        public void setBean(String bean) {
+            this.bean = bean;
+        }
+
+        private String bean;
+
         public int getAccountId() {
             return accountId;
         }

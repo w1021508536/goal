@@ -5,10 +5,9 @@ package com.small.small.goal.utils;
  */
 
 public class Url {
+    public static String Url = "http://api.test.smallaim.cn";
 
-
-    //    public static String Url = "http://47.92.79.222:8081";
-    public static String Url = "http://api1.smallaim.cn";
+    //    public static String Url = "http://api1.smallaim.cn";
     public static String PhotoUrl = "http://img.smallaim.cn";
     public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_200,w_200";
     public static final String SMALL_PHOTO_URL2 = "?x-oss-process=image/resize,m_lfit,h_400,w_400";
@@ -42,7 +41,6 @@ public class Url {
 
     public static String AimSupport = "/aim/support";//支持目标
     public static String PayBalance = "/pay/balance";//余额支付
-
 
     //Message
     public static String LastMessage = "/push/message/last";
@@ -87,7 +85,6 @@ public class Url {
 
     public static String RedGet = "/redpacket/income/draw";//获取收益红包
 
-
     public static String AimDynamicUser = "/aim/dynamic/user";//用户的动态
     public static String UserBase = "/user/base";//用户基础信息
 
@@ -97,5 +94,20 @@ public class Url {
     public static String AdList = "/ad";//广告列表
 
     public static String AccountCash = "/account/cash";//提现
+
+
+    //竞猜
+    //竞猜-赛事
+    public static String Guess = "/guess";//赛事  get
+    public static String GuessDetail = "/guess/detail";// 赛事详情
+    public static String GuessRecord = "/guess/record";//投注记录
+    //竞猜-彩票
+    public static String LotteryNewest = "/lottery/newest";//最近开奖
+    public static String Lottery = "/lottery";//最新一次开奖查询
+    public static String LotteryRecord = "/lottery/record";//投注记录
+    //竞猜-金豆
+    public static String Wager = "/wager";// 投注  post
+    public static String AccountRecord = "/account/record";//金豆记录
+    public static String ChargeBean = "/charge/bean";// 充值金豆
 
 }
