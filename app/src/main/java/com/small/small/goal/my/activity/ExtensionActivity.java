@@ -139,7 +139,7 @@ public class ExtensionActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result,ExtensionActivity.this)) {
+                if (Utils.callOk(result, ExtensionActivity.this)) {
                     Gson gson = new Gson();
                     agent = gson.fromJson(Utils.getResultStr(result), LastAgentEntity.class);
 
@@ -179,43 +179,49 @@ public class ExtensionActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 //{"msg":"success","code":0,"result":{"id":4,"userId":48,"level":3,"subCompanyId":0,"volume":0},"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
-                if (Utils.callOk(result,ExtensionActivity.this)) {
 
-                    Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(imgIcon);
-                    tvUserName.setText(sp.getString(KeyCode.USER_NICK, ""));
+                try {
+                    String code = new JSONObject(result).getString("code");
+                    if ("0".equals(code)) {
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(result);
-                        String id = Utils.GetOneStringForJson("id", Utils.getResultStr(result));
-                        String level = Utils.GetOneStringForJson("level", Utils.getResultStr(result));
-                        if (level.equals("1") || level.equals("2") || level.equals("3")) {
-                            tvExtension.setClickable(true);
-                            tvAgent.setBackgroundResource(R.drawable.bg_gray_extension);
-                            tvAgent.setClickable(false);
-                        } else {
-                            tvExtension.setBackgroundResource(R.drawable.bg_gray_extension);
+                        Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(imgIcon);
+                        tvUserName.setText(sp.getString(KeyCode.USER_NICK, ""));
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(result);
+                            String id = Utils.GetOneStringForJson("id", Utils.getResultStr(result));
+                            String level = Utils.GetOneStringForJson("level", Utils.getResultStr(result));
+                            if (level.equals("1") || level.equals("2") || level.equals("3")) {
+                                tvExtension.setClickable(true);
+                                tvAgent.setBackgroundResource(R.drawable.bg_gray_extension);
+                                tvAgent.setClickable(false);
+                            } else {
+                                tvExtension.setBackgroundResource(R.drawable.bg_gray_extension);
+                            }
+                            tvMoney.setText(id);
+                            tvExtension.setBackgroundResource(R.drawable.selector_blue_extension);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        tvMoney.setText(id);
-                        tvExtension.setBackgroundResource(R.drawable.selector_blue_extension);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-                } else {
-                    tvUserName.setText("代理商推广码");
-                    imgIcon.setVisibility(View.GONE);
-                    tvMoneyHint1.setText("已有");
-
-                    int id = agent.getId();
-                    if (id < 10000) {
-                        tvMoneyHint2.setText("名用户加入我们");
-                        tvMoney.setText(agent.getId() + "");
                     } else {
-                        double v = id / 10000.0;
-                        tvMoney.setText(v + "");
-                        tvMoneyHint2.setText("万用户加入我们");
-                    }
+                        tvUserName.setText("代理商推广码");
+                        imgIcon.setVisibility(View.GONE);
+                        tvMoneyHint1.setText("已有");
 
+                        int id = agent.getId();
+                        if (id < 10000) {
+                            tvMoneyHint2.setText("名用户加入我们");
+                            tvMoney.setText(agent.getId() + "");
+                        } else {
+                            double v = id / 10000.0;
+                            tvMoney.setText(v + "");
+                            tvMoneyHint2.setText("万用户加入我们");
+                        }
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -272,11 +278,11 @@ public class ExtensionActivity extends BaseActivity {
 
 
         UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
-        UMWeb web = new UMWeb("http://m.test.smallaim.cn/agent/" + sp.getString(KeyCode.USER_ID, ""));
-        web.setTitle("小目标");//标题
+        UMWeb web = new UMWeb("http://m.smallaim.cn/agent/" + sp.getString(KeyCode.USER_ID, ""));
+        web.setTitle("快来加入小目标吧");//标题
         web.setThumb(image);  //缩略图
-        web.setDescription("哈哈哈哈哈");//描述
-        new ShareAction(this).withText("hello").withMedia(web)
+        web.setDescription("加入小目标，和我一起赚钱吧");//描述
+        new ShareAction(this).withMedia(web)
                 .setDisplayList(SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
                 .setCallback(umShareListener).open();
     }
