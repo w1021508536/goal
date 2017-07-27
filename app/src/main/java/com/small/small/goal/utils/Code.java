@@ -22,6 +22,6 @@ public class Code {
 
     public static int THIRD_D_CODE = 30001;
 
-    public static double BONUS_MONEY_BASE = 100;
+    public static double BONUS_MONEY_BASE = 10;
 
 }

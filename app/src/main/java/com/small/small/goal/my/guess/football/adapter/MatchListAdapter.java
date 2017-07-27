@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.small.small.goal.R;
 import com.small.small.goal.my.guess.football.FootBallActivity;
-import com.small.small.goal.my.guess.football.MatchEmpty;
+import com.small.small.goal.my.guess.football.empty.MatchEmpty;
 import com.squareup.picasso.Picasso;
 
 

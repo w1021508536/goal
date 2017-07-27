@@ -77,13 +77,15 @@ public class GoldListAdapter extends BaseAdapter {
 
 
         if (position != 0) {
-            String now = new Date(Long.valueOf(guessEmptyList.get(position).getCreateTime())) + "";
-            String last = new Date(Long.valueOf(guessEmptyList.get(position - 1).getCreateTime())) + "";
-            if (now.substring(0, 8).equals(last.substring(0, 8))) {
+            String now = simpleDateFormat2.format(new Date(Long.valueOf(guessEmptyList.get(position).getCreateTime())));
+            String last = simpleDateFormat2.format(new Date(Long.valueOf(guessEmptyList.get(position - 1).getCreateTime())));
+            if (now.equals(last)) {
                 viewHolder.monthLayout.setVisibility(View.GONE);
             } else {
                 viewHolder.monthLayout.setVisibility(View.VISIBLE);
             }
+        } else {
+            viewHolder.monthLayout.setVisibility(View.VISIBLE);
         }
 
         if (guessEmptyList.get(position).getOperateType().equals("41")) {

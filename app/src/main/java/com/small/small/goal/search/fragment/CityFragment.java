@@ -1027,19 +1027,19 @@ public class CityFragment extends Fragment {
     }
 
 
-    @Override
-    public void onResume() {
-        if (Utils.isNetworkConnected(getActivity())) {
-            nullLayout.setClickable(false);
-            nullLayout.setVisibility(View.GONE);
-            isDown = true;
-            GetHotData("1", page * 10 + "");
-        } else {
-            nullLayout.setClickable(true);
-            nullLayout.setVisibility(View.VISIBLE);
-            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
-            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
-        }
-        super.onResume();
-    }
+//    @Override
+//    public void onResume() {
+//        if (Utils.isNetworkConnected(getActivity())) {
+//            nullLayout.setClickable(false);
+//            nullLayout.setVisibility(View.GONE);
+//            isDown = true;
+//            GetHotData("1", page * 10 + "");
+//        } else {
+//            nullLayout.setClickable(true);
+//            nullLayout.setVisibility(View.VISIBLE);
+//            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+//            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+//        }
+//        super.onResume();
+//    }
 }

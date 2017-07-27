@@ -34,6 +34,7 @@ import com.small.small.goal.my.activity.RenameActivity;
 import com.small.small.goal.my.entry.EveryTaskGsonEntity;
 import com.small.small.goal.my.entry.UerEntity;
 import com.small.small.goal.search.SearchFragment;
+import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
@@ -60,7 +61,7 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private LinearLayout aim_layout;
     private ImageView aim_image;
@@ -671,7 +672,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void getData() {
+    public void getData() {
         RequestParams requestParams = new RequestParams();
         SharedPreferences sp = Utils.UserSharedPreferences(this);
         requestParams.addHeader("token", sp.getString("token", ""));

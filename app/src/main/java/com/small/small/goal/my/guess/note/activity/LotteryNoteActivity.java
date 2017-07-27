@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -69,13 +70,24 @@ public class LotteryNoteActivity extends BaseActivity {
         lotteryAdapter = new LotteryAdapter(this, lotteryEmptyList);
         lotteryList.setAdapter(lotteryAdapter);
 
-        lotteryList.setMode(PullToRefreshBase.Mode.BOTH);
+        lotteryList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
         lotteryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(LotteryNoteActivity.this, LotteryDetailsActivity.class);
                 intent.putExtra("lotteryEmpty", lotteryEmptyList.get(position - 1));
                 startActivity(intent);
+
+            }
+        });
+        lotteryList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                GetLottery();
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
 
             }
         });
@@ -90,10 +102,12 @@ public class LotteryNoteActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+                System.out.println("======彩票列表===========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
                         JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
+                        lotteryEmptyList.clear();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             lotteryEmpty = new LotteryEmpty();
 
@@ -120,17 +134,22 @@ public class LotteryNoteActivity extends BaseActivity {
                             lotteryEmptyList.add(lotteryEmpty);
                         }
                         lotteryAdapter.notifyDataSetChanged();
+                    } else if (code.equals("100000")) {
+                        lotteryEmptyList.clear();
+                        lotteryAdapter.notifyDataSetChanged();
+                        Utils.showToast(LotteryNoteActivity.this, "暂无数据");
                     } else {
                         Utils.showToast(LotteryNoteActivity.this, new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                lotteryList.onRefreshComplete();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                lotteryList.onRefreshComplete();
             }
 
             @Override

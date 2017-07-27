@@ -80,6 +80,8 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
 
     private String money = "";
     private String bean_pay = "";
+    private int total;
+    private int page = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +103,7 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
         rightImageInclude.setImageResource(R.mipmap.icon_fitter);
 
         //        plv.setMode(PullToRefreshBase.Mode.BOTH);
-        plv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+        plv.setMode(PullToRefreshBase.Mode.BOTH);
 
         goldListAdapter = new GoldListAdapter(this, goldEmptyList);
         plv.setAdapter(goldListAdapter);
@@ -112,12 +114,24 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
                 startTime = "";
                 endTime = "";
+                page = 1;
                 GetData();
             }
 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-
+                if (page * 20 >= total) {
+                    plv.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(GoldListActivity.this, "没有更多数据了");
+                            plv.onRefreshComplete();
+                        }
+                    }, 1000);
+                } else {
+                    page = page + 1;
+                    GetData();
+                }
             }
         });
 
@@ -146,6 +160,8 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("startTime", startTime);
         requestParams.addBodyParameter("endTime", endTime);
+        requestParams.addBodyParameter("p", page + "");
+        requestParams.addBodyParameter("r", "20");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
@@ -156,7 +172,9 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
                         JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
-                        goldEmptyList.clear();
+                        if (page == 1)
+                            goldEmptyList.clear();
+                        total = Integer.valueOf(new JSONObject(result).getString("total"));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             goldEmpty = new GoldEmpty();
                             goldEmpty.setId(jsonArray.getJSONObject(i).optString("accountLogId"));
@@ -171,15 +189,13 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                             goldEmptyList.add(goldEmpty);
                         }
                         goldListAdapter.notifyDataSetChanged();
+                    } else if (code.equals("100000")) {
+                        Utils.showToast(GoldListActivity.this, "没有更多数据了");
                     } else {
-                        if (code.equals("100000")) {
-                            goldEmptyList.clear();
-                            goldListAdapter.notifyDataSetChanged();
-                        } else {
-                            Utils.showToast(GoldListActivity.this, new JSONObject(result).getString("msg"));
-                        }
-
+                        Utils.showToast(GoldListActivity.this, new JSONObject(result).getString("msg"));
                     }
+
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -202,9 +218,10 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
     @Override
     public void getSelectTime(String time) {
 
-        startTime = time.substring(0, time.length() - 9) + " 00:00:01";
-        endTime = time.substring(0, time.length() - 9) + " 23:59:59";
 
+//        startTime = time.substring(0, time.length() - 9) + " 00:00:01";
+        endTime = time.substring(0, time.length() - 9) + " 23:59:59";
+        page = 1;
         GetData();
     }
 
@@ -313,23 +330,23 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             bean_pay = "100";
             number_image.setImageResource(R.mipmap.icon_gold_bean_1);
         } else if (status == 2) {
-            content = "本次充值您将花费20元";
-            number_text.setText("2000金豆");
+            content = "本次充值您将花费6元";
+            number_text.setText("600金豆");
             number_image.setImageResource(R.mipmap.icon_gold_bean_2);
-            money = "20";
-            bean_pay = "2000";
+            money = "6";
+            bean_pay = "600";
         } else if (status == 3) {
+            content = "本次充值您将花费10元";
+            number_text.setText("1000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_3);
+            money = "10";
+            bean_pay = "1000";
+        } else if (status == 4) {
             content = "本次充值您将花费30元";
             number_text.setText("3000金豆");
-            number_image.setImageResource(R.mipmap.icon_gold_bean_3);
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
             money = "30";
             bean_pay = "3000";
-        } else if (status == 4) {
-            content = "本次充值您将花费40元";
-            number_text.setText("4000金豆");
-            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
-            money = "40";
-            bean_pay = "4000";
         } else if (status == 5) {
             content = "本次充值您将花费50元";
             number_text.setText("5000金豆");
@@ -337,11 +354,11 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             money = "50";
             bean_pay = "5000";
         } else if (status == 6) {
-            content = "本次充值您将花费60元";
-            number_text.setText("6000金豆");
+            content = "本次充值您将花费100元";
+            number_text.setText("10000金豆");
             number_image.setImageResource(R.mipmap.icon_gold_bean_4);
-            money = "60";
-            bean_pay = "6000";
+            money = "100";
+            bean_pay = "10000";
         }
         spannable = new SpannableStringBuilder(content);
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 8, content.length() - 1

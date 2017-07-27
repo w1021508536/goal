@@ -14,7 +14,7 @@ import android.widget.ListView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
-import com.small.small.goal.my.guess.football.MatchEmpty;
+import com.small.small.goal.my.guess.football.empty.MatchEmpty;
 import com.small.small.goal.my.guess.football.activity.FootBallDetailsActivity;
 import com.small.small.goal.my.guess.football.adapter.MatchListAdapter;
 import com.small.small.goal.my.guess.football.adapter.MatchTypeListAdapter;
@@ -98,11 +98,21 @@ public class MatchFragment extends Fragment {
         topHorizontalList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                matchTypeListAdapter.setPage(position);
-                matchTypeListAdapter.notifyDataSetChanged();
-
-
-                page_horizontal = position;
+                if (page_horizontal != position) {
+                    matchTypeListAdapter.setPage(position);
+                    matchTypeListAdapter.notifyDataSetChanged();
+                    page_horizontal = position;
+                    if (position == 0) {
+                        league = "";
+                    } else
+                        league = horizontalList.get(position);
+                    if (dataList.get(position).size() == 0) {
+                        GetDataList();
+                    } else {
+                        matchEmptyList = dataList.get(position);
+                        matchListAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         });
 
@@ -115,37 +125,30 @@ public class MatchFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-//        matchList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
-//            @Override
-//            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//                GetDataList();
-//            }
-//
-//            @Override
-//            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
-//
-//            }
-//        });
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                GetDataList();
+            }
+        });
 
         GetTypeList();
     }
 
     private void GetTypeList() {
         horizontalList.add("全部");
-        horizontalList.add("热门");
         horizontalList.add("西甲");
         horizontalList.add("英超");
         horizontalList.add("德甲");
         horizontalList.add("意甲");
+        horizontalList.add("葡超");
         horizontalList.add("法甲");
-        horizontalList.add("荷甲");
         horizontalList.add("中超");
 
 
         for (int i = 0; i < horizontalList.size(); i++) {
-            matchEmptyList.clear();
-            dataList.add(matchEmptyList);
+            List<MatchEmpty> matchEmptyList2 = new ArrayList<>();
+            dataList.add(matchEmptyList2);
         }
         matchTypeListAdapter.notifyDataSetChanged();
 
@@ -158,7 +161,7 @@ public class MatchFragment extends Fragment {
         requestParams.addHeader("token", Utils.GetToken(getActivity()));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("type", "1");
-        requestParams.addBodyParameter("league", "");
+        requestParams.addBodyParameter("league", league);
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
@@ -193,6 +196,11 @@ public class MatchFragment extends Fragment {
                         }
                         matchListAdapter.notifyDataSetChanged();
                         dataList.set(page_horizontal, matchEmptyList);
+                    } else if (code.equals("100000")) {
+                        matchEmptyList.clear();
+                        matchListAdapter.notifyDataSetChanged();
+                        dataList.set(page_horizontal, matchEmptyList);
+                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                     } else {
                         Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
                     }

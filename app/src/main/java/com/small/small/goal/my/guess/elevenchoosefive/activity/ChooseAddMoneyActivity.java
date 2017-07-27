@@ -4,7 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +17,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
+import com.small.small.goal.my.entry.UerEntity;
+import com.small.small.goal.my.gold.GoldPayActivity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.ChooseOvalEntity;
+import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
+import com.small.small.goal.my.guess.fastthree.FastThreePayActivity;
+import com.small.small.goal.my.guess.fastthree.empty.FastThreeEmpty;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
+import com.small.small.goal.utils.Code;
 import com.small.small.goal.utils.Combine;
 import com.small.small.goal.utils.EditTextHeightUtil;
 import com.small.small.goal.utils.GameUtils;
@@ -30,9 +41,13 @@ import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.utils.dialog.HuiFuDialog2;
 
+import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +122,21 @@ public class ChooseAddMoneyActivity extends BaseActivity {
 
     EditTextHeightUtil editTextHeightUtil;
 
+    private UerEntity.AccountBean account;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm");
+
+    private String expect = "";
+    private String openTime;
+
+    PopupWindow popupWindow;
+    SpannableStringBuilder spannable;
+
+    TextView bean_text;
+    private String chongzhi_money = "";
+    private String bean_pay = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_play_addmoney);
@@ -119,9 +149,14 @@ public class ChooseAddMoneyActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
+
+        account = CacheUtil.getInstance().getUserInfo().getAccount();
+
         rightImageInclude.setVisibility(View.GONE);
         data = CacheUtil.getInstance().getElevenChooseFive();
         min = getIntent().getIntExtra(KeyCode.INTENT_MIN, 1);
+        expect = getIntent().getExtras().getString("expect", "");
+        openTime = getIntent().getExtras().getString("openTime", "");
         nameTextInclude.setText("11选5");
 
         myAdapter = new MyAdapter();
@@ -187,7 +222,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             }
 
         }
-        tvMyDou.setText("我的金豆： 800  " + "您选择了" + zhuNums + "注");
+        tvMyDou.setText("我的金豆：" + account.getBean() + " 您选择了" + zhuNums + "注");
 
 
     }
@@ -249,7 +284,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
                 break;
             case R.id.tv_go:
                 //          dialog.show();
-                postTouZhu();
+                postTouZhu(v);
                 break;
         }
     }
@@ -258,7 +293,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
      * 彩票投注
      * create  wjz
      **/
-    private void postTouZhu() {
+    private void postTouZhu(final View v) {
 
         String context = "";
         for (Map<Integer, List<ChooseOvalEntity>> one : data) {
@@ -287,8 +322,8 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             }
         }
 
-        Integer tou = Integer.valueOf(etvTouNums.getText().toString());
-        Integer zhui = Integer.valueOf(etvZhuiNums.getText().toString());
+        final Integer tou = Integer.valueOf(etvTouNums.getText().toString());
+        final Integer zhui = Integer.valueOf(etvZhuiNums.getText().toString());
         RequestParams requestParams = new RequestParams(Url.Url + "/wager");
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -299,7 +334,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
         requestParams.addBodyParameter("linkId", "");
         requestParams.addBodyParameter("type", "4");
         requestParams.addBodyParameter("name", "11选5");
-        requestParams.addBodyParameter("expect", "");
+        requestParams.addBodyParameter("expect", (Long.valueOf(expect) + 1) + "");
         requestParams.addBodyParameter("code", "sd11x5");
         requestParams.addBodyParameter("rule", "");
 
@@ -308,9 +343,21 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             public void onSuccess(String result) {
 
                 boolean b = GameUtils.CallResultOK(result);
-                Utils.showToast(ChooseAddMoneyActivity.this, GameUtils.getMsg(result));
+//                Utils.showToast(ChooseAddMoneyActivity.this, GameUtils.getMsg(result));
+//                if (b) {
+//                    CacheUtil.getInstance().closeElevenChooseFive();
+//                }
+
                 if (b) {
+                    account.setBean((Integer.valueOf(account.getBean()) - (tou * zhui * zhuNums * 20)) + "");
+                    tvMyDou.setText("我的金豆：" + account.getBean() + "您选择了" + zhuNums + "注");
+                    PutWindow(v);
                     CacheUtil.getInstance().closeElevenChooseFive();
+                } else {
+                    Utils.showToast(ChooseAddMoneyActivity.this, GameUtils.getMsg(result));
+                    if (GameUtils.getMsg(result).equals("金豆不足")) {
+                        MoneyWindow(v);
+                    }
                 }
             }
 
@@ -325,6 +372,235 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             }
         });
     }
+
+    //弹出框
+    private void PutWindow(View view) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_lottery_pay_success, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        TextView content_text = (TextView) windowView.findViewById(R.id.content_text);
+        TextView next_text = (TextView) windowView.findViewById(R.id.next_text);
+        try {
+            Date date1 = simpleDateFormat.parse(openTime);
+            Long time = date1.getTime() + 1000 * 60 * 10;
+            ;
+            content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖，开奖结果会通过公众号通知");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        next_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                Intent intent = new Intent(ChooseAddMoneyActivity.this, FastThreeActivity.class);
+                intent.putExtra("status", "");
+                startActivity(intent);
+                finish();
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+    }
+
+    //弹出框
+    private void MoneyWindow(final View view) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_money_gold, null);
+        popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        RelativeLayout content_layout = (RelativeLayout) windowView.findViewById(R.id.content_layout);
+        TextView recharge1_text = (TextView) windowView.findViewById(R.id.recharge1_text);
+        TextView recharge2_text = (TextView) windowView.findViewById(R.id.recharge2_text);
+        TextView recharge3_text = (TextView) windowView.findViewById(R.id.recharge3_text);
+        TextView recharge4_text = (TextView) windowView.findViewById(R.id.recharge4_text);
+        TextView recharge5_text = (TextView) windowView.findViewById(R.id.recharge5_text);
+        TextView recharge6_text = (TextView) windowView.findViewById(R.id.recharge6_text);
+        ImageView ribbon_image = (ImageView) windowView.findViewById(R.id.ribbon_image);
+        bean_text = (TextView) windowView.findViewById(R.id.bean_text);
+
+        bean_text.setText(account.getBean());
+
+        recharge1_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 1);
+            }
+        });
+        recharge2_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 2);
+            }
+        });
+        recharge3_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 3);
+            }
+        });
+        recharge4_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 4);
+            }
+        });
+        recharge5_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 5);
+            }
+        });
+        recharge6_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 6);
+            }
+        });
+        windowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        content_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        ribbon_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(true);
+
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+    }
+
+    private void RechargeWindow(View view, int status) {
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_recharge_gold, null);
+        final PopupWindow popupWindow_recharge = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+        TextView content_text = (TextView) windowView.findViewById(R.id.content_text);
+        TextView number_text = (TextView) windowView.findViewById(R.id.number_text);
+        ImageView number_image = (ImageView) windowView.findViewById(R.id.number_image);
+        TextView ok_text = (TextView) windowView.findViewById(R.id.ok_text);
+        TextView no_text = (TextView) windowView.findViewById(R.id.no_text);
+        String content = null;
+        if (status == 1) {
+            content = "本次充值您将花费1元";
+            number_text.setText("100金豆");
+            chongzhi_money = "1";
+            bean_pay = "100";
+            number_image.setImageResource(R.mipmap.icon_gold_bean_1);
+        } else if (status == 2) {
+            content = "本次充值您将花费6元";
+            number_text.setText("600金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_2);
+            chongzhi_money = "6";
+            bean_pay = "600";
+        } else if (status == 3) {
+            content = "本次充值您将花费10元";
+            number_text.setText("1000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_3);
+            chongzhi_money = "10";
+            bean_pay = "1000";
+        } else if (status == 4) {
+            content = "本次充值您将花费30元";
+            number_text.setText("3000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "30";
+            bean_pay = "3000";
+        } else if (status == 5) {
+            content = "本次充值您将花费50元";
+            number_text.setText("5000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "50";
+            bean_pay = "5000";
+        } else if (status == 6) {
+            content = "本次充值您将花费100元";
+            number_text.setText("10000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "100";
+            bean_pay = "10000";
+        }
+        spannable = new SpannableStringBuilder(content);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 8, content.length() - 1
+                , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        content_text.setText(spannable);
+
+        ok_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChongZhi();
+                popupWindow_recharge.dismiss();
+            }
+        });
+        no_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow_recharge.dismiss();
+            }
+        });
+        popupWindow_recharge.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow_recharge.setTouchable(true);
+        popupWindow_recharge.setOutsideTouchable(false);
+        popupWindow_recharge.setFocusable(true);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow_recharge.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow_recharge.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    private void ChongZhi() {
+        Intent intent = new Intent(this, GoldPayActivity.class);
+
+        intent.putExtra("money", chongzhi_money);
+        startActivityForResult(intent, Code.SupportAim);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Code.SupportAim) {
+            account.setBean(Long.valueOf(account.getBean()) + Long.valueOf(bean_pay) + "");
+            bean_text.setText(account.getBean());
+            tvMyDou.setText("我的金豆：" + account.getBean() + " 您选择了" + zhuNums + "注");
+        } else if (resultCode == Code.FailCode) {
+
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 
     /**
      * 生成随机数

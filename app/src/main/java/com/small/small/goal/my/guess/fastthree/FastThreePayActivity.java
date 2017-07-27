@@ -3,6 +3,9 @@ package com.small.small.goal.my.guess.fastthree;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +16,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.entry.UerEntity;
+import com.small.small.goal.my.gold.GoldPayActivity;
+import com.small.small.goal.my.guess.fastthree.empty.FastThreeEmpty;
 import com.small.small.goal.my.guess.fastthree.fragment.SumFragment;
 import com.small.small.goal.my.guess.fastthree.fragment.ThreeNotSameFragment;
 import com.small.small.goal.my.guess.fastthree.fragment.ThreeSameFragment;
@@ -35,7 +41,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -105,9 +114,23 @@ public class FastThreePayActivity extends BaseActivity {
 
     private String content;
 
+    private String expect;
+    private String openTime;
+
+
     private UerEntity.AccountBean account;
 
     EditTextHeightUtil editTextHeightUtil;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm");
+
+    PopupWindow popupWindow;
+    SpannableStringBuilder spannable;
+
+    TextView bean_text;
+    private String chongzhi_money = "";
+    private String bean_pay = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +140,11 @@ public class FastThreePayActivity extends BaseActivity {
 
 //        EditTextHeightUtil.assistActivity(this);
         editTextHeightUtil = new EditTextHeightUtil(this, 1);
+
+        expect = getIntent().getExtras().getString("expect", "");
+        openTime = getIntent().getExtras().getString("openTime", "");
+        getFastThreeEmpty = (FastThreeEmpty) getIntent().getSerializableExtra("fastThreeEmpty");
+
         if (fastThreeEmptyList == null) {
             fastThreeEmptyList = new ArrayList<>();
         }
@@ -125,7 +153,7 @@ public class FastThreePayActivity extends BaseActivity {
             list.setAdapter(fastThreePayAdapter);
         }
 
-        getFastThreeEmpty = (FastThreeEmpty) getIntent().getSerializableExtra("fastThreeEmpty");
+
         if (getFastThreeEmpty != null) {
 
             if (getFastThreeEmpty.getStatus() == 12) {
@@ -177,6 +205,31 @@ public class FastThreePayActivity extends BaseActivity {
         beanText.setText("我的金豆：" + account.getBean());
     }
 
+    private void SetMoney() {
+        money = 0;
+        for (int i = 0; i < fastThreeEmptyList.size(); i++) {
+
+            if (fastThreeEmptyList.get(i).getStatus() == 40) {
+                money = (int) (money + Utils.combination(2, fastThreeEmptyList.get(i).getTwoNotList().size()) * 20);
+            } else if (fastThreeEmptyList.get(i).getStatus() == 30) {
+                money = (int) (money + Utils.combination(3, fastThreeEmptyList.get(i).getThreeNotList().size()) * 20);
+            } else if (fastThreeEmptyList.get(i).getStatus() == 31) {
+                money = money + 20;
+            } else if (fastThreeEmptyList.get(i).getStatus() == 20) {
+                money = money + fastThreeEmptyList.get(i).getTwoSameList().size() * fastThreeEmptyList.get(i).getTwoSingleList().size() * 20;
+            } else if (fastThreeEmptyList.get(i).getStatus() == 21) {
+                money = money + 20;
+            } else if (fastThreeEmptyList.get(i).getStatus() == 10) {
+                money = money + fastThreeEmptyList.get(i).getThreeSingleList().size() * 20;
+            } else if (fastThreeEmptyList.get(i).getStatus() == 11) {
+                money = money + 20;
+            } else if (fastThreeEmptyList.get(i).getStatus() == 0) {
+                money = money + fastThreeEmptyList.get(i).getSumList().size() * 20;
+            }
+        }
+        nextText.setText("立即投注 " + money * notes + "金豆");
+    }
+
     @OnClick({R.id.next_text, R.id.left_image_include, R.id.add_choose_layout, R.id.add_random_layout, R.id.tv_zhuiDelete, R.id.tv_zhuiAdd, R.id.tv_touDelete, R.id.tv_touAdd})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -223,6 +276,7 @@ public class FastThreePayActivity extends BaseActivity {
         //        name	    string	是	名称：英超、双色球	英超
 //        bean	    string	是	金豆	300
 //        code	    string	否	彩票代码	ssq
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.Wager);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -230,7 +284,7 @@ public class FastThreePayActivity extends BaseActivity {
         requestParams.addBodyParameter("multifold", notes + "");
         requestParams.addBodyParameter("linkId", "");
         requestParams.addBodyParameter("type", "4");
-        requestParams.addBodyParameter("expect", "20170810");
+        requestParams.addBodyParameter("expect", (Long.valueOf(expect) + 1) + "");
         requestParams.addBodyParameter("rule", "");
 
         requestParams.addBodyParameter("code", "jlk3");
@@ -321,7 +375,6 @@ public class FastThreePayActivity extends BaseActivity {
         }
 
         requestParams.addBodyParameter("content", content);
-        System.out.println("================content=======" + content);
         XUtil.post(requestParams, FastThreePayActivity.this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
@@ -331,9 +384,15 @@ public class FastThreePayActivity extends BaseActivity {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
+                        account.setBean((Integer.valueOf(account.getBean()) - money * notes) + "");
+                        beanText.setText("我的金豆：" + account.getBean());
                         PutWindow(v);
                     } else {
+
                         Utils.showToast(FastThreePayActivity.this, new JSONObject(result).getString("msg"));
+                        if (new JSONObject(result).getString("msg").equals("金豆不足")) {
+                            MoneyWindow(v);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -355,6 +414,177 @@ public class FastThreePayActivity extends BaseActivity {
 
     }
 
+    //弹出框
+    private void MoneyWindow(final View view) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_money_gold, null);
+        popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        RelativeLayout content_layout = (RelativeLayout) windowView.findViewById(R.id.content_layout);
+        TextView recharge1_text = (TextView) windowView.findViewById(R.id.recharge1_text);
+        TextView recharge2_text = (TextView) windowView.findViewById(R.id.recharge2_text);
+        TextView recharge3_text = (TextView) windowView.findViewById(R.id.recharge3_text);
+        TextView recharge4_text = (TextView) windowView.findViewById(R.id.recharge4_text);
+        TextView recharge5_text = (TextView) windowView.findViewById(R.id.recharge5_text);
+        TextView recharge6_text = (TextView) windowView.findViewById(R.id.recharge6_text);
+        ImageView ribbon_image = (ImageView) windowView.findViewById(R.id.ribbon_image);
+        bean_text = (TextView) windowView.findViewById(R.id.bean_text);
+
+        bean_text.setText(account.getBean());
+
+        recharge1_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 1);
+            }
+        });
+        recharge2_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 2);
+            }
+        });
+        recharge3_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 3);
+            }
+        });
+        recharge4_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 4);
+            }
+        });
+        recharge5_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 5);
+            }
+        });
+        recharge6_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 6);
+            }
+        });
+        windowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        content_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        ribbon_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(true);
+
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+    }
+
+    private void RechargeWindow(View view, int status) {
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_recharge_gold, null);
+        final PopupWindow popupWindow_recharge = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+        TextView content_text = (TextView) windowView.findViewById(R.id.content_text);
+        TextView number_text = (TextView) windowView.findViewById(R.id.number_text);
+        ImageView number_image = (ImageView) windowView.findViewById(R.id.number_image);
+        TextView ok_text = (TextView) windowView.findViewById(R.id.ok_text);
+        TextView no_text = (TextView) windowView.findViewById(R.id.no_text);
+        String content = null;
+        if (status == 1) {
+            content = "本次充值您将花费1元";
+            number_text.setText("100金豆");
+            chongzhi_money = "1";
+            bean_pay = "100";
+            number_image.setImageResource(R.mipmap.icon_gold_bean_1);
+        } else if (status == 2) {
+            content = "本次充值您将花费6元";
+            number_text.setText("600金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_2);
+            chongzhi_money = "6";
+            bean_pay = "600";
+        } else if (status == 3) {
+            content = "本次充值您将花费10元";
+            number_text.setText("1000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_3);
+            chongzhi_money = "10";
+            bean_pay = "1000";
+        } else if (status == 4) {
+            content = "本次充值您将花费30元";
+            number_text.setText("3000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "30";
+            bean_pay = "3000";
+        } else if (status == 5) {
+            content = "本次充值您将花费50元";
+            number_text.setText("5000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "50";
+            bean_pay = "5000";
+        } else if (status == 6) {
+            content = "本次充值您将花费100元";
+            number_text.setText("10000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "100";
+            bean_pay = "10000";
+        }
+        spannable = new SpannableStringBuilder(content);
+        spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 8, content.length() - 1
+                , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        content_text.setText(spannable);
+
+        ok_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChongZhi();
+                popupWindow_recharge.dismiss();
+            }
+        });
+        no_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow_recharge.dismiss();
+            }
+        });
+        popupWindow_recharge.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow_recharge.setTouchable(true);
+        popupWindow_recharge.setOutsideTouchable(false);
+        popupWindow_recharge.setFocusable(true);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow_recharge.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow_recharge.showAtLocation(view, Gravity.CENTER, 0, 0);
+    }
+
+    private void ChongZhi() {
+        Intent intent = new Intent(this, GoldPayActivity.class);
+
+        intent.putExtra("money", chongzhi_money);
+        startActivityForResult(intent, Code.SupportAim);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -405,6 +635,14 @@ public class FastThreePayActivity extends BaseActivity {
                 SetMoney();
             }
 
+        } else if (requestCode == Code.SupportAim) {
+            if (resultCode == Code.SupportAim) {
+                account.setBean(Long.valueOf(account.getBean()) + Long.valueOf(bean_pay) + "");
+                bean_text.setText(account.getBean());
+                beanText.setText("我的金豆：" + account.getBean());
+            } else if (resultCode == Code.FailCode) {
+
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -485,31 +723,6 @@ public class FastThreePayActivity extends BaseActivity {
         SetMoney();
     }
 
-    private void SetMoney() {
-        money = 0;
-        for (int i = 0; i < fastThreeEmptyList.size(); i++) {
-
-            if (fastThreeEmptyList.get(i).getStatus() == 40) {
-                money = (int) (money + Utils.combination(2, fastThreeEmptyList.get(i).getTwoNotList().size()) * 20);
-            } else if (fastThreeEmptyList.get(i).getStatus() == 30) {
-                money = (int) (money + Utils.combination(3, fastThreeEmptyList.get(i).getThreeNotList().size()) * 20);
-            } else if (fastThreeEmptyList.get(i).getStatus() == 31) {
-                money = money + 20;
-            } else if (fastThreeEmptyList.get(i).getStatus() == 20) {
-                money = money + fastThreeEmptyList.get(i).getTwoSameList().size() * fastThreeEmptyList.get(i).getTwoSingleList().size() * 20;
-            } else if (fastThreeEmptyList.get(i).getStatus() == 21) {
-                money = money + 20;
-            } else if (fastThreeEmptyList.get(i).getStatus() == 10) {
-                money = money + fastThreeEmptyList.get(i).getThreeSingleList().size() * 20;
-            } else if (fastThreeEmptyList.get(i).getStatus() == 11) {
-                money = money + 20;
-            } else if (fastThreeEmptyList.get(i).getStatus() == 0) {
-                money = money + fastThreeEmptyList.get(i).getSumList().size() * 20;
-            }
-        }
-        nextText.setText("立即投注 " + money * notes + "金豆");
-    }
-
 
     //弹出框
     private void PutWindow(View view) {
@@ -521,10 +734,23 @@ public class FastThreePayActivity extends BaseActivity {
 
         TextView content_text = (TextView) windowView.findViewById(R.id.content_text);
         TextView next_text = (TextView) windowView.findViewById(R.id.next_text);
+        try {
+            Date date1 = simpleDateFormat.parse(openTime);
+            Long time = date1.getTime() + 1000 * 60 * 10;
+            content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖，开奖结果会通过公众号通知");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         next_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
+                Intent intent = new Intent(FastThreePayActivity.this, FastThreeActivity.class);
+                intent.putExtra("status", "");
+                startActivity(intent);
+                finish();
             }
         });
         popupWindow.setAnimationStyle(R.style.MyDialogStyle);

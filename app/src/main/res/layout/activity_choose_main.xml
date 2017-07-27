@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/in"
-        layout="@layout/view_include_guess" />
+        layout="@layout/view_include" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -282,7 +282,7 @@
                 android:id="@+id/tv_winDou"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="900"
+                android:text="190"
                 android:textColor="@color/red"
                 android:textSize="14dp" />
 

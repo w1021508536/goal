@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
-import com.small.small.goal.my.guess.fastthree.FastThreeSumEmpty;
-import com.small.small.goal.my.guess.fastthree.ThirdDHistoryEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.FastThreeSumEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.ThirdDHistoryEmpty;
 import com.small.small.goal.my.guess.fastthree.adapter.FastThreeHistoryAdapter;
 import com.small.small.goal.my.guess.fastthree.adapter.SumAdapter;
 import com.small.small.goal.utils.Code;
@@ -203,22 +203,22 @@ public class SumFragment extends Fragment {
     }
 
     private void SetDataMoney() {
-        dataList.get(0).setMoney("奖" + (int) (240 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(1).setMoney("奖" + (int) (80 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(2).setMoney("奖" + (int) (40 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(3).setMoney("奖" + (int) (25 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(4).setMoney("奖" + (int) (16 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(5).setMoney("奖" + (int) (12 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(6).setMoney("奖" + (int) (10 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(7).setMoney("奖" + (int) (9 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(8).setMoney("奖" + (int) (9 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(9).setMoney("奖" + (int) (10 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(10).setMoney("奖" + (int) (12 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(11).setMoney("奖" + (int) (16 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(12).setMoney("奖" + (int) (25 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(13).setMoney("奖" + (int) (40 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(14).setMoney("奖" + (int) (80 * Code.BONUS_MONEY_BASE) + "");
-        dataList.get(15).setMoney("奖" + (int) (240 * Code.BONUS_MONEY_BASE) + "");
+        dataList.get(0).setMoney("奖4560");
+        dataList.get(1).setMoney("奖1440");
+        dataList.get(2).setMoney("奖680");
+        dataList.get(3).setMoney("奖400");
+        dataList.get(4).setMoney("奖240");
+        dataList.get(5).setMoney("奖168");
+        dataList.get(6).setMoney("奖130");
+        dataList.get(7).setMoney("奖108");
+        dataList.get(8).setMoney("奖108");
+        dataList.get(9).setMoney("奖130");
+        dataList.get(10).setMoney("奖168");
+        dataList.get(11).setMoney("奖240");
+        dataList.get(12).setMoney("奖400");
+        dataList.get(13).setMoney("奖680");
+        dataList.get(14).setMoney("奖1440");
+        dataList.get(15).setMoney("奖4560");
     }
 
 

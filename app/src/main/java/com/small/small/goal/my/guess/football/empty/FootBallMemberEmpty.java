@@ -1,4 +1,4 @@
-package com.small.small.goal.my.guess.football;
+package com.small.small.goal.my.guess.football.empty;
 
 /**
  * Created by JS on 2017-07-06.

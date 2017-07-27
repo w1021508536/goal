@@ -540,31 +540,6 @@
                     android:background="@color/white"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:id="@+id/football_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/selector_wallet_white_gray"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_gravity="center"
-                            android:src="@mipmap/icon_football" />
-
-                        <TextView
-                            style="@style/text_gray_12"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="8dp"
-                            android:text="趣味足球" />
-
-                    </LinearLayout>
-
 
                     <LinearLayout
                         android:id="@+id/xuan5_layout"
@@ -613,6 +588,32 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="8dp"
                             android:text="新快三" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/football_layout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/selector_wallet_white_gray"
+                        android:orientation="vertical"
+                        android:padding="10dp"
+                        android:visibility="invisible">
+
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@mipmap/icon_football" />
+
+                        <TextView
+                            style="@style/text_gray_12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="8dp"
+                            android:text="趣味足球" />
 
                     </LinearLayout>
                 </LinearLayout>

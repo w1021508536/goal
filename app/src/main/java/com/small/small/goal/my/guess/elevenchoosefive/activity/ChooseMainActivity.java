@@ -275,7 +275,7 @@ public class ChooseMainActivity extends BaseActivity {
     }
 
     private void setNewResult(String expect, long minute, long second) {
-        tvExpect.setText(expect);
+        tvExpect.setText((Integer.valueOf(expect) + 1) + "");
         //    tvExpectTime.setText();
 
         timer = new Timer(true);
@@ -477,18 +477,18 @@ public class ChooseMainActivity extends BaseActivity {
      **/
     private void initTal() {
         talData = new ArrayList<>();
-        talData.add(new HlvEntity("        前一        ", true, 1, 1900));
-        talData.add(new HlvEntity("        任二        ", false, 2, 900));
-        talData.add(new HlvEntity("        任三        ", false, 3, 2800));
-        talData.add(new HlvEntity("        任四        ", false, 4, 11400));
-        talData.add(new HlvEntity("        任五        ", false, 5, 79000));
-        talData.add(new HlvEntity("        任六        ", false, 6, 13000));
-        talData.add(new HlvEntity("        任七        ", false, 7, 3800));
-        talData.add(new HlvEntity("        任八        ", false, 8, 1350));
-        talData.add(new HlvEntity("        前二直选        ", false, 9, 1350));
-        talData.add(new HlvEntity("        前二组选        ", false, 10, 1350));
-        talData.add(new HlvEntity("        前三直选        ", false, 11, 1350));
-        talData.add(new HlvEntity("        前三组选        ", false, 12, 1350));
+        talData.add(new HlvEntity("        前一        ", true, 1, 190));
+        talData.add(new HlvEntity("        任二        ", false, 2, 90));
+        talData.add(new HlvEntity("        任三        ", false, 3, 280));
+        talData.add(new HlvEntity("        任四        ", false, 4, 1140));
+        talData.add(new HlvEntity("        任五        ", false, 5, 7900));
+        talData.add(new HlvEntity("        任六        ", false, 6, 1300));
+        talData.add(new HlvEntity("        任七        ", false, 7, 380));
+        talData.add(new HlvEntity("        任八        ", false, 8, 135));
+        talData.add(new HlvEntity("        前二直选        ", false, 9, 1900));
+        talData.add(new HlvEntity("        前二组选        ", false, 10, 950));
+        talData.add(new HlvEntity("        前三直选        ", false, 11, 17100));
+        talData.add(new HlvEntity("        前三组选        ", false, 12, 2850));
 
         WindowManager windowManager = getWindowManager();
         Display windowDisplay = windowManager.getDefaultDisplay();
@@ -544,7 +544,7 @@ public class ChooseMainActivity extends BaseActivity {
 
                 tvTouzhu.setClickable(false);
                 tvSelectNums.setText(hlvEntity.getMin() + "");
-                tvWinNums.setText(position > 5 ? 5 + "" : hlvEntity.getMin() + "");
+                tvWinNums.setText(position > 4 ? 5 + "" : hlvEntity.getMin() + "");
                 tvWinDou.setText(hlvEntity.getWinNums() + "");
                 tvTouzhu.setText("至少选" + hlvEntity.getMin() + "个号码");
                 mgvAdapter.setMin(hlvEntity.getMin());
@@ -711,7 +711,10 @@ public class ChooseMainActivity extends BaseActivity {
                 addEleven(mgvAdapter.getData());
                 Intent intent = new Intent(this, ChooseAddMoneyActivity.class);
                 intent.putExtra(KeyCode.INTENT_MIN, min);
+                intent.putExtra("expect", newsResultEntity.getExpect());
+                intent.putExtra("openTime", newsResultEntity.getOpenTime());
                 startActivity(intent);
+                finish();
                 break;
             case R.id.tv_oldWin:
                 if (lv.getVisibility() == View.VISIBLE) {

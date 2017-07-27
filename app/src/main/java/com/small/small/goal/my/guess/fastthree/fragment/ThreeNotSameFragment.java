@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
-import com.small.small.goal.my.guess.fastthree.FastThreeSumEmpty;
-import com.small.small.goal.my.guess.fastthree.ThirdDHistoryEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.FastThreeSumEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.ThirdDHistoryEmpty;
 import com.small.small.goal.my.guess.fastthree.adapter.FastThreeHistoryAdapter;
 import com.small.small.goal.my.guess.fastthree.adapter.SumAdapter;
 import com.small.small.goal.utils.MyListView;
@@ -21,7 +21,6 @@ import com.small.small.goal.utils.Url;
 import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.weight.MyGridView;
-import com.tencent.open.utils.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.small.small.goal.my.guess.football;
+package com.small.small.goal.my.guess.football.empty;
 
 import java.io.Serializable;
 

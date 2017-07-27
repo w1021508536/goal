@@ -180,19 +180,23 @@ public class HotFragment extends Fragment {
 
         if (getActivity() != null) {
             if (Utils.isNetworkConnected(getActivity())) {
-                nullLayout.setClickable(false);
-                nullLayout.setVisibility(View.GONE);
-                isDown = true;
-                GetHotData("1", page * 10 + "");
-            } else {
-                nullLayout.setClickable(true);
-                nullLayout.setVisibility(View.VISIBLE);
-                imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
-                tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
-            }
-        }
+                if (listView == null) {
+                    GetAd();
 
-    }
+                }
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    isDown = true;
+                    GetHotData("1", page * 10 + "");
+                } else {
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
+            }
+
+        }
 
 
     private void AddHeadView() {
@@ -1174,28 +1178,28 @@ public class HotFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onResume() {
-
-        if (Utils.isNetworkConnected(getActivity())) {
-            if (listView == null) {
-                GetAd();
-
-            }
-            nullLayout.setClickable(false);
-            nullLayout.setVisibility(View.GONE);
-            isDown = true;
-            GetHotData("1", page * 10 + "");
-        } else {
-            nullLayout.setClickable(true);
-            nullLayout.setVisibility(View.VISIBLE);
-            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
-            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
-        }
-
-
-        super.onResume();
-    }
+//    @Override
+//    public void onResume() {
+//
+//        if (Utils.isNetworkConnected(getActivity())) {
+//            if (listView == null) {
+//                GetAd();
+//
+//            }
+//            nullLayout.setClickable(false);
+//            nullLayout.setVisibility(View.GONE);
+//            isDown = true;
+//            GetHotData("1", page * 10 + "");
+//        } else {
+//            nullLayout.setClickable(true);
+//            nullLayout.setVisibility(View.VISIBLE);
+//            imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+//            tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+//        }
+//
+//
+//        super.onResume();
+//    }
 
 
 }

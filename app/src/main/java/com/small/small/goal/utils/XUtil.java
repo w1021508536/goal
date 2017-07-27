@@ -2,12 +2,17 @@ package com.small.small.goal.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
+import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
+import com.small.small.goal.login.LoginActivity;
 import com.small.small.goal.my.dialog.LoadingDialog;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.HttpMethod;
 import org.xutils.http.RequestParams;
@@ -21,6 +26,7 @@ import org.xutils.x;
  * 描述：对x.http 的二次封装，方便显示加载框和出错页
  **/
 public class XUtil {
+
 
     public interface XCallBackLinstener {
         void onSuccess(String result);
@@ -38,7 +44,7 @@ public class XUtil {
     public static void post(final RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
 
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
-
+        final MyApplication app = (MyApplication) context.getApplicationContext();
         if (((Activity) context).isDestroyed()) {
 
         } else
@@ -48,12 +54,26 @@ public class XUtil {
             @Override
             public void onSuccess(String result) {
                 //     Utils.showToast(context, Utils.getMsg(result));
-                loadingDialog.dismiss();
-                xCallBackLinstener.onSuccess(result);
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
+                try {
+                    if (new JSONObject(result).getString("code").equals("100001") && new JSONObject(result).getString("msg").equals("无效的token")) {
 
-                if (requestParams.getUri().equals(Url.Url + "/vote/vote")) {
-                    CacheUtil.getInstance().getMap().put(KeyCode.AIM_VOTE, true);
+                        app.exit();
+                        Utils.showToast(context,"账号登录过期，请重新登录");
+                        context.startActivity(new Intent(context, LoginActivity.class));
+                    } else {
+                        xCallBackLinstener.onSuccess(result);
+                        if (requestParams.getUri().equals(Url.Url + "/vote/vote")) {
+                            CacheUtil.getInstance().getMap().put(KeyCode.AIM_VOTE, true);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+
             }
 
             @Override
@@ -107,7 +127,7 @@ public class XUtil {
     public static <T> void get(RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
 
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
-
+        final MyApplication app = (MyApplication) context.getApplicationContext();
         if (((Activity) context).isDestroyed()) {
 
         } else
@@ -119,8 +139,18 @@ public class XUtil {
                 //        Utils.showToast(context, Utils.getMsg(result));
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
-                xCallBackLinstener.onSuccess(result);
-                Log.v("TAg", Utils.getMsg(result));
+                try {
+                    if (new JSONObject(result).getString("code").equals("100001") && new JSONObject(result).getString("msg").equals("无效的token")) {
+                        app.exit();
+                        Utils.showToast(context,"账号登录过期，请重新登录");
+                        context.startActivity(new Intent(context, LoginActivity.class));
+                    } else {
+                        xCallBackLinstener.onSuccess(result);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
 
@@ -129,7 +159,7 @@ public class XUtil {
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
-                //      Log.v("TAg", ex.getMessage());
+
 
                 if (context instanceof BaseActivity) {                          //访问出错展示的出错图
 
@@ -176,7 +206,7 @@ public class XUtil {
 
     public static <T> void put(final RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
-
+        final MyApplication app = (MyApplication) context.getApplicationContext();
         if (((Activity) context).isDestroyed()) {
 
         } else
@@ -186,21 +216,33 @@ public class XUtil {
         x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                //        Utils.showToast(context, Utils.getMsg(result));
-                loadingDialog.dismiss();
-                xCallBackLinstener.onSuccess(result);
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
 
-                if (requestParams.getUri().equals(Url.Url + "/aim/dynamic/comment")) {
-                    CacheUtil.getInstance().getMap().put(KeyCode.AIM_COMMENT, true);
-                } else if (requestParams.getUri().equals(Url.Url + "/aim/support")) {
-                    CacheUtil.getInstance().getMap().put(KeyCode.AIM_SUPPORT, true);
+                try {
+                    if (new JSONObject(result).getString("code").equals("100001") && new JSONObject(result).getString("msg").equals("无效的token")) {
+                        app.exit();
+                        Utils.showToast(context,"账号登录过期，请重新登录");
+                        context.startActivity(new Intent(context, LoginActivity.class));
+                    } else {
+                        xCallBackLinstener.onSuccess(result);
+                        if (requestParams.getUri().equals(Url.Url + "/aim/dynamic/comment")) {
+                            CacheUtil.getInstance().getMap().put(KeyCode.AIM_COMMENT, true);
+                        } else if (requestParams.getUri().equals(Url.Url + "/aim/support")) {
+                            CacheUtil.getInstance().getMap().put(KeyCode.AIM_SUPPORT, true);
+                        }
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                loadingDialog.dismiss();
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
             }
 

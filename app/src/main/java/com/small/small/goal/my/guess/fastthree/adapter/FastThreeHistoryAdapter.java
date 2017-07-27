@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 
 import com.small.small.goal.R;
-import com.small.small.goal.my.guess.fastthree.ThirdDHistoryEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.ThirdDHistoryEmpty;
 
 import java.util.List;
 

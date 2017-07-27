@@ -130,7 +130,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="2000金豆"
+                                android:text="600金豆"
                                 android:textColor="@color/text_gray_light"
                                 android:textSize="14dp" />
 
@@ -180,7 +180,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="3000金豆"
+                                android:text="1000金豆"
                                 android:textColor="@color/text_gray_light"
                                 android:textSize="14dp" />
 
@@ -224,7 +224,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="4000金豆"
+                                android:text="3000金豆"
                                 android:textColor="@color/text_gray_light"
                                 android:textSize="14dp" />
 
@@ -318,7 +318,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dp"
-                                android:text="6000金豆"
+                                android:text="10000金豆"
                                 android:textColor="@color/text_gray_light"
                                 android:textSize="14dp" />
 

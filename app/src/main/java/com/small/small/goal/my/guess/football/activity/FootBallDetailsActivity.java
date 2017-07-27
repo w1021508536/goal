@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
-import com.small.small.goal.my.guess.football.FootBallMemberEmpty;
-import com.small.small.goal.my.guess.football.MatchEmpty;
+import com.small.small.goal.my.guess.football.empty.FootBallMemberEmpty;
+import com.small.small.goal.my.guess.football.empty.MatchEmpty;
 import com.small.small.goal.my.guess.football.adapter.TeamLeftAdapter;
 import com.small.small.goal.my.guess.football.adapter.TeamRightAdapter;
 import com.small.small.goal.utils.BaseActivity;

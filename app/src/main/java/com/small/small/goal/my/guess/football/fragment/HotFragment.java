@@ -16,7 +16,7 @@ import android.widget.ListView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
-import com.small.small.goal.my.guess.football.MatchEmpty;
+import com.small.small.goal.my.guess.football.empty.MatchEmpty;
 import com.small.small.goal.my.guess.football.activity.FootBallDetailsActivity;
 import com.small.small.goal.my.guess.football.adapter.MatchListAdapter;
 import com.small.small.goal.utils.Url;

@@ -1,4 +1,4 @@
-package com.small.small.goal.my.guess.fastthree;
+package com.small.small.goal.my.guess.fastthree.empty;
 
 /**
  * Created by JS on 2017-07-03.

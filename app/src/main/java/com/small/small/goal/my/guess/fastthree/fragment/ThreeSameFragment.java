@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
-import com.small.small.goal.my.guess.fastthree.FastThreeSumEmpty;
-import com.small.small.goal.my.guess.fastthree.ThirdDHistoryEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.FastThreeSumEmpty;
+import com.small.small.goal.my.guess.fastthree.empty.ThirdDHistoryEmpty;
 import com.small.small.goal.my.guess.fastthree.adapter.FastThreeHistoryAdapter;
 import com.small.small.goal.my.guess.fastthree.adapter.SumAdapter;
 import com.small.small.goal.utils.Code;
@@ -101,7 +101,7 @@ public class ThreeSameFragment extends Fragment {
             fastThreeSumEmpty = new FastThreeSumEmpty();
             fastThreeSumEmpty.setStatus(0);
             fastThreeSumEmpty.setNumber(String.valueOf(i) + String.valueOf(i) + String.valueOf(i));
-            fastThreeSumEmpty.setMoney("奖" + (int) (240 * Code.BONUS_MONEY_BASE) + "");
+            fastThreeSumEmpty.setMoney("奖4560");
             dataList.add(fastThreeSumEmpty);
         }
 
@@ -111,7 +111,7 @@ public class ThreeSameFragment extends Fragment {
             fastThreeSumEmpty.setStatus(0);
             fastThreeSumEmpty.setNumber("三同号通选");
             fastThreeSumEmpty.setMoney("任意一个豹子开出即中");
-            fastThreeSumEmpty.setMoney("奖" + (int) (40 * Code.BONUS_MONEY_BASE) + "");
+            fastThreeSumEmpty.setMoney("奖680");
             fastList.add(fastThreeSumEmpty);
         }
 

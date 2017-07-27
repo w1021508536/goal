@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 
 import com.small.small.goal.R;
-import com.small.small.goal.my.guess.football.FootBallMemberEmpty;
+import com.small.small.goal.my.guess.football.empty.FootBallMemberEmpty;
 
 import java.util.List;
 

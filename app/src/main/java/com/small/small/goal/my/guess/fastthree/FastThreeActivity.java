@@ -1,7 +1,6 @@
 package com.small.small.goal.my.guess.fastthree;
 
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
@@ -10,16 +9,14 @@ import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
+import com.small.small.goal.my.guess.fastthree.empty.FastThreeEmpty;
 import com.small.small.goal.my.guess.fastthree.fragment.SumFragment;
 import com.small.small.goal.my.guess.fastthree.fragment.ThreeNotSameFragment;
 import com.small.small.goal.my.guess.fastthree.fragment.ThreeSameFragment;
@@ -87,14 +84,14 @@ public class FastThreeActivity extends BaseActivity {
 
     private List<Fragment> fragmentList;
 
-    private String sumString = "猜中开奖号码相加之和，单注奖900～24000金豆";//和数
-    private String twoNotString = "猜中开奖号码中不相同的2个号，单注奖800金豆";//二不同号
-    private String twoString = "猜中3个号码(2个相同),单注奖8000金豆";//二同号
-    private String twoString2 = "猜中相同的2个号,单注奖1500金豆";//二同号2
-    private String threeString = "猜中111～666中指定一个，单注奖24000金豆";//三同号
-    private String threeString2 = "111～666中任意一个开出，单注奖4000金豆";//三同号2
-    private String threeNotString = "猜中3个不同号码，单注奖4000金豆";//三不同号
-    private String threeNotString2 = "三连号任意一个开出，单注奖1000金豆";//三不同号2
+    private String sumString = "猜中开奖号码相加之和，单注奖108～4560金豆";//和数
+    private String twoNotString = "猜中开奖号码中不相同的2个号，单注奖88金豆";//二不同号
+    private String twoString = "猜中3个号码(2个相同),单注奖1440金豆";//二同号
+    private String twoString2 = "猜中相同的2个号,单注奖225金豆";//二同号2
+    private String threeString = "猜中111～666中指定一个，单注奖4560金豆";//三同号
+    private String threeString2 = "111～666中任意一个开出，单注奖680金豆";//三同号2
+    private String threeNotString = "猜中3个不同号码，单注奖680金豆";//三不同号
+    private String threeNotString2 = "三连号任意一个开出，单注奖130金豆";//三不同号2
 
 
     SpannableStringBuilder spannable;
@@ -344,7 +341,7 @@ public class FastThreeActivity extends BaseActivity {
                         code = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("code");
                         now = new JSONObject(result).optString("now");
 
-                        expectText.setText("距离" + Long.valueOf(expect) + 1 + "期截止");
+                        expectText.setText("距离" + (Long.valueOf(expect) + 1) + "期截止");
 
                         try {
                             Date date1 = simpleDateFormat.parse(openTime);
@@ -412,6 +409,8 @@ public class FastThreeActivity extends BaseActivity {
         FastThreeEmpty fastThreeEmpty = new FastThreeEmpty();
         Intent intent = new Intent();
         intent.setClass(this, FastThreePayActivity.class);
+        intent.putExtra("expect", expect);
+        intent.putExtra("openTime", openTime);
         if (currentPosition == 0) {
             if (SumFragment.dataList_choose.size() > 0) {
                 if (status.equals("")) {
