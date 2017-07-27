@@ -139,9 +139,13 @@ public class ExtensionActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
+
+                System.out.println("============getLast=============="+result);
+
                 if (Utils.callOk(result, ExtensionActivity.this)) {
                     Gson gson = new Gson();
                     agent = gson.fromJson(Utils.getResultStr(result), LastAgentEntity.class);
+
 
 
                     datas.add(new notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理商", agent.getNick().length()));

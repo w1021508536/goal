@@ -61,6 +61,12 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
     TextView nextText;
 
     TextView bean_text;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
 
     private GoldListAdapter goldListAdapter;
 
@@ -135,7 +141,19 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             }
         });
 
-        GetData();
+        if (this != null) {
+            if (Utils.isNetworkConnected(this)) {
+                nullLayout.setClickable(false);
+                nullLayout.setVisibility(View.GONE);
+                page = 1;
+                GetData();
+            } else {
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+            }
+        }
     }
 
     @OnClick({R.id.left_image_include, R.id.right_image_include, R.id.next_text})
@@ -149,6 +167,21 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                 break;
             case R.id.next_text:
                 MoneyWindow(view);
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(this)) {
+
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    GetData();
+                } else {
+                    Utils.showToast(this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
+
                 break;
         }
     }
@@ -190,9 +223,21 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                         }
                         goldListAdapter.notifyDataSetChanged();
                     } else if (code.equals("100000")) {
-                        Utils.showToast(GoldListActivity.this, "没有更多数据了");
+                        if (page == 1) {
+                            goldEmptyList.clear();
+                        }
+                        if (goldEmptyList.size() == 0) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_data);
+                            tvEmpty.setText("暂 时 没 有 任 何 数 据 ~");
+                        }
                     } else {
-                        Utils.showToast(GoldListActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
 
 
@@ -205,6 +250,12 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 System.out.println("========金豆记录==ex======" + ex.getMessage());
+
+
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                 plv.onRefreshComplete();
             }
 

@@ -249,47 +249,40 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/content_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="选" />
+                android:text="至少选1个号码，猜中第1个开奖号码，" />
 
-            <TextView
-                android:id="@+id/tv_selectNums"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1" />
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="个号，猜中任意" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="单注奖" />
 
-            <TextView
-                android:id="@+id/tv_winNums"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1" />
+                <TextView
+                    android:id="@+id/tv_winDou"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="190"
+                    android:textColor="@color/red"
+                    android:textSize="14dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="个号，单注奖" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="金豆" />
 
-            <TextView
-                android:id="@+id/tv_winDou"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="190"
-                android:textColor="@color/red"
-                android:textSize="14dp" />
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="金豆" />
 
         </LinearLayout>
 

@@ -3,7 +3,6 @@ package com.small.small.goal.my.guess.elevenchoosefive.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,13 +24,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
+import com.small.small.goal.my.guess.LotteryExplainActivity;
 import com.small.small.goal.my.guess.elevenchoosefive.adapter.ChooseOvalAdapter;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.ChooseOvalEntity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.HlvEntity;
@@ -109,10 +108,8 @@ public class ChooseMainActivity extends BaseActivity {
     MyGridView mgv2;
     @InjectView(R.id.mgv3)
     MyGridView mgv3;
-    @InjectView(R.id.tv_selectNums)
-    TextView tvSelectNums;
-    @InjectView(R.id.tv_winNums)
-    TextView tvWinNums;
+    @InjectView(R.id.content_text)
+    TextView contentText;
     @InjectView(R.id.tv_winDou)
     TextView tvWinDou;
     @InjectView(R.id.tv_random)
@@ -135,6 +132,8 @@ public class ChooseMainActivity extends BaseActivity {
     //    private List<ChooseOvalEntity> mgvSelectedData3;   //当前选中的集合
 //    private List<ChooseOvalEntity> mgvSelectedData2;
 //    private List<ChooseOvalEntity> mgvSelectedData1;
+
+    int position;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -181,6 +180,7 @@ public class ChooseMainActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
+        position = 0;
         setDrawableImg(R.mipmap.down);
         rightImageInclude.setImageResource(R.mipmap.icon_lottery_menu);
         nameTextInclude.setText("11选5");
@@ -191,7 +191,9 @@ public class ChooseMainActivity extends BaseActivity {
         popupWindow.setListener(new LotteryTopPopuwindow.setOnclickListener() {
             @Override
             public void onGuizeClick() {
-
+                Intent intent = new Intent(ChooseMainActivity.this, LotteryExplainActivity.class);
+                intent.putExtra("url", Url.UrlLottery + "sd11x5");
+                startActivity(intent);
             }
 
             @Override
@@ -275,7 +277,7 @@ public class ChooseMainActivity extends BaseActivity {
     }
 
     private void setNewResult(String expect, long minute, long second) {
-        tvExpect.setText((Integer.valueOf(expect) + 1) + "");
+        tvExpect.setText((Integer.valueOf(expect) + 2) + "");
         //    tvExpectTime.setText();
 
         timer = new Timer(true);
@@ -306,7 +308,7 @@ public class ChooseMainActivity extends BaseActivity {
             }
 
             tvExpectTime.setText((newMinute >= 10 ? newMinute : "0" + newMinute) + ":" + (second >= 10 ? second : "0" + second));
-            tvExpect.setText(newsResultEntity.getExpect() + "");
+            tvExpect.setText((Long.valueOf(newsResultEntity.getExpect()) + 1) + "");
             //   tvScoll.setText("距离第" + newsResultEntity.getExpect() + "期截止" + (newMinute >= 10 ? newMinute : "0" + newMinute) + ":" + (second >= 10 ? second : "0" + second));
             return false;
         }
@@ -515,109 +517,136 @@ public class ChooseMainActivity extends BaseActivity {
         tal.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                int position = tab.getPosition();
-//                for (HlvEntity one : talData) {
-//                    one.setSelected(false);
-//                }
-                mgvAdapter.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE);
-                mgvAdapter2.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE);
-                mgvAdapter3.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE);
-                mgv2.setVisibility(View.GONE);
-                mgv3.setVisibility(View.GONE);
-                if (position == 8) {
-                    mgv2.setVisibility(View.VISIBLE);
-                    mgvAdapter.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_2);
-                    mgvAdapter2.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_2);
-                    mgvAdapter3.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_2);
-                } else if (position == 10) {
-                    mgv3.setVisibility(View.VISIBLE);
-                    mgv2.setVisibility(View.VISIBLE);
-                    mgvAdapter.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_3);
-                    mgvAdapter2.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_3);
-                    mgvAdapter3.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_3);
-                }
 
-                HlvEntity hlvEntity = talData.get(position);
-                talData.get(position).setSelected(true);
-                //     hlvAdapter.notifyDataSetChanged();
-                min = hlvEntity.getMin();
+                if (position != tab.getPosition()) {
 
-                tvTouzhu.setClickable(false);
-                tvSelectNums.setText(hlvEntity.getMin() + "");
-                tvWinNums.setText(position > 4 ? 5 + "" : hlvEntity.getMin() + "");
-                tvWinDou.setText(hlvEntity.getWinNums() + "");
-                tvTouzhu.setText("至少选" + hlvEntity.getMin() + "个号码");
-                mgvAdapter.setMin(hlvEntity.getMin());
-
-                int selected = 0;
-                for (ChooseOvalEntity one : mgvAdapter.getData()) {
-                    if (one.isSelected()) {
-                        selected++;
+                    position = tab.getPosition();
+                    mgvAdapter.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE);
+                    mgvAdapter2.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE);
+                    mgvAdapter3.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE);
+                    mgv2.setVisibility(View.GONE);
+                    mgv3.setVisibility(View.GONE);
+                    if (position == 8) {
+                        mgv2.setVisibility(View.VISIBLE);
+                        mgvAdapter.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_2);
+                        mgvAdapter2.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_2);
+                        mgvAdapter3.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_2);
+                    } else if (position == 10) {
+                        mgv3.setVisibility(View.VISIBLE);
+                        mgv2.setVisibility(View.VISIBLE);
+                        mgvAdapter.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_3);
+                        mgvAdapter2.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_3);
+                        mgvAdapter3.setFlag(ChooseOvalAdapter.ELEVEN_CHOOSE_ZHI_3);
                     }
-                }
-                int selected2 = 0;
-                for (ChooseOvalEntity one : mgvAdapter2.getData()) {
-                    if (one.isSelected()) {
-                        selected2++;
-                    }
-                }
-                int selected3 = 0;
-                for (ChooseOvalEntity one : mgvAdapter3.getData()) {
-                    if (one.isSelected()) {
-                        selected3++;
-                    }
-                }
 
-                switch (hlvEntity.getMin()) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                        if (selected >= hlvEntity.getMin()) {
-                            tvTouzhu.setText("共" + Combine.getNumber(hlvEntity.getMin(), selected) + "注，下一步");
-                            tvTouzhu.setClickable(true);
+                    if (position == 0) {
+                        contentText.setText("至少选1个号码，猜中第1个开奖号码，");
+
+                    } else if (position == 1) {
+                        contentText.setText("至少选2个号码，任意猜中2个号码，");
+                    } else if (position == 2) {
+                        contentText.setText("至少选3个号码，任意猜中3个号码，");
+                    } else if (position == 3) {
+                        contentText.setText("至少选4个号码，任意猜中4个号码，");
+                    } else if (position == 4) {
+                        contentText.setText("至少选5个号码，全部猜中5个号码，");
+                    } else if (position == 5) {
+                        contentText.setText("至少选6个号码，选号包含5个开奖号，");
+                    } else if (position == 6) {
+                        contentText.setText("至少选7个号码，选号包含5个开奖号，");
+                    } else if (position == 7) {
+                        contentText.setText("至少选8个号码，选号包含5个开奖号，");
+                    } else if (position == 8) {
+                        contentText.setText("每位至少选1个号码，按位猜中前2个号码，");
+                    } else if (position == 9) {
+                        contentText.setText("至少选2个号码，猜中前2个号码，");
+                    } else if (position == 10) {
+                        contentText.setText("每位至少选1个号码，按位猜中前3个号码，");
+                    } else if (position == 11) {
+                        contentText.setText("至少选3个号码，猜中前3个号码，");
+                    }
+
+
+                    HlvEntity hlvEntity = talData.get(position);
+                    talData.get(position).setSelected(true);
+                    //     hlvAdapter.notifyDataSetChanged();
+                    min = hlvEntity.getMin();
+
+                    tvTouzhu.setClickable(false);
+                    tvWinDou.setText(hlvEntity.getWinNums() + "");
+                    tvTouzhu.setText("至少选" + hlvEntity.getMin() + "个号码");
+                    mgvAdapter.setMin(hlvEntity.getMin());
+
+                    int selected = 0;
+                    for (ChooseOvalEntity one : mgvAdapter.getData()) {
+                        if (one.isSelected()) {
+                            selected++;
                         }
-                        break;
-                    case 9:
-                        if (selected > 0 && selected2 > 0) {
-                            tvTouzhu.setText("共" + (selected * selected2) + "注，下一步");
-                            tvTouzhu.setClickable(true);
-                        } else {
-                            tvTouzhu.setText("每位至少选1个号码");
-                            tvTouzhu.setClickable(false);
+                    }
+                    int selected2 = 0;
+                    for (ChooseOvalEntity one : mgvAdapter2.getData()) {
+                        if (one.isSelected()) {
+                            selected2++;
                         }
-                        break;
-                    case 10:
-                        if (selected >= 2) {
-                            tvTouzhu.setText("共" + Combine.getNumber(2, selected) + "注，下一步");
-                            tvTouzhu.setClickable(true);
-                        } else {
-                            tvTouzhu.setText("每位至少选2个号码");
-                            tvTouzhu.setClickable(false);
+                    }
+                    int selected3 = 0;
+                    for (ChooseOvalEntity one : mgvAdapter3.getData()) {
+                        if (one.isSelected()) {
+                            selected3++;
                         }
-                        break;
-                    case 11:
-                        if (selected > 0 && selected2 > 0 && selected3 > 0) {
-                            tvTouzhu.setText("共" + (selected * selected2 * selected3) + "注，下一步");
-                            tvTouzhu.setClickable(true);
-                        } else {
-                            tvTouzhu.setText("每位至少选1个号码");
-                            tvTouzhu.setClickable(false);
-                        }
-                        break;
-                    case 12:
-                        if (selected >= 3) {
-                            tvTouzhu.setText("共" + Combine.getNumber(3, selected) + "注，下一步");
-                            tvTouzhu.setClickable(true);
-                        } else {
-                            tvTouzhu.setText("每位至少选3个号码");
-                            tvTouzhu.setClickable(false);
-                        }
-                        break;
+                    }
+
+                    switch (hlvEntity.getMin()) {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                            if (selected >= hlvEntity.getMin()) {
+                                tvTouzhu.setText("共" + Combine.getNumber(hlvEntity.getMin(), selected) + "注，下一步");
+                                tvTouzhu.setClickable(true);
+                            }
+                            break;
+                        case 9:
+                            if (selected > 0 && selected2 > 0) {
+                                tvTouzhu.setText("共" + (selected * selected2) + "注，下一步");
+                                tvTouzhu.setClickable(true);
+                            } else {
+                                tvTouzhu.setText("每位至少选1个号码");
+                                tvTouzhu.setClickable(false);
+                            }
+                            break;
+                        case 10:
+                            if (selected >= 2) {
+                                tvTouzhu.setText("共" + Combine.getNumber(2, selected) + "注，下一步");
+                                tvTouzhu.setClickable(true);
+                            } else {
+                                tvTouzhu.setText("每位至少选2个号码");
+                                tvTouzhu.setClickable(false);
+                            }
+                            break;
+                        case 11:
+                            if (selected > 0 && selected2 > 0 && selected3 > 0) {
+                                tvTouzhu.setText("共" + (selected * selected2 * selected3) + "注，下一步");
+                                tvTouzhu.setClickable(true);
+                            } else {
+                                tvTouzhu.setText("每位至少选1个号码");
+                                tvTouzhu.setClickable(false);
+                            }
+                            break;
+                        case 12:
+                            if (selected >= 3) {
+                                tvTouzhu.setText("共" + Combine.getNumber(3, selected) + "注，下一步");
+                                tvTouzhu.setClickable(true);
+                            } else {
+                                tvTouzhu.setText("每位至少选3个号码");
+                                tvTouzhu.setClickable(false);
+                            }
+                            break;
+                    }
                 }
             }
 

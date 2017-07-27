@@ -92,7 +92,7 @@ public class LotteryDetailsActivity extends BaseActivity {
             nameText.setText("11选5-" + lotteryEmpty.getExpect() + "期");
         }
 
-        timeText.setText(simpleDateFormat.format(new Date(Long.valueOf(lotteryEmpty.getUpdateTime()))));
+        timeText.setText(simpleDateFormat.format(new Date(Long.valueOf(lotteryEmpty.getOpenTime()))));
 
         beanText.setText(lotteryEmpty.getBean());
         infoText.setText("共" + lotteryEmpty.getNumber() + "注，倍投" + lotteryEmpty.getMultifold() + "倍");
@@ -179,6 +179,7 @@ public class LotteryDetailsActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.next_text:
+                LotteryNoteActivity.instance.finish();
                 finish();
                 break;
         }

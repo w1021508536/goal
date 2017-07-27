@@ -61,7 +61,7 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private LinearLayout aim_layout;
     private ImageView aim_image;
@@ -668,6 +668,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         } else if (CacheUtil.getInstance().isTaskAddMoneyToMainFlag()) {
             setTabSelection(0);
             CacheUtil.getInstance().setTaskAddMoneyToMainFlag(false);
+        } else if (CacheUtil.getInstance().isTaskQiQuan()) {
+            setTabSelection(0);
+            CacheUtil.getInstance().setTaskQiQuan(false);
         }
 
     }
@@ -711,7 +714,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public void onSuccess(String result) {
 
 
-                if (!Utils.callOk(result,MainActivity.this)) return;
+                if (!Utils.callOk(result, MainActivity.this)) return;
                 Gson gson = new Gson();
                 List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<EveryTaskGsonEntity>>() {
                 }.getType());

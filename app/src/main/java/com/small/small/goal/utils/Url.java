@@ -5,9 +5,9 @@ package com.small.small.goal.utils;
  */
 
 public class Url {
-    public static String Url = "http://api.test.smallaim.cn";
+//    public static String Url = "http://api.test.smallaim.cn";
 
-//    public static String Url = "http://api1.smallaim.cn";
+    public static String Url = "http://api1.smallaim.cn";
     public static String PhotoUrl = "http://img.smallaim.cn";
     public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_200,w_200";
     public static final String SMALL_PHOTO_URL2 = "?x-oss-process=image/resize,m_lfit,h_400,w_400";
@@ -105,6 +105,7 @@ public class Url {
     public static String LotteryNewest = "/lottery/newest";//最近开奖
     public static String Lottery = "/lottery";//最新一次开奖查询
     public static String LotteryRecord = "/lottery/record";//投注记录
+    public static String UrlLottery = "http://m.smallaim.cn/lottery/rule/";
     //竞猜-金豆
     public static String Wager = "/wager";// 投注  post
     public static String AccountRecord = "/account/record";//金豆记录

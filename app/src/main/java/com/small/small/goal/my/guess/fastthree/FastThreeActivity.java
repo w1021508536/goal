@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
+import com.small.small.goal.my.guess.LotteryExplainActivity;
 import com.small.small.goal.my.guess.fastthree.empty.FastThreeEmpty;
 import com.small.small.goal.my.guess.fastthree.fragment.SumFragment;
 import com.small.small.goal.my.guess.fastthree.fragment.ThreeNotSameFragment;
@@ -138,7 +139,9 @@ public class FastThreeActivity extends BaseActivity {
         popupWindow.setListener(new LotteryTopPopuwindow.setOnclickListener() {
             @Override
             public void onGuizeClick() {
-
+                Intent intent = new Intent(FastThreeActivity.this, LotteryExplainActivity.class);
+                intent.putExtra("url", Url.UrlLottery + "jlk3");
+                startActivity(intent);
             }
 
             @Override
@@ -265,7 +268,7 @@ public class FastThreeActivity extends BaseActivity {
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 14, sumString.length() - 2
                 , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         explainText.setText(spannable);
-        nextText.setText("每位至少各选1个号码");
+        nextText.setText("至少选择1个号码");
 
         GetNewData();
     }

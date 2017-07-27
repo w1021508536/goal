@@ -199,19 +199,42 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             for (Integer i : integers) {
                 List<ChooseOvalEntity> chooseOvalEntities = one.get(i);
                 if (i == 9) {
-                    int nums = 0;
+                    int now = 1;
+                    int qian = 0;
+                    int last = 0;
                     for (ChooseOvalEntity entity : chooseOvalEntities) {
-                        if (!entity.getContent().equals(","))
-                            nums++;
+
+                        if (entity.getContent().equals(",")) {
+                            now = 2;
+                        } else {
+                            if (now == 1) {
+                                qian++;
+                            } else {
+                                last++;
+                            }
+                        }
                     }
-                    zhuNums += Combine.getNumber(2, nums);
+                    zhuNums += qian * last;
                 } else if (i == 11) {
-                    int nums = 0;
+                    int now = 1;
+                    int qian = 0;
+                    int last = 0;
+                    int san = 0;
                     for (ChooseOvalEntity entity : chooseOvalEntities) {
-                        if (!entity.getContent().equals(","))
-                            nums++;
+                        if (entity.getContent().equals(",")) {
+                            now++;
+                        } else {
+                            if (now == 1) {
+                                qian++;
+                            } else if (now == 2) {
+                                last++;
+                            } else if (now == 3) {
+                                san++;
+                            }
+                        }
                     }
-                    zhuNums += Combine.getNumber(3, nums);
+
+                    zhuNums += qian * last * san;
                 } else if (i == 10) {
                     zhuNums += Combine.getNumber(2, chooseOvalEntities.size());
                 } else if (i == 12) {
@@ -321,6 +344,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
                 }
             }
         }
+        System.out.println("===========context=======" + context);
 
         final Integer tou = Integer.valueOf(etvTouNums.getText().toString());
         final Integer zhui = Integer.valueOf(etvZhuiNums.getText().toString());
@@ -387,7 +411,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             Date date1 = simpleDateFormat.parse(openTime);
             Long time = date1.getTime() + 1000 * 60 * 10;
             ;
-            content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖，开奖结果会通过公众号通知");
+            content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -397,7 +421,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 popupWindow.dismiss();
-                Intent intent = new Intent(ChooseAddMoneyActivity.this, FastThreeActivity.class);
+                Intent intent = new Intent(ChooseAddMoneyActivity.this, ChooseMainActivity.class);
                 intent.putExtra("status", "");
                 startActivity(intent);
                 finish();
@@ -653,11 +677,22 @@ public class ChooseAddMoneyActivity extends BaseActivity {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            switch (id) {
+                case R.id.etv_touNums:
+                    if (s.toString().length() > 0) {
+                        etvTouNums.setSelection(s.toString().length());
+                        if (Integer.valueOf(s.toString()) > 2000) {
+                            etvTouNums.setText(2000 + "");
+                        }
+                    }
 
+                    break;
+            }
 
         }
 

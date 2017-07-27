@@ -66,7 +66,7 @@ public class GoldListAdapter extends BaseAdapter {
 
 
         if (Double.valueOf(guessEmptyList.get(position).getAmount()) > 0) {
-            viewHolder.moneyText.setText(guessEmptyList.get(position).getAmount().substring(0, guessEmptyList.get(position).getAmount().indexOf(".")));
+            viewHolder.moneyText.setText("+" + guessEmptyList.get(position).getAmount().substring(0, guessEmptyList.get(position).getAmount().indexOf(".")));
             viewHolder.moneyText.setTextColor(context.getResources().getColor(R.color.kaijiang));
         } else {
             viewHolder.moneyText.setText(guessEmptyList.get(position).getAmount().substring(0, guessEmptyList.get(position).getAmount().indexOf(".")));

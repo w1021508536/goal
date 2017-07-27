@@ -57,6 +57,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -727,7 +728,13 @@ public class AimMoreActivity extends BaseActivity {
         UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
         new ShareAction(this).withText("测试").withMedia(image)
                 .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
+
                 .setCallback(umShareListener).open();
+
+//        UMWeb web = new UMWeb(Defaultcontent.url);
+//        web.setTitle("This is music title");//标题
+//        web.setThumb(thumb);  //缩略图
+//        web.setDescription("my description");//描述
     }
 
     private UMShareListener umShareListener = new UMShareListener() {

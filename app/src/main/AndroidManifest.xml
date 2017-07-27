@@ -499,7 +499,8 @@
             android:name=".my.guess.note.activity.SportDetailsActivity"
             android:label="比赛投注详情"
             android:screenOrientation="portrait" />
-        <activity android:name=".my.gold.GoldPayActivity"></activity>
+        <activity android:name=".my.gold.GoldPayActivity" />
+        <activity android:name=".my.guess.LotteryExplainActivity" />
     </application>
 
 </manifest>

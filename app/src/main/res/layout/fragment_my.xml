@@ -526,7 +526,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@color/white"
                     android:padding="15dp"
-                    android:text="趣味竞猜" />
+                    android:text="福利竞猜" />
 
                 <View
                     android:layout_width="match_parent"
@@ -587,7 +587,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="8dp"
-                            android:text="新快三" />
+                            android:text="新快3" />
 
                     </LinearLayout>
 

@@ -25,9 +25,12 @@
 
     <TextView
         android:id="@+id/brief_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:gravity="center"
         android:textColor="@color/gray_heavy"
         android:textSize="14dp" />
 

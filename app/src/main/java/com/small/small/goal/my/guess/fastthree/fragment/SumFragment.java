@@ -226,7 +226,7 @@ public class SumFragment extends Fragment {
 
         if (dataList_choose != null) {
             if (dataList_choose.size() < 1) {
-                FastThreeActivity.instance.nextText.setText("至少选择1个选项");
+                FastThreeActivity.instance.nextText.setText("至少选择1个号码");
             } else {
                 FastThreeActivity.instance.nextText.setText("共" + dataList_choose.size() + "注，下一步");
             }

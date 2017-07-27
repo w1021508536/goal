@@ -9,10 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
 
         <View
             android:id="@+id/view"
@@ -152,9 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
+                    android:text="0"
                     android:textColor="@color/white"
-                    android:textSize="50dp"
-                    android:text="0" />
+                    android:textSize="50dp" />
 
                 <TextView
                     android:id="@+id/tv_moneyHint2"
@@ -162,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="名代理" />
+                    android:text="名代理商" />
             </LinearLayout>
 
 

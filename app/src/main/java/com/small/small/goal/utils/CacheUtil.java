@@ -61,6 +61,15 @@ public class CacheUtil {
     public List<DynamicEntity.CommentsBean> commentsBeanList = new ArrayList<>();
     public boolean taskToMainFlag = false;
     public boolean taskAddMoneyToMainFlag = false;
+    public boolean taskQiQuan=false;
+
+    public boolean isTaskQiQuan() {
+        return taskQiQuan;
+    }
+
+    public void setTaskQiQuan(boolean taskQiQuan) {
+        this.taskQiQuan = taskQiQuan;
+    }
 
     public Map<String, Boolean> map = new HashMap<>();
 

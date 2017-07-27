@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/top_left"
-                android:text="转让个数" />
+                android:text="转让个数(整数)" />
 
             <EditText
                 android:id="@+id/etv_money"

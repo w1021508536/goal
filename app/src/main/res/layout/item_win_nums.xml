@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@drawable/bg_oval_view_gray_20"
+            android:background="@drawable/background_gray_corner_30"
             android:paddingBottom="3dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"

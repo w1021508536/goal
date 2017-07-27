@@ -18,6 +18,8 @@ import android.widget.TextView;
 
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
+import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
+import com.small.small.goal.my.guess.fastthree.FastThreePayActivity;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Url;
@@ -27,6 +29,9 @@ import com.small.small.goal.utils.XUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
+
+import java.text.ParseException;
+import java.util.Date;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -109,8 +114,6 @@ public class ToMoneyActivity extends BaseActivity {
                 break;
             case R.id.pay_text:
 
-                System.out.println("======================" + accountType);
-
                 if (accountType.equals("0")) {
                     Utils.showToast(this, "请选择提现方式");
                 } else if (accountType.equals("1")) {
@@ -122,7 +125,7 @@ public class ToMoneyActivity extends BaseActivity {
         }
     }
 
-    private void GetBudget(View view) {
+    private void GetBudget(final View view) {
 
         View windowView = LayoutInflater.from(this).inflate(
                 R.layout.window_to_money, null);
@@ -157,9 +160,8 @@ public class ToMoneyActivity extends BaseActivity {
                         public void onSuccess(String result) {
                             try {
                                 if (new JSONObject(result).getString("code").equals("0")) {
-                                    Utils.showToast(ToMoneyActivity.this, "提现成功");
                                     popupWindow.dismiss();
-
+                                    PutWindow(view);
                                 } else {
                                     Utils.showToast(ToMoneyActivity.this, new JSONObject(result).getString("msg"));
                                 }
@@ -251,6 +253,38 @@ public class ToMoneyActivity extends BaseActivity {
         popupWindow.setAnimationStyle(R.style.MyDialogStyle);
         popupWindow.setTouchable(true);
         popupWindow.setOutsideTouchable(true);
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+    }
+
+    private void PutWindow(View view) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_lottery_pay_success, null);
+        final PopupWindow popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+
+        TextView success_text = (TextView) windowView.findViewById(R.id.success_text);
+        TextView content_text = (TextView) windowView.findViewById(R.id.content_text);
+        TextView next_text = (TextView) windowView.findViewById(R.id.next_text);
+        next_text.setText("确定");
+        content_text.setText("提现申请已提交，1-2个工作日到账");
+        success_text.setVisibility(View.GONE);
+        next_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
 
         // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
         // 我觉得这里是API的一个bug

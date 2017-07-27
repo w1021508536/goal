@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -44,12 +47,21 @@ public class SportNoteActivity extends BaseActivity {
     TextView tvOkInclude;
     @InjectView(R.id.guess_list)
     PullToRefreshListView guessList;
+    @InjectView(R.id.ll_top_include)
+    LinearLayout llTopInclude;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
 
 
     private List<SportEmpty> sportEmptyList;
     private SportEmpty sportEmpty;
     private SportAdapter sportAdapter;
 
+    public static SportNoteActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,8 @@ public class SportNoteActivity extends BaseActivity {
 
     private void init() {
 
+        instance = this;
+
         nameTextInclude.setText("竞猜记录");
         rightImageInclude.setVisibility(View.GONE);
 
@@ -71,7 +85,7 @@ public class SportNoteActivity extends BaseActivity {
         sportAdapter = new SportAdapter(this, sportEmptyList);
         guessList.setAdapter(sportAdapter);
 
-        guessList.setMode(PullToRefreshBase.Mode.BOTH);
+        guessList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
 
         guessList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -82,10 +96,31 @@ public class SportNoteActivity extends BaseActivity {
 
             }
         });
+        guessList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+                GetGuess();
+            }
 
-        GetGuess();
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
 
+            }
+        });
 
+        if (this != null) {
+            if (Utils.isNetworkConnected(this)) {
+                nullLayout.setClickable(false);
+                nullLayout.setVisibility(View.GONE);
+//                page = 1;
+                GetGuess();
+            } else {
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+            }
+        }
     }
 
     private void GetGuess() {
@@ -128,17 +163,33 @@ public class SportNoteActivity extends BaseActivity {
                         }
 
                         sportAdapter.notifyDataSetChanged();
+                    } else if (code.equals("100000")) {
+                        if (sportEmptyList.size() == 0) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_data);
+                            tvEmpty.setText("暂 时 没 有 任 何 数 据 ~");
+                        }
                     } else {
-                        Utils.showToast(SportNoteActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                guessList.onRefreshComplete();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
+                guessList.onRefreshComplete();
             }
 
             @Override

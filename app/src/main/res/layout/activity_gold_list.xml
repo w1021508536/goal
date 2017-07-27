@@ -73,8 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@drawable/background_red_corner_5"
         android:gravity="center"
@@ -83,19 +83,34 @@
         android:textColor="@color/white"
         android:textSize="18dp" />
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/plv"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/next_text"
-        android:layout_below="@id/head"
-        android:background="@color/bg_activity"
-        android:divider="#3F424B"
-        android:dividerHeight="0.5dp"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        ptr:ptrHeaderTextColor="@color/white"
-        ptr:ptrShowIndicator="false" />
+        android:layout_below="@id/head">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/plv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_activity"
+            android:divider="#3F424B"
+            android:dividerHeight="0.5dp"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            ptr:ptrHeaderTextColor="@color/white"
+            ptr:ptrShowIndicator="false" />
+
+        <RelativeLayout
+            android:id="@+id/null_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <include layout="@layout/view_empty_nodata" />
+
+        </RelativeLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

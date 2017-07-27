@@ -14,6 +14,7 @@ import com.small.small.goal.my.dialog.MonthDialog;
 import com.small.small.goal.my.entry.TransferMoreEntity;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -120,6 +121,12 @@ public class TransferMoreAdapter extends BaseAdapter {
                 contentViewHolder.tvMoneyItem.setText("-" + Utils.getPercentTwoStr((float) redMoreAdapterEntry.getAmount()));
                 contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getToUserNick());
                 contentViewHolder.tvMoneyItem.setTextColor(context.getResources().getColor(android.R.color.black));
+            }
+
+            if (!redMoreAdapterEntry.getToUserAvatar().equals("")) {
+                Picasso.with(context).load(Utils.GetPhotoPath(redMoreAdapterEntry.getToUserAvatar())).into(contentViewHolder.imgItem);
+            } else {
+                contentViewHolder.imgItem.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
             }
 
             //   contentViewHolder.tvMoneyItem.setText("+" + redMoreAdapterEntry.getAmount());

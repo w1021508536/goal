@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="期权相关政策"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="一、期权是什么？"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="期权是小目标钱包赠送给用户的特殊福利"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="二、小目标期权的优势"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1、小目标免费赠送，不用通过购买来获得；"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2、期权可以好友之间转让赠送；"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3、未来期权可以换购小目标股票，实现资产增值."
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="三、获得期权的途径"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1、向自己的小目标里存入资金，除了每天获得平台奖励还有额外期权赠送；"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2、好友之间转让赠送."
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="四、期权计算"
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="小目标内资金3000元/天=1个期权，以此类推，上不封顶，不足1个期权计算至小数点后一位."
+            android:textColor="@color/text_aim"
+            android:textSize="14dp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

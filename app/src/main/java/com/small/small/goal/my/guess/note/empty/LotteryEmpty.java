@@ -26,6 +26,15 @@ public class LotteryEmpty implements Serializable {
     private String type;
     private String openCode;
     private String reward;
+    private String openTime;
+
+    public String getOpenTime() {
+        return openTime;
+    }
+
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
 
     public String getId() {
         return id;

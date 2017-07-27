@@ -121,7 +121,6 @@ public class TransferNextActivity extends BaseActivity {
     /**
      * 验证密码
      * create  wjz
-     *
      **/
     private void verifyPass(final String strPassword) {
 
@@ -132,7 +131,7 @@ public class TransferNextActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result,TransferNextActivity.this)) {
+                if (Utils.callOk(result, TransferNextActivity.this)) {
                     transfer(strPassword);
                 } else {
                     Utils.showToast(TransferNextActivity.this, Utils.getMsg(result));
@@ -166,7 +165,7 @@ public class TransferNextActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result,TransferNextActivity.this)) return;
+                if (!Utils.callOk(result, TransferNextActivity.this)) return;
                 option -= Double.valueOf(etvMoney.getText().toString());
                 tvMyTransfer.setText("剩余可以转让 " + option + "个");
                 CacheUtil.getInstance().getUserInfo().getAccount().setOption(option);
@@ -217,8 +216,13 @@ public class TransferNextActivity extends BaseActivity {
 
                 break;
             case R.id.tv_all:
-                etvMoney.setText(option + "");
-                etvMoney.setSelection(etvMoney.getText().toString().length());
+                if (String.valueOf(option).indexOf(".") > 0) {
+                    etvMoney.setText(String.valueOf(option).substring(0, String.valueOf(option).indexOf(".")));
+                    etvMoney.setSelection(etvMoney.getText().toString().length());
+                } else {
+                    etvMoney.setText(option + "");
+                    etvMoney.setSelection(etvMoney.getText().toString().length());
+                }
                 break;
             default:
                 break;

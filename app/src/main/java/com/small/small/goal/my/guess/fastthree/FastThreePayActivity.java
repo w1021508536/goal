@@ -3,8 +3,10 @@ package com.small.small.goal.my.guess.fastthree;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -203,6 +205,7 @@ public class FastThreePayActivity extends BaseActivity {
         rightImageInclude.setVisibility(View.GONE);
 
         beanText.setText("我的金豆：" + account.getBean());
+        etvTouNums.addTextChangedListener(new MyTextWatch());
     }
 
     private void SetMoney() {
@@ -218,7 +221,7 @@ public class FastThreePayActivity extends BaseActivity {
             } else if (fastThreeEmptyList.get(i).getStatus() == 20) {
                 money = money + fastThreeEmptyList.get(i).getTwoSameList().size() * fastThreeEmptyList.get(i).getTwoSingleList().size() * 20;
             } else if (fastThreeEmptyList.get(i).getStatus() == 21) {
-                money = money + 20;
+                money = money + 20 * fastThreeEmptyList.get(i).getTwoCheckList().size();
             } else if (fastThreeEmptyList.get(i).getStatus() == 10) {
                 money = money + fastThreeEmptyList.get(i).getThreeSingleList().size() * 20;
             } else if (fastThreeEmptyList.get(i).getStatus() == 11) {
@@ -270,6 +273,7 @@ public class FastThreePayActivity extends BaseActivity {
     }
 
     private void Betting(final View v) {
+
 
         //        content	string	是	投注内容:胜、负	胜
 
@@ -373,7 +377,7 @@ public class FastThreePayActivity extends BaseActivity {
                 content = content + ";";
             }
         }
-
+        System.out.println("============content===========" + content);
         requestParams.addBodyParameter("content", content);
         XUtil.post(requestParams, FastThreePayActivity.this, new XUtil.XCallBackLinstener() {
             @Override
@@ -737,7 +741,7 @@ public class FastThreePayActivity extends BaseActivity {
         try {
             Date date1 = simpleDateFormat.parse(openTime);
             Long time = date1.getTime() + 1000 * 60 * 10;
-            content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖，开奖结果会通过公众号通知");
+            content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖");
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -764,6 +768,40 @@ public class FastThreePayActivity extends BaseActivity {
         // 设置好参数之后再show
         popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
 
+    }
+
+    class MyTextWatch implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            if (s.toString().length() > 0) {
+                etvTouNums.setSelection(s.toString().length());
+                if (Integer.valueOf(s.toString()) > 2000) {
+                    notes = 2000;
+                }
+            }
+
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.toString().length() > 0) {
+                notes = Integer.valueOf(etvTouNums.getText().toString());
+                etvTouNums.setText(notes + "");
+                nextText.setText("立即投注 " + money * notes + "金豆");
+            } else {
+                notes = 0;
+                nextText.setText("立即投注 " + money * notes + "金豆");
+            }
+
+        }
     }
 
 
@@ -842,7 +880,7 @@ public class FastThreePayActivity extends BaseActivity {
                     number = number + " " + fastThreeEmptyList.get(position).getTwoCheckList().get(i) + " ";
                 }
                 viewHolder.numberText.setText(number);
-                viewHolder.notesText.setText(1 + "注");
+                viewHolder.notesText.setText(fastThreeEmptyList.get(position).getTwoCheckList().size() + "注");
             } else if (fastThreeEmptyList.get(position).getStatus() == 10) {
                 viewHolder.statusText.setText("三同号单选");
                 String number = "";

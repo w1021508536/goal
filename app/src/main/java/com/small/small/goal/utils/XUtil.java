@@ -3,6 +3,7 @@ package com.small.small.goal.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 
@@ -27,7 +28,6 @@ import org.xutils.x;
  **/
 public class XUtil {
 
-
     public interface XCallBackLinstener {
         void onSuccess(String result);
 
@@ -45,6 +45,7 @@ public class XUtil {
 
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
         final MyApplication app = (MyApplication) context.getApplicationContext();
+        final SharedPreferences sp = Utils.UserSharedPreferences(context);
         if (((Activity) context).isDestroyed()) {
 
         } else
@@ -58,9 +59,11 @@ public class XUtil {
                     loadingDialog.dismiss();
                 try {
                     if (new JSONObject(result).getString("code").equals("100001") && new JSONObject(result).getString("msg").equals("无效的token")) {
-
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.commit();
                         app.exit();
-                        Utils.showToast(context,"账号登录过期，请重新登录");
+                        Utils.showToast(context, "账号登录过期，请重新登录");
                         context.startActivity(new Intent(context, LoginActivity.class));
                     } else {
                         xCallBackLinstener.onSuccess(result);
@@ -128,6 +131,7 @@ public class XUtil {
 
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
         final MyApplication app = (MyApplication) context.getApplicationContext();
+        final SharedPreferences sp = Utils.UserSharedPreferences(context);
         if (((Activity) context).isDestroyed()) {
 
         } else
@@ -141,8 +145,12 @@ public class XUtil {
                     loadingDialog.dismiss();
                 try {
                     if (new JSONObject(result).getString("code").equals("100001") && new JSONObject(result).getString("msg").equals("无效的token")) {
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.commit();
                         app.exit();
-                        Utils.showToast(context,"账号登录过期，请重新登录");
+
+                        Utils.showToast(context, "账号登录过期，请重新登录");
                         context.startActivity(new Intent(context, LoginActivity.class));
                     } else {
                         xCallBackLinstener.onSuccess(result);
@@ -207,6 +215,7 @@ public class XUtil {
     public static <T> void put(final RequestParams requestParams, final Context context, final XCallBackLinstener xCallBackLinstener) {
         final LoadingDialog loadingDialog = new LoadingDialog(context, "");
         final MyApplication app = (MyApplication) context.getApplicationContext();
+        final SharedPreferences sp = Utils.UserSharedPreferences(context);
         if (((Activity) context).isDestroyed()) {
 
         } else
@@ -221,8 +230,11 @@ public class XUtil {
 
                 try {
                     if (new JSONObject(result).getString("code").equals("100001") && new JSONObject(result).getString("msg").equals("无效的token")) {
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.commit();
                         app.exit();
-                        Utils.showToast(context,"账号登录过期，请重新登录");
+                        Utils.showToast(context, "账号登录过期，请重新登录");
                         context.startActivity(new Intent(context, LoginActivity.class));
                     } else {
                         xCallBackLinstener.onSuccess(result);

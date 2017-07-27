@@ -8,12 +8,29 @@
 
     <include layout="@layout/view_include_guess" />
 
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/guess_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_gray_light"
-        android:divider="@color/bg_gray_light"
-        android:dividerHeight="1dp"
-        android:scrollbars="none" />
+        android:layout_height="match_parent">
+
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/guess_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_gray_light"
+            android:divider="@color/bg_gray_light"
+            android:dividerHeight="1dp"
+            android:scrollbars="none" />
+
+        <RelativeLayout
+            android:id="@+id/null_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <include layout="@layout/view_empty_nodata" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
 </LinearLayout>

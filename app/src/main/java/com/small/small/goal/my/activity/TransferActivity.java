@@ -4,13 +4,19 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.SpannableStringBuilder;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.small.small.goal.MainActivity;
 import com.small.small.goal.R;
 import com.small.small.goal.my.entry.NoticeEntity;
 import com.small.small.goal.my.entry.TransferShapeEntity;
@@ -73,6 +79,10 @@ public class TransferActivity extends BaseActivity {
     @InjectView(R.id.tv_hint)
     TextView tvHint;
 
+
+    PopupWindow popupWindow;
+    SpannableStringBuilder spannable;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_transfer);
@@ -101,6 +111,7 @@ public class TransferActivity extends BaseActivity {
         tvTransferTransfer.setOnClickListener(this);
         tvOkInclude.setOnClickListener(this);
         tvGoZhuanquTransfer.setOnClickListener(this);
+        tvQuestion.setOnClickListener(this);
     }
 
     @Override
@@ -111,13 +122,46 @@ public class TransferActivity extends BaseActivity {
                 startActivity(new Intent(this, TransferNextActivity.class));
                 break;
             case R.id.tv_goZhuanqu_transfer:
-                startActivity(new Intent(this, MontyToActivity.class));
+                CacheUtil.getInstance().setTaskQiQuan(true);
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.tv_ok_include:
                 startActivity(new Intent(this, TransferMoreActivity.class));
                 break;
+            case R.id.tv_question:
+                MoneyWindow(v);
+                break;
         }
     }
+
+    //弹出框
+    private void MoneyWindow(final View view) {
+
+        View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_transfer_explain, null);
+        popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+        windowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(true);
+
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+    }
+
 
     @Override
     public void getData() {
@@ -154,7 +198,7 @@ public class TransferActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result,TransferActivity.this)) return;
+                if (!Utils.callOk(result, TransferActivity.this)) return;
                 Gson gson = new Gson();
                 List<NoticeEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<NoticeEntity>>() {
                 }.getType());
@@ -192,7 +236,7 @@ public class TransferActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result,TransferActivity.this)) return;
+                if (!Utils.callOk(result, TransferActivity.this)) return;
                 //{"msg":"success","code":0,"result":[{"id":1,"createTime":1496302252000,"price":10.00},{"id":2,"createTime":1496388657000,"price":11.00},{"id":3,"createTime":1496475064000,"price":16.00},{"id":4,"createTime":1496561476000,"price":100.00},{"id":5,"createTime":1496647880000,"price":60.00},{"id":6,"createTime":1496734284000,"price":1.00},{"id":7,"createTime":1496820688000,"price":50.00}],"pageNum":1,"pageSize":9,"pageTotal":1,"total":7}
 
                 Gson gson = new Gson();
@@ -243,7 +287,7 @@ public class TransferActivity extends BaseActivity {
         if (maxPrice % 10 > 0) {
             double v = maxPrice - maxPrice % 10 + 10;
         }
-        double v =  (maxPrice / 10.0);
+        double v = (maxPrice / 10.0);
         for (double i = 0; i <= maxPrice; i += v) {
             dataY.add((float) i);
         }

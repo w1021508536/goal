@@ -2,11 +2,12 @@ package com.small.small.goal.my.guess.note.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -46,12 +47,22 @@ public class LotteryNoteActivity extends BaseActivity {
     TextView tvOkInclude;
     @InjectView(R.id.lottery_list)
     PullToRefreshListView lotteryList;
+    @InjectView(R.id.ll_top_include)
+    LinearLayout llTopInclude;
+    @InjectView(R.id.img_empty)
+    ImageView imgEmpty;
+    @InjectView(R.id.tv_empty)
+    TextView tvEmpty;
+    @InjectView(R.id.null_layout)
+    RelativeLayout nullLayout;
 
     private List<LotteryEmpty> lotteryEmptyList;
 
     private LotteryEmpty lotteryEmpty;
 
     private LotteryAdapter lotteryAdapter;
+
+    public static LotteryNoteActivity instance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +74,9 @@ public class LotteryNoteActivity extends BaseActivity {
     }
 
     private void init() {
+
+        instance = this;
+
         nameTextInclude.setText("投注记录");
         rightImageInclude.setVisibility(View.GONE);
 
@@ -91,7 +105,20 @@ public class LotteryNoteActivity extends BaseActivity {
 
             }
         });
-        GetLottery();
+
+        if (this != null) {
+            if (Utils.isNetworkConnected(this)) {
+                nullLayout.setClickable(false);
+                nullLayout.setVisibility(View.GONE);
+//                page = 1;
+                GetLottery();
+            } else {
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+            }
+        }
     }
 
     private void GetLottery() {
@@ -129,17 +156,24 @@ public class LotteryNoteActivity extends BaseActivity {
                             lotteryEmpty.setType(jsonArray.getJSONObject(i).getString("type"));
                             lotteryEmpty.setOpenCode(jsonArray.getJSONObject(i).getString("openCode"));
                             lotteryEmpty.setReward(jsonArray.getJSONObject(i).getString("reward"));
-
+                            lotteryEmpty.setOpenTime(jsonArray.getJSONObject(i).getString("openTime"));
 
                             lotteryEmptyList.add(lotteryEmpty);
                         }
                         lotteryAdapter.notifyDataSetChanged();
                     } else if (code.equals("100000")) {
-                        lotteryEmptyList.clear();
-                        lotteryAdapter.notifyDataSetChanged();
-                        Utils.showToast(LotteryNoteActivity.this, "暂无数据");
+                        if (lotteryEmptyList.size() == 0) {
+                            nullLayout.setClickable(false);
+                            nullLayout.setVisibility(View.VISIBLE);
+                            imgEmpty.setImageResource(R.mipmap.bg_null_data);
+                            tvEmpty.setText("暂 时 没 有 任 何 数 据 ~");
+                        }
                     } else {
-                        Utils.showToast(LotteryNoteActivity.this, new JSONObject(result).getString("msg"));
+//                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        nullLayout.setClickable(true);
+                        nullLayout.setVisibility(View.VISIBLE);
+                        imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                        tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -149,6 +183,10 @@ public class LotteryNoteActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_wrong);
+                tvEmpty.setText("出 错! 点 击 重 新 尝 试");
                 lotteryList.onRefreshComplete();
             }
 
@@ -165,6 +203,21 @@ public class LotteryNoteActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.left_image_include:
                 finish();
+                break;
+            case R.id.null_layout:
+                if (Utils.isNetworkConnected(this)) {
+
+                    nullLayout.setClickable(false);
+                    nullLayout.setVisibility(View.GONE);
+                    GetLottery();
+                } else {
+                    Utils.showToast(this, "请检查网络是否连接");
+                    nullLayout.setClickable(true);
+                    nullLayout.setVisibility(View.VISIBLE);
+                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
+                }
+
                 break;
         }
     }

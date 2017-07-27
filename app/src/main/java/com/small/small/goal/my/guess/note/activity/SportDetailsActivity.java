@@ -109,6 +109,7 @@ public class SportDetailsActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_image_include:
+                SportNoteActivity.instance.finish();
                 finish();
                 break;
         }
