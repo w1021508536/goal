@@ -184,19 +184,19 @@ public class HotFragment extends Fragment {
                     GetAd();
 
                 }
-                    nullLayout.setClickable(false);
-                    nullLayout.setVisibility(View.GONE);
-                    isDown = true;
-                    GetHotData("1", page * 10 + "");
-                } else {
-                    nullLayout.setClickable(true);
-                    nullLayout.setVisibility(View.VISIBLE);
-                    imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
-                    tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
-                }
+                nullLayout.setClickable(false);
+                nullLayout.setVisibility(View.GONE);
+                isDown = true;
+                GetHotData("1", page * 10 + "");
+            } else {
+                nullLayout.setClickable(true);
+                nullLayout.setVisibility(View.VISIBLE);
+                imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
+                tvEmpty.setText("网 络 异 常! 请 点 击 刷 新");
             }
-
         }
+
+    }
 
 
     private void AddHeadView() {
@@ -274,8 +274,6 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========GetAd===========" + result);
-
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -323,7 +321,9 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("========result====hot======" + result);
+
+                System.out.println("=========hotdata===========" + result);
+
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -562,12 +562,6 @@ public class HotFragment extends Fragment {
 
         private Context context;
 
-
-        private ImageOptions imageOptions = new ImageOptions.Builder()
-                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setLoadingDrawableId(R.mipmap.background_load)
-                .setFailureDrawableId(R.mipmap.background_fail)
-                .build();
 
         public HotAdapter(Context context) {
             this.context = context;
@@ -903,6 +897,13 @@ public class HotFragment extends Fragment {
                 }
 
                 if (imageList.size() == 1) {
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 2, width)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
@@ -913,6 +914,13 @@ public class HotFragment extends Fragment {
                     viewHolder.image1.setLayoutParams(layoutParams1);
 
                 } else if (imageList.size() == 2) {
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 2, width / 2)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
@@ -931,6 +939,13 @@ public class HotFragment extends Fragment {
                     viewHolder.image2.setLayoutParams(layoutParams2);
 
                 } else if (imageList.size() == 3) {
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 3, width / 3)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);

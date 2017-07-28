@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,15 +32,12 @@ import com.small.small.goal.my.guess.LotteryExplainActivity;
 import com.small.small.goal.my.guess.elevenchoosefive.adapter.ChooseOvalAdapter;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.ChooseOvalEntity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.HlvEntity;
-import com.small.small.goal.my.guess.elevenchoosefive.entity.NewsResultEntity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.OldResult;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.WinDaletouNumberEntity;
-import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
 import com.small.small.goal.my.guess.note.activity.LotteryNoteActivity;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Combine;
-import com.small.small.goal.utils.DateUtil;
 import com.small.small.goal.utils.GameUtils;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
@@ -51,6 +46,8 @@ import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.utils.dialog.LotteryTopPopuwindow;
 import com.small.small.goal.weight.MyGridView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
 import java.text.ParseException;
@@ -60,8 +57,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -124,16 +119,24 @@ public class ChooseMainActivity extends BaseActivity {
     private LotteryTopPopuwindow popupWindow;
     private ChooseOvalAdapter mgvAdapter2;
     private ChooseOvalAdapter mgvAdapter3;
-    private Timer timer;
-    private NewsResultEntity newsResultEntity;
-    private long newMinute;
-    private long second;
     private List<HlvEntity> talData;
     //    private List<ChooseOvalEntity> mgvSelectedData3;   //当前选中的集合
 //    private List<ChooseOvalEntity> mgvSelectedData2;
 //    private List<ChooseOvalEntity> mgvSelectedData1;
 
     int position;
+
+    private String expect;
+    private String openCode;
+    private String openTime;
+    private String openTimestamp;
+    private String expireTime;
+    private String code;
+    private String now;
+
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("mm:ss");
+    private TimeCount time;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,11 +173,7 @@ public class ChooseMainActivity extends BaseActivity {
         if (mgvAdapter3 != null) {
             mgvAdapter3.releaseData();
         }
-//        if (mgvSelectedData1 != null) {
-//            mgvSelectedData1.clear();
-//            mgvSelectedData2.clear();
-//            mgvSelectedData3.clear();
-//        }
+
     }
 
     @Override
@@ -239,27 +238,38 @@ public class ChooseMainActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                Log.v("TAG", result);
-                if (!GameUtils.CallResultOK(result)) return;
-                Gson gson = new Gson();
-                List<NewsResultEntity> data = gson.fromJson(GameUtils.getResultStr(result), new TypeToken<List<NewsResultEntity>>() {
-                }.getType());
-                if (data != null && data.size() > 0) {
 
-                    try {
-                        newsResultEntity = data.get(0);
-                        long expireTimeLong = DateUtil.stringToLong(newsResultEntity.getOpenTime(), "yyyy-MM-dd HH:mm:ss");
-                        long l = new Date().getTime() - expireTimeLong;
-                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
-                        Log.v("TAG", "time    " + df.format(new Date()));// new Date()为获取当前系统时间
-                        long minute = l / 60000;
-                        newMinute = 10 - minute % 10;
-                        second = 60 - l % 60000 / 1000;
-                        Log.v("TAG", "minute---- " + minute + " new----- " + newMinute + "second----- " + second);
-                        setNewResult(newsResultEntity.getExpect(), minute, second);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                try {
+                    if (new JSONObject(result).getString("code").equals("0")) {
+                        expect = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("expect");
+                        openCode = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("openCode");
+                        openTime = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("openTime");
+                        openTimestamp = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("openTimestamp");
+                        expireTime = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("expireTime");
+                        code = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("code");
+                        now = new JSONObject(result).optString("now");
+
+                        tvExpect.setText((Long.valueOf(expect) + 1) + "");
+                        try {
+                            Date date1 = simpleDateFormat.parse(openTime);
+
+                            if (now.equals("")) {
+                                SetTime(date1.getTime() + 1000 * 60 * 10 - System.currentTimeMillis());
+                            } else {
+                                SetTime(date1.getTime() + 1000 * 60 * 10 - Long.valueOf(now));
+                            }
+
+
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    } else {
+                        Utils.showToast(ChooseMainActivity.this, new JSONObject(result).getString("msg"));
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -276,43 +286,30 @@ public class ChooseMainActivity extends BaseActivity {
         });
     }
 
-    private void setNewResult(String expect, long minute, long second) {
-        tvExpect.setText((Integer.valueOf(expect) + 2) + "");
-        //    tvExpectTime.setText();
-
-        timer = new Timer(true);
-        timer.schedule(task, 0, 1000); //延时1000ms后执行，1000ms执行一次
+    private void SetTime(long no) {
+        time = new TimeCount(no, 1000);
+        time.start();
     }
 
 
-    TimerTask task = new TimerTask() {
-
-
-        public void run() {
-            Message message = new Message();
-            message.what = 1;
-            handler.sendMessage(message);
-
+    class TimeCount extends CountDownTimer {
+        public TimeCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);// 参数依次为总时长,和计时的时间间隔
         }
-    };
 
-    Handler handler = new Handler(new Handler.Callback() {
         @Override
-        public boolean handleMessage(Message msg) {
-
-            if (second == 0) {
-                second = 59;
-                newMinute--;
-            } else {
-                second--;
-            }
-
-            tvExpectTime.setText((newMinute >= 10 ? newMinute : "0" + newMinute) + ":" + (second >= 10 ? second : "0" + second));
-            tvExpect.setText((Long.valueOf(newsResultEntity.getExpect()) + 1) + "");
-            //   tvScoll.setText("距离第" + newsResultEntity.getExpect() + "期截止" + (newMinute >= 10 ? newMinute : "0" + newMinute) + ":" + (second >= 10 ? second : "0" + second));
-            return false;
+        public void onFinish() {// 计时完毕时触发
+            tvExpectTime.setText("00:00");
+            getNewsResult();
         }
-    });
+
+        @Override
+        public void onTick(long millisUntilFinished) {// 计时过程显示
+//            timeText.setText(millisUntilFinished / 1000 + "秒");
+            simpleDateFormat2.format(new Date(millisUntilFinished));
+            tvExpectTime.setText(simpleDateFormat2.format(new Date(millisUntilFinished)));
+        }
+    }
 
 
     /**
@@ -680,7 +677,6 @@ public class ChooseMainActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                Log.v("TAG", result);
                 if (!GameUtils.CallResultOK(result)) return;
                 Gson gson = new Gson();
                 List<OldResult> data = gson.fromJson(GameUtils.getResultStr(result), new TypeToken<List<OldResult>>() {
@@ -740,8 +736,8 @@ public class ChooseMainActivity extends BaseActivity {
                 addEleven(mgvAdapter.getData());
                 Intent intent = new Intent(this, ChooseAddMoneyActivity.class);
                 intent.putExtra(KeyCode.INTENT_MIN, min);
-                intent.putExtra("expect", newsResultEntity.getExpect());
-                intent.putExtra("openTime", newsResultEntity.getOpenTime());
+                intent.putExtra("expect", expect);
+                intent.putExtra("openTime", openTime);
                 startActivity(intent);
                 finish();
                 break;

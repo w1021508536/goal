@@ -333,7 +333,6 @@ public class FastThreeActivity extends BaseActivity {
         XUtil.get(requestParams, FastThreeActivity.this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("====GetNewData====" + result);
                 try {
                     if (new JSONObject(result).getString("code").equals("0")) {
                         expect = new JSONObject(result).getJSONArray("result").getJSONObject(0).getString("expect");
@@ -351,7 +350,6 @@ public class FastThreeActivity extends BaseActivity {
 
                             if (now.equals("")) {
                                 SetTime(date1.getTime() + 1000 * 60 * 10 - System.currentTimeMillis());
-                                System.out.println("====now==1==" + now);
                             } else {
                                 SetTime(date1.getTime() + 1000 * 60 * 10 - Long.valueOf(now));
                             }

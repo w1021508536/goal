@@ -85,7 +85,7 @@ public class TargetAdapter extends BaseAdapter {
         vh.tvNameItem.setText(collectEntity.getName());
         vh.tvMoneyItem.setText("已转入 " + collectEntity.getMoney() + "/" + ((int) collectEntity.getBudget()) + "元");
         vh.progressItem.setProgress((float) (collectEntity.getMoney() * 100 / collectEntity.getBudget()));
-        vh.imgBgItem.setImageResource(R.drawable.image4);
+        vh.imgBgItem.setImageResource(R.drawable.image1);
 
         if (!"".equals(collectEntity.getImg())) {
             Picasso.with(context).load(Utils.GetPhotoPath(collectEntity.getImg())).into(vh.imgBgItem);

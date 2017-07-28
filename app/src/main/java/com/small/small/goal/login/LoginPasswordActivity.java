@@ -121,8 +121,6 @@ public class LoginPasswordActivity extends BaseActivity implements View.OnClickL
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=======loginPAssword====" + result);
-
                 try {
                     String code = new JSONObject(result).getString("code");
 
@@ -152,7 +150,6 @@ public class LoginPasswordActivity extends BaseActivity implements View.OnClickL
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=======ex.getMessage()====" + ex.getMessage());
             }
 
             @Override

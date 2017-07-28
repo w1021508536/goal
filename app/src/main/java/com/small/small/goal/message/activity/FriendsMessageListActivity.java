@@ -118,7 +118,6 @@ public class FriendsMessageListActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String result) {
                         try {
-                            System.out.println("========同意==============" + result);
                             String code = new JSONObject(result).getString("code");
                             if (code.equals("0")) {
                                 dataList.get(position).put("status", "1");
@@ -230,7 +229,6 @@ public class FriendsMessageListActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=======FriendsMessageList========" + result);
                 try {
 
                     String code = new JSONObject(result).getString("code");

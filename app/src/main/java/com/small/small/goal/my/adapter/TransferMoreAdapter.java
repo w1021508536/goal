@@ -80,9 +80,9 @@ public class TransferMoreAdapter extends BaseAdapter {
             } else {
                 titleViewHolder = (TitleViewHolder) convertView.getTag();
             }
+            titleViewHolder.tvMoneyItem.setVisibility(View.GONE);
             TransferMoreEntity entity = data.get(position);
             titleViewHolder.tvTimeItem.setText(entity.getTitle());
-            titleViewHolder.tvMoneyItem.setText("支出 ¥" + Utils.getPercentTwoStr((float) entity.getDeleteMoney()) + "  收入 ¥" + Utils.getPercentTwoStr((float) entity.getAddMoney()));
             //   titleViewHolder.tvMoneyItem.setText("收入 ¥" + redMoreAdapterEntry.getAddMoney());
             if (position == 0 && titleViewHolder != null) {
                 titleViewHolder.imgMonthItem.setVisibility(View.VISIBLE);
@@ -111,23 +111,40 @@ public class TransferMoreAdapter extends BaseAdapter {
             TransferMoreEntity redMoreAdapterEntry = data.get(position);
 
 
+            String amount = String.valueOf(redMoreAdapterEntry.getAmount());
+
             if (redMoreAdapterEntry.getToUserId() == Integer.valueOf(sp.getString(KeyCode.USER_ID, "0"))) {
                 contentViewHolder.tvNameItem.setText("转入-来自");
-                contentViewHolder.tvMoneyItem.setText("+" + Utils.getPercentTwoStr((float) redMoreAdapterEntry.getAmount()));
+
+                if (redMoreAdapterEntry.getAmount() > 1) {
+                    contentViewHolder.tvMoneyItem.setText("+" + amount.substring(0, amount.indexOf(".")));
+                } else {
+                    contentViewHolder.tvMoneyItem.setText("+" + redMoreAdapterEntry.getAmount());
+                }
                 contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
                 contentViewHolder.tvMoneyItem.setTextColor(context.getResources().getColor(R.color.red));
+                if (!redMoreAdapterEntry.getToUserAvatar().equals("")) {
+                    Picasso.with(context).load(Utils.GetPhotoPath(redMoreAdapterEntry.getFromUserAvatar())).into(contentViewHolder.imgItem);
+                } else {
+                    contentViewHolder.imgItem.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
+                }
             } else {
                 contentViewHolder.tvNameItem.setText("转出-转给");
-                contentViewHolder.tvMoneyItem.setText("-" + Utils.getPercentTwoStr((float) redMoreAdapterEntry.getAmount()));
+                if (redMoreAdapterEntry.getAmount() < 1) {
+                    contentViewHolder.tvMoneyItem.setText("-" + redMoreAdapterEntry.getAmount());
+                } else {
+                    contentViewHolder.tvMoneyItem.setText("-" + amount.substring(0, amount.indexOf(".")));
+                }
+
                 contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getToUserNick());
                 contentViewHolder.tvMoneyItem.setTextColor(context.getResources().getColor(android.R.color.black));
+                if (!redMoreAdapterEntry.getToUserAvatar().equals("")) {
+                    Picasso.with(context).load(Utils.GetPhotoPath(redMoreAdapterEntry.getToUserAvatar())).into(contentViewHolder.imgItem);
+                } else {
+                    contentViewHolder.imgItem.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
+                }
             }
 
-            if (!redMoreAdapterEntry.getToUserAvatar().equals("")) {
-                Picasso.with(context).load(Utils.GetPhotoPath(redMoreAdapterEntry.getToUserAvatar())).into(contentViewHolder.imgItem);
-            } else {
-                contentViewHolder.imgItem.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_head));
-            }
 
             //   contentViewHolder.tvMoneyItem.setText("+" + redMoreAdapterEntry.getAmount());
 

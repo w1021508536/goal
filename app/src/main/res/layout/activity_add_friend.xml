@@ -86,7 +86,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_toRightOf="@id/search_first_image"
                 android:background="@null"
-                android:hint="搜索用户昵称或手机号"
+                android:hint="搜索用户昵称"
                 android:imeOptions="actionSearch"
                 android:padding="5dp"
                 android:singleLine="true"

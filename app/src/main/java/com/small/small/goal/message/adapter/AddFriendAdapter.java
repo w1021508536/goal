@@ -92,7 +92,6 @@ public class AddFriendAdapter extends BaseAdapter {
                 XUtil.get(requestParams, context, new XUtil.XCallBackLinstener() {
                     @Override
                     public void onSuccess(String result) {
-                        System.out.println("==========申请添加好友===========" + result);
                         try {
                             String code = new JSONObject(result).getString("code");
                             if (code.equals("0")) {

@@ -165,7 +165,6 @@ public class MatchFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=============足球赛事列表=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -215,7 +214,6 @@ public class MatchFragment extends Fragment {
             public void onError(Throwable ex, boolean isOnCallback) {
 //                matchList.onRefreshComplete();
                 swipe.setRefreshing(false);
-                System.out.println("=============足球赛事列表=====onError====" + ex.getMessage());
             }
 
             @Override
@@ -233,7 +231,6 @@ public class MatchFragment extends Fragment {
         if (isVisibleToUser) {
             //需要放在onResume的方法放在该处执行
             if (matchListAdapter != null) {
-                System.out.println("==============matchfragment===========");
                 matchListAdapter.notifyDataSetChanged();
             }
         } else {

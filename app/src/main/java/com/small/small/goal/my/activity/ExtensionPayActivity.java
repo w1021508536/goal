@@ -202,7 +202,6 @@ public class ExtensionPayActivity extends BaseActivity {
 
 
         if (data == null) return;
-        //   System.out.print("===============" + data.getExtras().getString("pay_result"));
         //支付页面返回处理
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -230,7 +229,6 @@ public class ExtensionPayActivity extends BaseActivity {
                     Utils.showToast(this, "支付失败");
                     Intent intent = new Intent();
                     setResult(Code.FailCode, intent);
-                    System.out.println("===============" + errorMsg + "========" + extraMsg);
                     finish();
                 } else if (result.equals("cancel")) {
                     Utils.showToast(this, "取消支付");
@@ -271,7 +269,6 @@ public class ExtensionPayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============AimDynamic=========" + result);
                 try {
                     if (Utils.callOk(result,ExtensionPayActivity.this)) {
                         if (channel.equals("balance")) {
@@ -284,7 +281,6 @@ public class ExtensionPayActivity extends BaseActivity {
                             BalancePay(orderId);
                         } else {
                             String json = new JSONObject(result).getJSONObject("result").getString("charge");
-                            System.out.println("==============AimDynamic=====json====" + json);
                             Pingpp.createPayment(ExtensionPayActivity.this, json);
                         }
 

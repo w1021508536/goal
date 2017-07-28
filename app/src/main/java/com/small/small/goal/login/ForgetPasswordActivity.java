@@ -128,7 +128,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========code=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -158,7 +157,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void ModifyPassword() {
-        System.out.println("==========ModifyPassword=========");
         RequestParams requestParams = new RequestParams(Url.Url + Url.ForgetPassword);
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
         requestParams.addBodyParameter("password", password_edit.getText().toString().trim());
@@ -167,7 +165,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========ModifyPassword=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
 
@@ -189,7 +186,6 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("==========ModifyPassword====ex=====" + ex.getMessage());
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(ForgetPasswordActivity.this, ex.getMessage());
                 }

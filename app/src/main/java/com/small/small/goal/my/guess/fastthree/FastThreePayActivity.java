@@ -377,13 +377,10 @@ public class FastThreePayActivity extends BaseActivity {
                 content = content + ";";
             }
         }
-        System.out.println("============content===========" + content);
         requestParams.addBodyParameter("content", content);
         XUtil.post(requestParams, FastThreePayActivity.this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("=======================" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");
@@ -407,7 +404,6 @@ public class FastThreePayActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("===========ex============" + ex.getMessage());
             }
 
             @Override
@@ -596,7 +592,6 @@ public class FastThreePayActivity extends BaseActivity {
             if (data != null) {
                 getFastThreeEmpty = (FastThreeEmpty) data.getSerializableExtra("fastThreeEmpty");
 
-                System.out.println("============getFastThreeEmpty================" + getFastThreeEmpty.getStatus());
 
                 if (getFastThreeEmpty != null) {
                     if (getFastThreeEmpty.getStatus() == 12) {

@@ -209,7 +209,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             }
 
             protected void doComplete(Object values) {
-                System.out.println("======qq==info======" + values.toString());
                 try {
                     nick_qq = new JSONObject(values.toString()).getString("nickname");
                     avatar_qq = new JSONObject(values.toString()).getString("figureurl_qq_1");
@@ -245,7 +244,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=======qq====result====" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");

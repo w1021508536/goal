@@ -299,7 +299,6 @@ public class RedHaveActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-//                System.out.println("=========GetRedList=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -439,7 +438,6 @@ public class RedHaveActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========DrawRedPacket=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -485,7 +483,6 @@ public class RedHaveActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========GetRedPacketData=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -507,7 +504,6 @@ public class RedHaveActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=========GetRedPacketData===ex==========" + ex.getMessage());
                 if (!ex.getMessage().equals("")) {
                     Utils.showToast(RedHaveActivity.this, ex.getMessage());
                 }

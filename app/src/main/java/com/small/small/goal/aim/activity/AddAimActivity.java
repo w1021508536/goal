@@ -212,7 +212,6 @@ public class AddAimActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.right_text:
-                System.out.println("=========dianji=========");
                 name = aim_edit.getText().toString().trim();
                 if (name.equals("")) {
                     Utils.showToast(this, "目标名称不可为空");
@@ -367,12 +366,10 @@ public class AddAimActivity extends BaseActivity {
             } else if (resultCode == Code.RESULT_CAMERA_CODE) {
                 photoFrom = 0;
                 imgLoad = data.getStringExtra("path");
-                System.out.println("===============CAMERA======imgLoad======" + imgLoad);
                 photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
             } else if (resultCode == Code.RESULT_GALLERY_CODE) {
                 photoFrom = 0;
                 imgLoad = data.getStringExtra("path");
-                System.out.println("===============imgLoad============" + imgLoad);
                 photo_image.setImageBitmap(BitmapFactory.decodeFile(imgLoad));
             } else if (resultCode == Code.RESULT_OWM_CODE) {
                 if (!data.getStringExtra("path").equals("")) {
@@ -398,7 +395,6 @@ public class AddAimActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=========photo=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -447,7 +443,6 @@ public class AddAimActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============aim=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -580,7 +575,6 @@ public class AddAimActivity extends BaseActivity {
         ok_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("=============cycle_window=====" + cycle_window);
                 cycle = cycle_window;
                 cycle_text.setText(cycle);
                 popupWindow.dismiss();

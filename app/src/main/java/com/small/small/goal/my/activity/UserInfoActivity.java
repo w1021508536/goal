@@ -457,7 +457,6 @@ public class UserInfoActivity extends BaseActivity {
         UerEntity userInfo = CacheUtil.getInstance().getUserInfo();
         String mobile = CacheUtil.getInstance().getUserInfo().getUser().getMobile();
         String wechatId = CacheUtil.getInstance().getUserInfo().getUser().getWechatId();
-        Log.v("TAG", wechatId + "");
         if (mobile == null || "".equals(mobile)) {
             tvPhoneBindUser.setText("去绑定");
         } else {

@@ -65,9 +65,11 @@ public class MyApplication extends MultiDexApplication {
         deviceId = TelephonyMgr.getDeviceId();
 
         PlatformConfig.setWeixin(ThirdUtils.WX_APP_ID, ThirdUtils.WX_APP_SECRET);
-        PlatformConfig.setQQZone(ThirdUtils.QQ_APP_ID, ThirdUtils.QQ_APP_KEY);
-        UMShareAPI.get(this);
         Config.DEBUG = true;
+        PlatformConfig.setQQZone(ThirdUtils.QQ_APP_ID, ThirdUtils.QQ_APP_KEY);
+        Config.DEBUG = true;
+        UMShareAPI.get(this);
+
     }
 
     public static String getCurProcessName(Context context) {

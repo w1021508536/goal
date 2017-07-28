@@ -409,12 +409,6 @@ public class CityFragment extends Fragment {
         private Context context;
 
 
-        private ImageOptions imageOptions = new ImageOptions.Builder()
-                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setLoadingDrawableId(R.mipmap.background_load)
-                .setFailureDrawableId(R.mipmap.background_fail)
-                .build();
-
         public HotAdapter(Context context) {
             this.context = context;
 
@@ -749,6 +743,15 @@ public class CityFragment extends Fragment {
                 }
 
                 if (imageList.size() == 1) {
+
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 2, width)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
+
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
@@ -760,6 +763,15 @@ public class CityFragment extends Fragment {
                     viewHolder.image1.setLayoutParams(layoutParams1);
 
                 } else if (imageList.size() == 2) {
+
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 2, width / 2)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
+
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
@@ -778,6 +790,15 @@ public class CityFragment extends Fragment {
                     viewHolder.image2.setLayoutParams(layoutParams2);
 
                 } else if (imageList.size() == 3) {
+
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 3, width / 3)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
+
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);

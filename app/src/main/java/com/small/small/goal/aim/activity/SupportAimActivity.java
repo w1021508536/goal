@@ -218,8 +218,6 @@ public class SupportAimActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.right_text:
-                System.out.println("=========dianji=========");
-
                 if (payMoney.equals("")) {
                     Utils.showToast(this, "请填写存入金额");
 

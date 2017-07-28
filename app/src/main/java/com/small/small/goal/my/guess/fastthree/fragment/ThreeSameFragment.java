@@ -163,7 +163,6 @@ public class ThreeSameFragment extends Fragment {
 
     public static void ChangeNext() {
 
-        System.out.println("=========isTongXuan=========" + isTongXuan);
         if (numberList.size() < 1 && isTongXuan == 0) {
             FastThreeActivity.instance.nextText.setText("至少选择1组号码");
         } else {
@@ -207,7 +206,6 @@ public class ThreeSameFragment extends Fragment {
             @Override
             public void onSuccess(String result) {
 
-                System.out.print("==========GetHistory==========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

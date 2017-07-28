@@ -294,9 +294,6 @@ public class FootBallActivity extends FragmentActivity {
         XUtil.post(requestParams, FootBallActivity.this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("=======================" + result);
-
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -313,7 +310,6 @@ public class FootBallActivity extends FragmentActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("===========ex============" + ex.getMessage());
             }
 
             @Override

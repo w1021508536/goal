@@ -163,7 +163,6 @@ public class TwoNotSameFragment extends Fragment {
             @Override
             public void onSuccess(String result) {
 
-                System.out.print("==========GetHistory==========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

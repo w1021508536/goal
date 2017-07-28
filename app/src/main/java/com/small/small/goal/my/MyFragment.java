@@ -237,9 +237,6 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onSuccess(String result) {
 
-                Log.v("TAG", result);
-
-
                 if (!Utils.callOk(result, getActivity())) {
                     tvTaskNumsFragment.setText(0 + "/" + 5);
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setFinishTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getFinishTaskCount());

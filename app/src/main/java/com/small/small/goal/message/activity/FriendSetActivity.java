@@ -72,10 +72,8 @@ public class FriendSetActivity extends BaseActivity {
                 // TODO Auto-generated method stub
                 if (isChecked) {
                     AddBlack();
-                    System.out.println("==========true==============");
                 } else {
                     RemoveBlack();
-                    System.out.println("==========false==============");
                 }
             }
         });
@@ -117,7 +115,6 @@ public class FriendSetActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========拉黑========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -151,7 +148,6 @@ public class FriendSetActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========移除拉黑========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

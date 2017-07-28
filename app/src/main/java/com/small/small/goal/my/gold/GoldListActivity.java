@@ -199,7 +199,6 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("========金豆记录========" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");
@@ -249,8 +248,6 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("========金豆记录==ex======" + ex.getMessage());
-
 
                 nullLayout.setClickable(true);
                 nullLayout.setVisibility(View.VISIBLE);

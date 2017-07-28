@@ -160,19 +160,6 @@ public class InviteActivity extends BaseActivity implements View.OnClickListener
                 map.put("HeadId", String.valueOf(HeadId));
                 map.put("LetterName", LetterName);
 
-//                Cursor groupContactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                        new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
-//                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + ContactId,
-//                        null,
-//                        null);
-//                while (groupContactCursor.moveToNext()) {
-//                    groupContactCursor.getString(0);
-//                    System.out.println("=============" + groupContactCursor.getString(0));
-//                    map.put("Number", groupContactCursor.getString(0));
-//                }
-//                groupContactCursor.close();
-
-
                 contacts_list.add(map);
 
             }

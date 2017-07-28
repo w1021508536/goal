@@ -153,7 +153,6 @@ public class SaveMoneyActivity extends BaseActivity {
 
     private void init() {
 
-        System.out.println("========================" + budget + "=====" + haveMoney);
         MaxMoney = budget - haveMoney;
 
         money_edit.addTextChangedListener(new TextWatcher() {

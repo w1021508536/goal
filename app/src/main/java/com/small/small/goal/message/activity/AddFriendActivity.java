@@ -163,7 +163,6 @@ public class AddFriendActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("================searchuser========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     dataList.clear();

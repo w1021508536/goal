@@ -135,6 +135,10 @@ public class AimMoreActivity extends BaseActivity {
 
     public static final int REQUEST_AIM_MORE = 10111;
 
+    private String title = "小目标";
+    private String describe = "";
+    private String imgUrl = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -197,7 +201,6 @@ public class AimMoreActivity extends BaseActivity {
                     setHeadViewData(targetHeadEntity);
                 } catch (Exception e) {
                     Log.v("TAG", "'");
-//com.google.gson.JsonSyntaxException: java.lang.NumberFormatException: Expected an int but was 0.9 at line 1 column 800 path $.supports[1].remainMoney
                 }
             }
 
@@ -293,6 +296,9 @@ public class AimMoreActivity extends BaseActivity {
     private void setHeadViewData(TargetHeadEntity targetHeadEntity) {
 
         try {
+            title = targetHeadEntity.getAim().getName();
+            describe = targetHeadEntity.getAim().getBrief();
+            imgUrl = targetHeadEntity.getAim().getImg();
             nameTextInclude.setText(targetHeadEntity.getAim().getName());
             if (header == null) return;
             TextView tv_budget = (TextView) header.findViewById(R.id.tv_budget_head);   //预算额度
@@ -725,16 +731,18 @@ public class AimMoreActivity extends BaseActivity {
      **/
     private void share() {
 
-        UMImage image = new UMImage(this, R.mipmap.about_us_logo);//网络图片
-        new ShareAction(this).withText("测试").withMedia(image)
+        UMWeb web = new UMWeb("http://www.smallaim.cn/");
+        web.setTitle(title);//标题
+        web.setDescription(describe);//描述
+        if (imgUrl.equals("")) {
+            web.setThumb(new UMImage(this, R.drawable.image1));  //缩略图
+        } else {
+            web.setThumb(new UMImage(this, Utils.GetPhotoPath(imgUrl)));  //缩略图
+        }
+
+        new ShareAction(this).withMedia(web)
                 .setDisplayList(SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE, SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE)
-
                 .setCallback(umShareListener).open();
-
-//        UMWeb web = new UMWeb(Defaultcontent.url);
-//        web.setTitle("This is music title");//标题
-//        web.setThumb(thumb);  //缩略图
-//        web.setDescription("my description");//描述
     }
 
     private UMShareListener umShareListener = new UMShareListener() {
@@ -747,7 +755,7 @@ public class AimMoreActivity extends BaseActivity {
         public void onResult(SHARE_MEDIA platform) {
             Log.d("plat", "platform" + platform);
 
-            Toast.makeText(AimMoreActivity.this, platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AimMoreActivity.this, " 分享成功啦", Toast.LENGTH_SHORT).show();
 
 
             RequestParams requestParams = Utils.getRequestParams(AimMoreActivity.this);
@@ -780,6 +788,7 @@ public class AimMoreActivity extends BaseActivity {
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
+
             Toast.makeText(AimMoreActivity.this, platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
             if (t != null) {
                 Log.d("throw", "throw:" + t.getMessage());
@@ -854,7 +863,6 @@ public class AimMoreActivity extends BaseActivity {
                     @Override
                     public void onSuccess(String result) {
                         //    Utils.showToast(this, result);
-                        System.out.println("=======感谢红包=========" + result);
                         try {
                             String code = new JSONObject(result).getString("code");
                             if (Utils.callOk(result, AimMoreActivity.this)) {
@@ -960,8 +968,6 @@ public class AimMoreActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========photo=========" + result);
-
                 if (!Utils.callOk(result, AimMoreActivity.this)) return;
 
             }

@@ -195,7 +195,6 @@ public class XUtil {
 
             @Override
             public void onCancelled(CancelledException cex) {
-                System.out.println("========not===null===get==cancelled====");
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
             }

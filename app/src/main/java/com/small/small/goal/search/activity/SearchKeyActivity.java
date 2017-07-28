@@ -222,7 +222,6 @@ public class SearchKeyActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=====getaim=======" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

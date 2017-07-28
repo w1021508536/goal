@@ -186,7 +186,6 @@ public class BlackListActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("=======GetFriendsListData======" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");
@@ -504,7 +503,6 @@ public class BlackListActivity extends BaseActivity {
                     XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("==========移除拉黑========" + result);
                             try {
                                 String code = new JSONObject(result).getString("code");
                                 if (code.equals("0")) {

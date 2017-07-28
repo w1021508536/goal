@@ -100,13 +100,11 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         requestParams.addHeader("deviceId", MyApplication.deviceId);
         requestParams.addBodyParameter("uid", Utils.UserSharedPreferences(this).getString("id", ""));
 
-        System.out.println("=========id=============" + Utils.UserSharedPreferences(this).getString("id", ""));
         requestParams.addBodyParameter("p", "1");
         requestParams.addBodyParameter("r", "20");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========GetCode=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -156,7 +154,6 @@ public class DistributionActivity extends BaseActivity implements MonthDialog.On
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=========GetData=============" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

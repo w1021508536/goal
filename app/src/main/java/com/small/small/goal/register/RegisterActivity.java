@@ -162,7 +162,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void GetCode() {
-        time.start();
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.GetCode);
         requestParams.addHeader("deviceId", deviceId);
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
@@ -170,14 +170,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========code=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-
-
+                        time.start();
                     } else {
-
+                        Utils.showToast(RegisterActivity.this, new JSONObject(result).getString("msg"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -212,7 +210,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         x.http().request(HttpMethod.PUT, requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========register=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
 

@@ -134,7 +134,6 @@ public class GoldPayActivity extends BaseActivity {
 
                 break;
             case R.id.alipay_layout:
-                System.out.println("==========AlipayGphone==========" + Utils.isAppInstalled(this, "com.eg.android.AlipayGphone"));
                 if (Utils.isAppInstalled(this, "com.eg.android.AlipayGphone")) {
                     wechat_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
                     balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
@@ -198,7 +197,6 @@ public class GoldPayActivity extends BaseActivity {
                     Utils.showToast(GoldPayActivity.this, "支付失败");
                     Intent intent = new Intent();
                     setResult(Code.FailCode, intent);
-                    System.out.println("===============" + errorMsg + "========" + extraMsg);
                     finish();
                 } else if (result.equals("cancel")) {
                     Utils.showToast(GoldPayActivity.this, "取消支付");
@@ -244,7 +242,6 @@ public class GoldPayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============支付=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -253,7 +250,6 @@ public class GoldPayActivity extends BaseActivity {
                             BalancePay();
                         } else {
                             String json = new JSONObject(result).getString("result");
-                            System.out.println("==============AimDynamic=====json====" + json);
                             Pingpp.createPayment(GoldPayActivity.this, json);
                         }
 
@@ -267,7 +263,6 @@ public class GoldPayActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("==============支付=====ex====" + ex.getMessage());
                 if (ex.getMessage() != null && !ex.getMessage().equals("")) {
                     Utils.showToast(GoldPayActivity.this, ex.getMessage());
                 }
@@ -294,7 +289,6 @@ public class GoldPayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============BalancePay=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/in"
-        layout="@layout/view_include" />
+        layout="@layout/view_include_guess" />
 
     <ScrollView
         android:layout_width="match_parent"

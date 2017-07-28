@@ -126,7 +126,6 @@ public class LoginCodeActivity extends BaseActivity implements View.OnClickListe
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==========code=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -163,9 +162,6 @@ public class LoginCodeActivity extends BaseActivity implements View.OnClickListe
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("=======qq====result====" + result);
-
                 try {
                     String code = new JSONObject(result).getString("code");
 

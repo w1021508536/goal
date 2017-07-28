@@ -344,11 +344,7 @@ public class AddFriendSearchActivity extends BaseActivity {
     class AddFriendSearchAdapter extends BaseAdapter {
 
         private Context context;
-        private ImageOptions imageOptions = new ImageOptions.Builder()
-                .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
-                .setLoadingDrawableId(R.mipmap.background_load)
-                .setFailureDrawableId(R.mipmap.background_fail)
-                .build();
+
 
         List<Map<String, String>> imageList;
 
@@ -383,7 +379,6 @@ public class AddFriendSearchActivity extends BaseActivity {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            System.out.println("================" + userSearchEntityList.get(position).getAimEntityList().size() + "===========" + position);
             if (!userSearchEntityList.get(position).getAvatar().equals("")) {
                 Picasso.with(context).load(Utils.GetPhotoPath(userSearchEntityList.get(position).getAvatar())).into(viewHolder.headImage);
             } else {
@@ -416,7 +411,6 @@ public class AddFriendSearchActivity extends BaseActivity {
                     XUtil.post(requestParams, context, new XUtil.XCallBackLinstener() {
                         @Override
                         public void onSuccess(String result) {
-                            System.out.println("==========attention==============" + result);
                             try {
                                 if (new JSONObject(result).getString("code").equals("0")) {
                                     if (userSearchEntityList.get(position).getIsFollowed().equals("0")) {
@@ -473,7 +467,6 @@ public class AddFriendSearchActivity extends BaseActivity {
                 viewHolder.imageLayout.setVisibility(View.GONE);
             } else {
                 viewHolder.imageLayout.setVisibility(View.VISIBLE);
-                System.out.println("=============position====userSearchEntityList=======" + position + "====" + userSearchEntityList.get(position).getAimEntityList().size());
                 for (int i = 0; i < userSearchEntityList.get(position).getAimEntityList().size(); i++) {
                     if (imageList.size() < 3) {
                         if (!userSearchEntityList.get(position).getAimEntityList().get(i).getImg().equals("")) {
@@ -484,10 +477,16 @@ public class AddFriendSearchActivity extends BaseActivity {
                         }
                     }
                 }
-
-                System.out.println("=============position===========" + position + "====" + imageList.size());
-
                 if (imageList.size() == 1) {
+
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 2, width)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
+
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.GONE);
                     viewHolder.image3.setVisibility(View.GONE);
@@ -498,6 +497,15 @@ public class AddFriendSearchActivity extends BaseActivity {
                     viewHolder.image1.setLayoutParams(layoutParams1);
 
                 } else if (imageList.size() == 2) {
+
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 2, width / 2)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
+
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.GONE);
@@ -516,6 +524,15 @@ public class AddFriendSearchActivity extends BaseActivity {
                     viewHolder.image2.setLayoutParams(layoutParams2);
 
                 } else if (imageList.size() == 3) {
+
+                    ImageOptions imageOptions = new ImageOptions.Builder()
+                            .setImageScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setLoadingDrawableId(R.mipmap.background_load)
+                            .setSize(width / 3, width / 3)
+                            .setPlaceholderScaleType(ImageView.ScaleType.CENTER_CROP)
+                            .setFailureDrawableId(R.mipmap.background_fail)
+                            .build();
+
                     viewHolder.image1.setVisibility(View.VISIBLE);
                     viewHolder.image2.setVisibility(View.VISIBLE);
                     viewHolder.image3.setVisibility(View.VISIBLE);

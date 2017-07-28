@@ -133,8 +133,6 @@ public class SystemMessageListActivity extends BaseActivity  {
                     if (code.equals("0")) {
                         JSONArray contentObject = new JSONObject(result).getJSONArray("result");
 
-                        System.out.println("=============GetSystemListData============" + result);
-
                         for (int i = 0; i < contentObject.length(); i++) {
 
                             map = new HashMap<String, String>();

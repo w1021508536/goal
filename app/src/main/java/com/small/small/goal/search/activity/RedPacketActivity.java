@@ -146,7 +146,6 @@ public class RedPacketActivity extends BaseActivity {
 
                     JSONArray jsonArray = jsonObject.getJSONArray("records");
 
-                    System.out.println("==========jsonArray===============" + jsonArray.length());
                     for (int i = 0; i < jsonArray.length(); i++) {
 //                redPacketRecordId": 121, "userId": 33, "money": 1.06, "
 //                packetId": 11, "createTime": 1496382687000, "type": 1, "nick": "Doris%F0%9F%90%BF", "avatar": "jpg"

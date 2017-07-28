@@ -26,9 +26,6 @@ import com.small.small.goal.R;
 import com.small.small.goal.my.entry.UerEntity;
 import com.small.small.goal.my.gold.GoldPayActivity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.ChooseOvalEntity;
-import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
-import com.small.small.goal.my.guess.fastthree.FastThreePayActivity;
-import com.small.small.goal.my.guess.fastthree.empty.FastThreeEmpty;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Code;
@@ -41,7 +38,6 @@ import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.utils.dialog.HuiFuDialog2;
 
-import org.json.JSONObject;
 import org.xutils.http.RequestParams;
 
 import java.text.ParseException;
@@ -245,7 +241,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             }
 
         }
-        tvMyDou.setText("我的金豆：" + account.getBean() + " 您选择了" + zhuNums + "注");
+        tvMyDou.setText("我的金豆：" + account.getBean());
 
 
     }
@@ -344,8 +340,6 @@ public class ChooseAddMoneyActivity extends BaseActivity {
                 }
             }
         }
-        System.out.println("===========context=======" + context);
-
         final Integer tou = Integer.valueOf(etvTouNums.getText().toString());
         final Integer zhui = Integer.valueOf(etvZhuiNums.getText().toString());
         RequestParams requestParams = new RequestParams(Url.Url + "/wager");
@@ -374,7 +368,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
 
                 if (b) {
                     account.setBean((Integer.valueOf(account.getBean()) - (tou * zhui * zhuNums * 20)) + "");
-                    tvMyDou.setText("我的金豆：" + account.getBean() + "您选择了" + zhuNums + "注");
+                    tvMyDou.setText("我的金豆：" + account.getBean());
                     PutWindow(v);
                     CacheUtil.getInstance().closeElevenChooseFive();
                 } else {
@@ -617,7 +611,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
         if (resultCode == Code.SupportAim) {
             account.setBean(Long.valueOf(account.getBean()) + Long.valueOf(bean_pay) + "");
             bean_text.setText(account.getBean());
-            tvMyDou.setText("我的金豆：" + account.getBean() + " 您选择了" + zhuNums + "注");
+            tvMyDou.setText("我的金豆：" + account.getBean());
         } else if (resultCode == Code.FailCode) {
 
         }
@@ -753,7 +747,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             List<ChooseOvalEntity> oneData = new ArrayList<>();
             for (Map.Entry<Integer, List<ChooseOvalEntity>> eny : map.entrySet()) {
 
-                vh.tvType.setText(types[eny.getKey()]);
+                vh.tvType.setText("["+types[eny.getKey()]+"]");
                 oneData = map.get(eny.getKey());
             }
 
@@ -779,6 +773,60 @@ public class ChooseAddMoneyActivity extends BaseActivity {
                 }
             });
 
+
+            int notes = 0;
+            Set<Integer> integers = map.keySet();
+            for (Integer i : integers) {
+                List<ChooseOvalEntity> chooseOvalEntities = map.get(i);
+                if (i == 9) {
+                    int now = 1;
+                    int qian = 0;
+                    int last = 0;
+                    for (ChooseOvalEntity entity : chooseOvalEntities) {
+
+                        if (entity.getContent().equals(",")) {
+                            now = 2;
+                        } else {
+                            if (now == 1) {
+                                qian++;
+                            } else {
+                                last++;
+                            }
+                        }
+                    }
+                    notes += qian * last;
+                } else if (i == 11) {
+                    int now = 1;
+                    int qian = 0;
+                    int last = 0;
+                    int san = 0;
+                    for (ChooseOvalEntity entity : chooseOvalEntities) {
+                        if (entity.getContent().equals(",")) {
+                            now++;
+                        } else {
+                            if (now == 1) {
+                                qian++;
+                            } else if (now == 2) {
+                                last++;
+                            } else if (now == 3) {
+                                san++;
+                            }
+                        }
+                    }
+
+                    notes += qian * last * san;
+                } else if (i == 10) {
+                    notes += Combine.getNumber(2, chooseOvalEntities.size());
+                } else if (i == 12) {
+                    notes += Combine.getNumber(3, chooseOvalEntities.size());
+                } else {
+                    notes += Combine.getNumber(i, chooseOvalEntities.size());
+                }
+            }
+
+            vh.notesText.setText(notes + "注");
+
+
             return convertView;
         }
 
@@ -790,6 +838,8 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             TextView tvRed;
             @InjectView(R.id.img_delete)
             ImageView imgDelete;
+            @InjectView(R.id.notes_text)
+            TextView notesText;
 
             ViewHolder(View view) {
                 ButterKnife.inject(this, view);

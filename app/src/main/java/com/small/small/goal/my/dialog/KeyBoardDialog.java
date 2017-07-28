@@ -175,7 +175,6 @@ public class KeyBoardDialog extends AlertDialog {
                     for (int i = 0; i < 6; i++) {
                         strPassword += tvList[i].getText().toString().trim();
                     }
-                    System.out.println("strPassword :" + strPassword);
                     //           verifyPass(strPassword);
                     if (linener != null) {
                         linener.onKey(strPassword);

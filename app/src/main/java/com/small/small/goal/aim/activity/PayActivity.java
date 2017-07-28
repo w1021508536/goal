@@ -164,7 +164,6 @@ public class PayActivity extends BaseActivity {
 
                 break;
             case R.id.alipay_layout:
-                System.out.println("==========AlipayGphone==========" + Utils.isAppInstalled(this, "com.eg.android.AlipayGphone"));
                 if (Utils.isAppInstalled(this, "com.eg.android.AlipayGphone")) {
                     wechat_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
                     balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
@@ -217,7 +216,6 @@ public class PayActivity extends BaseActivity {
 
 
         if (data == null) return;
-        //   System.out.print("===============" + data.getExtras().getString("pay_result"));
         //支付页面返回处理
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
@@ -245,7 +243,6 @@ public class PayActivity extends BaseActivity {
                     Utils.showToast(PayActivity.this, "支付失败");
                     Intent intent = new Intent();
                     setResult(Code.FailCode, intent);
-                    System.out.println("===============" + errorMsg + "========" + extraMsg);
                     finish();
                 } else if (result.equals("cancel")) {
                     Utils.showToast(PayActivity.this, "取消支付");
@@ -299,7 +296,6 @@ public class PayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -308,7 +304,6 @@ public class PayActivity extends BaseActivity {
                             BalancePay();
                         } else {
                             String json = new JSONObject(result).getJSONObject("result").getString("charge");
-                            System.out.println("==============AimDynamic=====json====" + json);
                             Pingpp.createPayment(PayActivity.this, json);
                         }
 
@@ -350,7 +345,6 @@ public class PayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

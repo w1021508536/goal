@@ -96,7 +96,6 @@ public class HotFragment extends Fragment {
         matchList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("=======position========="+position);
                 Intent intent = new Intent(getActivity(), FootBallDetailsActivity.class);
                 intent.putExtra("matchId", matchEmptyList.get(position - 1).getId());
                 intent.putExtra("match", matchEmptyList.get(position - 1));
@@ -122,7 +121,6 @@ public class HotFragment extends Fragment {
         XUtil.get(requestParams, getActivity(), new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=============足球赛事列表=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -167,7 +165,6 @@ public class HotFragment extends Fragment {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 swipe.setRefreshing(false);
-                System.out.println("=============足球赛事列表=====onError====" + ex.getMessage());
             }
 
             @Override
@@ -184,8 +181,6 @@ public class HotFragment extends Fragment {
         if (isVisibleToUser) {
             //需要放在onResume的方法放在该处执行
             if (matchListAdapter != null) {
-                System.out.println("==============hotfragment===========");
-
                 matchListAdapter.notifyDataSetChanged();
             }
         } else {

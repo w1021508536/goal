@@ -97,7 +97,9 @@ public class TransferMoreActivity extends BaseActivity implements MonthDialog.On
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("==============" + result);
+
+                System.out.println("======================="+result);
+
                 if (!Utils.callOk(result, TransferMoreActivity.this)) return;
 
                 Gson gson = new Gson();

@@ -233,7 +233,6 @@ public class BindPhoneNextActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==========getCode=========" + result);
                 if (!Utils.callOk(result,BindPhoneNextActivity.this))
                     Utils.showToast(BindPhoneNextActivity.this, Utils.getMsg(result));
                 return;

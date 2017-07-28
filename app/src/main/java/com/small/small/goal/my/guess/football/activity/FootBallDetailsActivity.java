@@ -207,7 +207,6 @@ public class FootBallDetailsActivity extends BaseActivity {
         XUtil.get(requestParams, FootBallDetailsActivity.this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=============足球详情=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -371,7 +370,6 @@ public class FootBallDetailsActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("=============足球详情=====onError====" + ex.getMessage());
             }
 
             @Override

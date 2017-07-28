@@ -250,7 +250,6 @@ public class MontyToActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {

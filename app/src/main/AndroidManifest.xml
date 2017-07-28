@@ -43,6 +43,8 @@
     <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -70,7 +72,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="tencent1106004131" />
+                <data android:scheme="tencent1106277072" />
             </intent-filter>
         </activity>
         <activity

@@ -140,7 +140,6 @@ public class SupportPayActivity extends BaseActivity {
 
                 break;
             case R.id.alipay_layout:
-                System.out.println("==========AlipayGphone==========" + Utils.isAppInstalled(this, "com.eg.android.AlipayGphone"));
                 if (Utils.isAppInstalled(this, "com.eg.android.AlipayGphone")) {
                     wechat_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
                     balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
@@ -204,7 +203,6 @@ public class SupportPayActivity extends BaseActivity {
                     Utils.showToast(SupportPayActivity.this, "支付失败");
                     Intent intent = new Intent();
                     setResult(Code.FailCode, intent);
-                    System.out.println("===============" + errorMsg + "========" + extraMsg);
                     finish();
                 } else if (result.equals("cancel")) {
                     Utils.showToast(SupportPayActivity.this, "取消支付");
@@ -240,8 +238,6 @@ public class SupportPayActivity extends BaseActivity {
 
 
     private void BalancePay() {
-        System.out.println("====================" + aimId + "===" + dynamicId + "-==" + money + "==" + channel);
-
         RequestParams requestParams = new RequestParams(Url.Url + Url.PayBalance);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -254,7 +250,6 @@ public class SupportPayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -288,8 +283,6 @@ public class SupportPayActivity extends BaseActivity {
     }
 
     private void DynamicAim() {
-        System.out.println("====================" + aimId + "===" + dynamicId + "-==" + money + "==" + channel);
-
         RequestParams requestParams = new RequestParams(Url.Url + Url.AimSupport);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
@@ -302,7 +295,6 @@ public class SupportPayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("==============AimDynamic=========" + result);
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -311,7 +303,6 @@ public class SupportPayActivity extends BaseActivity {
                             BalancePay();
                         } else {
                             String json = new JSONObject(result).getJSONObject("result").getString("charge");
-                            System.out.println("==============AimDynamic=====json====" + json);
                             Pingpp.createPayment(SupportPayActivity.this, json);
                         }
 

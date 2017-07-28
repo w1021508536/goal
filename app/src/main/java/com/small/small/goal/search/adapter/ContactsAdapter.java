@@ -98,7 +98,6 @@ public class ContactsAdapter extends BaseAdapter {
                         null);
                 while (groupContactCursor.moveToNext()) {
                     groupContactCursor.getString(0);
-                    System.out.println("=============" + groupContactCursor.getString(0));
                     number = groupContactCursor.getString(0);
                 }
                 groupContactCursor.close();

@@ -252,9 +252,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
             Float totalMoney = Float.valueOf(dataList.get(position_now).getMoney());
             totalMoney = totalMoney + Float.valueOf(money);
             dataList.get(position_now).setMoney(totalMoney + "");
-            if (viewPager.getChildAt(position_now) == null) {
-                System.out.println("================null==============");
-            }
             View currentView = viewPagerAdapter.getPrimaryItem();
 
             TextView tv_money = (TextView) currentView.findViewById(R.id.money_text);
@@ -401,7 +398,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
-                        System.out.println("========getaim============" + result);
                         JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
 
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -519,7 +515,6 @@ public class AimFragment extends Fragment implements View.OnClickListener {
         public void onPageSelected(int position) {
             // TODO Auto-generated method stub
             position_now = position;
-            System.out.println("==========position_now========" + position_now);
             for (int i = 0; i < imageViews.length; i++) {
                 imageViews[position].setBackgroundResource(R.mipmap.icon_dian_yellow);
                 //不是当前选中的page，其小圆点设置为未选中的状态

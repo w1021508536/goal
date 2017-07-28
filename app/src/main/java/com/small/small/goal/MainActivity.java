@@ -456,8 +456,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void connect(String token) {
         if (getApplicationInfo().packageName.equals(MyApplication.getCurProcessName(getApplicationContext()))) {
 
-            System.out.print("=");
-
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
 
                 /**
@@ -475,11 +473,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onSuccess(String userid) {
-                    System.out.println("====================" + userid);
-                    Log.d("LoginActivity", "--onSuccess" + userid);
-//                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-//                    finish();
-
                     userEditor.putString("RY_Id", userid);
                     userEditor.commit();
                 }
@@ -490,7 +483,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
-                    System.out.println("===========errorCode.getMessage()=========" + errorCode.getMessage());
                 }
             });
         }
@@ -503,8 +495,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                System.out.println("=============GetFriendsListData==========" + result);
-
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
@@ -608,20 +598,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("==========GetFollowListData===========" + result);
-
                 try {
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
                         utilsEditor.putString("followList", new JSONObject(result).getString("result"));
                         utilsEditor.commit();
                     }
-//                    else if(code.equals("100000")){
-//                        List<Map<String, String>> followList = new ArrayList<Map<String, String>>();
-//                        Utils.UtilsSharedPreferences(MainActivity.this).edit().putString("followList", Utils.changeFollowToJson(followList));
-//                        Utils.UtilsSharedPreferences(MainActivity.this).edit().commit();
-//                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -35,7 +35,6 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
 
     private IWXAPI wx_api;
 
-
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -46,21 +45,6 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
     private String openid_wx;
     private String nick_wx;
     private String avatar_wx;
-
-
-    private String id;
-    private String nick;
-    private String avatar;
-    private String brief;
-    private String wechatId;
-    private String qqId;
-    private String mobile;
-    private String city;
-    private String createTime;
-    private String updateTime;
-    private String token;
-    private String imtoken;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +60,8 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
         wx_api = WXAPIFactory.createWXAPI(this, ThirdUtils.WX_APP_ID, true);
         wx_api.registerApp(ThirdUtils.WX_APP_ID);
         wx_api.handleIntent(getIntent(), this);
+
+
     }
 
     @Override
@@ -105,18 +91,11 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
 
         switch (resp.errCode) {
             case BaseResp.ErrCode.ERR_OK:
-                System.out.println("========code===============11============");
                 if (ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX == resp.getType()) {
-//                    ProgressBar.stop();
-                    System.out.println("========code===============22============");
-                    Utils.showToast(WXEntryActivity.this, "分享成功");
-                    finish();
-//                    ThirdShareActivity.instance.finish();
+                    super.onResp(resp);
                     break;
                 }
                 String code = ((SendAuth.Resp) resp).code;
-
-                System.out.println("========code===" + code);
                 GetData(code, ((SendAuth.Resp) resp).state);
 //                GetWXData(code);
                 break;
@@ -148,7 +127,7 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
         XUtil.post(params, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!Utils.callOk(result,WXEntryActivity.this)) {
+                if (!Utils.callOk(result, WXEntryActivity.this)) {
 
                     Utils.showToast(WXEntryActivity.this, Utils.getMsg(result));
                     finish();
@@ -181,7 +160,6 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("======result=====" + result);
                 try {
                     access_token = new JSONObject(result).getString("access_token");
                     openid_wx = new JSONObject(result).getString("openid");
@@ -220,7 +198,6 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
             @Override
             public void onSuccess(String result) {
 
-                System.out.println("======result==userinfo===" + result);
                 try {
                     avatar_wx = new JSONObject(result).getString("headimgurl");
                     nick_wx = new JSONObject(result).getString("nickname");
@@ -257,8 +234,6 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-
-                System.out.println("=======qq====result====" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");

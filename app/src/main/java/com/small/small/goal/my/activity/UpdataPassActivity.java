@@ -232,7 +232,6 @@ public class UpdataPassActivity extends BaseActivity {
                     for (int i = 0; i < 6; i++) {
                         strPassword += tvList[i].getText().toString().trim();
                     }
-                    System.out.println("strPassword :" + strPassword);
 
                     Intent intent = new Intent(UpdataPassActivity.this, UpdataPassActivity.class);
 
