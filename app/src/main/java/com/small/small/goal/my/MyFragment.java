@@ -372,6 +372,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
     //判断是否为代理商
     private void GetCode() {
         RequestParams requestParams = new RequestParams(Url.Url + Url.Agent);
