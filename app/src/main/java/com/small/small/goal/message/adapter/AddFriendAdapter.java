@@ -24,7 +24,7 @@ import java.util.Map;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Administrator on 2017/5/26.
+ * Created by js on 2017/5/26.
  */
 
 public class AddFriendAdapter extends BaseAdapter {

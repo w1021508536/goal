@@ -86,9 +86,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                 finish();
                 break;
             case R.id.code_text:
+
                 if (phone_edit.getText().toString().trim().length() != 11) {
                     Toast.makeText(this, "请填写正确手机号码", Toast.LENGTH_SHORT).show();
                 } else {
+                    code_text.setClickable(false);
                     GetCode();
                 }
 
@@ -120,7 +122,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
     }
 
     private void GetCode() {
-        time.start();
+
         RequestParams requestParams = new RequestParams(Url.Url + Url.GetCode);
         requestParams.addHeader("deviceId", deviceId);
         requestParams.addBodyParameter("mobile", phone_edit.getText().toString().trim());
@@ -132,6 +134,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
                     String code = new JSONObject(result).getString("code");
                     if (code.equals("0")) {
                         Utils.showToast(ForgetPasswordActivity.this, "发送成功");
+                        time.start();
                     } else {
                         String msg = new JSONObject(result).getString("msg");
                         Utils.showToast(ForgetPasswordActivity.this, msg);
@@ -150,7 +153,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 
             @Override
             public void onFinished() {
-
+                code_text.setClickable(true);
             }
         });
 

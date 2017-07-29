@@ -288,6 +288,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            //个人信息
             case R.id.content_tv_fragment:
             case R.id.icon_fragment:
                 if ("".equals(sp.getString(KeyCode.USER_ID, ""))) {
@@ -296,56 +297,73 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                     startActivity(new Intent(getContext(), UserInfoActivity.class));
                 }
                 break;
+            //任务中心
             case R.id.ll_task_fragment:
                 startActivity(new Intent(getContext(), TaskActivity.class));
                 break;
+            //红包
             case R.id.ll_red_fragment:
                 startActivity(new Intent(getContext(), RedActivity.class));
                 break;
+            //我的关注
             case R.id.ll_follow_fragment:
                 startActivity(new Intent(getContext(), FollowActivity.class));
                 break;
+            //我的目标
             case R.id.ll_target_fragment:
                 startActivity(new Intent(getContext(), AimActivity.class));
                 break;
+            //我的收藏
             case R.id.ll_collect_framgent:
                 startActivity(new Intent(getContext(), CollectActivity.class));
                 break;
+            //我的钱包
             case R.id.ll_wallect_fragment:
                 startActivity(new Intent(getContext(), WalletActivity.class));
                 break;
+            //设置
             case R.id.right_image_include:
                 startActivity(new Intent(getContext(), SettingActivity.class));
                 break;
+            //经验值
             case R.id.tv_level_fragment:
                 startActivity(new Intent(getContext(), LevelActivity.class));
                 break;
+            //签到
             case R.id.left_image_include:
                 startActivity(new Intent(getContext(), SignActivity.class));
                 break;
+            //期权转让
             case R.id.ll_transfer_fragment:
                 startActivity(new Intent(getContext(), TransferActivity.class));
                 break;
+            //商城
             case R.id.ll_shopping_fragment:
                 Utils.showToast(getActivity(), "敬请期待");
                 break;
+            //推广码
             case R.id.ll_extension_fragment:
                 startActivity(new Intent(getContext(), ExtensionActivity.class));
                 break;
+            //合作伙伴
             case R.id.distribution_layout:
                 GetCode();
                 break;
+            //足球
             case R.id.football_layout:
                 startActivity(new Intent(getContext(), FootBallActivity.class));
                 break;
+            //快3
             case R.id.kuai3_layout:
                 Intent intent = new Intent(getContext(), FastThreeActivity.class);
                 intent.putExtra("status", "");
                 startActivity(intent);
                 break;
+            //11选5
             case R.id.xuan5_layout:
                 startActivity(new Intent(getContext(), ChooseMainActivity.class));
                 break;
+            //我的金豆
             case R.id.bean_layout:
                 startActivity(new Intent(getContext(), GoldListActivity.class));
                 break;

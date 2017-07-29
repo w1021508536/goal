@@ -37,10 +37,6 @@
 
     <color name="blue_text">#0099EF</color>
 
-
-    <color name="my_dengji_bg">#D615C8</color>
-
-    <color name="background_tab_pressed">#6633B5E5</color>
     //等级的背景蓝色
     <color name="bg_level_blue">#B0A2C6</color>
     <color name="line_level_red">#C05492</color>
@@ -55,26 +51,20 @@
     <color name="bg_view">#292D36</color>
     <color name="bg_hui_botton">#5B5E65</color>
 
-    <color name="bg_include">#373A41</color>
 
     <color name="bg_gray_light">#F0EFF5</color>
 
-    <!-- 浅灰色-->
-    <color name="bg_hui_activity">#FCFCFC</color>
     <!-- 字体 深灰色-->
     <color name="text_gray_heavy">#5A5A5A</color>
     <!-- 橘黄色下划线  -->
     <color name="bg_orange">#FFC000</color>
     <color name="yellow">#FEF900</color>
 
-    <color name="system_color">#242730</color>
     //灰色的字体颜色
-    <color name="text_white_hui">#ABACAE</color>
     <color name="text_hui">#6B6C80</color>
 
     <color name="text_yellow">#F6C310</color>
     <!-- 紫色的背景色 -->
-    <color name="zi_day_news">#8C54B1</color>
     <color name="red">#F64442</color>
     <color name="line_hui">#F0F0F0</color>
 
@@ -82,17 +72,9 @@
     <color name="bg_red">#F64442</color>
 
     <color name="red_heavy">#CF181A</color>
-    //紫色的线
-    <color name="line_violet">#A87ED2</color>
 
     <color name="blue">#015AAC</color>
 
-    <color name="hui_create_home_dialog">#EFE9F5</color>
-
-    <!--background_gary -->
-    <color name="gray_line_my">#3F424B</color>
-
     <color name="kaijiang">#FEB336</color>
-    <color name="green">#8EA62E</color>
     <color name="text_gray_light">#ABACAE</color>
 </resources>

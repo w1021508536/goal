@@ -194,10 +194,6 @@
             android:label="我的关注"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TaskListActivity"
-            android:label="任务中心"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".aim.activity.AddAimActivity"
             android:label="新建目标"
             android:screenOrientation="portrait" />

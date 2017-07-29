@@ -53,16 +53,11 @@ public class PositionAdapter extends BaseAdapter {
             viewHolder.title_text = (TextView) convertView.findViewById(R.id.title_text);
             viewHolder.check_image = (ImageView) convertView.findViewById(R.id.check_image);
             viewHolder.snippet_text = (TextView) convertView.findViewById(R.id.snippet_text);
-            viewHolder.left_image= (ImageView) convertView.findViewById(R.id.left_image);
+            viewHolder.left_image = (ImageView) convertView.findViewById(R.id.left_image);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-
-//        if (position == 0) {
-//            viewHolder.title_text.setText("不显示");
-//            viewHolder.snippet_text.setVisibility(View.GONE);
-//        } else {
 
         if (dataList.get(position).get("title").equals("不显示")) {
             viewHolder.title_text.setText(dataList.get(position).get("title"));
@@ -76,8 +71,6 @@ public class PositionAdapter extends BaseAdapter {
             viewHolder.snippet_text.setText(dataList.get(position).get("snippet"));
             viewHolder.left_image.setVisibility(View.VISIBLE);
         }
-
-//        }
 
 
         return convertView;
