@@ -6,8 +6,10 @@ package com.small.small.goal.utils;
 
 public class Url {
 //    public static String Url = "http://api.test.smallaim.cn";
-    public static String Url = "http://api1.smallaim.cn";
+        public static String Url = "http://api1.smallaim.cn";
     public static String PhotoUrl = "http://img.smallaim.cn";
+
+    public static final String PHONE_ADDRESS = "http://apis.baidu.com/netpopo/shouji/query";
 
     public static final String SMALL_PHOTO_URL = "?x-oss-process=image/resize,m_lfit,h_200,w_200";
     public static final String SMALL_PHOTO_URL2 = "?x-oss-process=image/resize,m_lfit,h_400,w_400";
@@ -110,5 +112,22 @@ public class Url {
     public static String Wager = "/wager";// 投注  post
     public static String AccountRecord = "/account/record";//金豆记录
     public static String ChargeBean = "/charge/bean";// 充值金豆
+
+
+    // 商城
+
+    //收货地址
+    public static String Address = "/address";// put  新增收货地址  get  地址列表  post 修改收货地址
+    public static String AddressDelete = "/address/delete";// 删除收货地址
+
+    //订单
+    public static String Order = "/order";//订单列表
+    public static String OrderConfirm = "/order/confirm";//确认订单
+
+
+    //账户明细
+//    public static String AccountRecord = "/account/record";
+
+    public static String NoticeList = "/notice/list";
 
 }

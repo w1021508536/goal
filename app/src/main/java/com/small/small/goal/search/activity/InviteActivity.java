@@ -1,11 +1,13 @@
 package com.small.small.goal.search.activity;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import com.small.small.goal.R;
 import com.small.small.goal.search.adapter.ContactsAdapter;
 import com.small.small.goal.utils.BaseActivity;
+import com.small.small.goal.utils.Code;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +44,8 @@ public class InviteActivity extends BaseActivity implements View.OnClickListener
     TextView tvEmpty;
     @InjectView(R.id.null_layout)
     RelativeLayout nullLayout;
+    @InjectView(R.id.title_text)
+    TextView titleText;
 
     private ContactsAdapter contactsAdapter;
 
@@ -63,20 +68,53 @@ public class InviteActivity extends BaseActivity implements View.OnClickListener
 
     private Parcelable state;
 
+    private String type = "0";//1 搜索左侧   2 添加地址
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_invite);
         ButterKnife.inject(this);
         super.onCreate(savedInstanceState);
 
-        contacts_list = new ArrayList<Map<String, String>>();
 
-        contactsAdapter = new ContactsAdapter(this, contacts_list);
-        contactsList.setAdapter(contactsAdapter);
         init();
     }
 
     private void init() {
+
+        type = getIntent().getExtras().getString("type", "0");
+
+        contacts_list = new ArrayList<Map<String, String>>();
+
+        contactsAdapter = new ContactsAdapter(this, contacts_list, type);
+        contactsList.setAdapter(contactsAdapter);
+
+        if (type.equals("2")) {
+            titleText.setText("选择联系人");
+            contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String number = null;
+                    Cursor groupContactCursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER},
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contacts_list.get(position).get("ContactId"),
+                            null,
+                            null);
+                    while (groupContactCursor.moveToNext()) {
+                        groupContactCursor.getString(0);
+                        number = groupContactCursor.getString(0);
+                    }
+                    groupContactCursor.close();
+
+                    Intent intent = new Intent();
+                    intent.putExtra("number", number);
+                    intent.putExtra("name", contacts_list.get(position).get("ContactName"));
+                    setResult(Code.CONTACTS, intent);
+                    finish();
+                }
+            });
+        }
 
         getPhoneContacts();
     }
@@ -163,7 +201,7 @@ public class InviteActivity extends BaseActivity implements View.OnClickListener
                 contacts_list.add(map);
 
             }
-            if (contacts_list.size()<1){
+            if (contacts_list.size() < 1) {
                 nullLayout.setVisibility(View.VISIBLE);
                 tvEmpty.setText("暂 时 没 有 通 讯 录 联 系 人");
             }

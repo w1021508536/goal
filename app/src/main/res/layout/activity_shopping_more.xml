@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_activity"
+    android:orientation="vertical">
+
+    <include
+        android:id="@id/in"
+        layout="@layout/view_include_guess" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_bottom"
+        android:layout_below="@id/in">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:id="@+id/img_top_big"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/background_load" />
+
+                <TextView
+                    android:id="@+id/tv_shopName"
+                    style="@style/text_white_14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:background="#80000000"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="@dimen/top_left"
+                    android:paddingRight="@dimen/top_left"
+                    android:paddingTop="10dp"
+                    android:text="SIXGOD 六神花露水" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/rl_height"
+                android:paddingLeft="@dimen/top_left"
+                android:paddingRight="@dimen/top_left">
+
+                <TextView
+                    android:id="@+id/tv_jindoujia"
+                    style="@style/text_white_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="金豆价:" />
+
+                <TextView
+                    android:id="@+id/tv_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="2dp"
+                    android:layout_toRightOf="@id/tv_jindoujia"
+                    android:textColor="@color/red"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/tv_surplus"
+                    style="@style/text_white_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="剩余：20份" />
+            </RelativeLayout>
+
+            <TextView
+                style="@style/text_hui_white_14"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/tv_bottom"
+                android:background="@color/bg_view"
+                android:gravity="center"
+                android:text="—— 奖品介绍 ——" />
+
+            <TextView
+
+                android:id="@+id/tv_content"
+                style="@style/text_hui_white_14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/top_left" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_myMoney"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:drawableLeft="@mipmap/icon_gold_bean"
+            android:drawablePadding="5dp"
+            android:text="金豆余额：10000"
+            android:textColor="@color/red" />
+
+        <TextView
+            android:id="@+id/tv_duihuan_ok"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/rl_height"
+            android:layout_marginLeft="@dimen/top_left"
+            android:layout_marginRight="@dimen/top_left"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/selector_oval_red_5"
+            android:gravity="center"
+            android:text="试一下手气"
+            android:textColor="@color/white"
+            android:textSize="18dp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -28,10 +28,12 @@ public class ContactsAdapter extends BaseAdapter {
 
     private List<Map<String, String>> contacts_list;
     private Context context;
+    private String type;
 
-    public ContactsAdapter(Context context, List<Map<String, String>> contacts_list) {
+    public ContactsAdapter(Context context, List<Map<String, String>> contacts_list, String type) {
         this.context = context;
         this.contacts_list = contacts_list;
+        this.type = type;
     }
 
 
@@ -84,6 +86,10 @@ public class ContactsAdapter extends BaseAdapter {
             viewHolder.imageView.setImageBitmap(BitmapFactory.decodeStream(input));
         } else {
             viewHolder.imageView.setImageResource(R.mipmap.icon_head);
+        }
+
+        if (type.equals("2")) {
+            viewHolder.invite_text.setVisibility(View.GONE);
         }
 
         viewHolder.invite_text.setOnClickListener(new View.OnClickListener() {

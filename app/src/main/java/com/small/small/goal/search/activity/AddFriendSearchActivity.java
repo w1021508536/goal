@@ -228,12 +228,14 @@ public class AddFriendSearchActivity extends BaseActivity {
                                 return;
                             } else {
                                 intent.setClass(this, InviteActivity.class);
+                                intent.putExtra("type", "1");
                                 startActivity(intent);
                             }
                         }
                     }
                 } else {
                     intent.setClass(this, InviteActivity.class);
+                    intent.putExtra("type", "1");
                     startActivity(intent);
                 }
 
@@ -305,6 +307,7 @@ public class AddFriendSearchActivity extends BaseActivity {
                         } else {
                             Intent intent = new Intent();
                             intent.setClass(this, InviteActivity.class);
+                            intent.putExtra("type", "1");
                             startActivity(intent);
                         }
                     }
@@ -321,6 +324,7 @@ public class AddFriendSearchActivity extends BaseActivity {
                     } else {
                         Intent intent = new Intent();
                         intent.setClass(this, InviteActivity.class);
+                        intent.putExtra("type", "1");
                         startActivity(intent);
                     }
                 } else {
@@ -331,6 +335,7 @@ public class AddFriendSearchActivity extends BaseActivity {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent();
                     intent.setClass(this, InviteActivity.class);
+                    intent.putExtra("type", "1");
                     startActivity(intent);
                 } else {
                     Utils.showToast(AddFriendSearchActivity.this, "您禁止了写入权限");

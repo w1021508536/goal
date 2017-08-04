@@ -9,10 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:orientation="vertical"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <View
             android:id="@+id/view"
@@ -55,8 +55,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:padding="5dp"
-                android:src="@mipmap/icon_spread_question"
-                android:visibility="gone" />
+                android:src="@mipmap/icon_spread_question" />
 
             <TextView
                 android:id="@+id/tv_ok_include"
@@ -92,7 +91,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@null"></com.gongwen.marqueen.MarqueeView>
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@null"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp" />
 
         </LinearLayout>
 

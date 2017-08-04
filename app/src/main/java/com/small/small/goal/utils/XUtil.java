@@ -69,6 +69,18 @@ public class XUtil {
                         xCallBackLinstener.onSuccess(result);
                         if (requestParams.getUri().equals(Url.Url + "/vote/vote")) {
                             CacheUtil.getInstance().getMap().put(KeyCode.AIM_VOTE, true);
+
+                            for (int i = 0; i < CacheUtil.getInstance().getEveryTaskGsonEntityList().size(); i++) {
+                                if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getUserTaskId() == 6) {
+
+                                    if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() < 10) {
+                                        CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).setFinishTimes(CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() + 1);
+                                    }
+
+                                }
+                            }
+
+
                         }
                     }
 
@@ -85,6 +97,8 @@ public class XUtil {
                     loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
                 //   Log.v("TAg", ex.getMessage());
+
+                Utils.showToast(context, "网络异常，请稍后再试");
 
                 if (context instanceof BaseActivity) {                          //访问出错展示的出错图
 
@@ -168,6 +182,7 @@ public class XUtil {
                     loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
 
+                Utils.showToast(context, "网络异常，请稍后再试");
 
                 if (context instanceof BaseActivity) {                          //访问出错展示的出错图
 
@@ -239,6 +254,17 @@ public class XUtil {
                         xCallBackLinstener.onSuccess(result);
                         if (requestParams.getUri().equals(Url.Url + "/aim/dynamic/comment")) {
                             CacheUtil.getInstance().getMap().put(KeyCode.AIM_COMMENT, true);
+
+                            for (int i = 0; i < CacheUtil.getInstance().getEveryTaskGsonEntityList().size(); i++) {
+                                if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getUserTaskId() == 7) {
+
+                                    if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() < 5) {
+                                        CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).setFinishTimes(CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() + 1);
+                                    }
+
+                                }
+                            }
+
                         } else if (requestParams.getUri().equals(Url.Url + "/aim/support")) {
                             CacheUtil.getInstance().getMap().put(KeyCode.AIM_SUPPORT, true);
                         }
@@ -255,6 +281,9 @@ public class XUtil {
                 if (loadingDialog.isShowing())
                     loadingDialog.dismiss();
                 xCallBackLinstener.onError(ex, isOnCallback);
+
+                Utils.showToast(context, "网络异常，请稍后再试");
+
             }
 
             @Override

@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.gongwen.marqueen.MarqueeFactory;
+import com.gongwen.marqueen.MarqueeView;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.guess.LotteryExplainActivity;
@@ -32,7 +34,10 @@ import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.utils.dialog.LotteryTopPopuwindow;
 import com.small.small.goal.weight.MyViewPager;
+import com.small.small.goal.weight.Notice;
+import com.small.small.goal.weight.NoticeMF;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
@@ -80,6 +85,13 @@ public class FastThreeActivity extends BaseActivity {
 
     public static TextView nextText;
 
+    @InjectView(R.id.img_guangbo)
+    ImageView imgGuangbo;
+    @InjectView(R.id.marqueeView)
+    MarqueeView marqueeView;
+    @InjectView(R.id.history_layout)
+    LinearLayout historyLayout;
+
     private List<String> typeList;
     private int currentPosition = 0;
 
@@ -118,6 +130,9 @@ public class FastThreeActivity extends BaseActivity {
 
     FootBallPagerAdapter adapter;
 
+    private MarqueeFactory<TextView, Notice> marqueeFactory;
+    private List<Notice> noticeList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_fast_three);
@@ -126,6 +141,7 @@ public class FastThreeActivity extends BaseActivity {
         instance = this;
         fragmentList = new ArrayList<>();
         typeList = new ArrayList<>();
+        noticeList = new ArrayList<>();
 
         status = getIntent().getExtras().getString("status", "");
 
@@ -134,6 +150,12 @@ public class FastThreeActivity extends BaseActivity {
         rightImageInclude.setImageResource(R.mipmap.icon_lottery_menu);
 
         nextText = (TextView) findViewById(R.id.next_text);
+
+        marqueeFactory = new NoticeMF(this,0);
+        marqueeView.setMarqueeFactory(marqueeFactory);
+        marqueeView.setInterval(5000);
+        marqueeView.startFlipping();
+
 
         popupWindow = new LotteryTopPopuwindow(this);
         popupWindow.setListener(new LotteryTopPopuwindow.setOnclickListener() {
@@ -271,6 +293,8 @@ public class FastThreeActivity extends BaseActivity {
         nextText.setText("至少选择1个号码");
 
         GetNewData();
+        getNotice();
+
     }
 
     @OnClick({R.id.left_image_include, R.id.right_image_include, R.id.random_text, R.id.next_text})
@@ -322,6 +346,50 @@ public class FastThreeActivity extends BaseActivity {
             }
             TwoNotSameFragment.getFragment().SetRandom(number, number2);
         }
+    }
+
+    /**
+     * 获取最新开奖
+     * create  wjz
+     **/
+    private void getNotice() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.NoticeList);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("type", "3");
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("===========公告=========" + result);
+                try {
+                    if (new JSONObject(result).getString("code").equals("0")) {
+
+                        JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            noticeList.add(new Notice(jsonArray.getJSONObject(i).getString("content"), 0));
+                        }
+                        marqueeFactory.setData(noticeList);
+
+                    } else {
+                        Utils.showToast(FastThreeActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
 

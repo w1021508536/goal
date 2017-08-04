@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.gongwen.marqueen.MarqueeFactory;
+import com.gongwen.marqueen.MarqueeView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.small.small.goal.MyApplication;
@@ -34,18 +36,21 @@ import com.small.small.goal.my.guess.elevenchoosefive.entity.ChooseOvalEntity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.HlvEntity;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.OldResult;
 import com.small.small.goal.my.guess.elevenchoosefive.entity.WinDaletouNumberEntity;
+import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
 import com.small.small.goal.my.guess.note.activity.LotteryNoteActivity;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Combine;
-import com.small.small.goal.utils.GameUtils;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
 import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.utils.dialog.LotteryTopPopuwindow;
 import com.small.small.goal.weight.MyGridView;
+import com.small.small.goal.weight.Notice;
+import com.small.small.goal.weight.NoticeMF;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.http.RequestParams;
@@ -81,8 +86,6 @@ public class ChooseMainActivity extends BaseActivity {
     ImageView rightImageInclude;
     @InjectView(R.id.tv_ok_include)
     TextView tvOkInclude;
-    @InjectView(R.id.banner)
-    ImageView banner;
     @InjectView(R.id.tal)
     TabLayout tal;
     @InjectView(R.id.tv_expect)
@@ -113,6 +116,8 @@ public class ChooseMainActivity extends BaseActivity {
     TextView tvTouzhu;
     @InjectView(R.id.ll_bottom)
     LinearLayout llBottom;
+    @InjectView(R.id.marqueeView)
+    MarqueeView marqueeView;
     //    private HlvAdapter hlvAdapter;
     private ChooseOvalAdapter mgvAdapter;
     private int min = 1;   //至少选择的
@@ -137,6 +142,9 @@ public class ChooseMainActivity extends BaseActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("mm:ss");
     private TimeCount time;
+
+    private MarqueeFactory<TextView, Notice> marqueeFactory;
+    private List<Notice> noticeList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -179,6 +187,12 @@ public class ChooseMainActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
+        noticeList = new ArrayList<>();
+        marqueeFactory = new NoticeMF(this, 0);
+        marqueeView.setMarqueeFactory(marqueeFactory);
+        marqueeView.setInterval(5000);
+        marqueeView.startFlipping();
+
         position = 0;
         setDrawableImg(R.mipmap.down);
         rightImageInclude.setImageResource(R.mipmap.icon_lottery_menu);
@@ -224,6 +238,7 @@ public class ChooseMainActivity extends BaseActivity {
     public void getData() {
         super.getData();
         getNewsResult();
+        getNotice();
     }
 
     /**
@@ -264,6 +279,50 @@ public class ChooseMainActivity extends BaseActivity {
                             e.printStackTrace();
                         }
 
+
+                    } else {
+                        Utils.showToast(ChooseMainActivity.this, new JSONObject(result).getString("msg"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    /**
+     * 获取最新开奖
+     * create  wjz
+     **/
+    private void getNotice() {
+        RequestParams requestParams = new RequestParams(Url.Url + Url.NoticeList);
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
+        requestParams.addBodyParameter("type", "3");
+        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("===========公告=========" + result);
+                try {
+                    if (new JSONObject(result).getString("code").equals("0")) {
+
+                        JSONArray jsonArray = new JSONObject(result).getJSONArray("result");
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            noticeList.add(new Notice(jsonArray.getJSONObject(i).getString("content"), 0));
+                        }
+                        marqueeFactory.setData(noticeList);
 
                     } else {
                         Utils.showToast(ChooseMainActivity.this, new JSONObject(result).getString("msg"));
@@ -677,9 +736,9 @@ public class ChooseMainActivity extends BaseActivity {
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (!GameUtils.CallResultOK(result)) return;
+                if (!Utils.callOk(result, ChooseMainActivity.this)) return;
                 Gson gson = new Gson();
-                List<OldResult> data = gson.fromJson(GameUtils.getResultStr(result), new TypeToken<List<OldResult>>() {
+                List<OldResult> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<OldResult>>() {
                 }.getType());
 
                 List<Integer> reds = new ArrayList<>();

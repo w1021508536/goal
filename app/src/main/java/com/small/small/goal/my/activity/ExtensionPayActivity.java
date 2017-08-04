@@ -269,6 +269,7 @@ public class ExtensionPayActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
+
                 try {
                     if (Utils.callOk(result,ExtensionPayActivity.this)) {
                         if (channel.equals("balance")) {

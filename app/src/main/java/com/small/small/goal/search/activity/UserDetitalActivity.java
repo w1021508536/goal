@@ -1071,8 +1071,8 @@ public class UserDetitalActivity extends BaseActivity {
 
             @InjectView(R.id.money_layout)
             RelativeLayout moneyLayout;
-            @InjectView(R.id.icon_money_text)
-            TextView iconMoneyText;
+//            @InjectView(R.id.icon_money_text)
+//            TextView iconMoneyText;
             @InjectView(R.id.icon_money_image)
             ImageView iconMoneyImage;
 

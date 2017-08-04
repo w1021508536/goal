@@ -171,11 +171,7 @@ public class PayActivity extends BaseActivity {
                     channel = "alipay";
                     alipay_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
                 } else {
-                    wechat_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
-                    balance_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
-                    alipay_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_off));
-                    channel = "alipay_wap";
-                    alipay_right_image.setImageDrawable(getResources().getDrawable(R.mipmap.icon_hook_on));
+                    Utils.showToast(PayActivity.this, "请先安装支付宝应用");
                 }
                 break;
             case R.id.union_layout:

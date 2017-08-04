@@ -446,7 +446,7 @@ public class AimFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                if (ex.getMessage() != null) {
+                if (ex.getMessage() != null && !ex.getMessage().equals("")) {
                     Utils.showToast(getActivity(), ex.getMessage());
                 }
                 right_image.setClickable(true);

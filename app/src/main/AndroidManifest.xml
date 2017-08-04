@@ -42,8 +42,7 @@
     <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".MyApplication"
@@ -131,6 +130,7 @@
         <activity
             android:name=".login.LoginActivity"
             android:label="登录方式"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".login.LoginPasswordActivity"
@@ -222,7 +222,7 @@
             android:label="我的收藏"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.WalletActivity"
+            android:name=".my.wallet.WalletActivity"
             android:label="我的钱包"
             android:screenOrientation="portrait" />
         <activity
@@ -267,11 +267,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".my.activity.MontyToActivity"
+            android:name=".my.wallet.MontyToActivity"
             android:label="充值"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.ToMoneyActivity"
+            android:name=".my.wallet.ToMoneyActivity"
             android:label="提现"
             android:screenOrientation="portrait" />
         <activity
@@ -299,11 +299,11 @@
             android:label="多图选择的界面"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TransferActivity"
+            android:name=".my.transfer.activity.TransferActivity"
             android:label="期权转让"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TransferNextActivity"
+            android:name=".my.transfer.activity.TransferNextActivity"
             android:label="转让"
             android:screenOrientation="portrait" />
         <activity
@@ -315,7 +315,7 @@
             android:label="推广码"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.TransferMoreActivity"
+            android:name=".my.transfer.activity.TransferMoreActivity"
             android:label="期权转让明细"
             android:screenOrientation="portrait" />
         <activity
@@ -449,7 +449,7 @@
             android:label="分销下级成员"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".my.activity.ToMoneyWeChatActivity"
+            android:name=".my.wallet.ToMoneyWeChatActivity"
             android:label="微信的提现"
             android:screenOrientation="portrait" />
         <activity
@@ -499,6 +499,19 @@
             android:screenOrientation="portrait" />
         <activity android:name=".my.gold.GoldPayActivity" />
         <activity android:name=".my.guess.LotteryExplainActivity" />
+        <activity android:name=".my.guess.twoColorBall.TwoColorBallActivity" />
+        <activity android:name=".my.mall.activity.MallActivity" />
+        <activity android:name=".my.mall.activity.AddAddressAcivity" />
+        <activity android:name=".my.mall.activity.AddressActivity" />
+        <activity android:name=".my.mall.activity.PhoneRecordActivity" />
+        <activity android:name=".my.mall.activity.QbRecordActivity" />
+        <activity android:name=".my.mall.activity.RechargePhoneActivity" />
+        <activity android:name=".my.mall.activity.RechargeQbActivity" />
+        <activity android:name=".my.mall.activity.ShopingMoreActivity" />
+        <activity android:name=".my.guess.twoColorBall.PlayAddMoneyActivity" />
+        <activity android:name=".my.wallet.BalanceListActivity"></activity>
+        <activity android:name=".my.gift.GiftListActivity" />
+        <activity android:name=".my.gift.GiftDetailsActivity" />
     </application>
 
 </manifest>

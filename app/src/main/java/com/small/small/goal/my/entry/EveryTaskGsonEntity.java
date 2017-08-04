@@ -26,14 +26,16 @@ public class EveryTaskGsonEntity {
 
     private int userTaskId;
     private int rewardType;
-    private String action= "";
+    private String action = "";
     private int taskType;
     private int reward;
     private int times;
     private int status;
     private long updateTime;
-    private String name= "";
+    private String name = "";
     private int upperLimit;
+    private int finishTimes;
+    private int totalReward;
     private int finish;
 
     public int getUserTaskId() {
@@ -122,5 +124,21 @@ public class EveryTaskGsonEntity {
 
     public void setFinish(int finish) {
         this.finish = finish;
+    }
+
+    public int getFinishTimes() {
+        return finishTimes;
+    }
+
+    public void setFinishTimes(int finishTimes) {
+        this.finishTimes = finishTimes;
+    }
+
+    public int getTotalReward() {
+        return totalReward;
+    }
+
+    public void setTotalReward(int totalReward) {
+        this.totalReward = totalReward;
     }
 }

@@ -22,6 +22,9 @@ public class Code {
 
     public static int THIRD_D_CODE = 30001;
 
-    public static double BONUS_MONEY_BASE = 10;
+    public static int BONUS_MONEY_BASE = 10;
+
+    public static int CONTACTS = 4001;//联系人
+    public static int COMMODITY = 4002;//商品详情回调
 
 }

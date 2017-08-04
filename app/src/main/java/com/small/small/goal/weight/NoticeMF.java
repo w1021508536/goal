@@ -12,17 +12,24 @@ import com.gongwen.marqueen.MarqueeFactory;
 import com.small.small.goal.R;
 import com.small.small.goal.my.activity.ExtensionActivity;
 
-public class NoticeMF extends MarqueeFactory<TextView, ExtensionActivity.notice> {
+public class NoticeMF extends MarqueeFactory<TextView, Notice> {
     private LayoutInflater inflater;
-
-    public NoticeMF(Context mContext) {
+    private int status;
+    public NoticeMF(Context mContext, int status) {
         super(mContext);
         inflater = LayoutInflater.from(mContext);
+        this.status=status;
     }
 
     @Override
-    public TextView generateMarqueeItemView(ExtensionActivity.notice data) {
+    public TextView generateMarqueeItemView(Notice data) {
         TextView mView = (TextView) inflater.inflate(R.layout.notice_item, null);
+
+        if (status==0){
+            mView.setTextColor(mContext.getResources().getColor(R.color.white));
+        }else if (status==1){
+            mView.setTextColor(mContext.getResources().getColor(R.color.text_hui));
+        }
 
         SpannableStringBuilder builder = new SpannableStringBuilder(data.getNoticeStr());
         ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);

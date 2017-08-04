@@ -9,6 +9,9 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,6 +33,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.activity.AimMoreActivity;
+import com.small.small.goal.my.activity.SupportActivity;
 import com.small.small.goal.search.activity.RedHaveActivity;
 import com.small.small.goal.search.activity.SupportMoneyActivity;
 import com.small.small.goal.search.activity.UserDetitalActivity;
@@ -43,6 +47,7 @@ import com.small.small.goal.utils.WrapContentHeightViewPager;
 import com.small.small.goal.utils.XUtil;
 import com.small.small.goal.utils.entity.CommentEntity;
 import com.small.small.goal.utils.entity.DynamicEntity;
+import com.small.small.goal.weight.MarqueeText;
 import com.small.small.goal.weight.PinchImageView;
 import com.squareup.picasso.Picasso;
 
@@ -115,6 +120,7 @@ public class HotFragment extends Fragment {
     private ImageView[] imageViews;
 
     private TextView text_zhuli;
+    SpannableStringBuilder spannable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -362,7 +368,8 @@ public class HotFragment extends Fragment {
                             dynamicEntity.setUpdateTime(dynamicObject.optString("updateTime"));
                             dynamicEntity.setProvince(dynamicObject.optString("province"));
                             dynamicEntity.setIsPaid(dynamicObject.optString("isPaid"));
-
+                            dynamicEntity.setLastNick(dynamicObject.optString("lastNick"));
+                            dynamicEntity.setLastSupport(dynamicObject.optString("lastSupport"));
 
                             dynamicEntity.setSupports(jsonArray.getJSONObject(j).optString("supports"));
                             dynamicEntity.setHaveRedPacket(jsonArray.getJSONObject(j).optString("haveRedPacket"));
@@ -473,10 +480,26 @@ public class HotFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Code.SupportAim) {
-
+            String money = "";
             int number = Integer.valueOf(dynamicEntityList.get(currentPosition).getSupports()) + 1;
             dynamicEntityList.get(currentPosition).setSupports(number + "");
             text_zhuli.setText("" + number);
+
+            if (data != null) {
+                money = data.getExtras().getString("money", "");
+                if (!money.equals("")) {
+                    if (Double.valueOf(money) > 10) {
+                        dynamicEntityList.get(currentPosition).setLastNick(Utils.UserSharedPreferences(getActivity()).getString("nick", ""));
+                        dynamicEntityList.get(currentPosition).setLastSupport(String.valueOf(Double.valueOf(money) * 0.8));
+                    } else {
+                        dynamicEntityList.get(currentPosition).setLastNick(Utils.UserSharedPreferences(getActivity()).getString("nick", ""));
+                        dynamicEntityList.get(currentPosition).setLastSupport(String.valueOf(Double.valueOf(money) * 0.7));
+                    }
+
+                    hotAdapter.notifyDataSetChanged();
+                }
+            }
+
             PutRedWindow();
         } else if (resultCode == Code.FailCode) {
         }
@@ -774,7 +797,7 @@ public class HotFragment extends Fragment {
                 }
             });
 
-            viewHolder.moneyText.setText(dynamicEntityList.get(position).getMoney());
+//            viewHolder.moneyText.setText(dynamicEntityList.get(position).getMoney());
             viewHolder.commentImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1025,6 +1048,28 @@ public class HotFragment extends Fragment {
                 viewHolder.provinceText.setText(dynamicEntityList.get(position).getProvince());
             }
 
+            if (dynamicEntityList.get(position).getLastNick().equals("")) {
+                String content = "为自己的目标存入" + dynamicEntityList.get(position).getMoney() + "元";
+                spannable = new SpannableStringBuilder(content);
+                spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.chat_top)), content.length() - 1 - dynamicEntityList.get(position).getMoney().length(), content.length() - 1
+                        , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.moneyMarquee.setText(spannable);
+            } else {
+                String content = dynamicEntityList.get(position).getLastNick() + "支持目标" + dynamicEntityList.get(position).getLastSupport() + "元";
+                spannable = new SpannableStringBuilder(content);
+                spannable.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.chat_top)), content.length() - 1 - dynamicEntityList.get(position).getLastSupport().length(), content.length() - 1
+                        , Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.moneyMarquee.setText(spannable);
+            }
+
+            viewHolder.moneyMarquee.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!dynamicEntityList.get(position).getLastNick().equals("")) {
+                        startActivity(new Intent(context, SupportActivity.class));
+                    }
+                }
+            });
             return convertView;
         }
 
@@ -1053,8 +1098,12 @@ public class HotFragment extends Fragment {
             ImageView image1;
             @InjectView(R.id.more_layout)
             RelativeLayout moreLayout;
-            @InjectView(R.id.money_text)
-            TextView moneyText;
+            //            @InjectView(R.id.money_text)
+//            TextView moneyText;
+//            @InjectView(R.id.icon_money_text)
+//            TextView iconMoneyText;
+            @InjectView(R.id.money_marquee)
+            MarqueeText moneyMarquee;
             @InjectView(R.id.money_image)
             ImageView moneyImage;
             @InjectView(R.id.vote_image)
@@ -1074,8 +1123,7 @@ public class HotFragment extends Fragment {
 
             @InjectView(R.id.money_layout)
             RelativeLayout moneyLayout;
-            @InjectView(R.id.icon_money_text)
-            TextView iconMoneyText;
+
             @InjectView(R.id.icon_money_image)
             ImageView iconMoneyImage;
 

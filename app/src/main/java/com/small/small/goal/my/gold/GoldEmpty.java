@@ -6,15 +6,6 @@ package com.small.small.goal.my.gold;
 
 public class GoldEmpty {
 
-//    "id": 820,
-//            "userId": 26,
-//            "accountType": 3,
-//            "operateType": 32,
-//            "remark": "投注",
-//            "amount": -2400,
-//            "linkId": 17,
-//            "createTime": "2017-07-03 09:42:49",
-//            "account": 197700
 
 
     private String id;
@@ -26,6 +17,8 @@ public class GoldEmpty {
     private String linkId;
     private String createTime;
     private String account;
+    private String startTime;
+    private String endTime;
 
     public String getId() {
         return id;
@@ -97,5 +90,21 @@ public class GoldEmpty {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

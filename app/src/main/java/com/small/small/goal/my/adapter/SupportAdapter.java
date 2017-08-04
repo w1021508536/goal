@@ -77,14 +77,14 @@ public class SupportAdapter extends BaseAdapter {
             Picasso.with(context).load(Utils.GetPhotoPath(supportEntity.getAvatar())).into(vh.iconItem);
         }
         vh.tvNameItem.setText(supportEntity.getNick());
-        vh.tvMoneyItem.setText(supportEntity.getMoney() + "");
+        vh.tvMoneyItem.setText(supportEntity.getRemainMoney() + "");
         vh.tvTimeItem.setText(Utils.GetTime(supportEntity.getCreateTime()));
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserDetitalActivity.class);
-                intent.putExtra(UserDetitalActivity.KEY_USERID, supportEntity.getFromUserId()+"");
+                intent.putExtra(UserDetitalActivity.KEY_USERID, supportEntity.getFromUserId() + "");
                 context.startActivity(intent);
             }
         });

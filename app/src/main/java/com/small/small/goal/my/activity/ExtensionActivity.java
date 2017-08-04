@@ -1,17 +1,29 @@
 package com.small.small.goal.my.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gongwen.marqueen.MarqueeFactory;
 import com.gongwen.marqueen.MarqueeView;
 import com.google.gson.Gson;
+import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.dialog.ExtensionDialog;
 import com.small.small.goal.my.entry.LastAgentEntity;
@@ -20,6 +32,7 @@ import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
 import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
+import com.small.small.goal.weight.Notice;
 import com.small.small.goal.weight.NoticeMF;
 import com.squareup.picasso.Picasso;
 import com.umeng.socialize.ShareAction;
@@ -38,9 +51,8 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.small.small.goal.R.id.tv_extension;
 
 /**
  * 公司：小目标
@@ -70,18 +82,20 @@ public class ExtensionActivity extends BaseActivity {
     TextView tvUserName;
     @InjectView(R.id.tv_agent)
     TextView tvAgent;
-    @InjectView(tv_extension)
-    TextView tvExtension;
     @InjectView(R.id.tv_moneyHint1)
     TextView tvMoneyHint1;
     @InjectView(R.id.tvMoney)
     TextView tvMoney;
     @InjectView(R.id.tv_moneyHint2)
     TextView tvMoneyHint2;
-    private ExtensionDialog dialog;
-    private final List<notice> datas = new ArrayList<>();
-    private MarqueeFactory<TextView, notice> marqueeFactory;
+    @InjectView(R.id.tv_extension)
+    TextView tvExtension;
+    //    private ExtensionDialog dialog;
+    private final List<Notice> datas = new ArrayList<>();
+    private MarqueeFactory<TextView, Notice> marqueeFactory;
     private LastAgentEntity agent;
+
+    PopupWindow popupWindow;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,10 +107,10 @@ public class ExtensionActivity extends BaseActivity {
     @Override
     public void initData() {
         super.initData();
-        dialog = new ExtensionDialog(this);
+//        dialog = new ExtensionDialog(this);
 
 
-        marqueeFactory = new NoticeMF(this);
+        marqueeFactory = new NoticeMF(this,1);
         marqueeView.setMarqueeFactory(marqueeFactory);
         marqueeView.startFlipping();
 
@@ -105,18 +119,16 @@ public class ExtensionActivity extends BaseActivity {
     @Override
     public void initWeight() {
         super.initWeight();
-        tvAgent.setOnClickListener(this);
-        tvExtension.setOnClickListener(this);
         tvExtension.setClickable(false);
-        dialog.setOnClickGoListener(new ExtensionDialog.onClickGoListener() {
-            @Override
-            public void onclick() {
-                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
-                intent.putExtra("money", "698");
-                startActivity(intent);
-                dialog.dismiss();
-            }
-        });
+//        dialog.setOnClickGoListener(new ExtensionDialog.onClickGoListener() {
+//            @Override
+//            public void onclick() {
+//                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
+//                intent.putExtra("money", "698");
+//                startActivity(intent);
+//                dialog.dismiss();
+//            }
+//        });
     }
 
     @Override
@@ -143,7 +155,7 @@ public class ExtensionActivity extends BaseActivity {
                 if (Utils.callOk(result, ExtensionActivity.this)) {
                     Gson gson = new Gson();
                     agent = gson.fromJson(Utils.getResultStr(result), LastAgentEntity.class);
-                    datas.add(new notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理商", agent.getNick().length()));
+                    datas.add(new Notice("恭喜用户" + agent.getNick() + "成为小目标第" + agent.getId() + "名代理商", agent.getNick().length()));
                     marqueeFactory.setData(datas);
 
                 }
@@ -168,28 +180,29 @@ public class ExtensionActivity extends BaseActivity {
      * create  wjz
      **/
     private void getAgent() {
-        RequestParams requestParams = Utils.getRequestParams(this);
-
-        requestParams.setUri(Url.Url + "/agent");
-        String string = sp.getString(KeyCode.USER_ID, "");
-        //  requestParams.addBodyParameter("uid", sp.getString(KeyCode.USER_ID, ""));
+        RequestParams requestParams = new RequestParams(Url.Url + "/agent");
+        requestParams.addHeader("token", Utils.GetToken(this));
+        requestParams.addHeader("deviceId", MyApplication.deviceId);
 
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                //{"msg":"success","code":0,"result":{"id":4,"userId":48,"level":3,"subCompanyId":0,"volume":0},"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
 
                 try {
                     String code = new JSONObject(result).getString("code");
                     if ("0".equals(code)) {
+                        if (!sp.getString(KeyCode.USER_AVATAR, "").equals("")) {
+                            Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(imgIcon);
+                        } else {
+                            imgIcon.setImageResource(R.mipmap.icon_head);
+                        }
 
-                        Picasso.with(ExtensionActivity.this).load(Utils.GetPhotoPath(sp.getString(KeyCode.USER_AVATAR, ""))).into(imgIcon);
                         tvUserName.setText(sp.getString(KeyCode.USER_NICK, ""));
 
                         try {
                             JSONObject jsonObject = new JSONObject(result);
-                            String id = Utils.GetOneStringForJson("id", Utils.getResultStr(result));
-                            String level = Utils.GetOneStringForJson("level", Utils.getResultStr(result));
+                            String id = jsonObject.getJSONObject("result").getString("id");
+                            String level = jsonObject.getJSONObject("result").getString("level");
                             if (level.equals("1") || level.equals("2") || level.equals("3")) {
                                 tvExtension.setClickable(true);
                                 tvAgent.setBackgroundResource(R.drawable.bg_gray_extension);
@@ -227,6 +240,8 @@ public class ExtensionActivity extends BaseActivity {
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
 
+                System.out.println("============ex===" + ex.getMessage());
+
             }
 
             @Override
@@ -236,32 +251,25 @@ public class ExtensionActivity extends BaseActivity {
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        super.onClick(v);
-        switch (v.getId()) {
-            case R.id.tv_agent:
-//                View view = LayoutInflater.from(this).inflate(R.layout.dialog_hint, null);
-//                new AlertDialog.Builder(this).setView(view)
-//                        .setTitle("成为代理商")
-//                        //   .setMessage("1.成为代理商需要支付698元;" + "\n" + "2.成为代理商后可以开展小目标分销业务，参与全民业绩分享;")
-//                        .setPositiveButton("去支付", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                //     unBindWx();
-//                                dialog.dismiss();
-//                                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
-//                                intent.putExtra("money", "698");
-//                                startActivity(intent);
-//                            }
-//                        }).show();
-                dialog.show();
+    @OnClick({R.id.left_image_include, R.id.right_image_include, R.id.tv_agent, R.id.tv_extension})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.left_image_include:
+                finish();
                 break;
-            case tv_extension:
+            case R.id.right_image_include:
+                MoneyWindow(view, 2);
+                break;
+            case R.id.tv_agent:
+//                dialog.show();
+                MoneyWindow(view, 1);
+                break;
+            case R.id.tv_extension:
                 share();
                 break;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -296,7 +304,7 @@ public class ExtensionActivity extends BaseActivity {
         public void onResult(SHARE_MEDIA platform) {
             Log.d("plat", "platform" + platform);
 
-            Toast.makeText(ExtensionActivity.this,  " 分享成功啦", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExtensionActivity.this, " 分享成功啦", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -310,34 +318,62 @@ public class ExtensionActivity extends BaseActivity {
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
-            Toast.makeText(ExtensionActivity.this,  " 分享取消了", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ExtensionActivity.this, " 分享取消了", Toast.LENGTH_SHORT).show();
         }
     };
 
-    public class notice {
+    private void MoneyWindow(final View view, int number) {
 
-        String noticeStr = "";
-        int nameLength;
+        final View windowView = LayoutInflater.from(this).inflate(
+                R.layout.window_extension_explain, null);
+        popupWindow = new PopupWindow(windowView,
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, false);
+        TextView tv_go = (TextView) windowView.findViewById(R.id.tv_go);
+        TextView tv_money = (TextView) windowView.findViewById(R.id.tv_haveMoney);
 
-        public notice(String noticeStr, int nameLength) {
-            this.noticeStr = noticeStr;
-            this.nameLength = nameLength;
+        String s = tv_money.getText().toString();
+        int i = s.indexOf("6");
+        SpannableStringBuilder builder = new SpannableStringBuilder(tv_money.getText().toString());
+        ForegroundColorSpan redSpan = new ForegroundColorSpan(Color.RED);
+        builder.setSpan(redSpan, i, i + 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv_money.setText(builder);
+
+        if (number == 1) {
+            tv_go.setVisibility(View.VISIBLE);
+        } else {
+            tv_go.setVisibility(View.GONE);
+            windowView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupWindow.dismiss();
+                }
+            });
         }
 
-        public String getNoticeStr() {
-            return noticeStr;
-        }
+        tv_go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ExtensionActivity.this, ExtensionPayActivity.class);
+                intent.putExtra("money", "698");
+                startActivity(intent);
+                popupWindow.dismiss();
+            }
+        });
 
-        public void setNoticeStr(String noticeStr) {
-            this.noticeStr = noticeStr;
-        }
+        popupWindow.setAnimationStyle(R.style.MyDialogStyle);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(false);
+        popupWindow.setFocusable(true);
 
-        public int getNameLength() {
-            return nameLength;
-        }
 
-        public void setNameLength(int nameLength) {
-            this.nameLength = nameLength;
-        }
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        // 我觉得这里是API的一个bug
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.background_empty));
+        // 设置好参数之后再show
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
     }
+
+
+
 }

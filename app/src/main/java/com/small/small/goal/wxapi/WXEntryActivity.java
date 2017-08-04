@@ -162,7 +162,7 @@ public class WXEntryActivity extends WXCallbackActivity implements IWXAPIEventHa
 
                 try {
                     access_token = new JSONObject(result).getString("access_token");
-                    openid_wx = new JSONObject(result).getString("openid");
+                    openid_wx = new JSONObject(result).getString("unionid");
 
                     if (state.equals(UserInfoActivity.BIND_WX)) {
                         bindWx(openid_wx);

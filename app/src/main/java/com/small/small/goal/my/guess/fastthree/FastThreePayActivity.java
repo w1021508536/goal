@@ -254,20 +254,44 @@ public class FastThreePayActivity extends BaseActivity {
             case R.id.tv_zhuiAdd:
                 break;
             case R.id.tv_touDelete:
-                if (notes > 1) {
+
+                if (etvTouNums.getText().toString().equals("")) {
+                    notes = 1;
+                    etvTouNums.setText(notes + "");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+                    nextText.setText("立即投注 " + money * notes + "金豆");
+                } else if (etvTouNums.getText().toString().equals("1")) {
+                } else {
                     notes--;
                     etvTouNums.setText(notes + "");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
                     nextText.setText("立即投注 " + money * notes + "金豆");
+
                 }
+
                 break;
             case R.id.tv_touAdd:
-                notes++;
-                etvTouNums.setText(notes + "");
-                nextText.setText("立即投注 " + money * notes + "金豆");
+
+                if (etvTouNums.getText().toString().equals("")) {
+                    notes++;
+                    etvTouNums.setText(notes + "");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+
+                    nextText.setText("立即投注 " + money * notes + "金豆");
+                } else {
+                    notes++;
+                    etvTouNums.setText(notes + "");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+                    nextText.setText("立即投注 " + money * notes + "金豆");
+                }
+
                 break;
             case R.id.next_text:
+                if (fastThreeEmptyList.size() > 0) {
+                    Betting(view);
+                } else
+                    Utils.showToast(this, "请添加投注");
 
-                Betting(view);
                 break;
         }
     }
@@ -429,6 +453,8 @@ public class FastThreePayActivity extends BaseActivity {
         TextView recharge4_text = (TextView) windowView.findViewById(R.id.recharge4_text);
         TextView recharge5_text = (TextView) windowView.findViewById(R.id.recharge5_text);
         TextView recharge6_text = (TextView) windowView.findViewById(R.id.recharge6_text);
+        TextView recharge7_text = (TextView) windowView.findViewById(R.id.recharge7_text);
+        TextView recharge8_text = (TextView) windowView.findViewById(R.id.recharge8_text);
         ImageView ribbon_image = (ImageView) windowView.findViewById(R.id.ribbon_image);
         bean_text = (TextView) windowView.findViewById(R.id.bean_text);
 
@@ -468,6 +494,18 @@ public class FastThreePayActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 RechargeWindow(view, 6);
+            }
+        });
+        recharge7_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 7);
+            }
+        });
+        recharge8_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 8);
             }
         });
         windowView.setOnClickListener(new View.OnClickListener() {
@@ -548,6 +586,18 @@ public class FastThreePayActivity extends BaseActivity {
             number_image.setImageResource(R.mipmap.icon_gold_bean_4);
             chongzhi_money = "100";
             bean_pay = "10000";
+        } else if (status == 7) {
+            content = "本次充值您将花费200元";
+            number_text.setText("20000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "200";
+            bean_pay = "20000";
+        } else if (status == 8) {
+            content = "本次充值您将花费500元";
+            number_text.setText("50000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "500";
+            bean_pay = "50000";
         }
         spannable = new SpannableStringBuilder(content);
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 8, content.length() - 1
@@ -741,7 +791,13 @@ public class FastThreePayActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-
+        windowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                finish();
+            }
+        });
         next_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -776,10 +832,20 @@ public class FastThreePayActivity extends BaseActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             if (s.toString().length() > 0) {
-                etvTouNums.setSelection(s.toString().length());
-                if (Integer.valueOf(s.toString()) > 2000) {
-                    notes = 2000;
+
+                if (s.toString().equals("0")) {
+                    etvTouNums.setText("");
+                } else {
+                    etvTouNums.setSelection(s.toString().length());
+                    if (Integer.valueOf(s.toString()) > 2000) {
+                        notes = 2000;
+                        etvTouNums.setText(2000 + "");
+                    }
+
+
                 }
+
+
             }
 
 
@@ -787,15 +853,15 @@ public class FastThreePayActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (s.toString().length() > 0) {
-                notes = Integer.valueOf(etvTouNums.getText().toString());
-                etvTouNums.setText(notes + "");
-                nextText.setText("立即投注 " + money * notes + "金豆");
-            } else {
+
+
+            if ("".equals(etvTouNums.getText().toString())) {
                 notes = 0;
                 nextText.setText("立即投注 " + money * notes + "金豆");
+            } else {
+                notes = Integer.valueOf(etvTouNums.getText().toString());
+                nextText.setText("立即投注 " + money * notes + "金豆");
             }
-
         }
     }
 

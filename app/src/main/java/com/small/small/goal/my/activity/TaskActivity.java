@@ -81,114 +81,11 @@ public class TaskActivity extends BaseActivity {
     @Override
     public void initData() {
         view = findViewById(R.id.view);
-        super.initData();
+
         nameTextInclude.setText("我的任务");
         rightImageInclude.setVisibility(View.VISIBLE);
         rightImageInclude.setImageResource(R.mipmap.qa_icon);
-        //     getSign();
-//        for (int i = 0; i < 10; i++) {
-//            getSign();
-//        }
-    }
 
-    @Override
-    public void getData() {
-        super.getData();
-
-        //  getSign();
-
-//        requestParams.setUri(Url.Url + "/task");
-//        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
-//            @Override
-//            public void onSuccess(String result) {
-//
-//
-//                if (!Utils.callOk(result)) return;
-//                Gson gson = new Gson();
-//                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
-//                }.getType());
-//
-//                for (EveryTaskGsonEntity one : data) {
-//                    if (one.getAction().equals("aim_vote") && one.getFinish() == 1) { //点赞
-//                        tvGoGreatTask.setText("已完成");
-//                        tvGoGreatTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                        tvGoGreatTask.setClickable(false);
-//                    } else if (one.getAction().equals("aim_comment") && one.getFinish() == 1) {  //评论
-//                        tvGoCommentTask.setText("已完成");
-//                        tvGoCommentTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                        tvGoCommentTask.setClickable(false);
-//                    } else if (one.getAction().equals("aim_share") && one.getFinish() == 1) {  //分享
-//                        tvGoShareTask.setText("已完成");
-//                        tvGoShareTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                        tvGoShareTask.setClickable(false);
-//                    } else if (one.getAction().equals("aim_support") && one.getFinish() == 1) {  //助力
-//                        tvFriendsTask.setText("已完成");
-//                        tvFriendsTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                        tvFriendsTask.setClickable(false);
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//
-//            }
-//        });
-
-        Map<String, Boolean> map = CacheUtil.getInstance().getMap();
-        Set<String> strings = map.keySet();
-        for (String s : strings) {
-
-            if (s.equals(KeyCode.AIM_VOTE) && map.get(s)) {              //点赞
-                tvGoGreatTask.setText("已完成");
-                tvGoGreatTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-                tvGoGreatTask.setClickable(false);
-            } else if (s.equals(KeyCode.AIM_COMMENT) && map.get(s)) {      //评论
-                tvGoCommentTask.setText("已完成");
-                tvGoCommentTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-                tvGoCommentTask.setClickable(false);
-            } else if (s.equals(KeyCode.AIM_SHARE) && map.get(s)) {          //分享
-                tvGoShareTask.setText("已完成");
-                tvGoShareTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-                tvGoShareTask.setClickable(false);
-            } else if (s.equals(KeyCode.AIM_SUPPORT) && map.get(s)) {          //助力
-                tvFriendsTask.setText("已完成");
-                tvFriendsTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-                tvFriendsTask.setClickable(false);
-            }
-
-        }
-
-//        for (EveryTaskGsonEntity one : data) {
-//            if (one.getAction().equals("aim_vote") && one.getFinish() == 1) { //点赞
-//                tvGoGreatTask.setText("已完成");
-//                tvGoGreatTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                tvGoGreatTask.setClickable(false);
-//            } else if (one.getAction().equals("aim_comment") && one.getFinish() == 1) {  //评论
-//                tvGoCommentTask.setText("已完成");
-//                tvGoCommentTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                tvGoCommentTask.setClickable(false);
-//            } else if (one.getAction().equals("aim_share") && one.getFinish() == 1) {  //分享
-//                tvGoShareTask.setText("已完成");
-//                tvGoShareTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                tvGoShareTask.setClickable(false);
-//            } else if (one.getAction().equals("aim_support") && one.getFinish() == 1) {  //助力
-//                tvFriendsTask.setText("已完成");
-//                tvFriendsTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
-//                tvFriendsTask.setClickable(false);
-//            }
-//        }
-    }
-
-    @Override
-    public void initWeight() {
-        super.initWeight();
         leftImageInclude.setOnClickListener(this);
         tvAddMoneyTask.setOnClickListener(this);
         tvGotoSignTask.setOnClickListener(this);
@@ -197,6 +94,56 @@ public class TaskActivity extends BaseActivity {
         tvGoGreatTask.setOnClickListener(this);
         tvGoCommentTask.setOnClickListener(this);
         tvInvitationFriendTask.setOnClickListener(this);      //邀请好友
+
+        super.initData();
+    }
+
+    @Override
+    public void getData() {
+        super.getData();
+
+        Map<String, Boolean> map = CacheUtil.getInstance().getMap();
+        Set<String> strings = map.keySet();
+        for (String s : strings) {
+
+           if (s.equals(KeyCode.AIM_SHARE) && map.get(s)) {          //分享
+                tvGoShareTask.setText("1/1");
+                tvGoShareTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                tvGoShareTask.setClickable(false);
+            } else if (s.equals(KeyCode.AIM_SUPPORT) && map.get(s)) {          //助力
+                tvFriendsTask.setText("已完成");
+                tvFriendsTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                tvFriendsTask.setClickable(false);
+            }
+        }
+
+        for (int i = 0; i < CacheUtil.getInstance().getEveryTaskGsonEntityList().size(); i++) {
+            if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getUserTaskId() == 6) {
+                if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() < 10) {
+                    tvGoGreatTask.setText(CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() + "/10");
+                } else {
+                    tvGoGreatTask.setText("10/10");
+                    tvGoGreatTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                    tvGoGreatTask.setClickable(false);
+                }
+            } else if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getUserTaskId() == 7) {
+                if (CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() < 5) {
+                    tvGoCommentTask.setText(CacheUtil.getInstance().getEveryTaskGsonEntityList().get(i).getFinishTimes() + "/5");
+                } else {
+                    tvGoCommentTask.setText("5/5");
+                    tvGoCommentTask.setBackgroundResource(R.drawable.background_oval_gray_gray_big);
+                    tvGoCommentTask.setClickable(false);
+                }
+            }
+        }
+
+
+    }
+
+    @Override
+    public void initWeight() {
+        super.initWeight();
+
     }
 
     @Override
@@ -218,6 +165,9 @@ public class TaskActivity extends BaseActivity {
 //                break;
 
             case R.id.tv_goGreat_task:
+                CacheUtil.getInstance().setTaskToMainFlag(true);
+                startActivity(new Intent(this, MainActivity.class));
+                break;
             case R.id.tv_goShare_task:
             case R.id.tv_goComment_task:
                 CacheUtil.getInstance().setTaskToMainFlag(true);
@@ -239,34 +189,6 @@ public class TaskActivity extends BaseActivity {
         }
 
 
-//        requestParams.setUri(Url.Url + "/task");
-//        XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
-//            @Override
-//            public void onSuccess(String result) {
-//
-//
-//                if (!Utils.callOk(result)) return;
-//                Gson gson = new Gson();
-//                List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResult(result), new TypeToken<List<EveryTaskGsonEntity>>() {
-//                }.getType());
-//
-//                for (EveryTaskGsonEntity one:data){
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onError(Throwable ex, boolean isOnCallback) {
-//
-//            }
-//
-//            @Override
-//            public void onFinished() {
-//
-//            }
-//        });
-
     }
 
     private void getSign() {
@@ -276,7 +198,7 @@ public class TaskActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                if (!Utils.callOk(result,TaskActivity.this)) return;
+                if (!Utils.callOk(result, TaskActivity.this)) return;
                 try {
                     long signTime = (long) ((JSONObject) new JSONObject(result).get("result")).get("lastSignInTime");
                     Date date = new Date(signTime);

@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.small.small.goal.MyApplication;
 
 import org.json.JSONArray;
@@ -26,6 +31,7 @@ import org.xutils.http.RequestParams;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -255,6 +261,35 @@ public class Utils {
 
 
         return time_string;
+    }
+    public static String GetTime(String time) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = simpleDateFormat.parse(time);
+            String time_string = "";
+            long minute = 60000;
+            long hour = 3600000;
+            long day = 86400000;
+            long third_day = 259200000;
+            long distanceTime = System.currentTimeMillis() - date.getTime();
+            if (distanceTime < minute) {
+                time_string = "刚刚";
+            } else if (distanceTime >= minute && distanceTime < hour) {
+                time_string = String.valueOf(distanceTime / minute) + "分钟前";
+            } else if (distanceTime >= hour && distanceTime < day) {
+                time_string = String.valueOf(distanceTime / hour) + "小时前";
+            } else if (distanceTime >= day && distanceTime < third_day) {
+                time_string = String.valueOf(distanceTime / day) + "天前";
+            } else if (distanceTime >= third_day) {
+                time_string = simpleDateFormat.format(simpleDateFormat.parse(time));
+            }
+            return time_string;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
+
     }
 
     public static String GetTime2(Long time) {
@@ -599,5 +634,73 @@ public class Utils {
             }
         }
         return intRet;
+    }
+
+    /**
+     * 获取版本号
+     *
+     * @return 当前应用的版本号
+     */
+    public static String getVersion(Context context) {
+        try {
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            String version = info.versionName;
+            return version;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "1.0" ;
+        }
+    }
+
+    public static Gson gson = new Gson();
+
+
+    /**
+     * 转成list
+     *
+     * @param gsonString
+     * @param cls
+     * @return
+     */
+    public static <T> ArrayList<T> fromJsonList(String gsonString, Class<T> cls) {
+        ArrayList<T> mList = new ArrayList<T>();
+        JsonArray array = new JsonParser().parse(gsonString).getAsJsonArray();
+        for (final JsonElement elem : array) {
+            mList.add(gson.fromJson(elem, cls));
+        }
+        return mList;
+    }
+
+    public static String getNUmberForString(String str) {
+        str = str.trim();
+        String str2 = "";
+        if (str != null && !"".equals(str)) {
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) >= 48 && str.charAt(i) <= 57) {
+                    str2 += str.charAt(i);
+                }
+            }
+        }
+        return str2;
+    }
+
+    //隐藏手机号中间
+    public static String GetPhone(String phone) {
+        if (!TextUtils.isEmpty(phone) && phone.length() > 6) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < phone.length(); i++) {
+                char c = phone.charAt(i);
+                if (i >= 3 && i <= 6) {
+                    sb.append('*');
+                } else {
+                    sb.append(c);
+                }
+            }
+
+            return sb.toString();
+        } else {
+            return "";
+        }
     }
 }

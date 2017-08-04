@@ -28,19 +28,20 @@ import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.small.small.goal.aim.AimFragment;
+import com.small.small.goal.login.LoginCodeActivity;
 import com.small.small.goal.message.MessageFragment;
 import com.small.small.goal.my.MyFragment;
 import com.small.small.goal.my.activity.RenameActivity;
 import com.small.small.goal.my.entry.EveryTaskGsonEntity;
 import com.small.small.goal.my.entry.UerEntity;
 import com.small.small.goal.search.SearchFragment;
-import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
 import com.small.small.goal.utils.Utils;
 import com.small.small.goal.utils.XUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.common.Callback;
@@ -120,6 +121,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView message_num_text;
     private final static int CWJ_HEAP_SIZE = 55 * 1024 * 1024;
 
+    public static String isFootball = "";
+    public static String isLottery = "";
+    public static String version = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -145,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getData();
 
 
+        System.out.println("===========GetToken========" + Utils.GetToken(this));
+        System.out.println("===================" + MyApplication.deviceId);
         //     VMRuntime.getRuntime().setMinimumHeapSize(CWJ_HEAP_SIZE);
 
     }
@@ -595,6 +602,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RequestParams requestParams = new RequestParams(Url.Url + Url.FollowedList);
         requestParams.addHeader("token", Utils.GetToken(this));
         requestParams.addHeader("deviceId", MyApplication.deviceId);
+
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -674,6 +682,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     UerEntity userInfo = gson.fromJson(jsonObject.get("result").toString(), UerEntity.class);
 
                     CacheUtil.getInstance().setUserInfo(userInfo);
+
+                    JSONObject userObject = new JSONObject(result).getJSONObject("result").getJSONObject("user");
+                    String nick = userObject.getString("nick");
+                    String avatar = userObject.optString("avatar");
+                    String brief = userObject.optString("brief");
+
+                    SharedPreferences sharedPreferences = Utils.UserSharedPreferences(MainActivity.this);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putString("nick", nick);
+                    editor.putString("avatar", avatar);
+                    editor.putString("brief", brief);
+                    editor.commit();
+
+                    JSONArray jsonArray = jsonObject.getJSONObject("result").getJSONArray("appConfigs");
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        if (jsonArray.getJSONObject(i).getString("id").equals("1")) {
+                            isLottery = jsonArray.getJSONObject(i).getString("value");
+                        } else if (jsonArray.getJSONObject(i).getString("id").equals("2")) {
+                            version = jsonArray.getJSONObject(i).getString("value");
+                        } else if (jsonArray.getJSONObject(i).getString("id").equals("3")) {
+                            isFootball = jsonArray.getJSONObject(i).getString("value");
+                        }
+                    }
+                    if (myFragment != null) {
+                        myFragment.SetLottery();
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -700,6 +737,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Gson gson = new Gson();
                 List<EveryTaskGsonEntity> data = gson.fromJson(Utils.getResultStr(result), new TypeToken<List<EveryTaskGsonEntity>>() {
                 }.getType());
+
                 Map<String, Boolean> map = new HashMap<String, Boolean>();
 
                 List<String> mapKey = new ArrayList<String>();
@@ -719,10 +757,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 map.put(KeyCode.AIM_SIGN, false);
 
-//                map.put(KeyCode.AIM_COMMENT, false);
-//                map.put(KeyCode.AIM_SHARE, false);
-//                map.put(KeyCode.AIM_SUPPORT, false);
-//                map.put(KeyCode.AIM_VOTE, false);
+                CacheUtil.getInstance().setEveryTaskGsonEntityList(data);
+
                 CacheUtil.getInstance().setMap(map);
             }
 

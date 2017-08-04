@@ -49,7 +49,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="2017年5月"
                 android:textColor="@color/text_gray_light"
                 android:textSize="12dp" />
 
@@ -71,6 +70,7 @@
                 android:textSize="14dp" />
 
             <ImageView
+                android:id="@+id/money_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

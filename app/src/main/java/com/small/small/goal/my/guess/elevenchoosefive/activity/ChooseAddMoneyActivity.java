@@ -31,7 +31,6 @@ import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Code;
 import com.small.small.goal.utils.Combine;
 import com.small.small.goal.utils.EditTextHeightUtil;
-import com.small.small.goal.utils.GameUtils;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
 import com.small.small.goal.utils.Utils;
@@ -123,7 +122,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("HH:mm");
 
-    private String expect = "";
+    private String expect = "0";
     private String openTime;
 
     PopupWindow popupWindow;
@@ -132,6 +131,8 @@ public class ChooseAddMoneyActivity extends BaseActivity {
     TextView bean_text;
     private String chongzhi_money = "";
     private String bean_pay = "";
+
+    int tou;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,7 +152,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
         rightImageInclude.setVisibility(View.GONE);
         data = CacheUtil.getInstance().getElevenChooseFive();
         min = getIntent().getIntExtra(KeyCode.INTENT_MIN, 1);
-        expect = getIntent().getExtras().getString("expect", "");
+        expect = getIntent().getExtras().getString("expect", "0");
         openTime = getIntent().getExtras().getString("openTime", "");
         nameTextInclude.setText("11选5");
 
@@ -293,17 +294,46 @@ public class ChooseAddMoneyActivity extends BaseActivity {
                 etvZhuiNums.setSelection(etvZhuiNums.getText().length());
                 break;
             case R.id.img_touDelete:
-                if (etvTouNums.getText().toString().equals("1")) return;
-                etvTouNums.setText((Integer.valueOf(etvTouNums.getText().toString()) - 1) + "");
-                etvTouNums.setSelection(etvTouNums.getText().length());
+//                if (etvTouNums.getText().toString().equals("1")) return;
+//                etvTouNums.setText((Integer.valueOf(etvTouNums.getText().toString()) - 1) + "");
+//                etvTouNums.setSelection(etvTouNums.getText().length());
+
+                if (etvTouNums.getText().toString().equals("")) {
+                    etvTouNums.setText("1");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+                } else if (etvTouNums.getText().toString().equals("1")) {
+//                    etvTouNums.setText("1");
+//                    etvTouNums.setSelection(etvTouNums.getText().length());
+                } else {
+                    etvTouNums.setText((Integer.valueOf(etvTouNums.getText().toString()) - 1) + "");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+                }
+
                 break;
             case R.id.img_touAdd:
-                etvTouNums.setText((Integer.valueOf(etvTouNums.getText().toString()) + 1) + "");
-                etvTouNums.setSelection(etvTouNums.getText().length());
+//                etvTouNums.setText((Integer.valueOf(etvTouNums.getText().toString()) + 1) + "");
+//                etvTouNums.setSelection(etvTouNums.getText().length());
+
+                if (etvTouNums.getText().toString().equals("")) {
+                    etvTouNums.setText("1");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+                } else {
+                    etvTouNums.setText((Integer.valueOf(etvTouNums.getText().toString()) + 1) + "");
+                    etvTouNums.setSelection(etvTouNums.getText().length());
+                }
                 break;
             case R.id.tv_go:
-                //          dialog.show();
-                postTouZhu(v);
+
+                if (data.size() > 0) {
+                    if (etvTouNums.getText().toString().equals("")) {
+                        Utils.showToast(this, "请填写投注倍数");
+                    } else {
+                        postTouZhu(v);
+                    }
+                } else
+                    Utils.showToast(this, "请添加投注");
+
+
                 break;
         }
     }
@@ -360,11 +390,10 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
 
-                boolean b = GameUtils.CallResultOK(result);
-//                Utils.showToast(ChooseAddMoneyActivity.this, GameUtils.getMsg(result));
-//                if (b) {
-//                    CacheUtil.getInstance().closeElevenChooseFive();
-//                }
+
+                System.out.println("========================" + result);
+
+                boolean b = Utils.callOk(result, ChooseAddMoneyActivity.this);
 
                 if (b) {
                     account.setBean((Integer.valueOf(account.getBean()) - (tou * zhui * zhuNums * 20)) + "");
@@ -372,8 +401,8 @@ public class ChooseAddMoneyActivity extends BaseActivity {
                     PutWindow(v);
                     CacheUtil.getInstance().closeElevenChooseFive();
                 } else {
-                    Utils.showToast(ChooseAddMoneyActivity.this, GameUtils.getMsg(result));
-                    if (GameUtils.getMsg(result).equals("金豆不足")) {
+                    Utils.showToast(ChooseAddMoneyActivity.this, Utils.getMsg(result));
+                    if (Utils.getMsg(result).equals("金豆不足")) {
                         MoneyWindow(v);
                     }
                 }
@@ -381,7 +410,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                System.out.println("========================" + ex.getMessage());
             }
 
             @Override
@@ -404,12 +433,18 @@ public class ChooseAddMoneyActivity extends BaseActivity {
         try {
             Date date1 = simpleDateFormat.parse(openTime);
             Long time = date1.getTime() + 1000 * 60 * 10;
-            ;
             content_text.setText("预计" + simpleDateFormat2.format(new Date(time)) + "开奖");
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
+        windowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+                finish();
+            }
+        });
 
         next_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -449,6 +484,8 @@ public class ChooseAddMoneyActivity extends BaseActivity {
         TextView recharge4_text = (TextView) windowView.findViewById(R.id.recharge4_text);
         TextView recharge5_text = (TextView) windowView.findViewById(R.id.recharge5_text);
         TextView recharge6_text = (TextView) windowView.findViewById(R.id.recharge6_text);
+        TextView recharge7_text = (TextView) windowView.findViewById(R.id.recharge7_text);
+        TextView recharge8_text = (TextView) windowView.findViewById(R.id.recharge8_text);
         ImageView ribbon_image = (ImageView) windowView.findViewById(R.id.ribbon_image);
         bean_text = (TextView) windowView.findViewById(R.id.bean_text);
 
@@ -488,6 +525,18 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 RechargeWindow(view, 6);
+            }
+        });
+        recharge7_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 7);
+            }
+        });
+        recharge8_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 8);
             }
         });
         windowView.setOnClickListener(new View.OnClickListener() {
@@ -568,6 +617,18 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             number_image.setImageResource(R.mipmap.icon_gold_bean_4);
             chongzhi_money = "100";
             bean_pay = "10000";
+        } else if (status == 7) {
+            content = "本次充值您将花费200元";
+            number_text.setText("20000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "200";
+            bean_pay = "20000";
+        } else if (status == 8) {
+            content = "本次充值您将花费500元";
+            number_text.setText("50000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            chongzhi_money = "500";
+            bean_pay = "50000";
         }
         spannable = new SpannableStringBuilder(content);
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 8, content.length() - 1
@@ -679,9 +740,14 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             switch (id) {
                 case R.id.etv_touNums:
                     if (s.toString().length() > 0) {
-                        etvTouNums.setSelection(s.toString().length());
-                        if (Integer.valueOf(s.toString()) > 2000) {
-                            etvTouNums.setText(2000 + "");
+
+                        if (s.toString().equals("0")) {
+                            etvTouNums.setText("");
+                        } else {
+                            etvTouNums.setSelection(s.toString().length());
+                            if (Integer.valueOf(s.toString()) > 2000) {
+                                etvTouNums.setText(2000 + "");
+                            }
                         }
                     }
 
@@ -692,25 +758,30 @@ public class ChooseAddMoneyActivity extends BaseActivity {
 
         @Override
         public void afterTextChanged(Editable s) {
-            switch (id) {
-                case R.id.etv_touNums:
-                    setTvGo();
-                    break;
-                case R.id.etv_zhuiNums:
-                    setTvGo();
-                    break;
-            }
+
+            setTvGo();
         }
     }
 
     private void setTvGo() {
-        if ("".equals(etvTouNums.getText().toString())) return;
-        if ("".equals(etvZhuiNums.getText().toString())) return;
+//        if ("".equals(etvTouNums.getText().toString())) {
+//            return;
+//        }
+//
+////        if ("".equals(etvZhuiNums.getText().toString())) return;
+//
+//        Integer tou = Integer.valueOf(etvTouNums.getText().toString());
+////        Integer zhui = Integer.valueOf(etvZhuiNums.getText().toString());
+//
+//        tvGo.setText("立即投注  " + (tou * 1 * zhuNums * 20) + "金豆");
 
-        Integer tou = Integer.valueOf(etvTouNums.getText().toString());
-        Integer zhui = Integer.valueOf(etvZhuiNums.getText().toString());
+        if ("".equals(etvTouNums.getText().toString())) {
+            tou = 0;
+        } else {
+            tou = Integer.valueOf(etvTouNums.getText().toString());
+        }
 
-        tvGo.setText("立即投注  " + (tou * zhui * zhuNums * 20) + "金豆");
+        tvGo.setText("立即投注  " + (tou * 1 * zhuNums * 20) + "金豆");
 
     }
 
@@ -747,7 +818,7 @@ public class ChooseAddMoneyActivity extends BaseActivity {
             List<ChooseOvalEntity> oneData = new ArrayList<>();
             for (Map.Entry<Integer, List<ChooseOvalEntity>> eny : map.entrySet()) {
 
-                vh.tvType.setText("["+types[eny.getKey()]+"]");
+                vh.tvType.setText("[" + types[eny.getKey()] + "]");
                 oneData = map.get(eny.getKey());
             }
 

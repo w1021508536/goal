@@ -86,11 +86,12 @@ public class LotteryDetailsActivity extends BaseActivity {
             }
         }
 
-        if (lotteryEmpty.getTid().equals("9")) {
-            nameText.setText("新快3-" + lotteryEmpty.getExpect() + "期");
-        } else if (lotteryEmpty.getTid().equals("8")) {
-            nameText.setText("11选5-" + lotteryEmpty.getExpect() + "期");
-        }
+//        if (lotteryEmpty.getTid().equals("9")) {
+//            nameText.setText("新快3-" + lotteryEmpty.getExpect() + "期");
+//        } else if (lotteryEmpty.getTid().equals("8")) {
+//            nameText.setText("11选5-" + lotteryEmpty.getExpect() + "期");
+//        }
+        nameText.setText(lotteryEmpty.getName()+"-" + lotteryEmpty.getExpect() + "期");
 
         timeText.setText("预计开奖时间：" + simpleDateFormat.format(new Date(Long.valueOf(lotteryEmpty.getOpenTime()))));
 
@@ -99,75 +100,77 @@ public class LotteryDetailsActivity extends BaseActivity {
         createTimeText.setText(simpleDateFormat.format(new Date(Long.valueOf(lotteryEmpty.getCreateTime()))));
         openCodeText.setText(lotteryEmpty.getOpenCode());
 
-        String contentString = "";
-        String lotteryContent = lotteryEmpty.getContent();
+        contentText.setText(lotteryEmpty.getContent());
 
-        List<String> listContent = new ArrayList<>();
-
-
-        while (lotteryContent.indexOf(";") > 0) {
-            listContent.add(lotteryContent.substring(0, lotteryContent.indexOf(";")));
-            lotteryContent = lotteryContent.substring(lotteryContent.indexOf(";") + 1, lotteryContent.length());
-        }
-        if (listContent.size() == 0) {
-            listContent.add(lotteryEmpty.getContent());
-        }
-
-        for (int i = 0; i < listContent.size(); i++) {
-            String code = listContent.get(i).substring(0, listContent.get(i).indexOf(":"));
-            String content = listContent.get(i).substring(listContent.get(i).indexOf(":") + 1, listContent.get(i).length());
-            if (code.equals("1")) {
-                contentString = contentString + "[直选]";
-            } else if (code.equals("3")) {
-                contentString = contentString + "[组三]";
-            } else if (code.equals("6")) {
-                contentString = contentString + "[组六]";
-            } else if (code.equals("22")) {
-                contentString = contentString + "[任2]";
-            } else if (code.equals("23")) {
-                contentString = contentString + "[任3]";
-            } else if (code.equals("24")) {
-                contentString = contentString + "[任4]";
-            } else if (code.equals("25")) {
-                contentString = contentString + "[任5]";
-            } else if (code.equals("26")) {
-                contentString = contentString + "[任6]";
-            } else if (code.equals("27")) {
-                contentString = contentString + "[任7]";
-            } else if (code.equals("28")) {
-                contentString = contentString + "[任8]";
-            } else if (code.equals("31")) {
-                contentString = contentString + "[前一直选]";
-            } else if (code.equals("32")) {
-                contentString = contentString + "[前二直选]";
-            } else if (code.equals("33")) {
-                contentString = contentString + "[前三直选]";
-            } else if (code.equals("301")) {
-                contentString = contentString + "[前一组选]";
-            } else if (code.equals("302")) {
-                contentString = contentString + "[前二组选]";
-            } else if (code.equals("303")) {
-                contentString = contentString + "[前三组选]";
-            } else if (code.equals("10")) {
-                contentString = contentString + "[和值]";
-            } else if (code.equals("43")) {
-                contentString = contentString + "[三连号通选]";
-            } else if (code.equals("431")) {
-                contentString = contentString + "[三同号单选]";
-            } else if (code.equals("436")) {
-                contentString = contentString + "[三同号通选]";
-            } else if (code.equals("430")) {
-                contentString = contentString + "[三不同号]";
-            } else if (code.equals("421")) {
-                contentString = contentString + "[二同号单选]";
-            } else if (code.equals("426")) {
-                contentString = contentString + "[二同号复选]";
-            } else if (code.equals("420")) {
-                contentString = contentString + "[二不同号]";
-            }
-            contentString = contentString + content + ";";
-        }
-        contentText.setText(contentString);
+//        String contentString = "";
+//        String lotteryContent = lotteryEmpty.getContent();
+//
+//        List<String> listContent = new ArrayList<>();
+//
+//
+//        while (lotteryContent.indexOf(";") > 0) {
+//            listContent.add(lotteryContent.substring(0, lotteryContent.indexOf(";")));
+//            lotteryContent = lotteryContent.substring(lotteryContent.indexOf(";") + 1, lotteryContent.length());
+//        }
+//        if (listContent.size() == 0) {
+//            listContent.add(lotteryEmpty.getContent());
+//        }
+//
+//        for (int i = 0; i < listContent.size(); i++) {
+//            String code = listContent.get(i).substring(0, listContent.get(i).indexOf(":"));
+//            String content = listContent.get(i).substring(listContent.get(i).indexOf(":") + 1, listContent.get(i).length());
+//            if (code.equals("1")) {
+//                contentString = contentString + "[直选]";
+//            } else if (code.equals("3")) {
+//                contentString = contentString + "[组三]";
+//            } else if (code.equals("6")) {
+//                contentString = contentString + "[组六]";
+//            } else if (code.equals("22")) {
+//                contentString = contentString + "[任2]";
+//            } else if (code.equals("23")) {
+//                contentString = contentString + "[任3]";
+//            } else if (code.equals("24")) {
+//                contentString = contentString + "[任4]";
+//            } else if (code.equals("25")) {
+//                contentString = contentString + "[任5]";
+//            } else if (code.equals("26")) {
+//                contentString = contentString + "[任6]";
+//            } else if (code.equals("27")) {
+//                contentString = contentString + "[任7]";
+//            } else if (code.equals("28")) {
+//                contentString = contentString + "[任8]";
+//            } else if (code.equals("31")) {
+//                contentString = contentString + "[前一直选]";
+//            } else if (code.equals("32")) {
+//                contentString = contentString + "[前二直选]";
+//            } else if (code.equals("33")) {
+//                contentString = contentString + "[前三直选]";
+//            } else if (code.equals("301")) {
+//                contentString = contentString + "[前一组选]";
+//            } else if (code.equals("302")) {
+//                contentString = contentString + "[前二组选]";
+//            } else if (code.equals("303")) {
+//                contentString = contentString + "[前三组选]";
+//            } else if (code.equals("10")) {
+//                contentString = contentString + "[和值]";
+//            } else if (code.equals("43")) {
+//                contentString = contentString + "[三连号通选]";
+//            } else if (code.equals("431")) {
+//                contentString = contentString + "[三同号单选]";
+//            } else if (code.equals("436")) {
+//                contentString = contentString + "[三同号通选]";
+//            } else if (code.equals("430")) {
+//                contentString = contentString + "[三不同号]";
+//            } else if (code.equals("421")) {
+//                contentString = contentString + "[二同号单选]";
+//            } else if (code.equals("426")) {
+//                contentString = contentString + "[二同号复选]";
+//            } else if (code.equals("420")) {
+//                contentString = contentString + "[二不同号]";
+//            }
+//            contentString = contentString + content + ";";
+//        }
+//        contentText.setText(contentString);
 
 
     }

@@ -145,7 +145,7 @@ public class LevelActivity extends BaseActivity {
 
         aimRed = new Integer[][]{{1, 0}, {1, 5}, {1, 7}, {1, 10}, {2, 15}, {5, 30}, {10, 50}, {15, 80}, {20, 100}};
 
-        expArray = new Integer[]{0, 600, 900, 1500, 3000, 7500, 4500, 100000, 200000};
+        expArray = new Integer[]{0, 600, 900, 1500, 3000, 7500, 45000, 100000, 200000};
         linearLayouts = new LinearLayout[]{llLine1, llLine3, llLine4, llLine5, llLine6, llLine7, llLine8};
 
         Integer[] bitmapRes = new Integer[]{R.mipmap.zhuxiaobao_icon, R.mipmap.zhuxiaobao_icon, R.mipmap.icon_fendouzhu, R.mipmap.icon_chulanzhu, R.mipmap.icon_chengmingzhu, R.mipmap.icon_feitianzhu, R.mipmap.icon_zhuxiaoxian, R.mipmap.icon_zhudaxian, R.mipmap.icon_yidaizongzhu};
@@ -198,11 +198,20 @@ public class LevelActivity extends BaseActivity {
         llAimLevel.setOnClickListener(this);
         llRedLevel.setOnClickListener(this);
         //    rlMoneyLevel.setOnClickListener(this);
+        imgLevel1Level.setOnClickListener(this);
+        imgLevel2Level.setOnClickListener(this);
+        imgLevel3Level.setOnClickListener(this);
+        imgLevel4Level.setOnClickListener(this);
+        imgLevel5Level.setOnClickListener(this);
+        imgLevel6Level.setOnClickListener(this);
+        imgLevel7Level.setOnClickListener(this);
+        imgLevel8Level.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        Integer[] integers;
         switch (v.getId()) {
             case R.id.ll_aim_level:
                 startActivity(new Intent(this, AddAimActivity.class));
@@ -215,7 +224,75 @@ public class LevelActivity extends BaseActivity {
             case R.id.rl_money_level:
                 // startActivity(new Intent(this,MontyToActivity.class));
                 break;
+            case R.id.img_level1_level:
+                ClearImage();
+                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+                integers = aimRed[1];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level2_level:
+                ClearImage();
+                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+                integers = aimRed[2];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level3_level:
+                ClearImage();
+                imageViews[2].setImageResource(R.mipmap.icon_level_3);
+                integers = aimRed[3];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level4_level:
+                ClearImage();
+                imageViews[3].setImageResource(R.mipmap.icon_level_4);
+                integers = aimRed[4];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level5_level:
+                ClearImage();
+                imageViews[4].setImageResource(R.mipmap.icon_level_5);
+                integers = aimRed[5];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level6_level:
+                ClearImage();
+                imageViews[5].setImageResource(R.mipmap.icon_level_6);
+                integers = aimRed[6];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level7_level:
+                ClearImage();
+                imageViews[6].setImageResource(R.mipmap.icon_level_7);
+                integers = aimRed[7];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
+            case R.id.img_level8_level:
+                ClearImage();
+                imageViews[7].setImageResource(R.mipmap.icon_level_8);
+                integers = aimRed[8];
+                tvAimNumsLevel.setText(integers[0] + "");
+                tvRedNumsLevel.setText(integers[1] + "");
+                break;
         }
+    }
+
+
+    private void ClearImage() {
+        imageViews[0].setImageResource(R.mipmap.icon_level_gray_1);
+        imageViews[1].setImageResource(R.mipmap.icon_level_gray_2);
+        imageViews[2].setImageResource(R.mipmap.icon_level_gray_3);
+        imageViews[3].setImageResource(R.mipmap.icon_level_gray_4);
+        imageViews[4].setImageResource(R.mipmap.icon_level_gray_5);
+        imageViews[5].setImageResource(R.mipmap.icon_level_gray_6);
+        imageViews[6].setImageResource(R.mipmap.icon_level_gray_7);
+        imageViews[7].setImageResource(R.mipmap.icon_level_gray_8);
     }
 
     private void setImageView(Integer grade) {
@@ -231,52 +308,52 @@ public class LevelActivity extends BaseActivity {
                 break;
             case 2:
 
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
                 imageViews[1].setImageResource(R.mipmap.icon_level_2);
                 break;
             case 3:
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
-                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[1].setImageResource(R.mipmap.icon_level_2);
                 imageViews[2].setImageResource(R.mipmap.icon_level_3);
                 break;
             case 4:
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
-                imageViews[1].setImageResource(R.mipmap.icon_level_2);
-                imageViews[2].setImageResource(R.mipmap.icon_level_3);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+//                imageViews[2].setImageResource(R.mipmap.icon_level_3);
                 imageViews[3].setImageResource(R.mipmap.icon_level_4);
                 break;
             case 5:
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
-                imageViews[1].setImageResource(R.mipmap.icon_level_2);
-                imageViews[2].setImageResource(R.mipmap.icon_level_3);
-                imageViews[3].setImageResource(R.mipmap.icon_level_4);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+//                imageViews[2].setImageResource(R.mipmap.icon_level_3);
+//                imageViews[3].setImageResource(R.mipmap.icon_level_4);
                 imageViews[4].setImageResource(R.mipmap.icon_level_5);
                 break;
             case 6:
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
-                imageViews[1].setImageResource(R.mipmap.icon_level_2);
-                imageViews[2].setImageResource(R.mipmap.icon_level_3);
-                imageViews[3].setImageResource(R.mipmap.icon_level_4);
-                imageViews[4].setImageResource(R.mipmap.icon_level_5);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+//                imageViews[2].setImageResource(R.mipmap.icon_level_3);
+//                imageViews[3].setImageResource(R.mipmap.icon_level_4);
+//                imageViews[4].setImageResource(R.mipmap.icon_level_5);
                 imageViews[5].setImageResource(R.mipmap.icon_level_6);
                 break;
             case 7:
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
-                imageViews[1].setImageResource(R.mipmap.icon_level_2);
-                imageViews[2].setImageResource(R.mipmap.icon_level_3);
-                imageViews[3].setImageResource(R.mipmap.icon_level_4);
-                imageViews[4].setImageResource(R.mipmap.icon_level_5);
-                imageViews[5].setImageResource(R.mipmap.icon_level_6);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+//                imageViews[2].setImageResource(R.mipmap.icon_level_3);
+//                imageViews[3].setImageResource(R.mipmap.icon_level_4);
+//                imageViews[4].setImageResource(R.mipmap.icon_level_5);
+//                imageViews[5].setImageResource(R.mipmap.icon_level_6);
                 imageViews[6].setImageResource(R.mipmap.icon_level_7);
                 break;
             case 8:
-                imageViews[0].setImageResource(R.mipmap.icon_level_1);
-                imageViews[1].setImageResource(R.mipmap.icon_level_2);
-                imageViews[2].setImageResource(R.mipmap.icon_level_3);
-                imageViews[3].setImageResource(R.mipmap.icon_level_4);
-                imageViews[4].setImageResource(R.mipmap.icon_level_5);
-                imageViews[5].setImageResource(R.mipmap.icon_level_6);
-                imageViews[6].setImageResource(R.mipmap.icon_level_7);
+//                imageViews[0].setImageResource(R.mipmap.icon_level_1);
+//                imageViews[1].setImageResource(R.mipmap.icon_level_2);
+//                imageViews[2].setImageResource(R.mipmap.icon_level_3);
+//                imageViews[3].setImageResource(R.mipmap.icon_level_4);
+//                imageViews[4].setImageResource(R.mipmap.icon_level_5);
+//                imageViews[5].setImageResource(R.mipmap.icon_level_6);
+//                imageViews[6].setImageResource(R.mipmap.icon_level_7);
                 imageViews[7].setImageResource(R.mipmap.icon_level_8);
                 break;
         }

@@ -26,6 +26,9 @@ public class DynamicEntity {
     private String province;
     private String isPaid;
 
+    private String lastSupport;
+    private String lastNick;
+
     private String haveVote;
     private String votes;
 
@@ -194,7 +197,21 @@ public class DynamicEntity {
     }
 
 
+    public String getLastSupport() {
+        return lastSupport;
+    }
 
+    public void setLastSupport(String lastSupport) {
+        this.lastSupport = lastSupport;
+    }
+
+    public String getLastNick() {
+        return lastNick;
+    }
+
+    public void setLastNick(String lastNick) {
+        this.lastNick = lastNick;
+    }
 
     public String getCity() {
         return city;

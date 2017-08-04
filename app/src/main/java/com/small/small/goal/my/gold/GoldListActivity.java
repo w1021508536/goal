@@ -106,8 +106,8 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
     private void init() {
 
         nameTextInclude.setText("金豆明细");
-        rightImageInclude.setImageResource(R.mipmap.icon_fitter);
-
+//        rightImageInclude.setImageResource(R.mipmap.icon_fitter);
+        rightImageInclude.setVisibility(View.GONE);
         //        plv.setMode(PullToRefreshBase.Mode.BOTH);
         plv.setMode(PullToRefreshBase.Mode.BOTH);
 
@@ -148,6 +148,8 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                 page = 1;
                 GetData();
             } else {
+                goldEmptyList.clear();
+                goldListAdapter.notifyDataSetChanged();
                 nullLayout.setClickable(true);
                 nullLayout.setVisibility(View.VISIBLE);
                 imgEmpty.setImageResource(R.mipmap.bg_net_wrong);
@@ -156,15 +158,15 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
         }
     }
 
-    @OnClick({R.id.left_image_include, R.id.right_image_include, R.id.next_text})
+    @OnClick({R.id.left_image_include, R.id.right_image_include, R.id.next_text, R.id.null_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.left_image_include:
                 finish();
                 break;
-            case R.id.right_image_include:
-                dialog.show();
-                break;
+//            case R.id.right_image_include:
+//                dialog.show();
+//                break;
             case R.id.next_text:
                 MoneyWindow(view);
                 break;
@@ -175,6 +177,8 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                     nullLayout.setVisibility(View.GONE);
                     GetData();
                 } else {
+                    goldEmptyList.clear();
+                    goldListAdapter.notifyDataSetChanged();
                     Utils.showToast(this, "请检查网络是否连接");
                     nullLayout.setClickable(true);
                     nullLayout.setVisibility(View.VISIBLE);
@@ -199,6 +203,7 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             @Override
             public void onSuccess(String result) {
 
+                System.out.println("===============" + result);
 
                 try {
                     String code = new JSONObject(result).getString("code");
@@ -226,13 +231,17 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
                             goldEmptyList.clear();
                         }
                         if (goldEmptyList.size() == 0) {
+                            goldEmptyList.clear();
+                            goldListAdapter.notifyDataSetChanged();
                             nullLayout.setClickable(false);
                             nullLayout.setVisibility(View.VISIBLE);
                             imgEmpty.setImageResource(R.mipmap.bg_null_data);
                             tvEmpty.setText("暂 时 没 有 任 何 数 据 ~");
                         }
                     } else {
-//                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
+                        goldEmptyList.clear();
+                        goldListAdapter.notifyDataSetChanged();
+                        Utils.showToast(GoldListActivity.this, new JSONObject(result).getString("msg"));
                         nullLayout.setClickable(true);
                         nullLayout.setVisibility(View.VISIBLE);
                         imgEmpty.setImageResource(R.mipmap.bg_wrong);
@@ -248,7 +257,9 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                System.out.println("=========ex======" + ex.getMessage());
+                goldEmptyList.clear();
+                goldListAdapter.notifyDataSetChanged();
                 nullLayout.setClickable(true);
                 nullLayout.setVisibility(View.VISIBLE);
                 imgEmpty.setImageResource(R.mipmap.bg_wrong);
@@ -288,6 +299,8 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
         TextView recharge4_text = (TextView) windowView.findViewById(R.id.recharge4_text);
         TextView recharge5_text = (TextView) windowView.findViewById(R.id.recharge5_text);
         TextView recharge6_text = (TextView) windowView.findViewById(R.id.recharge6_text);
+        TextView recharge7_text = (TextView) windowView.findViewById(R.id.recharge7_text);
+        TextView recharge8_text = (TextView) windowView.findViewById(R.id.recharge8_text);
         ImageView ribbon_image = (ImageView) windowView.findViewById(R.id.ribbon_image);
         bean_text = (TextView) windowView.findViewById(R.id.bean_text);
 
@@ -327,6 +340,18 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             @Override
             public void onClick(View v) {
                 RechargeWindow(view, 6);
+            }
+        });
+        recharge7_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 7);
+            }
+        });
+        recharge8_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RechargeWindow(view, 8);
             }
         });
         windowView.setOnClickListener(new View.OnClickListener() {
@@ -407,6 +432,18 @@ public class GoldListActivity extends BaseActivity implements MonthDialog.OnDial
             number_image.setImageResource(R.mipmap.icon_gold_bean_4);
             money = "100";
             bean_pay = "10000";
+        } else if (status == 7) {
+            content = "本次充值您将花费200元";
+            number_text.setText("20000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            money = "200";
+            bean_pay = "20000";
+        } else if (status == 8) {
+            content = "本次充值您将花费500元";
+            number_text.setText("50000金豆");
+            number_image.setImageResource(R.mipmap.icon_gold_bean_4);
+            money = "500";
+            bean_pay = "50000";
         }
         spannable = new SpannableStringBuilder(content);
         spannable.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.red_heavy)), 8, content.length() - 1

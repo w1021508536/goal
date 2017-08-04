@@ -120,14 +120,17 @@ public class RedMoreAdapter extends BaseAdapter {
                 case 1:   //
                     contentViewHolder.tvNameItem.setText("助力红包—来自");
                     contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
+                    contentViewHolder.imgItem.setImageResource(R.mipmap.zhuli_bag_icon);
                     break;
                 case 2:   //
                     contentViewHolder.tvNameItem.setText("感谢红包—来自");
                     contentViewHolder.tvUserName.setText(redMoreAdapterEntry.getFromUserNick());
+                    contentViewHolder.imgItem.setImageResource(R.mipmap.shouyi_bag_icon);
                     break;
                 case 3:  //
                     contentViewHolder.tvNameItem.setText("收益红包");
                     contentViewHolder.tvUserName.setText("");
+                    contentViewHolder.imgItem.setImageDrawable(context.getResources().getDrawable(R.mipmap.shouyi_bag_icon));
                     break;
 
             }

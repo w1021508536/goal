@@ -76,8 +76,6 @@ public class CollectActivity extends BaseActivity {
         drawable.setBounds(0, 0, Utils.dip2px(this, 14), Utils.dip2px(this, 14));
         etvSeachCollect.setCompoundDrawables(drawable, null, null, null);
 
-//        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_collect, null);
-//        plvCollect.setEmptyView(emptyView);
     }
 
     @Override
@@ -90,13 +88,6 @@ public class CollectActivity extends BaseActivity {
                 getData();
             }
         });
-//        plvCollect.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
-//            @Override
-//            public void onLastItemVisible() {
-//                page++;
-//                getData();
-//            }
-//        });
     }
 
     @Override
@@ -123,10 +114,6 @@ public class CollectActivity extends BaseActivity {
                     Gson gson = new Gson();
                     List<CollectEntity> data = gson.fromJson(jsonData, new TypeToken<List<CollectEntity>>() {
                     }.getType());
-//                    if (Integer.valueOf(jsonObject.get("pageNum").toString()) != 0) {
-//                        adapter.addData(data);
-//                    } else
-//                        adapter.setData(data);
                     adapter.setData(data);
                     plv.onRefreshComplete();
                 } catch (JSONException e) {

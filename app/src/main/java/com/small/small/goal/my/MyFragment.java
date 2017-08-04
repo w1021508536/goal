@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.small.small.goal.MainActivity;
 import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.login.LoginActivity;
@@ -30,14 +30,16 @@ import com.small.small.goal.my.activity.RenameActivity;
 import com.small.small.goal.my.activity.SettingActivity;
 import com.small.small.goal.my.activity.SignActivity;
 import com.small.small.goal.my.activity.TaskActivity;
-import com.small.small.goal.my.activity.TransferActivity;
+import com.small.small.goal.my.transfer.activity.TransferActivity;
 import com.small.small.goal.my.activity.UserInfoActivity;
-import com.small.small.goal.my.activity.WalletActivity;
 import com.small.small.goal.my.entry.UerEntity;
 import com.small.small.goal.my.gold.GoldListActivity;
 import com.small.small.goal.my.guess.elevenchoosefive.activity.ChooseMainActivity;
 import com.small.small.goal.my.guess.fastthree.FastThreeActivity;
 import com.small.small.goal.my.guess.football.FootBallActivity;
+import com.small.small.goal.my.guess.twoColorBall.TwoColorBallActivity;
+import com.small.small.goal.my.mall.activity.MallActivity;
+import com.small.small.goal.my.wallet.WalletActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.KeyCode;
 import com.small.small.goal.utils.Url;
@@ -100,7 +102,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     View lineView;
     @InjectView(R.id.imageView2)
     ImageView imageView2;
-    @InjectView(R.id.ll_wallect_fragment)
+    @InjectView(R.id.ll_wallet_fragment)
     LinearLayout llWallectFragment;
     @InjectView(R.id.ll_red_fragment)
     LinearLayout llRedFragment;
@@ -129,10 +131,16 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     LinearLayout xuan5Layout;
     @InjectView(R.id.bean_layout)
     LinearLayout beanLayout;
+    @InjectView(R.id.two_ball_layout)
+    LinearLayout twoBallLayout;
+    @InjectView(R.id.guess_layout)
+    LinearLayout guessLayout;
 
     private UerEntity userInfo;
     private SharedPreferences sp;
     private UerEntity.AccountBean account;
+
+    private String version_now;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -166,10 +174,11 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         kuai3Layout.setOnClickListener(this);
         footballLayout.setOnClickListener(this);
         xuan5Layout.setOnClickListener(this);
+        twoBallLayout.setOnClickListener(this);
     }
 
     private void initData() {
-
+        version_now = Utils.getVersion(getActivity());
         sp = Utils.UserSharedPreferences(getContext());
 
         Drawable drawable = getResources().getDrawable(R.mipmap.exp_icon);
@@ -183,6 +192,25 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         UerEntity.TaskInfoBean taskInfo = userInfo.getTaskInfo();
         getSign(taskInfo);
 
+        if (MainActivity.version.equals("")) {
+
+            guessLayout.setVisibility(View.GONE);
+        } else {
+            long now = Long.valueOf(version_now.replace(".", ""));
+            long get = Long.valueOf(MainActivity.version.replace(".", ""));
+            if (now < get) {
+                guessLayout.setVisibility(View.VISIBLE);
+            } else {
+                if (MainActivity.isLottery.equals("on")) {
+                    guessLayout.setVisibility(View.VISIBLE);
+                } else {
+                    guessLayout.setVisibility(View.GONE);
+                }
+
+            }
+
+        }
+
     }
 
 
@@ -194,7 +222,12 @@ public class MyFragment extends Fragment implements View.OnClickListener {
         UerEntity.TaskInfoBean taskInfo = userInfo.getTaskInfo();
 
         tvOptionFragment.setText(account.getOption() + "");
-        tvScoreFragment.setText(account.getScore() + "");
+
+        if (Integer.valueOf(CacheUtil.getInstance().getUserInfo().getAccount().getBean()) > 9999) {
+            String bean = CacheUtil.getInstance().getUserInfo().getAccount().getBean();
+            tvScoreFragment.setText(bean.substring(0, bean.length() - 4) + "." + bean.substring(bean.length() - 4, bean.length() - 3) + "w");
+        } else
+            tvScoreFragment.setText(CacheUtil.getInstance().getUserInfo().getAccount().getBean());
 
         int exp = userInfo.getAccount().getExp();
         tvLevelFragment.setText("Exp " + userInfo.getAccount().getExp());
@@ -245,7 +278,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 }
                 try {
                     long signTime = (long) ((JSONObject) new JSONObject(result).get("result")).get("lastSignInTime");
-                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/" + (int) (taskInfo.getTotalTaskCount() + 1));
+//                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/" + (int) (taskInfo.getTotalTaskCount() + 1));
+                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/5");
                     Date date = new Date(signTime);
                     SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日");
                     Date nowDate = new Date();
@@ -260,7 +294,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                     } else {
                     }
                     CacheUtil.getInstance().getUserInfo().getTaskInfo().setTotalTaskCount(CacheUtil.getInstance().getUserInfo().getTaskInfo().getTotalTaskCount() + 1);
-                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/" + ((int) taskInfo.getTotalTaskCount()));
+//                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/" + ((int) taskInfo.getTotalTaskCount()));
+                    tvTaskNumsFragment.setText(((int) taskInfo.getFinishTaskCount()) + "/5");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -318,7 +353,7 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 startActivity(new Intent(getContext(), CollectActivity.class));
                 break;
             //我的钱包
-            case R.id.ll_wallect_fragment:
+            case R.id.ll_wallet_fragment:
                 startActivity(new Intent(getContext(), WalletActivity.class));
                 break;
             //设置
@@ -339,7 +374,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 break;
             //商城
             case R.id.ll_shopping_fragment:
-                Utils.showToast(getActivity(), "敬请期待");
+//                Utils.showToast(getActivity(), "敬请期待");
+                startActivity(new Intent(getContext(), MallActivity.class));
                 break;
             //推广码
             case R.id.ll_extension_fragment:
@@ -348,6 +384,10 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             //合作伙伴
             case R.id.distribution_layout:
                 GetCode();
+                break;
+            //我的金豆
+            case R.id.bean_layout:
+                startActivity(new Intent(getContext(), GoldListActivity.class));
                 break;
             //足球
             case R.id.football_layout:
@@ -363,9 +403,9 @@ public class MyFragment extends Fragment implements View.OnClickListener {
             case R.id.xuan5_layout:
                 startActivity(new Intent(getContext(), ChooseMainActivity.class));
                 break;
-            //我的金豆
-            case R.id.bean_layout:
-                startActivity(new Intent(getContext(), GoldListActivity.class));
+            //双色球
+            case R.id.two_ball_layout:
+                startActivity(new Intent(getContext(), TwoColorBallActivity.class));
                 break;
             default:
                 break;
@@ -390,8 +430,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                         Intent intent = new Intent(getActivity(), DistributionActivity.class);
                         startActivity(intent);
                     } else if (code.equals("1500001")) {
-                        Utils.showToast(getActivity(), new JSONObject(result).getString("msg"));
-                        startActivity(new Intent(getActivity(), ExtensionActivity.class));
+                        Utils.showToast(getActivity(), new JSONObject(result).getString("您还不是代理，请购买推广码"));
+//                        startActivity(new Intent(getActivity(), ExtensionActivity.class));
                     } else if (code.equals("100000")) {
                         Intent intent = new Intent(getActivity(), DistributionActivity.class);
                         startActivity(intent);
@@ -423,6 +463,14 @@ public class MyFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+
+
+//        if (Integer.valueOf(CacheUtil.getInstance().getUserInfo().getAccount().getBean()) > 9999) {
+//            String bean = CacheUtil.getInstance().getUserInfo().getAccount().getBean();
+//            tvScoreFragment.setText(bean.substring(0, bean.length() - 4) + "." + bean.substring(bean.length() - 4, bean.length() - 3) + "w");
+//        } else
+//            tvScoreFragment.setText(CacheUtil.getInstance().getUserInfo().getAccount().getBean());
+
         SharedPreferences sp = Utils.UserSharedPreferences(getContext());
         String avatar = sp.getString("avatar", "");
 //        x.image().bind(iconFragment, sp
@@ -444,8 +492,8 @@ public class MyFragment extends Fragment implements View.OnClickListener {
                 finishNums++;
             }
         }
-        tvTaskNumsFragment.setText(finishNums + "/" + map.size());
-
+//        tvTaskNumsFragment.setText(finishNums + "/" + map.size());
+        tvTaskNumsFragment.setText(finishNums + "/5");
         if (!"".equals(content)) {
             contentTvFragment.setBackground(null);
             contentTvFragment.setText(content);
@@ -497,6 +545,27 @@ public class MyFragment extends Fragment implements View.OnClickListener {
 
             }
         });
+    }
+
+    public void SetLottery() {
+
+        if (MainActivity.version.equals("")) {
+            guessLayout.setVisibility(View.GONE);
+        } else {
+            long now = Long.valueOf(version_now.replace(".", ""));
+            long get = Long.valueOf(MainActivity.version.replace(".", ""));
+            if (now < get) {
+                guessLayout.setVisibility(View.VISIBLE);
+            } else {
+                if (MainActivity.isLottery.equals("on")) {
+                    guessLayout.setVisibility(View.VISIBLE);
+                } else {
+                    guessLayout.setVisibility(View.GONE);
+                }
+
+            }
+
+        }
     }
 
 }

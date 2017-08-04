@@ -16,11 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@color/white"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:layout_alignParentLeft="true">
+        android:paddingBottom="10dp">
 
         <ImageView
             android:layout_width="match_parent"
@@ -99,7 +99,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom"
-        android:layout_below="@id/head"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/head"
         android:fillViewport="true"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -115,19 +117,57 @@
                 android:background="@mipmap/banner_fast3"
                 android:orientation="vertical">
 
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#00000000"
-                    app:elevation="0dp"
-                    app:tabBackground="@null"
-                    app:tabIndicatorColor="@color/bg_red"
-                    app:tabSelectedTextColor="@color/bg_red"
-                    app:tabTextColor="#A1AAF9" />
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/history_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#80000000"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/img_guangbo"
+                            android:layout_width="20dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="10dp"
+                            android:src="@mipmap/icon_notice_red" />
+
+
+                        <com.gongwen.marqueen.MarqueeView
+                            android:id="@+id/marqueeView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:background="@null" />
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/tabLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#00000000"
+                        app:elevation="0dp"
+                        app:tabBackground="@null"
+                        app:tabIndicatorColor="@color/bg_red"
+                        app:tabSelectedTextColor="@color/bg_red"
+                        app:tabTextColor="#A1AAF9" />
+                </LinearLayout>
+
+
             </RelativeLayout>
 
 

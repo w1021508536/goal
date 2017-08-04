@@ -34,5 +34,16 @@ public class KeyCode {
     public static final String AIM_SUPPORT = "aim_support";
     public static final String AIM_SIGN = "aim_sign";
 
+
+    /*** intent 跳转传值的key值 ***/
+    public static final String INTENT_FLAG = "flag";
+    public static final String INTENT_TYPE = "type";
     public static final String INTENT_MIN = "min";
+    public static final String INTENT_ADDRESSENTITY = "address";
+    public static final String INTENT_POSITION = "position";
+    public static final String INTENT_HOME_NUMBER = "number";
+
+    /*** map 的key值 ***/
+    public static final String MAP_RED = "red";
+    public static final String MAP_BLUE = "blue";
 }

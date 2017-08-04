@@ -63,6 +63,9 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
     private RedMoreAdapter adapter;
     private boolean addFlag;
 
+
+    private int total;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         setContentView(R.layout.activity_red_more);
@@ -75,6 +78,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
         super.initData();
         nameTextInclude.setText("红包明细");
         rightImageInclude.setVisibility(View.GONE);
+//        rightImageInclude.setImageResource(R.mipmap.btn_filter);
         MonthDialog dialog = new MonthDialog(this, this);
         adapter = new RedMoreAdapter(this, dialog);
 
@@ -82,7 +86,7 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
 //        View emptyView = LayoutInflater.from(this).inflate(R.layout.view_empty_nodata, null);
 //        plv.setEmptyView(emptyView);
 
-
+        leftImageInclude.setOnClickListener(this);
     }
 
     @Override
@@ -95,26 +99,26 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
         requestParams.addBodyParameter("startTime", startTime);
         requestParams.addBodyParameter("endTime", endTime);
         requestParams.addBodyParameter("p", page + "");
+        requestParams.addBodyParameter("r", "10");
         XUtil.get(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
 //{"msg":"no data","code":100000,"pageNum":0,"pageSize":0,"pageTotal":0,"total":0}
+
+                System.out.println("===============result=========" + result);
 
                 if ((!RenameActivity.callOk(result) || Utils.getMsg(result).equals(KeyCode.NO_DATA)) && page == 1) {
                     plv.setVisibility(View.GONE);
                     return;
                 }
                 try {
+
+                    total = Integer.valueOf(new JSONObject(result).getString("total"));
+                    if (total < 10) {
+                        plv.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+                    } else
+                        plv.setMode(PullToRefreshBase.Mode.BOTH);
                     JSONObject jsonObject = new JSONObject(result);
-//                    if (jsonObject.get("msg").equals("no data")) {
-//                        List<RedMoreEntity> data = new ArrayList<RedMoreEntity>();
-//                        data.add(new RedMoreEntity(1, 11, 8, 1, 1491300885000l, 1, 0));
-//                        data.add(new RedMoreEntity(2, 11, 8, 2, 1491300978000l, 1, 0));
-//                        List<RedMoreAdapterEntry> redMoreAdapterEntries = setTimeData(data);
-//                  k      return;
-//                    }
-                    //2017-6-14 08:00:00
-                    //2017-04-04 18:14:45
                     String jsonData = jsonObject.get("result").toString();
                     Gson gson = new Gson();
                     List<RedMoreEntity> data = gson.fromJson(jsonData, new TypeToken<List<RedMoreEntity>>() {
@@ -197,20 +201,55 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
     @Override
     public void initWeight() {
         super.initWeight();
-        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+        plv.setMode(PullToRefreshBase.Mode.BOTH);
+//        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+//            @Override
+//            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+//                page = 1;
+//                getData();
+//            }
+//        });
+//        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+//            @Override
+//            public void onLastItemVisible() {
+//                if (startTime.equals("") && addFlag) {
+//                    page++;
+//                    getData();
+//                    addFlag = false;
+//                }
+//            }
+//        });
+
+        /**
+         * 实现 接口  OnRefreshListener2<ListView>  以便与监听  滚动条到顶部和到底部
+         */
+        plv.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
-            public void onRefresh(PullToRefreshBase<ListView> pullToRefreshBase) {
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                //   new GetDownDataTask().execute();
                 page = 1;
                 getData();
             }
-        });
-        plv.setOnLastItemVisibleListener(new PullToRefreshBase.OnLastItemVisibleListener() {
+
             @Override
-            public void onLastItemVisible() {
-                if (startTime.equals("") && addFlag) {
-                    page++;
-                    getData();
-                    addFlag = false;
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                //        new GetUpDataTask().execute();
+
+                if (page * 10 >= total) {
+                    plv.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Utils.showToast(RedMoreActivity.this, "没有更多数据了");
+                            plv.onRefreshComplete();
+                        }
+                    }, 1000);
+                } else {
+
+                    if (startTime.equals("") && addFlag) {
+                        page++;
+                        getData();
+                        addFlag = false;
+                    }
                 }
             }
         });
@@ -218,7 +257,14 @@ public class RedMoreActivity extends BaseActivity implements MonthDialog.OnDialo
 
     @Override
     public void onClick(View v) {
-        super.onClick(v);
+        switch (v.getId()) {
+            case R.id.right_image_include:
+
+                break;
+            case R.id.left_image_include:
+                finish();
+                break;
+        }
     }
 
     /**

@@ -17,7 +17,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +31,7 @@ import com.small.small.goal.MyApplication;
 import com.small.small.goal.R;
 import com.small.small.goal.my.dialog.HuiFuDialog;
 import com.small.small.goal.my.entry.UerEntity;
+import com.small.small.goal.my.mall.activity.AddressActivity;
 import com.small.small.goal.utils.BaseActivity;
 import com.small.small.goal.utils.CacheUtil;
 import com.small.small.goal.utils.Code;
@@ -111,6 +111,8 @@ public class UserInfoActivity extends BaseActivity {
     TextView tvWxBindUser;
     @InjectView(R.id.black_layout)
     RelativeLayout blackLayout;
+    @InjectView(R.id.address_layout)
+    RelativeLayout addressLayout;
 
     private IWXAPI wx_api;
 
@@ -189,6 +191,7 @@ public class UserInfoActivity extends BaseActivity {
         rlPhoneUser.setOnClickListener(this);
         rlWxUser.setOnClickListener(this);
         blackLayout.setOnClickListener(this);
+        addressLayout.setOnClickListener(this);
     }
 
     @Override
@@ -252,6 +255,9 @@ public class UserInfoActivity extends BaseActivity {
 
                 startActivity(new Intent(this, BlackListActivity.class));
                 break;
+            case R.id.address_layout:
+                startActivity(new Intent(this, AddressActivity.class));
+                break;
         }
     }
 
@@ -266,7 +272,7 @@ public class UserInfoActivity extends BaseActivity {
         XUtil.post(requestParams, this, new XUtil.XCallBackLinstener() {
             @Override
             public void onSuccess(String result) {
-                if (Utils.callOk(result,UserInfoActivity.this)) {
+                if (Utils.callOk(result, UserInfoActivity.this)) {
                     dialog.show();
                     tvWxBindUser.setText("解绑");
                     CacheUtil.getInstance().getUserInfo().getUser().setWechatId("");

@@ -271,7 +271,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="5dp"
-                    android:text="去做任务" />
+                    android:text="0/1" />
 
             </RelativeLayout>
 
@@ -323,7 +323,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="5dp"
-                    android:text="去做任务" />
+                    android:text="0/5" />
 
             </RelativeLayout>
 

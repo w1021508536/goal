@@ -54,6 +54,8 @@
 
     <color name="bg_gray_light">#F0EFF5</color>
 
+    <!-- 浅灰色-->
+    <color name="bg_hui_activity">#FCFCFC</color>
     <!-- 字体 深灰色-->
     <color name="text_gray_heavy">#5A5A5A</color>
     <!-- 橘黄色下划线  -->
@@ -61,6 +63,7 @@
     <color name="yellow">#FEF900</color>
 
     //灰色的字体颜色
+    <color name="text_white_hui">#ABACAE</color>
     <color name="text_hui">#6B6C80</color>
 
     <color name="text_yellow">#F6C310</color>
@@ -77,4 +80,8 @@
 
     <color name="kaijiang">#FEB336</color>
     <color name="text_gray_light">#ABACAE</color>
+
+    <color name="bg_include">#373A41</color>
+
+    <color name="gray_head">#323232</color>
 </resources>

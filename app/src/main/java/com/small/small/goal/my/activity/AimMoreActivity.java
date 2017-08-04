@@ -139,12 +139,15 @@ public class AimMoreActivity extends BaseActivity {
     private String describe = "";
     private String imgUrl = "";
 
+    EditTextHeightUtil editTextHeightUtil;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         setContentView(R.layout.activity_target_more);
         ButterKnife.inject(this);
-        EditTextHeightUtil.assistActivity(this);
+//        EditTextHeightUtil.assistActivity(this);
+        editTextHeightUtil = new EditTextHeightUtil(this, 1);
         super.onCreate(savedInstanceState);
     }
 
@@ -341,7 +344,7 @@ public class AimMoreActivity extends BaseActivity {
             List<TargetHeadEntity.SupportsBean> supports = targetHeadEntity.getSupports();
             CacheUtil.getInstance().setSupportEntityList(supports);
 
-            tv_supports.setText(supports.size() + "助力");
+            tv_supports.setText(supports.size() + "支持");
             for (int i = 0; i < 5; i++) {   //最多显示5个助力的人的头像
                 if (supports.size() > i) {
                     CircleImageView circleImageView = new CircleImageView(this);
